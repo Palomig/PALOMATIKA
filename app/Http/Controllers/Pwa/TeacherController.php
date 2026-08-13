@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\HomeworkAssignment;
+use App\Models\HomeworkReviewItem;
 use App\Models\HomeworkSolutionPhoto;
+use App\Models\HomeworkTopicTask;
 use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\LessonSession;
 use App\Models\OgeAttempt;
@@ -819,12 +821,19 @@ class TeacherController extends Controller
             ->limit(30)
             ->get();
 
+        // Пункты разбора — все, включая done: разобранное показываем серым следом.
+        $reviewItems = HomeworkReviewItem::where('homework_assignment_id', $assignment->id)
+            ->orderByDesc('id')
+            ->get()
+            ->keyBy('homework_topic_task_id');
+
         return view('pwa.teacher.homework-submissions', [
             'user' => $user,
             'assignment' => $assignment,
             'homework' => $assignment->homework,
             'submissions' => $assignment->topicTaskSubmissions->keyBy('homework_topic_task_id'),
             'notes' => $notes,
+            'reviewItems' => $reviewItems,
         ]);
     }
 
@@ -891,6 +900,75 @@ class TeacherController extends Controller
         }
 
         return back()->with('success', 'Заметка сохранена.');
+    }
+
+    /**
+     * Отметка «разобрать на уроке» на конкретной задаче домашки — вторая стадия
+     * проверки: из всех заданий учитель выбирает те, что пойдут в повестку урока.
+     *
+     * Отдельная сущность, а не заметка: у пункта разбора свой срок жизни — он
+     * гаснет, когда урок с этой задачей завершён. Заметка при этом опциональна:
+     * проверяя дюжину задач, учитель ставит галочку, а текст пишет не всегда.
+     */
+    public function homeworkReviewToggle(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
+    {
+        $user = $request->user();
+        $assignment->load('homework');
+        abort_unless($assignment->homework !== null, 404);
+        abort_unless($this->canReviewHomework($user, $assignment), 403);
+        abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
+
+        $data = $request->validate([
+            'on' => 'required|boolean',
+            'note' => 'nullable|string|max:2000',
+            'to_student_card' => 'nullable|boolean',
+        ]);
+
+        $item = HomeworkReviewItem::where('homework_assignment_id', $assignment->id)
+            ->where('homework_topic_task_id', $homeworkTask->id)
+            ->active()
+            ->first();
+
+        // Снятие отметки удаляет пункт, а не помечает done: «done» значит
+        // «разобрали на уроке», а не «учитель передумал отмечать».
+        if (!$data['on']) {
+            $item?->delete();
+
+            return $request->expectsJson()
+                ? response()->json(['item' => null])
+                : back()->with('success', 'Отметка снята.');
+        }
+
+        $note = trim((string) ($data['note'] ?? '')) ?: null;
+
+        $item ??= new HomeworkReviewItem([
+            'student_id' => $assignment->student_id,
+            'teacher_id' => $user->id,
+            'homework_assignment_id' => $assignment->id,
+            'homework_topic_task_id' => $homeworkTask->id,
+        ]);
+        $item->note = $note ?? $item->note;
+
+        // В карточку ученика заметка уходит только по явной галочке: копилка
+        // заметок — про ученика вообще, а не про одну домашку.
+        if ($note !== null && !empty($data['to_student_card'])) {
+            $studentNote = StudentNote::create([
+                'student_id' => $assignment->student_id,
+                'teacher_id' => $user->id,
+                'homework_assignment_id' => $assignment->id,
+                'task_ref' => 'Задача ' . $homeworkTask->task_order,
+                'kind' => 'todo',
+                'source' => 'homework',
+                'body' => $note,
+            ]);
+            $item->student_note_id = $studentNote->id;
+        }
+
+        $item->save();
+
+        return $request->expectsJson()
+            ? response()->json(['item' => $item->fresh()])
+            : back()->with('success', 'Задача отмечена к разбору.');
     }
 
     /** Отметка «проверено» (и снятие её же). */

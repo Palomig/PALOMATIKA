@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Services\HomeworkReviewService;
 use App\Services\LessonSessionService;
 use DomainException;
 use Illuminate\Http\JsonResponse;
@@ -113,6 +114,9 @@ class StudentLessonController extends Controller
                 ->values()
                 ->map(fn ($t, $i) => $this->serializeTaskForStudent($t, $myAttempts->get($t->id), $i + 1))
                 ->all(),
+            // Разбор домашки: карточки только этого ученика — как персональные
+            // задачи, чужие не показываем. Заметка учителя сюда не попадает.
+            'review' => app(HomeworkReviewService::class)->cardsForStudent($session, (int) $student->id),
         ]);
     }
 

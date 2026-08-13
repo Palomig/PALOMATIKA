@@ -11,6 +11,7 @@ use App\Models\LessonSessionParticipant;
 use App\Models\LessonSessionTask;
 use App\Models\StudentNote;
 use App\Models\User;
+use App\Services\HomeworkReviewService;
 use DomainException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -207,6 +208,12 @@ class LessonSessionService
         LessonActivityInterval::where('lesson_session_id', $session->id)
             ->whereNull('ended_at')
             ->update(['ended_at' => $endsAt]);
+
+        // Разобранное на уроке гаснет вместе с уроком: держать это на учителе —
+        // значит копить мусор. Через app(), а не через конструктор: сервис
+        // инжектится в кучу мест, менять сигнатуру ради одной строки незачем.
+        app(HomeworkReviewService::class)->resolveForSession($session);
+
         return $session->fresh();
     }
 

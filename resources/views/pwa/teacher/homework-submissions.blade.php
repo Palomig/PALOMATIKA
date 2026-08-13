@@ -47,6 +47,27 @@
     border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px;
   }
   .sub-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .sub-head-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .sub-head-right form { margin: 0; }
+
+  /* Вторая стадия проверки: что из этой домашки идёт в повестку урока. */
+  .review-counter {
+    margin-top: 10px; padding: 8px 11px; border-radius: 10px;
+    font-size: 12px; font-weight: 800;
+    color: var(--purple); background: var(--purple-bg); border: 1px solid var(--purple-bd);
+  }
+  .review-toggle {
+    border: 1px solid var(--border); background: var(--surface2); color: var(--muted);
+    border-radius: 8px; padding: 4px 9px; font-size: 11px; font-weight: 800;
+    cursor: pointer; white-space: nowrap; font-family: inherit;
+  }
+  .review-toggle:active { opacity: .75; }
+  .review-toggle.is-on { background: var(--purple); border-color: transparent; color: #fff; }
+  .review-resolved { font-size: 10px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+  /* Кандидат на разбор: ученик ошибся или не приступил. Полоса нужна, чтобы
+     при прокрутке дюжины задач было видно, куда смотреть. Только подсказка —
+     отметку всё равно ставит учитель. */
+  .sub-card.is-candidate { border-left: 3px solid var(--yellow); }
   .sub-num { font-family: var(--display); font-size: 14px; color: var(--text); }
   .sub-state { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
   .state-wait { color: var(--muted); background: var(--surface2); }
@@ -84,46 +105,7 @@
     font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 5px;
   }
 
-  /* Просмотрщик тетради: фото открывается поверх страницы, а не в новой вкладке —
-     учитель не теряет место в списке задач. */
-  /* Выше кнопки багрепорта из layout (z-index 1100), но ниже её модалки (1150). */
-  .viewer {
-    position: fixed; inset: 0; z-index: 1120;
-    background: rgba(0,0,0,.95);
-    display: flex; align-items: center; justify-content: center;
-    padding: calc(56px + var(--safe-top)) 12px calc(56px + var(--safe-bottom));
-  }
-  .viewer-img {
-    max-width: 100%; max-height: 100%;
-    object-fit: contain; border-radius: 8px; display: block;
-  }
-  .viewer-bar {
-    position: absolute; top: 0; left: 0; right: 0;
-    display: flex; align-items: center; gap: 10px;
-    padding: calc(10px + var(--safe-top)) 12px 10px;
-    background: linear-gradient(rgba(0,0,0,.75), transparent);
-  }
-  .viewer-label { flex: 1; color: #fff; font-size: 12px; font-weight: 800; overflow-wrap: anywhere; }
-  .viewer-btn {
-    flex-shrink: 0; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.1);
-    color: #fff; border-radius: 10px; cursor: pointer;
-    font-size: 12px; font-weight: 800; padding: 7px 11px; text-decoration: none; line-height: 1;
-  }
-  .viewer-btn:active { opacity: .7; }
-  .viewer-close { font-size: 16px; padding: 6px 11px; }
-  .viewer-nav {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 40px; height: 56px; border-radius: 10px;
-    border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.45);
-    color: #fff; font-size: 26px; line-height: 1; cursor: pointer;
-  }
-  .viewer-nav:active { opacity: .7; }
-  .viewer-prev { left: 8px; }
-  .viewer-next { right: 8px; }
-  .viewer-count {
-    position: absolute; left: 0; right: 0; bottom: calc(14px + var(--safe-bottom));
-    text-align: center; color: rgba(255,255,255,.75); font-size: 12px; font-weight: 800;
-  }
+  {{-- Стили просмотрщика тетради живут в pwa._shared.photo-viewer --}}
   .no-photo { margin-top: 10px; font-size: 12px; color: var(--muted); font-weight: 700; }
 
   .note-form { margin-top: 10px; display: grid; gap: 8px; }
@@ -228,6 +210,11 @@
       <span class="badge badge-progress">{{ $assignment->status }}</span>
     </div>
 
+    @php $pendingReview = $reviewItems->whereIn('status', \App\Models\HomeworkReviewItem::ACTIVE_STATUSES)->count(); @endphp
+    @if($pendingReview > 0)
+      <div class="review-counter">К разбору: {{ $pendingReview }}</div>
+    @endif
+
     <div class="summary-actions">
       <form method="POST" action="{{ route('pwa.teacher.homework.reviewed', $assignment) }}">
         @csrf
@@ -261,12 +248,32 @@
           $stateClass = 'state-wrong';
           $stateLabel = $submission->accepted_at ? 'Неверно' : 'Ещё пробует';
       }
+
+      $reviewItem = $reviewItems->get($task->id);
+      $isFlagged = $reviewItem !== null
+          && in_array($reviewItem->status, \App\Models\HomeworkReviewItem::ACTIVE_STATUSES, true);
+      $isResolved = $reviewItem !== null && $reviewItem->status === \App\Models\HomeworkReviewItem::STATUS_DONE;
+      // Кандидат — задача, где ученик ошибся или не приступил. Подсвечиваем,
+      // но не отмечаем: что разбирать, решает учитель.
+      $isCandidate = !$isFlagged && !$isResolved && ($submission === null || !$submission->is_correct);
     @endphp
 
-    <div class="sub-card">
+    <div class="sub-card {{ $isCandidate ? 'is-candidate' : '' }}">
       <div class="sub-head">
         <div class="sub-num">Задача {{ $task->task_order }}</div>
-        <div class="sub-state {{ $stateClass }}">{{ $stateLabel }}</div>
+        <div class="sub-head-right">
+          @if($isResolved)
+            <span class="review-resolved">разобрано {{ $reviewItem->resolved_at?->format('d.m') }}</span>
+          @endif
+          <form method="POST" action="{{ route('pwa.teacher.homework.review-toggle', [$assignment, $task]) }}">
+            @csrf
+            <input type="hidden" name="on" value="{{ $isFlagged ? 0 : 1 }}">
+            <button type="submit" class="review-toggle {{ $isFlagged ? 'is-on' : '' }}">
+              {{ $isFlagged ? '✓ Разобрать' : '+ Разобрать' }}
+            </button>
+          </form>
+          <div class="sub-state {{ $stateClass }}">{{ $stateLabel }}</div>
+        </div>
       </div>
 
       @if($hasInlineSvg)
@@ -372,26 +379,7 @@
     @endif
   </div>
 
-  {{-- Просмотрщик страниц: живёт в DOM только когда открыт, чтобы полноразмерные фото не грузились заранее. --}}
-  <template x-if="viewer">
-    <div class="viewer" @click.self="close()">
-      <div class="viewer-bar">
-        <div class="viewer-label" x-text="photos[vi].label"></div>
-        <a class="viewer-btn" :href="photos[vi].full" target="_blank" rel="noopener">Оригинал</a>
-        <button type="button" class="viewer-btn viewer-close" @click="close()" aria-label="Закрыть">✕</button>
-      </div>
-
-      <img class="viewer-img" :src="photos[vi].src" :alt="photos[vi].label">
-
-      <template x-if="photos.length > 1">
-        <div>
-          <button type="button" class="viewer-nav viewer-prev" @click="step(-1)" aria-label="Предыдущая страница">‹</button>
-          <button type="button" class="viewer-nav viewer-next" @click="step(1)" aria-label="Следующая страница">›</button>
-          <div class="viewer-count" x-text="(vi + 1) + ' / ' + photos.length"></div>
-        </div>
-      </template>
-    </div>
-  </template>
+  @include('pwa._shared.photo-viewer')
 </div>
 @endsection
 

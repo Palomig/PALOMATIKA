@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -1453,6 +1454,38 @@ class StudentController extends Controller
             'message' => $message,
             'code' => $code,
         ]);
+    }
+
+    /**
+     * Фото собственного решения — нужно ученику на разборе домашки с учителем.
+     *
+     * Единственная проверка — принадлежность домашки самому ученику:
+     * фото → попытка → назначение → student_id. Проверять «то же ДЗ» нельзя:
+     * домашка выдаётся на класс (один Homework — много HomeworkAssignment),
+     * и такая проверка открыла бы тетради всех одноклассников.
+     */
+    public function homeworkSolutionPhoto(Request $request, HomeworkSolutionPhoto $photo)
+    {
+        $user = $request->user();
+        $photo->load('submission.assignment');
+
+        $assignment = $photo->submission?->assignment;
+        abort_unless($assignment !== null, 404);
+        abort_unless((int) $assignment->student_id === (int) $user->id, 403);
+
+        $width = in_array((int) $request->query('w'), [400, 800, 1600], true) ? (int) $request->query('w') : null;
+
+        if ($photo->isRemote()) {
+            $url = $this->photoStore->readUrl((string) $photo->remote_id, $width);
+            abort_if($url === null, 404);
+
+            return redirect()->away($url);
+        }
+
+        $path = (string) $photo->path;
+        abort_if($path === '' || !Storage::disk('public')->exists($path), 404);
+
+        return response()->file(Storage::disk('public')->path($path));
     }
 
     public function submitTopicHomeworkTask(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
