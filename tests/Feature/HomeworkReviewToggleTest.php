@@ -118,11 +118,31 @@ class HomeworkReviewToggleTest extends TestCase
         [$assignment, $task] = $this->assign();
         $this->actingAs($this->teacher)->post($this->toggleUrl($assignment, $task), ['on' => 1]);
 
+        // Счётчик и подпись кнопки рендерятся сервером и подхватываются Alpine:
+        // без серверного значения при медленной загрузке моргала бы пустая кнопка.
         $this->actingAs($this->teacher)
             ->get('https://teacher.' . config('app.base_domain') . '/homework/assignment/' . $assignment->id)
             ->assertOk()
-            ->assertSee('К разбору: 1')
-            ->assertSee('✓ Разобрать');
+            ->assertSee('К разбору:')
+            ->assertSee('>1</span>', false)
+            ->assertSee('✓ Разобрать')
+            ->assertSee('toggleReview(' . $task->id . ')', false);
+    }
+
+    /** Переключатель асинхронный: JSON-ответ вместо редиректа, скролл не слетает. */
+    public function test_toggle_answers_json_without_redirect(): void
+    {
+        [$assignment, $task] = $this->assign();
+
+        $this->actingAs($this->teacher)
+            ->postJson($this->toggleUrl($assignment, $task), ['on' => true])
+            ->assertOk()
+            ->assertJsonPath('item.status', HomeworkReviewItem::STATUS_PENDING);
+
+        $this->actingAs($this->teacher)
+            ->postJson($this->toggleUrl($assignment, $task), ['on' => false])
+            ->assertOk()
+            ->assertJsonPath('item', null);
     }
 
     public function test_resolved_flag_is_shown_as_a_trace(): void
