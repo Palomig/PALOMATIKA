@@ -80,10 +80,30 @@
   .resume-sub { font-size: 13px; color: var(--muted); }
   .resume-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px 18px; font-weight: 800; font-size: 15px; cursor: pointer; }
   .personal-badge { font-size: 10px; font-weight: 800; padding: 1px 8px; border-radius: 6px; background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-bd); white-space: nowrap; }
+
+  /* Разбор домашки: только чтение, поля ответа нет — это не задача урока */
+  .review-block { border: 1px solid var(--purple-bd); background: var(--purple-bg); border-radius: var(--r); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .review-block-head { font-family: var(--display); font-size: 15px; color: var(--text); }
+  .review-card-s { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 13px; }
+  .review-card-num { font-size: 11px; font-weight: 800; color: var(--purple); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .review-visual-s { margin: 6px 0; display: flex; justify-content: center; }
+  .review-visual-s :is(svg, img) { max-width: 100%; height: auto; }
+  .review-text-s { font-size: 14px; line-height: 1.45; color: var(--text); word-break: break-word; }
+  .review-answers-s { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .review-chip-s { font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+  .review-chip-s.is-mine { color: var(--yellow); border-color: var(--yellow-bd); background: var(--yellow-bg); }
+  .review-chip-label-s { color: var(--muted); font-weight: 600; }
+  .review-photos-s { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .review-photo-s { padding: 0; border: none; background: none; cursor: zoom-in; width: 92px; }
+  .review-photo-s img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: block; }
+  .review-photo-s:active img { opacity: .8; }
 @endpush
 
 @section('body')
-<div class="page" x-data="studentLesson({{ $session->id }}, '{{ $session->status }}')" x-init="init()">
+<div class="page" x-data="studentLesson({{ $session->id }}, '{{ $session->status }}')" x-init="init()"
+     @keydown.escape.window="viewer && close()"
+     @keydown.arrow-left.window="viewer && step(-1)"
+     @keydown.arrow-right.window="viewer && step(1)">
   <div class="topbar">
     <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Урок</div>
@@ -106,6 +126,41 @@
   <template x-if="released">
     <div class="lesson-released-banner">Учитель отпустил тебя — можно выходить 👋</div>
   </template>
+
+  {{--
+    Разбор домашки: задачи, которые учитель отметил при проверке и взял на урок.
+    Решать их заново не нужно — поля ответа здесь нет, это «смотрим вместе на то,
+    что ты уже написал». Заметку учителя ученику не показываем.
+  --}}
+  <template x-if="review.length">
+    <div class="review-block">
+      <div class="review-block-head">🔍 Разбор с учителем</div>
+      <template x-for="card in review" :key="'rev-' + card.id">
+        <div class="review-card-s">
+          <div class="review-card-num" x-text="'Задача ' + card.task_order"></div>
+          <div class="review-visual-s" x-show="card.svg" x-html="card.svg"></div>
+          <div class="review-text-s" x-html="card.text"></div>
+
+          <div class="review-answers-s">
+            <span class="review-chip-s"><span class="review-chip-label-s">верный ответ:</span> <span x-text="card.correct"></span></span>
+            <template x-if="card.first_answer !== null">
+              <span class="review-chip-s is-mine"><span class="review-chip-label-s">твой:</span> <span x-text="card.first_answer"></span></span>
+            </template>
+          </div>
+
+          <div class="review-photos-s" x-show="card.photos.length">
+            <template x-for="(p, pi) in card.photos" :key="'revp-' + card.id + '-' + pi">
+              <button type="button" class="review-photo-s" @click="openReviewPhotos(card, pi)">
+                <img :src="p.url" :alt="p.label" loading="lazy">
+              </button>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  @include('pwa._shared.photo-viewer')
 
   <template x-for="task in tasks" :key="task.id">
     <div class="lesson-task-card" :class="task.my_answer ? 'is-answered' : ''" :data-task-id="task.id">
@@ -222,11 +277,17 @@
 
   function studentLesson(sessionId, initialStatus) {
     let tasksJson = ''; // вне reactive: снапшот последних серверных tasks
+    let reviewJson = ''; // то же для карточек разбора
 
     return {
       sessionId,
       status: initialStatus,
       tasks: [],
+      review: [],          // разбор домашки с учителем: только чтение
+      // Просмотрщик тетради (контракт партиала pwa._shared.photo-viewer)
+      photos: [],
+      viewer: false,
+      vi: 0,
       loaded: false,       // пришёл первый ответ /state
       sending: {},
       pollTimer: null,
@@ -449,6 +510,17 @@
         // tasks заменяем только при реальном изменении и не во время ввода:
         // иначе :value каждые 5с переприменяется и стирает недопечатанный ответ.
         const typing = document.activeElement?.classList?.contains('lesson-answer-input');
+        // Карточки разбора меняются редко (учитель добавляет их руками), но
+        // сравниваем так же: x-html при каждом poll пересоздавал бы DOM и сбивал
+        // уже дорендеренные формулы.
+        const rj = JSON.stringify(d.review || []);
+        if (rj !== reviewJson) {
+          reviewJson = rj;
+          this.review = d.review || [];
+          this.$nextTick(() => {
+            if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
+          });
+        }
         const tj = JSON.stringify(d.tasks);
         if (tj !== tasksJson && !typing) {
           tasksJson = tj;
@@ -461,6 +533,17 @@
           });
         }
       },
+
+      /** Тетрадь открывается поверх урока — как у учителя, тем же партиалом. */
+      openReviewPhotos(card, index) {
+        this.photos = (card.photos || []).map(p => ({ src: p.url, full: p.full, label: p.label }));
+        if (!this.photos.length) return;
+        this.vi = index;
+        this.viewer = true;
+        document.body.style.overflow = 'hidden';
+      },
+      close() { this.viewer = false; document.body.style.overflow = ''; },
+      step(d) { this.vi = (this.vi + d + this.photos.length) % this.photos.length; },
 
       async submitAnswer(taskId, answer) {
         if (!answer || this.sending[taskId]) return;
