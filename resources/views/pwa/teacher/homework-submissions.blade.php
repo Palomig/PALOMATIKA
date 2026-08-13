@@ -63,6 +63,7 @@
   }
   .review-toggle:active { opacity: .75; }
   .review-toggle.is-on { background: var(--purple); border-color: transparent; color: #fff; }
+  .review-toggle:disabled { opacity: .5; cursor: default; }
   .review-resolved { font-size: 10px; font-weight: 800; color: var(--muted); white-space: nowrap; }
   /* Кандидат на разбор: ученик ошибся или не приступил. Полоса нужна, чтобы
      при прокрутке дюжины задач было видно, куда смотреть. Только подсказка —
@@ -165,6 +166,16 @@
           }
       }
   }
+
+  // Отметки «разобрать» держим в Alpine: перезагрузка страницы после каждой
+  // галочки сбрасывала скролл в начало, а отмечают их подряд по всему списку.
+  $reviewFlags = [];
+  foreach ($homework->topicTasks as $flagTask) {
+      $flagItem = $reviewItems->get($flagTask->id);
+      $reviewFlags[$flagTask->id] = $flagItem !== null
+          && in_array($flagItem->status, \App\Models\HomeworkReviewItem::ACTIVE_STATUSES, true);
+  }
+  $pendingReview = count(array_filter($reviewFlags));
 @endphp
 <div class="page"
      x-data="{
@@ -174,7 +185,43 @@
        vi: 0,
        open(i) { this.vi = i; this.viewer = true; document.body.style.overflow = 'hidden'; },
        close() { this.viewer = false; document.body.style.overflow = ''; },
-       step(d) { this.vi = (this.vi + d + this.photos.length) % this.photos.length; }
+       step(d) { this.vi = (this.vi + d + this.photos.length) % this.photos.length; },
+
+       flags: @js((object) $reviewFlags),
+       busy: {},
+       get reviewCount() { return Object.values(this.flags).filter(Boolean).length; },
+
+       /**
+        * Переключение отметки без перезагрузки. Состояние меняем сразу, а при
+        * ошибке откатываем: учитель отмечает задачи подряд, ждать ответ сервера
+        * на каждой галочке — терять темп.
+        */
+       async toggleReview(taskId) {
+         if (this.busy[taskId]) return;
+         const next = !this.flags[taskId];
+         this.busy[taskId] = true;
+         this.flags[taskId] = next;
+         try {
+           // Путь относительный: маршрут живёт на teacher-поддомене, а url()
+           // построил бы его от APP_URL, то есть от главного домена.
+           const r = await fetch(`/homework/assignment/{{ $assignment->id }}/tasks/${taskId}/review`, {
+             method: 'POST',
+             headers: {
+               'Content-Type': 'application/json',
+               'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+               Accept: 'application/json',
+             },
+             credentials: 'include',
+             body: JSON.stringify({ on: next }),
+           });
+           if (!r.ok) throw new Error('http ' + r.status);
+         } catch (e) {
+           this.flags[taskId] = !next;
+           alert('Не удалось изменить отметку. Проверь связь и попробуй ещё раз.');
+         } finally {
+           this.busy[taskId] = false;
+         }
+       }
      }"
      @keydown.escape.window="viewer && close()"
      @keydown.arrow-left.window="viewer && step(-1)"
@@ -210,10 +257,9 @@
       <span class="badge badge-progress">{{ $assignment->status }}</span>
     </div>
 
-    @php $pendingReview = $reviewItems->whereIn('status', \App\Models\HomeworkReviewItem::ACTIVE_STATUSES)->count(); @endphp
-    @if($pendingReview > 0)
-      <div class="review-counter">К разбору: {{ $pendingReview }}</div>
-    @endif
+    <div class="review-counter" x-show="reviewCount > 0" @if($pendingReview === 0) style="display:none" @endif>
+      К разбору: <span x-text="reviewCount">{{ $pendingReview }}</span>
+    </div>
 
     <div class="summary-actions">
       <form method="POST" action="{{ route('pwa.teacher.homework.reviewed', $assignment) }}">
@@ -250,28 +296,27 @@
       }
 
       $reviewItem = $reviewItems->get($task->id);
-      $isFlagged = $reviewItem !== null
-          && in_array($reviewItem->status, \App\Models\HomeworkReviewItem::ACTIVE_STATUSES, true);
+      $isFlagged = $reviewFlags[$task->id] ?? false;
       $isResolved = $reviewItem !== null && $reviewItem->status === \App\Models\HomeworkReviewItem::STATUS_DONE;
       // Кандидат — задача, где ученик ошибся или не приступил. Подсвечиваем,
-      // но не отмечаем: что разбирать, решает учитель.
-      $isCandidate = !$isFlagged && !$isResolved && ($submission === null || !$submission->is_correct);
+      // но не отмечаем: что разбирать, решает учитель. Отмеченную не подсвечиваем —
+      // условие реактивное, полоса гаснет сразу при нажатии.
+      $isCandidate = !$isResolved && ($submission === null || !$submission->is_correct);
     @endphp
 
-    <div class="sub-card {{ $isCandidate ? 'is-candidate' : '' }}">
+    <div class="sub-card {{ $isCandidate && !$isFlagged ? 'is-candidate' : '' }}"
+         @if($isCandidate) :class="flags[{{ $task->id }}] ? '' : 'is-candidate'" @endif>
       <div class="sub-head">
         <div class="sub-num">Задача {{ $task->task_order }}</div>
         <div class="sub-head-right">
           @if($isResolved)
             <span class="review-resolved">разобрано {{ $reviewItem->resolved_at?->format('d.m') }}</span>
           @endif
-          <form method="POST" action="{{ route('pwa.teacher.homework.review-toggle', [$assignment, $task]) }}">
-            @csrf
-            <input type="hidden" name="on" value="{{ $isFlagged ? 0 : 1 }}">
-            <button type="submit" class="review-toggle {{ $isFlagged ? 'is-on' : '' }}">
-              {{ $isFlagged ? '✓ Разобрать' : '+ Разобрать' }}
-            </button>
-          </form>
+          <button type="button" class="review-toggle {{ $isFlagged ? 'is-on' : '' }}"
+                  :class="flags[{{ $task->id }}] ? 'is-on' : ''"
+                  :disabled="!!busy[{{ $task->id }}]"
+                  @click="toggleReview({{ $task->id }})"
+                  x-text="flags[{{ $task->id }}] ? '✓ Разобрать' : '+ Разобрать'">{{ $isFlagged ? '✓ Разобрать' : '+ Разобрать' }}</button>
           <div class="sub-state {{ $stateClass }}">{{ $stateLabel }}</div>
         </div>
       </div>
