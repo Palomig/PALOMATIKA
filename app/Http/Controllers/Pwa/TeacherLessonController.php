@@ -11,6 +11,7 @@ use App\Models\Homework;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AssistantService;
+use App\Services\HomeworkReviewService;
 use App\Services\LessonHomeworkSuggestionService;
 use App\Services\LessonSessionService;
 use App\Services\LessonTaskPickerService;
@@ -371,6 +372,57 @@ class TeacherLessonController extends Controller
             'other_students'  => $others,
             'prior_homeworks' => $prior,
         ]);
+    }
+
+    /**
+     * GET /lessons/{id}/review-items
+     *
+     * Вторая стадия домашки на экране урока: что учитель отметил «разобрать»
+     * у участников (pending) и что уже поставил в повестку (planned).
+     */
+    public function reviewItems(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        $studentIds = $session->participants()->pluck('student_id')->all();
+
+        $service = app(HomeworkReviewService::class);
+
+        return response()->json([
+            'pending' => $service->pendingFor($studentIds, (int) $session->teacher_id),
+            'planned' => $service->plannedFor($session),
+        ]);
+    }
+
+    /**
+     * POST /lessons/{id}/review-items   body: { item_ids: [] }
+     */
+    public function planReviewItems(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        $data = $request->validate([
+            'item_ids' => 'required|array',
+            'item_ids.*' => 'integer',
+        ]);
+
+        $service = app(HomeworkReviewService::class);
+        $planned = $service->planInto($session, $data['item_ids']);
+
+        return response()->json([
+            'planned_count' => $planned,
+            'planned' => $service->plannedFor($session),
+        ]);
+    }
+
+    /**
+     * DELETE /lessons/{id}/review-items/{itemId} — учитель передумал.
+     */
+    public function unplanReviewItem(Request $request, int $id, int $itemId): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        app(HomeworkReviewService::class)->unplan($session, $itemId);
+
+        return response()->json(['ok' => true]);
     }
 
     /**

@@ -191,6 +191,9 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::get('/lessons/{id}',                          [TeacherLessonController::class, 'show'])->name('pwa.teacher.lessons.show')->whereNumber('id');
         Route::get('/lessons/{id}/state',                    [TeacherLessonController::class, 'state'])->name('pwa.teacher.lessons.state')->whereNumber('id');
         Route::get('/lessons/{id}/homework-suggestions',     [TeacherLessonController::class, 'homeworkSuggestions'])->name('pwa.teacher.lessons.homework-suggestions')->whereNumber('id');
+        Route::get('/lessons/{id}/review-items',             [TeacherLessonController::class, 'reviewItems'])->name('pwa.teacher.lessons.review-items')->whereNumber('id');
+        Route::post('/lessons/{id}/review-items',            [TeacherLessonController::class, 'planReviewItems'])->name('pwa.teacher.lessons.plan-review')->whereNumber('id');
+        Route::delete('/lessons/{id}/review-items/{itemId}', [TeacherLessonController::class, 'unplanReviewItem'])->name('pwa.teacher.lessons.unplan-review')->whereNumber('id')->whereNumber('itemId');
         Route::post('/lessons/{id}/tasks',                   [TeacherLessonController::class, 'addTask'])->name('pwa.teacher.lessons.add-task')->whereNumber('id');
         Route::delete('/lessons/{id}/tasks/{taskId}',        [TeacherLessonController::class, 'removeTask'])->name('pwa.teacher.lessons.remove-task')->whereNumber('id')->whereNumber('taskId');
         Route::post('/lessons/{id}/start',                   [TeacherLessonController::class, 'start'])->name('pwa.teacher.lessons.start')->whereNumber('id');
