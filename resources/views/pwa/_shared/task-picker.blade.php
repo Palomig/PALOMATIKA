@@ -58,29 +58,24 @@
                     x-text="groupAllSelected(g) ? 'Снять блок' : 'Выбрать блок'"></button>
           </summary>
           <div class="spoiler-body">
-            <template x-for="t in g.tasks" :key="t.uid">
-              <div class="task-item tp-card" :class="{ 'tp-selected': isSelected(t), 'is-existing': isExisting(t) }" @click="toggle(t)">
-                <span class="tp-check" x-show="isSelected(t)">✓</span>
-                <div class="tp-illus" x-show="cardSvg(t)" x-html="cardSvg(t)"></div>
-                <template x-if="cardImage(t)">
-                  <div class="tp-illus">
-                    {{-- Путь из банка ЕГЭ уже абсолютный (/ege-bank/img/…),
-                         у ОГЭ — имя файла внутри папки темы. --}}
-                    <img :src="cardImageSrc(t)" alt="" loading="lazy">
-                  </div>
-                </template>
-                <div class="task-item-text" x-show="t.text" x-text="t.text"></div>
-                <div class="task-item-text tp-expr" x-show="!t.text && t.expression" x-html="renderLatex(t.expression)"></div>
-                <div class="answer-row">
-                  <template x-if="t.answer">
-                    <span><span class="answer-label">Ответ:</span> <span class="tp-answer" x-text="t.answer"></span></span>
+            {{-- Есть подтипы — раскрываем задание ещё на уровень --}}
+            <template x-for="sub in g.subs" :key="sub.key">
+              <details class="tp-sub">
+                <summary>
+                  <span class="tp-sub-label" x-text="sub.label"></span>
+                  <span class="tp-count" x-text="'(' + sub.tasks.length + ')'"></span>
+                  <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(sub)"
+                          x-text="groupAllSelected(sub) ? 'Снять' : 'Выбрать'"></button>
+                </summary>
+                <div class="tp-sub-body">
+                  <template x-for="t in sub.tasks" :key="t.uid">
+                    @include('pwa._shared.partials.task-picker-card')
                   </template>
-                  <template x-if="!t.answer">
-                    <span class="tp-badge">без автопроверки</span>
-                  </template>
-                  <span class="tp-existing-note" x-show="isExisting(t)">уже добавлено</span>
                 </div>
-              </div>
+              </details>
+            </template>
+            <template x-for="t in (g.subs.length ? [] : g.tasks)" :key="t.uid">
+              @include('pwa._shared.partials.task-picker-card')
             </template>
           </div>
         </details>
@@ -180,6 +175,21 @@
   }
   .task-picker .spoiler[open] summary::after { transform:rotate(180deg); }
   .task-picker .spoiler-body { padding:0 10px 10px; display:flex; flex-direction:column; gap:8px; }
+  /* Второй уровень: серии с разными условиями внутри одного задания */
+  .task-picker .tp-sub {
+    border:1px solid var(--border); border-radius:10px; background:rgba(255,255,255,.02);
+  }
+  .task-picker .tp-sub summary {
+    list-style:none; cursor:pointer; padding:9px 12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .task-picker .tp-sub summary::-webkit-details-marker { display:none; }
+  .task-picker .tp-sub summary::after {
+    content:'⌄'; margin-left:auto; color:var(--muted); transition:transform .15s ease;
+  }
+  .task-picker .tp-sub[open] summary::after { transform:rotate(180deg); }
+  .task-picker .tp-sub-label { font-size:13px; line-height:1.3; color:var(--text); min-width:0; }
+  .task-picker .tp-sub-body { padding:0 8px 8px; display:flex; flex-direction:column; gap:8px; }
   .task-picker .tp-summary-label { flex:1; min-width:0; }
   .task-picker .tp-count { font-size:11px; color:var(--muted); font-weight:400; }
   .task-picker .tp-block-btn {
@@ -402,11 +412,23 @@ function taskPicker(config) {
 
     // --- группировка (спойлеры для ОГЭ, buckets для 7/8) ---
     get groups() {
-      const out = [], seen = new Map();
+      const out = [], seen = new Map(), subSeen = new Map();
       for (const t of this.tasks) {
         const k = String(t.group_key ?? '');
-        if (!seen.has(k)) { seen.set(k, { key: k, label: t.group_label || '', tasks: [] }); out.push(seen.get(k)); }
-        seen.get(k).tasks.push(t);
+        if (!seen.has(k)) { seen.set(k, { key: k, label: t.group_label || '', tasks: [], subs: [] }); out.push(seen.get(k)); }
+        const g = seen.get(k);
+        g.tasks.push(t);
+        if (t.subtype_key) {
+          const sk = k + '|' + t.subtype_key;
+          if (!subSeen.has(sk)) { const s = { key: sk, label: t.subtype_label || '', tasks: [] }; subSeen.set(sk, s); g.subs.push(s); }
+          subSeen.get(sk).tasks.push(t);
+        }
+      }
+      // Подтипы показываем, только когда по ним разложены все задачи задания
+      // и их больше одного — иначе лишний уровень раскрытия ни к чему.
+      for (const g of out) {
+        const covered = g.subs.reduce((n, s) => n + s.tasks.length, 0);
+        if (g.subs.length < 2 || covered !== g.tasks.length) g.subs = [];
       }
       return out;
     },
