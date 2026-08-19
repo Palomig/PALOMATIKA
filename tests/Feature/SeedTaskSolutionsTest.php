@@ -80,15 +80,26 @@ class SeedTaskSolutionsTest extends TestCase
         $this->assertSame('', $this->solutionOf($retired));
     }
 
-    /** Каждый написанный разбор заканчивается блоком с ответом. */
-    public function test_every_authored_file_has_an_answer_block(): void
+    /** Каждый написанный разбор — с чертежом и блоком ответа. */
+    public function test_every_authored_file_has_a_figure_and_an_answer(): void
     {
         $files = File::files(storage_path('app/tasks/solutions/oge/topic_23'));
         $this->assertCount(12, $files);
 
         foreach ($files as $file) {
             $html = File::get($file->getPathname());
-            $this->assertStringContainsString('<div class="answer">', $html, $file->getFilename());
+            $name = $file->getFilename();
+            $this->assertStringContainsString('<div class="answer">', $html, $name);
+            $this->assertStringContainsString('<div class="sol-figure">', $html, $name);
+            // Чертёж — в стилистике заданий 24 и 25: тёмная подложка и та же палитра.
+            $this->assertStringContainsString('fill="#0a1628"', $html, $name);
+            $this->assertMatchesRegularExpression('/<svg[^>]+viewBox="0 0 340 \\d+"/', $html, $name);
+            // Столько же чертежей, сколько разобранных задач.
+            $this->assertSame(
+                substr_count($html, '<p><i>'),
+                substr_count($html, '<div class="sol-figure">'),
+                $name
+            );
         }
     }
 }
