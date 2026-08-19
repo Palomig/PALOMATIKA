@@ -418,9 +418,6 @@ class StudentController extends Controller
                     $isCurated = trim((string) ($zadanie['taxonomy_key'] ?? '')) !== '';
                     // Решение видно только учителям/админам; его текст НЕ отдаётся ученику.
                     $hasSolution = $isTeacher && trim((string) ($zadanie['solution'] ?? '')) !== '';
-                    // Чертёж серии — тоже учительский материал: в прежнем банке он
-                    // жил на /topics/{id}, куда ученику хода нет.
-                    $illustration = $isTeacher ? trim((string) ($zadanie['illustration'] ?? '')) : '';
                     $zadaniya[] = [
                         'number'       => $num,
                         'section'      => $isCurated ? $blockSection : '',
@@ -433,7 +430,6 @@ class StudentController extends Controller
                         'hint'         => $zadanie['answer_hint'] ?? null,
                         'tasks'        => $tasks,
                         'has_solution' => $hasSolution,
-                        'illustration' => $illustration !== '' ? $illustration : null,
                     ];
                 }
             }
@@ -562,11 +558,6 @@ class StudentController extends Controller
             'title'        => $title,
             'subtitle'     => $subtitle,
             'instruction'  => $instruction,
-            // Чертёж серии — только когда у самого разбора своих чертежей нет:
-            // иначе он дублирует первый же рисунок в тексте.
-            'illustration' => str_contains($solution, 'class="sol-figure"')
-                ? ''
-                : trim((string) ($found['illustration'] ?? '')),
             'solution'     => $solution,
         ]);
     }
