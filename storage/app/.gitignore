@@ -2,6 +2,10 @@
 !public/
 !tasks/
 !tasks/*.json
+!tasks/solutions/
+!tasks/solutions/*/
+!tasks/solutions/*/*/
+!tasks/solutions/*/*/*.html
 !tasks/entrance10/
 !tasks/entrance10/*.json
 !tasks/ege/

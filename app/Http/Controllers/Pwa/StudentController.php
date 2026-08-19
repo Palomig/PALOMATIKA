@@ -418,6 +418,9 @@ class StudentController extends Controller
                     $isCurated = trim((string) ($zadanie['taxonomy_key'] ?? '')) !== '';
                     // Решение видно только учителям/админам; его текст НЕ отдаётся ученику.
                     $hasSolution = $isTeacher && trim((string) ($zadanie['solution'] ?? '')) !== '';
+                    // Чертёж серии — тоже учительский материал: в прежнем банке он
+                    // жил на /topics/{id}, куда ученику хода нет.
+                    $illustration = $isTeacher ? trim((string) ($zadanie['illustration'] ?? '')) : '';
                     $zadaniya[] = [
                         'number'       => $num,
                         'section'      => $isCurated ? $blockSection : '',
@@ -430,6 +433,7 @@ class StudentController extends Controller
                         'hint'         => $zadanie['answer_hint'] ?? null,
                         'tasks'        => $tasks,
                         'has_solution' => $hasSolution,
+                        'illustration' => $illustration !== '' ? $illustration : null,
                     ];
                 }
             }
@@ -553,12 +557,13 @@ class StudentController extends Controller
         }
 
         return view('pwa.student.part2-solution', [
-            'topic'       => $topic,
-            'number'      => $number,
-            'title'       => $title,
-            'subtitle'    => $subtitle,
-            'instruction' => $instruction,
-            'solution'    => $solution,
+            'topic'        => $topic,
+            'number'       => $number,
+            'title'        => $title,
+            'subtitle'     => $subtitle,
+            'instruction'  => $instruction,
+            'illustration' => trim((string) ($found['illustration'] ?? '')),
+            'solution'     => $solution,
         ]);
     }
 
