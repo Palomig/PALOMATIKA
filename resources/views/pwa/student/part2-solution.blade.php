@@ -38,6 +38,13 @@
     color: var(--text); font-weight: 600; font-size: 16px;
   }
   .sol-body .step-note { color: var(--text-muted); }
+  /* Подзаголовок подтипа: в группе ФИПИ слилось несколько серий прежнего
+     банка, и разбор каждой идёт своим разделом. */
+  .sol-body .sol-part {
+    font-family: var(--display); font-size: 16px; color: #9cc2f0;
+    margin: 26px 0 12px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+  .sol-body .sol-part:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
   .sol-body .sol-table {
     width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px;
     background: var(--surface); border-radius: 10px; overflow: hidden;

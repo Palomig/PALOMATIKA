@@ -515,17 +515,18 @@ class StudentController extends Controller
      */
     public function part2Solution(Request $request, string $topic, int $number)
     {
-        $allowed = ['21', '24', '25']; // расширяемый allow-list (позже: '23' и т.д.)
-        if (!in_array($topic, $allowed, true)) {
+        if (!in_array($topic, ['20', '21', '22', '23', '24', '25'], true)) {
             abort(404);
         }
 
         $data = $this->taskData->getTopicData($topic);
         $found = null;
+        $blockTitle = '';
         foreach (($data['blocks'] ?? []) as $block) {
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
                 if ((int) ($zadanie['number'] ?? 0) === $number) {
                     $found = $zadanie;
+                    $blockTitle = trim((string) ($block['title'] ?? ''));
                     break 2;
                 }
             }
@@ -536,14 +537,26 @@ class StudentController extends Controller
             abort(404);
         }
 
-        $short = $this->part2ShortLabels()[$topic][$number] ?? null;
         $instruction = trim((string) ($found['instruction'] ?? ''));
+
+        // Заголовки part2ShortLabels() описывают серии прежнего банка и после
+        // педагогической перегруппировки ФИПИ к её номерам уже не относятся:
+        // у кураторской группы заголовок берём из неё самой, как в списке.
+        if (trim((string) ($found['taxonomy_key'] ?? '')) !== '') {
+            $title = $instruction !== '' ? $instruction : "Группа {$number}";
+            $subtitle = $blockTitle !== '' ? $blockTitle : null;
+            $instruction = '';   // уже вынесена в заголовок, в рамке не дублируем
+        } else {
+            $short = $this->part2ShortLabels()[$topic][$number] ?? null;
+            $title = $short['title'] ?? "Задание {$number}";
+            $subtitle = $short['subtitle'] ?? null;
+        }
 
         return view('pwa.student.part2-solution', [
             'topic'       => $topic,
             'number'      => $number,
-            'title'       => $short['title'] ?? "Задание {$number}",
-            'subtitle'    => $short['subtitle'] ?? null,
+            'title'       => $title,
+            'subtitle'    => $subtitle,
             'instruction' => $instruction,
             'solution'    => $solution,
         ]);

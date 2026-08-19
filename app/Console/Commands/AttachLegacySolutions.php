@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\DB;
  * типа задачи текст совпадает дословно, а числа меняются от варианта к
  * варианту. Заголовки не годятся — у ФИПИ они длиннее и переформулированы.
  *
+ * Автоматика ловит только пары «один к одному». Педагогическая перегруппировка
+ * ФИПИ шире прежней: например, пять серий про движение по прямой слились в одну
+ * группу «Скорость и разность времени в пути». Такие случаи перечислены руками
+ * в MANUAL, а разборы подтипов склеиваются в одну страницу с подзаголовками.
+ *
  *   php artisan tasks:attach-legacy-solutions --dry-run
  *   php artisan tasks:attach-legacy-solutions
  */
@@ -31,6 +36,31 @@ class AttachLegacySolutions extends Command
 
     private const CARRIED = ['solution', 'illustration', 'answer_hint'];
 
+    /**
+     * Ручная карта: тема → задание банка ФИПИ → задания прежнего банка,
+     * которые в него вошли. Сверено по текстам задач; порядок доноров
+     * задаёт порядок подтипов на странице разбора.
+     */
+    private const MANUAL = [
+        '21' => [
+            1 => [1, 2, 3, 4, 5],   // движение по прямой: туда-обратно, навстречу, вдогонку
+            2 => [6],               // круговая трасса
+            3 => [7],               // средняя скорость
+            4 => [8],               // протяжённые тела (длина поезда)
+            5 => [9, 10, 11, 12],   // движение по воде
+            6 => [15],              // работа и производительность
+            7 => [13, 14],          // проценты: концентрация и сухое вещество
+        ],
+        '23' => [
+            5 => [6],               // биссектрисы углов при боковой стороне трапеции
+            7 => [11],              // прямая, параллельная основаниям трапеции
+            8 => [12],              // хорды и расстояния от центра
+        ],
+        '24' => [
+            8 => [11, 12],          // две высоты: тупоугольный и остроугольный случаи
+        ],
+    ];
+
     public function handle(): int
     {
         $donors = $this->groupsWithExtras(TaskBankRepository::RETIRED);
@@ -39,54 +69,48 @@ class AttachLegacySolutions extends Command
             return self::SUCCESS;
         }
 
+        $byTopic = [];
+        $byNumber = [];
+        foreach ($donors as $donor) {
+            $byTopic[$donor->topic][] = $donor;
+            $byNumber[$donor->topic][$donor->zadanie_number] = $donor;
+        }
+
         $targets = TaskGroup::query()
             ->with('tasks')
             ->where('bank', 'oge')
             ->where('source', 'fipi')
-            ->get()
-            ->groupBy('topic');
+            ->orderBy('topic')->orderBy('zadanie_number')
+            ->get();
 
-        $matched = $missed = 0;
+        $used = [];
+        $matched = $empty = 0;
         $updates = [];
 
-        foreach ($donors as $donor) {
-            $key = $this->signature($donor);
-            $found = null;
-
-            foreach ($targets[$donor->topic] ?? [] as $group) {
-                if ($key !== '' && $this->signature($group) === $key) {
-                    $found = $group;
-                    break;
-                }
-            }
-
-            // Запасной ключ — заголовок типа. Подтипы банка ФИПИ называли по
-            // заголовкам прежнего банка, поэтому там, где текст задачи
-            // переформулирован, названия всё равно совпадают.
-            if ($found === null) {
-                $title = $this->normalizeTitle($this->title($donor));
-                foreach ($targets[$donor->topic] ?? [] as $group) {
-                    if ($title !== '' && $this->normalizeTitle($this->title($group)) === $title) {
-                        $found = $group;
-                        break;
-                    }
-                }
-            }
-
-            if ($found === null) {
-                $missed++;
-                $this->line(sprintf('  не нашлось пары: тема %s, задание %d — %s',
-                    $donor->topic, $donor->zadanie_number, mb_substr($this->title($donor), 0, 60)));
+        foreach ($targets as $target) {
+            $found = $this->manualDonors($target, $byNumber) ?: $this->autoDonors($target, $byTopic);
+            if ($found === []) {
+                $empty++;
                 continue;
             }
 
             $matched++;
-            $updates[$found->id] = array_merge($found->payload ?? [], $this->extras($donor));
+            foreach ($found as $donor) {
+                $used[$donor->id] = true;
+            }
+            $updates[$target->id] = array_merge($target->payload ?? [], $this->compose($found));
+        }
+
+        foreach ($donors as $donor) {
+            if (!isset($used[$donor->id])) {
+                $this->line(sprintf('  не нашлось пары: тема %s, задание %d — %s',
+                    $donor->topic, $donor->zadanie_number, mb_substr($this->title($donor), 0, 60)));
+            }
         }
 
         $this->newLine();
-        $this->info(sprintf('%s: сопоставлено %d, без пары %d',
-            $this->option('dry-run') ? 'ПОДСЧЁТ' : 'Перенесено', $matched, $missed));
+        $this->info(sprintf('%s: групп ФИПИ с разбором %d, без разбора %d',
+            $this->option('dry-run') ? 'ПОДСЧЁТ' : 'Перенесено', $matched, $empty));
 
         if ($this->option('dry-run') || $updates === []) {
             return self::SUCCESS;
@@ -101,6 +125,103 @@ class AttachLegacySolutions extends Command
         return self::SUCCESS;
     }
 
+    /**
+     * Доноры из ручной карты.
+     *
+     * @param  array<string, array<int, TaskGroup>>  $byNumber
+     * @return array<int, TaskGroup>
+     */
+    private function manualDonors(TaskGroup $target, array $byNumber): array
+    {
+        $numbers = self::MANUAL[$target->topic][$target->zadanie_number] ?? [];
+        $found = [];
+        foreach ($numbers as $number) {
+            if (isset($byNumber[$target->topic][$number])) {
+                $found[] = $byNumber[$target->topic][$number];
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * Доноры, найденные автоматически: сперва по отпечатку текста задачи,
+     * затем — запасным ключом по заголовку типа. Подтипы банка ФИПИ называли
+     * по заголовкам прежнего банка, поэтому там, где текст задачи
+     * переформулирован, названия всё равно совпадают.
+     *
+     * @param  array<string, array<int, TaskGroup>>  $byTopic
+     * @return array<int, TaskGroup>
+     */
+    private function autoDonors(TaskGroup $target, array $byTopic): array
+    {
+        $signature = $this->signature($target);
+        if ($signature !== '') {
+            foreach ($byTopic[$target->topic] ?? [] as $donor) {
+                if ($this->signature($donor) === $signature) {
+                    return [$donor];
+                }
+            }
+        }
+
+        $title = $this->normalizeTitle($this->title($target));
+        if ($title !== '') {
+            foreach ($byTopic[$target->topic] ?? [] as $donor) {
+                if ($this->normalizeTitle($this->title($donor)) === $title) {
+                    return [$donor];
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Собрать переносимые поля. Несколько доноров — это подтипы одной группы
+     * ФИПИ: их разборы идут подряд под своими подзаголовками, а чертёж и
+     * подсказка берутся от первого донора, у которого они есть.
+     *
+     * @param  array<int, TaskGroup>  $donors
+     * @return array<string, mixed>
+     */
+    private function compose(array $donors): array
+    {
+        if (count($donors) === 1) {
+            return $this->extras($donors[0]);
+        }
+
+        $carried = [];
+        $parts = [];
+        foreach ($donors as $donor) {
+            $extras = $this->extras($donor);
+            $solution = trim((string) ($extras['solution'] ?? ''));
+            if ($solution !== '') {
+                $parts[] = '<h3 class="sol-part">' . e($this->subtypeTitle($donor)) . '</h3>' . $solution;
+            }
+            foreach (['illustration', 'answer_hint'] as $key) {
+                if (!isset($carried[$key]) && !empty($extras[$key])) {
+                    $carried[$key] = $extras[$key];
+                }
+            }
+        }
+
+        if ($parts !== []) {
+            $carried['solution'] = implode('', $parts);
+        }
+
+        return $carried;
+    }
+
+    /** Заголовок подтипа без кураторской нумерации прежнего банка («III) …»). */
+    private function subtypeTitle(TaskGroup $donor): string
+    {
+        $title = $this->title($donor);
+        $title = preg_replace('/^\s*[IVX]+\)\s*/u', '', $title) ?? $title;
+        $title = trim($title);
+
+        return $title !== '' ? $title : "Задание {$donor->zadanie_number}";
+    }
+
     /** @return array<int, TaskGroup> */
     private function groupsWithExtras(string $source): array
     {
@@ -108,6 +229,7 @@ class AttachLegacySolutions extends Command
             ->with('tasks')
             ->where('bank', 'oge')
             ->where('source', $source)
+            ->orderBy('topic')->orderBy('zadanie_number')
             ->get()
             ->filter(fn (TaskGroup $g) => $this->extras($g) !== [])
             ->values()
