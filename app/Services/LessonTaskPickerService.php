@@ -267,7 +267,8 @@ class LessonTaskPickerService
      *
      * @return array<int, array{
      *   id:string|int, expression:string, text?:string, image?:string, answer:string,
-     *   group_key:string|int, group_label:string, section?:string|null,
+     *   group_key:string|int, group_label:string, subtype_key?:string|null, subtype_label?:string,
+     *   section?:string|null,
      *   zadanie_number?:int, level_id?:string
      * }>
      */
@@ -296,6 +297,9 @@ class LessonTaskPickerService
                 // «Новые задания» живут в zadanie с number 0 — для раздела 'new' это валидно.
                 if (!$number && !($isNewZadanie && $section === 'new')) continue;
                 $instruction = $this->shorten((string) ($z['instruction'] ?? ''), 80);
+                // Подтипы — второй уровень внутри задания: серии с разными
+                // условиями, размеченные `tasks:seed-subtypes`.
+                $subtypes = is_array($z['subtypes'] ?? null) ? array_values($z['subtypes']) : [];
                 $groupLabel = $isNewZadanie
                     ? self::NEW_ZADANIE_LABEL
                     : ($instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}");
@@ -310,6 +314,8 @@ class LessonTaskPickerService
                     if ($expression === '') {
                         $expression = (string) ($z['instruction'] ?? '');
                     }
+                    $subtype = isset($t['subtype']) ? (int) $t['subtype'] : null;
+                    $subtypeLabel = $subtype !== null ? (string) ($subtypes[$subtype] ?? '') : '';
                     $result[] = [
                         'uid'            => "{$blockNumber}.{$number}.{$taskId}",
                         'id'             => $taskId,
@@ -322,6 +328,8 @@ class LessonTaskPickerService
                         'image_svg'      => (string) ($t['svg'] ?? self::drawingFromHtml((string) ($t['html'] ?? ''))),
                         'group_key'      => $number,
                         'group_label'    => $groupLabel,
+                        'subtype_key'    => $subtypeLabel !== '' ? "{$number}.{$subtype}" : null,
+                        'subtype_label'  => $subtypeLabel,
                         'zadanie_number' => $number,
                         'section'        => $section,
                     ];
