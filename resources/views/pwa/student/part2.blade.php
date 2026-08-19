@@ -131,6 +131,48 @@
   }
   .spoiler[open] .spoiler-chevron { transform: rotate(90deg); }
   .spoiler-body { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 8px; }
+  /* Второй уровень: внутри группы задачи разложены по подтипам —
+     сериям с разными условиями, которые решаются по-разному. */
+  .subtype {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255,255,255,.02);
+  }
+  .subtype + .subtype { margin-top: -2px; }
+  .subtype summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .subtype summary::-webkit-details-marker { display: none; }
+  .subtype-chevron {
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1;
+    transition: transform .15s ease;
+  }
+  .subtype[open] .subtype-chevron { transform: rotate(90deg); }
+  .subtype-title {
+    flex: 1; min-width: 0;
+    font-family: var(--display);
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--text);
+  }
+  .subtype-count {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+  }
+  .subtype-body { padding: 0 8px 8px; display: flex; flex-direction: column; gap: 8px; }
   .task-list {
     margin-top: 12px;
     display: flex; flex-direction: column; gap: 8px;
@@ -265,54 +307,26 @@
           @if($group['hint'])
             <div class="hint-box">{{ $group['hint'] }}</div>
           @endif
-          @foreach($group['tasks'] as $task)
-            <div class="task-item">
-              @if(!empty($task['image']))
-                <img src="{{ asset('images/tasks/' . $selectedTopic . '/' . ltrim($task['image'], '/')) }}"
-                     alt="" style="display:block;max-width:100%;height:auto;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;background:#fff;padding:4px;" loading="lazy">
-              @endif
-              @if(!empty($task['drawing']))
-                <div class="fipi-drawing">{!! $task['drawing'] !!}</div>
-              @endif
-
-              @if(!empty($task['html']))
-                {{-- Банк ФИПИ: разметка уже готова (KaTeX + инлайновые SVG) --}}
-                <div class="task-item-text fipi-html">{!! $task['html'] !!}</div>
-              @else
-                <div class="task-item-text">{{ $task['text'] }}</div>
-              @endif
-              @if(!empty($task['answer']))
-                @if($isTeacher)
-                  {{-- Учителю ответ нужен как справка — показываем сразу. --}}
-                  <div class="answer-row">
-                    <span class="answer-label">Ответ:</span>
-                    <span class="answer-value">{{ $task['answer'] }}</span>
-                  </div>
-                @else
-                  <div class="p2-answer" data-zadanie="{{ $group['number'] }}" data-task="{{ $task['id'] }}">
-                    <div class="p2-input-row" data-mathpad-anchor>
-                      <input type="text" class="p2-input" placeholder="Твой ответ"
-                             autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"
-                             @if(in_array($selectedTopic, ['20', '23'], true))
-                               data-mathpad="{{ $selectedTopic === '20' ? 'full' : 'roots' }}"
-                             @endif>
-                      <button type="button" class="p2-btn p2-check">Проверить</button>
-                    </div>
-                    @if($selectedTopic === '20')
-                      <div class="p2-hint">Несколько корней — через «;». Промежуток — со скобками: (1; 1+√2).</div>
-                    @elseif($selectedTopic === '23')
-                      <div class="p2-hint">Корень пиши как √6 или sqrt(6). Ответ нужен точный, не десятичный.</div>
-                    @endif
-                    <div class="p2-result" hidden></div>
-                    <button type="button" class="p2-reveal">Показать ответ</button>
-                  </div>
-                @endif
-              @endif
-              @if(!empty($task['id']))
-                <div class="task-item-meta">{{ $task['id'] }}</div>
-              @endif
-            </div>
-          @endforeach
+          @if(!empty($group['subtypes']))
+            @foreach($group['subtypes'] as $subtype)
+              <details class="subtype">
+                <summary>
+                  <span class="subtype-chevron">›</span>
+                  <span class="subtype-title">{{ $subtype['title'] }}</span>
+                  <span class="subtype-count">{{ count($subtype['tasks']) }}</span>
+                </summary>
+                <div class="subtype-body">
+                  @foreach($subtype['tasks'] as $task)
+                    @include('pwa.student.partials.part2-task', ['task' => $task, 'group' => $group])
+                  @endforeach
+                </div>
+              </details>
+            @endforeach
+          @else
+            @foreach($group['tasks'] as $task)
+              @include('pwa.student.partials.part2-task', ['task' => $task, 'group' => $group])
+            @endforeach
+          @endif
         </div>
       </details>
     @empty
