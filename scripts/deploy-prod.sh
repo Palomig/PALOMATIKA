@@ -141,7 +141,7 @@ is_runtime_file() {
     .github/*|.claude/*|.vscode/*|.idea/*|agent-board/*) return 1 ;;
     tests/*|phpunit.xml|node_modules/*|vendor/*) return 1 ;;
     docs/*|*.md|.gitignore|.gitattributes|.editorconfig) return 1 ;;
-    scripts/deploy-prod.sh) return 1 ;;
+    scripts/deploy-prod.sh|scripts/blade-lint.php) return 1 ;;
     *) return 0 ;;
   esac
 }
@@ -166,6 +166,23 @@ if [ ${#FILES[@]} -eq 0 ]; then
   echo "Рантайм-файлов не изменилось."
 else
   printf '  %s\n' "${FILES[@]}"
+fi
+
+# ── Собираются ли шаблоны ────────────────────────────────────────────────────
+# Blade-ловушка: HTML-атрибут может совпасть с директивой (@error на <img> уже
+# уронил прод в 500). Проверяем только те шаблоны, что едут этим деплоем: чужие
+# давние поломки не наше дело и блокировать доставку не должны.
+BLADE=()
+for path in "${FILES[@]}"; do
+  case "$path" in *.blade.php) [ -f "$path" ] && BLADE+=("$path") ;; esac
+done
+
+if [ ${#BLADE[@]} -gt 0 ] && [ -f scripts/blade-lint.php ]; then
+  if ! php scripts/blade-lint.php "${BLADE[@]}"; then
+    echo "Деплой остановлен: шаблон не собирается в валидный PHP — на проде это 500." >&2
+    exit 1
+  fi
+  echo "Шаблоны собираются: ${#BLADE[@]}"
 fi
 
 if [ "$DRY_RUN" = "1" ]; then
