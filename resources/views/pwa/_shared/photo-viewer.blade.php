@@ -254,7 +254,8 @@ function photoZoom() {
          @gesturechange.prevent="void 0">
       <img class="viewer-img" x-ref="img" draggable="false"
            :src="imgSrc" :alt="photos[vi].label"
-           @error="if (hiRes) { _noFull = true; hiRes = false; }"
+           {{-- x-on:error, а не @error: @error — директива Blade, шаблон не соберётся --}}
+           x-on:error="if (hiRes) { _noFull = true; hiRes = false; }"
            :class="{ 'is-zoomed': scale > 1, 'is-dragging': dragging }"
            :style="`transform: translate(${x}px, ${y}px) scale(${scale})`">
     </div>
