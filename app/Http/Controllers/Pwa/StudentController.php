@@ -591,7 +591,13 @@ class StudentController extends Controller
             $subtitle = $short['subtitle'] ?? null;
         }
 
-        return view('pwa.student.part2-solution', [
+        // Раздел «2я часть» открывает разбор всплывающим окном и просит только
+        // содержимое; отдельная страница по тому же адресу остаётся рабочей.
+        $view = $request->boolean('fragment')
+            ? 'pwa.student.part2-solution-fragment'
+            : 'pwa.student.part2-solution';
+
+        return view($view, [
             'topic'        => $topic,
             'number'       => $number,
             'title'        => $title,

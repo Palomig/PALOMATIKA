@@ -8,6 +8,35 @@
 @endpush
 
 @push('styles')
+@include('pwa.student.partials.part2-solution-styles')
+  /* Всплывающее окно с разбором: на весь экран, закрывается крестиком справа. */
+  .sol-modal {
+    position: fixed; inset: 0; z-index: 900;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+  }
+  .sol-modal[hidden] { display: none; }
+  .sol-modal-head {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 12px;
+    padding: calc(14px + var(--safe-top)) 16px 12px;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+  }
+  .sol-modal-heading { flex: 1; min-width: 0; }
+  .sol-modal-name { font-family: var(--display); font-size: 15px; color: var(--text); }
+  .sol-modal-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sol-modal-close {
+    flex-shrink: 0; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer;
+  }
+  .sol-modal-close:active { transform: scale(.96); }
+  .sol-modal-body {
+    flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 16px 16px calc(32px + var(--safe-bottom, 0px));
+  }
+  .sol-modal-loading { color: var(--muted); font-size: 14px; text-align: center; padding: 28px 0; }
   /* Условия банка ФИПИ приходят готовой разметкой: формулы в KaTeX, чертежи
      инлайновыми SVG. Ширину чертежа задают Tailwind-классы (`max-w-[350px]`),
      но в PWA Tailwind не подключён — он живёт в head-config, а тут своя тема.
@@ -299,8 +328,9 @@
         </summary>
         <div class="spoiler-body">
           @if($isTeacher && !empty($group['has_solution']))
-            <a class="teacher-solution-btn"
-               href="{{ route('pwa.student.part2.solution', ['topic' => $selectedTopic, 'number' => $group['number']]) }}">
+            <a class="teacher-solution-btn js-solution-open"
+               href="{{ route('pwa.student.part2.solution', ['topic' => $selectedTopic, 'number' => $group['number']]) }}"
+               data-title="{{ $group['title'] }}">
               📖 Подробнее <span class="teacher-solution-tag">для учителя</span>
             </a>
           @endif
@@ -352,6 +382,20 @@
     </div>
   </template>
 </div>
+
+{{-- Разбор для учителя: открывается поверх списка, чтобы не терять место в теме --}}
+<div class="sol-modal task-render-scope" id="solution-modal" hidden
+     role="dialog" aria-modal="true" aria-labelledby="solution-modal-name">
+  <div class="sol-modal-head">
+    <div class="sol-modal-heading">
+      <div class="sol-modal-name" id="solution-modal-name">Подробное решение</div>
+      <div class="sol-modal-desc">Задание {{ $selectedTopic }} · только для учителя</div>
+    </div>
+    <button type="button" class="sol-modal-close" id="solution-modal-close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="sol-modal-body" id="solution-modal-body"></div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -446,6 +490,87 @@
       if (e.key === 'Enter' && e.target.classList?.contains('p2-input')) {
         e.preventDefault();
         run(e.target.closest('.p2-answer'), false);
+      }
+    });
+  })();
+
+  // --- разбор для учителя во всплывающем окне ---
+  (function () {
+    const modal = document.getElementById('solution-modal');
+    const body  = document.getElementById('solution-modal-body');
+    const name  = document.getElementById('solution-modal-name');
+    if (!modal) return;
+
+    let opened = false;
+
+    function typeset(el) {
+      if (typeof renderMathInElement !== 'function') return;
+      renderMathInElement(el, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$',  right: '$',  display: false },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '\\[', right: '\\]', display: true },
+        ],
+        throwOnError: false,
+      });
+    }
+
+    function close() {
+      if (!opened) return;
+      opened = false;
+      modal.hidden = true;
+      body.innerHTML = '';
+      document.body.style.overflow = '';
+      if (location.hash === '#solution') history.back();
+    }
+
+    async function open(url, title) {
+      name.textContent = title || 'Подробное решение';
+      body.innerHTML = '<div class="sol-modal-loading">Загружаю разбор…</div>';
+      modal.hidden = false;
+      modal.scrollTop = 0;
+      body.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      opened = true;
+      // Отдельная запись в истории: системная кнопка «назад» закрывает окно,
+      // а не уводит со страницы темы.
+      history.pushState({ solution: true }, '', '#solution');
+
+      try {
+        const res = await fetch(url + (url.includes('?') ? '&' : '?') + 'fragment=1', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          credentials: 'same-origin',
+        });
+        if (!res.ok) throw new Error(res.status);
+        body.innerHTML = await res.text();
+        typeset(body);
+      } catch (e) {
+        body.innerHTML = '<div class="sol-modal-loading">Не удалось загрузить разбор. '
+          + '<a href="' + url + '" style="color:var(--text)">Открыть страницей</a></div>';
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('.js-solution-open');
+      if (link) {
+        e.preventDefault();
+        open(link.getAttribute('href'), link.dataset.title);
+        return;
+      }
+      if (e.target.closest('#solution-modal-close')) close();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+
+    window.addEventListener('popstate', function () {
+      if (opened) {
+        opened = false;
+        modal.hidden = true;
+        body.innerHTML = '';
+        document.body.style.overflow = '';
       }
     });
   })();
