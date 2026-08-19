@@ -562,7 +562,11 @@ class StudentController extends Controller
             'title'        => $title,
             'subtitle'     => $subtitle,
             'instruction'  => $instruction,
-            'illustration' => trim((string) ($found['illustration'] ?? '')),
+            // Чертёж серии — только когда у самого разбора своих чертежей нет:
+            // иначе он дублирует первый же рисунок в тексте.
+            'illustration' => str_contains($solution, 'class="sol-figure"')
+                ? ''
+                : trim((string) ($found['illustration'] ?? '')),
             'solution'     => $solution,
         ]);
     }
