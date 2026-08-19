@@ -2,6 +2,9 @@
 !public/
 !tasks/
 !tasks/*.json
+!tasks/subtypes/
+!tasks/subtypes/*/
+!tasks/subtypes/*/*.json
 !tasks/solutions/
 !tasks/solutions/*/
 !tasks/solutions/*/*/

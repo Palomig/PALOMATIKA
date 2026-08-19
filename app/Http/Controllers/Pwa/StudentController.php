@@ -407,6 +407,7 @@ class StudentController extends Controller
                         'text'   => $text,
                         'image'  => $t['image'] ?? null,
                         'answer' => $t['answer'] ?? null,
+                        'subtype' => isset($t['subtype']) ? (int) $t['subtype'] : null,
                     ];
                 }
                 if (!empty($tasks)) {
@@ -429,6 +430,7 @@ class StudentController extends Controller
                             : ($short['subtitle'] ?? null),
                         'hint'         => $zadanie['answer_hint'] ?? null,
                         'tasks'        => $tasks,
+                        'subtypes'     => $this->part2Subtypes($zadanie['subtypes'] ?? null, $tasks),
                         'has_solution' => $hasSolution,
                     ];
                 }
@@ -444,6 +446,43 @@ class StudentController extends Controller
             'isPremium'     => true, // No billing gate in PWA
             'trialUsed'     => true,  // No trial UI in PWA
         ]);
+    }
+
+    /**
+     * Задачи группы, разложенные по подтипам, — второй уровень раскрытия.
+     * Разметку кладёт `tasks:seed-subtypes`; если она не сошлась с задачами,
+     * возвращаем пустой список и группа показывается плоско, как раньше.
+     *
+     * @param  array<int, string>|null  $titles
+     * @param  array<int, array<string, mixed>>  $tasks
+     * @return array<int, array{title: string, tasks: array<int, array<string, mixed>>}>
+     */
+    private function part2Subtypes(?array $titles, array $tasks): array
+    {
+        if (empty($titles)) {
+            return [];
+        }
+
+        $subtypes = [];
+        foreach (array_values($titles) as $i => $title) {
+            $subtypes[$i] = ['title' => (string) $title, 'tasks' => []];
+        }
+
+        foreach ($tasks as $task) {
+            $i = $task['subtype'];
+            if ($i === null || !isset($subtypes[$i])) {
+                return [];
+            }
+            $subtypes[$i]['tasks'][] = $task;
+        }
+
+        foreach ($subtypes as $subtype) {
+            if ($subtype['tasks'] === []) {
+                return [];
+            }
+        }
+
+        return array_values($subtypes);
     }
 
     /**

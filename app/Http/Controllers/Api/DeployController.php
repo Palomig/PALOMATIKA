@@ -56,6 +56,7 @@ class DeployController extends Controller
         'tasks:retire-legacy',
         'tasks:attach-legacy-solutions',
         'tasks:seed-solutions',
+        'tasks:seed-subtypes',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
