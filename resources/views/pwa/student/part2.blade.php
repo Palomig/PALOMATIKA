@@ -52,6 +52,16 @@
     font-size: 11px; font-weight: 500; opacity: .7;
     padding: 2px 7px; border-radius: 6px; background: rgba(255,255,255,.12);
   }
+  /* Чертёж серии: общая схема конфигурации, одна на все задачи группы. */
+  .series-figure {
+    margin: 0 0 14px; padding: 10px 12px 8px;
+    background: #0a1628; border: 1px solid #1e3a5f; border-radius: 12px;
+  }
+  .series-figure svg { display: block; width: 100%; max-width: 260px; height: auto; margin: 0 auto; }
+  .series-figure-label {
+    display: block; margin-top: 6px; text-align: center;
+    color: var(--text-muted); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+  }
   .topics-row {
     display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
     gap: 6px; padding-bottom: 2px;
@@ -261,6 +271,12 @@
                href="{{ route('pwa.student.part2.solution', ['topic' => $selectedTopic, 'number' => $group['number']]) }}">
               📖 Подробнее <span class="teacher-solution-tag">для учителя</span>
             </a>
+          @endif
+          @if($isTeacher && !empty($group['illustration']))
+            <div class="series-figure">
+              {!! $group['illustration'] !!}
+              <span class="series-figure-label">чертёж серии · для учителя</span>
+            </div>
           @endif
           @if($group['hint'])
             <div class="hint-box">{{ $group['hint'] }}</div>

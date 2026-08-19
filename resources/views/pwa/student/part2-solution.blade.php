@@ -20,6 +20,12 @@
     border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;
     color: var(--text); font-size: 15px; line-height: 1.5;
   }
+  /* Чертёж серии — общая схема конфигурации, одна на все задачи группы. */
+  .sol-figure-top {
+    margin: 0 0 16px; padding: 12px;
+    background: #0a1628; border: 1px solid #1e3a5f; border-radius: 12px;
+  }
+  .sol-figure-top svg { display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto; }
   .sol-body { color: var(--text); font-size: 15px; line-height: 1.6; }
   .sol-body p { margin: 0 0 12px; }
   .sol-body ul { margin: 0 0 12px; padding-left: 20px; }
@@ -75,6 +81,10 @@
 
   @if($instruction !== '')
     <div class="sol-instruction">{{ $instruction }}</div>
+  @endif
+
+  @if($illustration !== '')
+    <div class="sol-figure-top">{!! $illustration !!}</div>
   @endif
 
   <div class="sol-body">
