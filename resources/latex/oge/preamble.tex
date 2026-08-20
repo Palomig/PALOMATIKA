@@ -135,19 +135,34 @@
 % Вводное условие блока 1–5: без рамки и номера, во всю ширину полосы.
 \newcommand{\ogeIntro}[1]{\par\vspace{4pt}#1\par\vspace{6pt}}
 
-% Растровая иллюстрация условия (планы, графики ФИПИ). Ширина ограничена
-% полосой набора, высота — третью страницы: иначе один план участка вытесняет
-% с листа все пять вопросов, к которым он относится.
-\newcommand{\ogeRaster}[1]{%
+% Растровая иллюстрация условия (планы, чертежи, фотографии ФИПИ).
+% Печатается в натуральную величину и только сжимается, если не влезает в
+% полосу: растянутый растр читается хуже мелкого, а увеличивать нечего —
+% исходник у ФИПИ экранный.
+\newcommand{\ogeRaster}[2]{%
   \par\vspace{\OGEfigbefore}%
   \noindent\hspace*{\fill}%
-  \includegraphics[width=\linewidth,height=0.33\textheight,keepaspectratio]{#1}%
+  \ifdim #2pt>\linewidth
+    \includegraphics[width=\linewidth,height=0.33\textheight,keepaspectratio]{#1}%
+  \else
+    \includegraphics[width=#2pt,height=0.33\textheight,keepaspectratio]{#1}%
+  \fi
   \hspace*{\fill}\par\vspace{\OGEfigafter}}
 
 % Та же иллюстрация внутри ячейки таблицы: без отбивок и переводов строки,
-% иначе \par порвёт ячейку, а ширина в полосу вытолкнет таблицу за поля.
-\newcommand{\ogeRasterCell}[1]{%
-  \includegraphics[width=0.42\linewidth,height=0.22\textheight,keepaspectratio]{#1}}
+% иначе \par порвёт ячейку.
+\newcommand{\ogeRasterCell}[2]{%
+  \ifdim #2pt>0.42\linewidth
+    \includegraphics[width=0.42\linewidth,height=0.22\textheight,keepaspectratio]{#1}%
+  \else
+    \includegraphics[width=#2pt,height=0.22\textheight,keepaspectratio]{#1}%
+  \fi}
+
+% Обозначение внутри предложения: «имеет ширину [B=195] мм». Такие формулы
+% ФИПИ тоже хранит растром, и вынести их отдельной иллюстрацией — значит
+% выбросить кусок предложения и оставить «имеет ширину мм».
+\newcommand{\ogeRasterInline}[2]{%
+  \raisebox{-0.25\height}{\includegraphics[height=#2pt]{#1}}}
 
 % Место под решение во второй части.
 \newcommand{\ogesolutiongap}[1][\OGEparttwogap]{\par\vspace{#1}}
