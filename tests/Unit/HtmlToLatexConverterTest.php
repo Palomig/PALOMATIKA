@@ -73,23 +73,64 @@ class HtmlToLatexConverterTest extends TestCase
         $this->assertStringContainsString('Условие задачи', $out['latex']);
     }
 
-    public function test_ragged_rows_are_padded_to_equal_width(): void
+    /** Одинокая ячейка в широкой таблице — подзаголовок во всю ширину. */
+    public function test_single_cell_row_spans_the_table(): void
     {
         $html = '<table><tr><td>Шапка</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>';
 
         $out = $this->convert($html);
 
-        // Три колонки в спецификации и ровно два амперсанда в короткой строке.
         $this->assertStringContainsString('{|c|c|c|}', $out['latex']);
-        $this->assertStringContainsString('Шапка & & ', $out['latex']);
+        // Распорка обязана быть внутри \multicolumn: он должен открывать
+        // ячейку, иначе TeX падает на «Misplaced \omit».
+        $this->assertStringContainsString('\\multicolumn{3}{|c|}{\\cs Шапка}', $out['latex']);
+        $this->assertStringNotContainsString('\\cs \\multicolumn{3}', $out['latex']);
     }
 
-    public function test_raster_image_is_collected_as_asset(): void
+    /**
+     * Экспорт ФИПИ теряет colspan и rowspan: «Диаметр диска (дюймы)» приезжает
+     * одной ячейкой в строке из двух, а под ней четыре номера. Без сшивки
+     * заголовок встаёт над одной колонкой вместо четырёх, и таблица врёт.
+     */
+    public function test_lost_header_merges_are_reconstructed(): void
+    {
+        $html = '<table>'
+            . '<tr><td>Ширина шины</td><td>Диаметр диска</td></tr>'
+            . '<tr><td>15</td><td>16</td><td>17</td><td>18</td></tr>'
+            . '<tr><td>195</td><td>a</td><td>b</td><td>c</td><td>d</td></tr>'
+            . '<tr><td>205</td><td>e</td><td>f</td><td>g</td><td>h</td></tr>'
+            . '</table>';
+
+        $out = $this->convert($html);
+
+        $this->assertStringContainsString('\\multirow{2}{*}{Ширина шины}', $out['latex']);
+        $this->assertStringContainsString('\\multicolumn{4}{c|}{Диаметр диска}', $out['latex']);
+        // Под сшитой ячейкой линейка идёт только над колонками.
+        $this->assertStringContainsString('\\cline{2-5}', $out['latex']);
+        // Вторая строка сдвинута вправо: первую колонку держит объединение.
+        $this->assertStringContainsString('\\cs & 15 & 16 & 17 & 18', $out['latex']);
+    }
+
+    /** Ровная таблица сшивок не получает: там нечего восстанавливать. */
+    public function test_regular_table_is_not_merged(): void
+    {
+        $html = '<table><tr><td>Тип</td><td>Цена</td><td>Срок</td></tr>'
+            . '<tr><td>А</td><td>1</td><td>2</td></tr>'
+            . '<tr><td>Б</td><td>3</td><td>4</td></tr></table>';
+
+        $out = $this->convert($html);
+
+        $this->assertStringNotContainsString('\\multirow', $out['latex']);
+        $this->assertStringNotContainsString('\\multicolumn', $out['latex']);
+    }
+
+    public function test_raster_image_is_collected_with_its_caption(): void
     {
         $out = $this->convert('<figure><img src="img/intro_X/plan.png"><figcaption>Рис. 1</figcaption></figure>');
 
         $this->assertSame(['img/intro_X/plan.png'], $out['assets']);
         $this->assertStringContainsString('\\ogeAsset{0}', $out['latex']);
+        $this->assertSame('Рис. 1', $out['captions'][0]);
     }
 
     /**

@@ -100,17 +100,213 @@ class PrintVariantComposer
     /**
      * Вводный текст блока 1–5.
      *
-     * Печатается без рамки задания и без номера — это условие, а не вопрос,
-     * ровно как в бланке ФИПИ.
+     * Печатается без рамки задания и без номера — это условие, а не вопрос.
+     * Иллюстрации ставятся с обтеканием: экспорт ФИПИ сваливает их все в
+     * начало текста, и если печатать так, два рисунка съедают полосу целиком,
+     * а условие уезжает на следующую страницу отдельно от своих картинок.
      */
     private function renderIntro(TaskIntro $intro): string
     {
         $converted = $this->converter->convert($intro->html);
         $this->unknown += $converted['unknown'];
+
         $latex = $this->resolveFigures($converted['latex'], $converted['figures'], 0, 'intro');
-        $latex = $this->resolveAssets($latex, $converted['assets']);
+        $latex = $this->layoutIntroAssets($latex, $converted['assets'], $converted['captions']);
 
         return "\\ogeIntro{\n" . trim($latex) . "\n}\n\n";
+    }
+
+    /** Строк текста в абзаце на глаз: полоса набора вмещает около 85 знаков. */
+    private const CHARS_PER_LINE = 85;
+
+    /** Полная ширина полосы набора в пунктах — от неё считается узкая строка. */
+    private const TEXT_WIDTH_PT = 481.9;
+
+    /** Кегль 12pt даёт интерлиньяж 14,446pt — им и меряем высоту обтекания. */
+    private const BASELINE_PT = 14.446;
+
+    /**
+     * Расставляет иллюстрации вводного текста по абзацам с обтеканием.
+     *
+     * @param list<string> $assets
+     * @param array<int, string> $captions
+     */
+    private function layoutIntroAssets(string $latex, array $assets, array $captions): string
+    {
+        $wraps = [];
+
+        foreach ($assets as $index => $relative) {
+            $info = $this->assets->describe($relative);
+
+            if ($info === null) {
+                $latex = $this->replaceAsset($latex, $index, '\\textit{[иллюстрация недоступна]}');
+                continue;
+            }
+
+            // Мелкий растр — это формула внутри предложения, её не двигаем.
+            if ($info['height'] <= self::INLINE_HEIGHT_PT) {
+                $latex = $this->replaceAsset(
+                    $latex,
+                    $index,
+                    sprintf('\\ogeRasterInline{%s}{%.1f}', $info['path'], $info['height'])
+                );
+                continue;
+            }
+
+            $latex = $this->replaceAsset($latex, $index, '');
+            $wraps[] = [
+                'path' => $info['path'],
+                'width' => min($info['width'], 200.0),
+                'height' => $info['height'],
+                'caption' => $captions[$index] ?? '',
+            ];
+        }
+
+        return $wraps === [] ? $latex : $this->injectWraps($latex, $wraps);
+    }
+
+    private function replaceAsset(string $latex, int $index, string $with): string
+    {
+        foreach (['ogeAsset', 'ogeAssetCell'] as $macro) {
+            $latex = str_replace('\\' . $macro . '{' . $index . '}', $with, $latex);
+        }
+
+        return $latex;
+    }
+
+    /**
+     * Вставляет обтекаемые рисунки в начала абзацев.
+     *
+     * wrapfig не считает, сколько строк займёт рисунок, — число строк ему
+     * задаётся вручную, и если поставить два рисунка подряд, второй наедет на
+     * первый. Поэтому идём по абзацам, прикидывая их длину по числу знаков, и
+     * ставим следующий рисунок только тогда, когда предыдущий уже обтёк.
+     *
+     * @param list<array{path: string, width: float, height: float, caption: string}> $wraps
+     */
+    private function injectWraps(string $latex, array $wraps): string
+    {
+        $paragraphs = preg_split('/\n{2,}/', trim($latex)) ?: [];
+        $paragraphs = array_values(array_filter($paragraphs, static fn (string $s): bool => trim($s) !== ''));
+
+        if ($paragraphs === []) {
+            return $latex;
+        }
+
+        // Первый абзац оставляем во всю ширину: он вводит сюжет, и рисунок
+        // рядом с одной-двумя строками смотрится оторванным.
+        $at = min(1, count($paragraphs) - 1);
+
+        foreach ($wraps as $wrap) {
+            if ($at >= count($paragraphs)) {
+                // Абзацы кончились — остаток печатаем обычными иллюстрациями.
+                $paragraphs[] = sprintf('\\ogeRaster{%s}{%.1f}', $wrap['path'], $wrap['width']);
+                continue;
+            }
+
+            $fit = $this->fitWrap($paragraphs, $at, $wrap);
+
+            // Обтекать нечем даже уменьшенным рисунком: до конца условия
+            // осталось меньше строк, чем он занимает. wrapfig в этом случае
+            // пускает обтекание дальше — в первое задание, и оно печатается
+            // узкой колонкой. Тогда печатаем рисунок обычным блоком.
+            if ($fit === null) {
+                $paragraphs[] = sprintf('\\ogeRaster{%s}{%.1f}', $wrap['path'], $wrap['width'])
+                    . ($wrap['caption'] !== '' ? "\n\n" . $wrap['caption'] : '');
+                continue;
+            }
+
+            [$width, $lines] = $fit;
+
+            $paragraphs[$at] = sprintf(
+                '\\ogeWrap{%d}{%.1f}{%s}{%s}',
+                $lines,
+                $width,
+                $wrap['path'],
+                $wrap['caption']
+            ) . "\n" . $paragraphs[$at];
+
+            $at = $this->nextFreeParagraph($paragraphs, $at, $lines, $width);
+        }
+
+        return implode("\n\n", $paragraphs);
+    }
+
+    /** Уже этого рисунок не сжимаем: подписи на чертеже станут нечитаемы. */
+    private const MIN_WRAP_WIDTH_PT = 120.0;
+
+    /**
+     * Подбирает ширину рисунка, при которой его обтекает оставшийся текст.
+     *
+     * Уменьшение помогает дважды: рисунок становится ниже, и строка рядом с
+     * ним длиннее — оставшегося условия хватает на большее число строк.
+     *
+     * @param list<string> $paragraphs
+     * @param array{path: string, width: float, height: float, caption: string} $wrap
+     * @return array{0: float, 1: int}|null Ширина и число обтекающих строк.
+     */
+    private function fitWrap(array $paragraphs, int $at, array $wrap): ?array
+    {
+        $caption = $wrap['caption'] !== '' ? 12.0 : 0.0;
+
+        for ($width = $wrap['width']; $width >= self::MIN_WRAP_WIDTH_PT; $width -= 12.0) {
+            $height = $wrap['height'] * ($width / $wrap['width']);
+            $lines = (int) ceil(($height + $caption) / self::BASELINE_PT) + 1;
+
+            if ($this->linesFrom($paragraphs, $at, $width) >= $lines) {
+                return [$width, $lines];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Первый абзац, до которого предыдущий рисунок уже закончил обтекаться.
+     *
+     * @param list<string> $paragraphs
+     */
+    private function nextFreeParagraph(array $paragraphs, int $from, int $linesNeeded, float $width): int
+    {
+        $covered = 0;
+
+        for ($i = $from; $i < count($paragraphs); $i++) {
+            $covered += $this->paragraphLines($paragraphs[$i], $width);
+            if ($covered >= $linesNeeded) {
+                return $i + 1;
+            }
+        }
+
+        return count($paragraphs);
+    }
+
+    /**
+     * Сколько строк текста осталось до конца условия начиная с абзаца.
+     *
+     * @param list<string> $paragraphs
+     */
+    private function linesFrom(array $paragraphs, int $from, float $width): int
+    {
+        $lines = 0;
+        for ($i = $from; $i < count($paragraphs); $i++) {
+            $lines += $this->paragraphLines($paragraphs[$i], $width);
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Длина абзаца в строках.
+     *
+     * Рядом с рисунком строка короче на его ширину — считать её полной значит
+     * недооценить абзац вдвое и пустить обтекание за пределы условия.
+     */
+    private function paragraphLines(string $paragraph, float $width): int
+    {
+        $share = max(0.25, (self::TEXT_WIDTH_PT - $width - 10.0) / self::TEXT_WIDTH_PT);
+        $perLine = max(20.0, self::CHARS_PER_LINE * $share);
+
+        return max(1, (int) ceil(mb_strlen($paragraph) / $perLine));
     }
 
     private function renderTask(int $number, Task $task, bool $part2): string
