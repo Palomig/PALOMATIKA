@@ -170,7 +170,9 @@ class PrintVariantComposer
      */
     private function sideBySideIfCompact(string $latex): string
     {
-        if (substr_count($latex, '\\includegraphics') !== 1) {
+        // Инлайновые растры в счёт не идут: перенос вправо касается только
+        // самостоятельного чертежа.
+        if (substr_count($latex, '\\includegraphics') - substr_count($latex, '\\ogeRasterInline{') !== 1) {
             return $latex;
         }
 
@@ -209,29 +211,54 @@ class PrintVariantComposer
         return '\\ogeSideBySide{' . $text . '}{' . $figure . "}\n\n";
     }
 
+    /** Растр не выше этого — обозначение внутри строки, а не иллюстрация. */
+    private const INLINE_HEIGHT_PT = 30.0;
+
     /**
      * Подстановка растровых иллюстраций.
      *
-     * Ширина берётся щедрая: планы участков и графики тарифов — главный
-     * носитель условия в заданиях 1–5, мелкими их печатать нельзя.
-     * Пропавший файл не роняет сборку, а оставляет заметку в тексте:
-     * тихо выпущенная картинка сделала бы задание неразрешимым незаметно.
+     * Различаем по натуральной высоте. У ФИПИ часть формул хранится картинками
+     * («B=195» — это растр 60×20 px), и по разметке они неотличимы от плана
+     * участка. Вынести такую формулу отдельной иллюстрацией — значит выбросить
+     * кусок предложения: остаётся «имеет ширину  мм».
+     *
+     * Пропавший файл не роняет сборку, а оставляет заметку в тексте: тихо
+     * выпущенная картинка сделала бы задание неразрешимым незаметно.
      */
     private function resolveAssets(string $latex, array $assets): string
     {
         foreach ($assets as $index => $relative) {
-            $local = $this->assets->localPath($relative);
+            $info = $this->assets->describe($relative);
 
-            foreach (['ogeAsset' => 'ogeRaster', 'ogeAssetCell' => 'ogeRasterCell'] as $from => $to) {
-                $replacement = $local === null
-                    ? '\\textit{[иллюстрация недоступна]}'
-                    : sprintf('\\%s{%s}', $to, $local);
-
-                $latex = str_replace('\\' . $from . '{' . $index . '}', $replacement, $latex);
+            foreach (['ogeAsset' => false, 'ogeAssetCell' => true] as $macro => $inCell) {
+                $latex = str_replace(
+                    '\\' . $macro . '{' . $index . '}',
+                    $this->rasterCall($info, $inCell),
+                    $latex
+                );
             }
         }
 
         return $latex;
+    }
+
+    /** @param array{path: string, width: float, height: float}|null $info */
+    private function rasterCall(?array $info, bool $inCell): string
+    {
+        if ($info === null) {
+            return '\\textit{[иллюстрация недоступна]}';
+        }
+
+        if ($info['height'] <= self::INLINE_HEIGHT_PT) {
+            return sprintf('\\ogeRasterInline{%s}{%.1f}', $info['path'], $info['height']);
+        }
+
+        return sprintf(
+            '\\%s{%s}{%.1f}',
+            $inCell ? 'ogeRasterCell' : 'ogeRaster',
+            $info['path'],
+            $info['width']
+        );
     }
 
     /**

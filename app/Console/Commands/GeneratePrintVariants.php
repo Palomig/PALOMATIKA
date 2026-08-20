@@ -67,7 +67,11 @@ class GeneratePrintVariants extends Command
             $this->prepareWorkdir($work);
 
             $composer = new PrintVariantComposer(
-                new HtmlToLatexConverter(),
+                // Конвертеру нужен только размер растра — чтобы отличить
+                // формулу внутри предложения от самостоятельного чертежа.
+                new HtmlToLatexConverter(
+                    static fn (string $rel): ?float => $assets->describe($rel)['height'] ?? null
+                ),
                 new SvgPrintConverter($work),
                 $assets,
             );

@@ -7,9 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlToLatexConverterTest extends TestCase
 {
-    private function convert(string $html): array
+    private function convert(string $html, ?\Closure $measure = null): array
     {
-        return (new HtmlToLatexConverter())->convert($html);
+        return (new HtmlToLatexConverter($measure))->convert($html);
     }
 
     public function test_math_passes_through_untouched(): void
@@ -131,6 +131,39 @@ class HtmlToLatexConverterTest extends TestCase
         $out = $this->convert('<p>$x+1 & \\text{при} x\\geqslant-2$</p>');
 
         $this->assertStringContainsString('\\text{при}\\, x', $out['latex']);
+    }
+
+    /**
+     * Экспорт ФИПИ складывает формулы-картинки в общий блок рисунков, а на их
+     * месте в предложении оставляет пустой span: выходит «имеет ширину  мм».
+     */
+    public function test_inline_formula_images_are_returned_into_the_sentence(): void
+    {
+        $html = '<aside class="ifigs">'
+            . '<figure><img src="big.jpg"><figcaption>Рис. 1</figcaption></figure>'
+            . '<figure><img src="f1.png"><figcaption>Рис. 2</figcaption></figure>'
+            . '</aside>'
+            . '<div class="itxt"><p>шина имеет ширину <span></span> мм.</p></div>';
+
+        $measure = static fn (string $rel): ?float => $rel === 'f1.png' ? 15.0 : 200.0;
+
+        $out = $this->convert($html, $measure);
+
+        // Формула вернулась в предложение, крупный чертёж остался иллюстрацией.
+        $this->assertSame(['big.jpg', 'f1.png'], $out['assets']);
+        $this->assertStringContainsString('ширину \\ogeAsset{1} мм', $out['latex']);
+    }
+
+    /** Пустой span без парного растра — обычный мусор разметки, не трогаем. */
+    public function test_stray_empty_span_is_not_filled_with_a_figure(): void
+    {
+        $html = '<aside class="ifigs"><figure><img src="big.jpg"></figure></aside>'
+            . '<div class="itxt"><p>текст <span></span></p></div>';
+
+        $out = $this->convert($html, static fn (): ?float => 200.0);
+
+        $this->assertSame(['big.jpg'], $out['assets']);
+        $this->assertStringNotContainsString('текст \\ogeAsset', $out['latex']);
     }
 
     public function test_known_typography_is_mapped(): void

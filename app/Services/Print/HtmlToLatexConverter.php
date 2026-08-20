@@ -30,6 +30,20 @@ class HtmlToLatexConverter
     /** @var array<string, string> Незнакомые символы, встреченные при переводе. */
     private array $unknownChars = [];
 
+    /**
+     * Высота растра в пунктах по относительному пути — или null, если неизвестна.
+     *
+     * Нужна ровно для одного: отличить формулу-картинку внутри предложения от
+     * самостоятельного чертежа. Без измерителя конвертер работает как прежде,
+     * просто не чинит вынесенные формулы.
+     */
+    public function __construct(private readonly ?\Closure $measureAsset = null)
+    {
+    }
+
+    /** Растр не выше этого — обозначение внутри строки, а не иллюстрация. */
+    private const INLINE_HEIGHT_PT = 30.0;
+
     private const ENTITIES = [
         '&nbsp;' => "\u{00A0}",
         '&mdash;' => '---',
@@ -55,6 +69,7 @@ class HtmlToLatexConverter
         $this->unknownChars = [];
 
         $html = strtr($html, self::ENTITIES);
+        $html = $this->restoreInlineFigures($html);
         $html = $this->stashFigures($html);
         $html = $this->stashMath($html);
 
@@ -76,6 +91,72 @@ class HtmlToLatexConverter
             'assets' => $this->assets,
             'unknown' => $this->unknownChars,
         ];
+    }
+
+    /**
+     * Возвращает вынесенные формулы на их место в предложении.
+     *
+     * Экспорт ФИПИ обходится с формулами-картинками так: складывает их в общий
+     * блок рисунков в начале текста, подписывает «Рис. 3», а на их месте в
+     * предложении оставляет пустой <span></span>. В печатной работе выходит
+     * «шина имеет ширину  мм», а сама формула висит отдельной иллюстрацией
+     * страницей выше.
+     *
+     * Чиним только при точном совпадении: сколько мелких растров в блоке
+     * рисунков, столько и пустых span в тексте. У половины сюжетов банка
+     * пустой span — просто мусор разметки, и туда лезть нельзя.
+     */
+    private function restoreInlineFigures(string $html): string
+    {
+        if ($this->measureAsset === null) {
+            return $html;
+        }
+
+        if (!preg_match('#<(aside|div)[^>]*class="ifigs"[^>]*>(.*?)</\\1>#is', $html, $aside)) {
+            return $html;
+        }
+
+        // Блоки <figure> с мелкими растрами — кандидаты на возврат в текст.
+        $inline = [];
+        preg_match_all('#<figure\b.*?</figure>#is', $aside[2], $figures);
+        foreach ($figures[0] as $figure) {
+            if (!preg_match('/<img[^>]+src="([^"]+)"/i', $figure, $img)) {
+                continue;
+            }
+            $height = ($this->measureAsset)($img[1]);
+            if ($height !== null && $height <= self::INLINE_HEIGHT_PT) {
+                $inline[] = ['figure' => $figure, 'src' => $img[1]];
+            }
+        }
+
+        if ($inline === []) {
+            return $html;
+        }
+
+        $rest = str_replace($aside[0], '', $html);
+        $slots = preg_match_all('#<span>\s*</span>#i', $rest);
+
+        if ($slots !== count($inline)) {
+            return $html;
+        }
+
+        $trimmedAside = $aside[0];
+        foreach ($inline as $item) {
+            $trimmedAside = str_replace($item['figure'], '', $trimmedAside);
+        }
+
+        $html = str_replace($aside[0], $trimmedAside, $html);
+
+        $i = 0;
+        return preg_replace_callback(
+            '#<span>\s*</span>#i',
+            function () use (&$i, $inline): string {
+                $src = $inline[$i++]['src'] ?? null;
+
+                return $src === null ? '' : '<img src="' . $src . '">';
+            },
+            $html
+        ) ?? $html;
     }
 
     /**

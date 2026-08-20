@@ -20,6 +20,36 @@ class PrintAssetStore
     }
 
     /**
+     * Локальный файл вместе с натуральным размером в пунктах.
+     *
+     * Размер нужен, чтобы отличить обозначение внутри предложения от
+     * самостоятельного чертежа: у ФИПИ часть формул хранится растром, и по
+     * разметке они неотличимы от плана участка — только по высоте.
+     *
+     * @return array{path: string, width: float, height: float}|null
+     */
+    public function describe(string $relative): ?array
+    {
+        $path = $this->localPath($relative);
+        if ($path === null) {
+            return null;
+        }
+
+        $size = @getimagesize($path);
+        if ($size === false) {
+            return null;
+        }
+
+        // Экранный пиксель к пункту: 96 dpi против 72. Растр печатается в своём
+        // размере, увеличение превращает 262 px в мыло на пол-страницы.
+        return [
+            'path' => $path,
+            'width' => $size[0] * 0.75,
+            'height' => $size[1] * 0.75,
+        ];
+    }
+
+    /**
      * Возвращает путь к локальному файлу, пригодному для \includegraphics.
      *
      * GIF конвертируется в PNG: pdflatex его не понимает, а три плана
