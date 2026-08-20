@@ -21,6 +21,9 @@ class HtmlToLatexConverter
     /** @var list<string> Пути растровых иллюстраций в порядке появления. */
     private array $assets = [];
 
+    /** @var array<int, string> Подписи иллюстраций по их индексу. */
+    private array $assetCaptions = [];
+
     /** @var list<string> Формулы, вынутые из разметки до разбора DOM. */
     private array $math = [];
 
@@ -58,12 +61,13 @@ class HtmlToLatexConverter
 
     /**
      * @return array{latex: string, figures: list<string>, assets: list<string>,
-     *               unknown: array<string, string>}
+     *               captions: array<int, string>, unknown: array<string, string>}
      */
     public function convert(string $html): array
     {
         $this->figures = [];
         $this->assets = [];
+        $this->assetCaptions = [];
         $this->math = [];
         $this->tableDepth = 0;
         $this->unknownChars = [];
@@ -89,6 +93,7 @@ class HtmlToLatexConverter
             'latex' => $this->tidy($latex),
             'figures' => $this->figures,
             'assets' => $this->assets,
+            'captions' => $this->assetCaptions,
             'unknown' => $this->unknownChars,
         ];
     }
@@ -258,8 +263,29 @@ class HtmlToLatexConverter
         }
 
         $this->assets[] = $src;
+        $index = count($this->assets) - 1;
 
-        return '\\ogeAsset{' . (count($this->assets) - 1) . '}';
+        $caption = $this->captionOf($node);
+        if ($caption !== '') {
+            $this->assetCaptions[$index] = $caption;
+        }
+
+        return '\\ogeAsset{' . $index . '}';
+    }
+
+    /** Подпись «Рис. 1» из <figcaption> рядом с картинкой. */
+    private function captionOf(\DOMElement $img): string
+    {
+        $figure = $img->parentNode;
+        if (!$figure instanceof \DOMElement || strtolower($figure->tagName) !== 'figure') {
+            return '';
+        }
+
+        foreach ($figure->getElementsByTagName('figcaption') as $caption) {
+            return $this->escape(trim($caption->textContent));
+        }
+
+        return '';
     }
 
     /**
@@ -510,23 +536,75 @@ class HtmlToLatexConverter
     /**
      * Таблица данных из условия — с линейками.
      *
-     * Данные ФИПИ приходят с рваными строками: в шапке две ячейки, ниже пять.
-     * Ширина считается по самой длинной строке, короткие дополняются пустыми,
-     * иначе LaTeX упадёт на несовпадении числа колонок.
+     * Экспорт ФИПИ теряет colspan и rowspan, оставляя рваные строки: в шапке
+     * две ячейки, ниже пять. Объединения восстанавливаются по форме таблицы —
+     * в банке она устойчива: 20 из 24 рваных таблиц имеют вид
+     * «2, max−1, max, max…», то есть заголовок из двух ячеек, под ним
+     * подзаголовки колонок, дальше данные. Без восстановления «Диаметр диска
+     * (дюймы)» встаёт над одной колонкой вместо трёх, и таблица врёт.
      *
      * @param list<list<string>> $rows
      */
     private function renderDataTable(array $rows, int $cols): string
     {
         $spec = '|' . str_repeat('c|', $cols);
+        $merged = $this->looksLikeMergedHeader($rows, $cols);
 
         $body = '';
-        foreach ($rows as $row) {
-            $row = array_pad($row, $cols, '');
-            $body .= '\\cs ' . implode(' & ', array_map([$this, 'flattenCell'], $row)) . "\\\\\n\\hline\n";
+        foreach ($rows as $i => $row) {
+            $body .= $this->renderRow($row, $cols, $i, $merged) . "\\\\\n";
+            // Линейка под первой строкой сшитой шапки шла бы поперёк
+            // объединённой ячейки — её рисуем только над колонками.
+            $body .= ($merged && $i === 0)
+                ? '\\cline{2-' . $cols . "}\n"
+                : "\\hline\n";
         }
 
         return "\n\\ogeTable{" . $spec . "}{\n\\hline\n" . $body . "}\n\n";
+    }
+
+    /**
+     * Похоже ли начало таблицы на потерянные объединения шапки.
+     *
+     * @param list<list<string>> $rows
+     */
+    private function looksLikeMergedHeader(array $rows, int $cols): bool
+    {
+        return $cols >= 3
+            && count($rows) >= 3
+            && count($rows[0]) === 2
+            && count($rows[1]) === $cols - 1;
+    }
+
+    /**
+     * @param list<string> $row
+     */
+    private function renderRow(array $row, int $cols, int $index, bool $merged): string
+    {
+        $cells = array_map([$this, 'flattenCell'], $row);
+
+        if ($merged && $index === 0) {
+            // «Ширина шины (мм)» держит две строки, «Диаметр диска (дюймы)» —
+            // все колонки правее.
+            return '\\cs \\multirow{2}{*}{' . $cells[0] . '} & '
+                . '\\multicolumn{' . ($cols - 1) . '}{c|}{' . $cells[1] . '}';
+        }
+
+        if ($merged && $index === 1) {
+            // Первая колонка занята объединением сверху.
+            array_unshift($cells, '');
+
+            return '\\cs ' . implode(' & ', $cells);
+        }
+
+        // Одинокая ячейка в широкой таблице — подзаголовок во всю ширину.
+        // Распорка уходит внутрь: \multicolumn обязан открывать ячейку,
+        // иначе TeX падает на «Misplaced \omit».
+        if (count($cells) === 1 && $cols > 1) {
+            return '\\multicolumn{' . $cols . '}{|c|}{\\cs ' . $cells[0] . '}';
+        }
+
+        return '\\cs ' . implode(' & ', array_pad($cells, $cols, ''));
     }
 
     /** Внутри ячейки не должно быть \par: перевод абзаца порвёт таблицу. */

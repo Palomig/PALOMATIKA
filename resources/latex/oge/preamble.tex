@@ -10,6 +10,8 @@
 \usepackage[most]{tcolorbox}
 \usepackage{fancyhdr}
 \usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
 \usetikzlibrary{calc,arrows}
 
 \geometry{
@@ -157,6 +159,19 @@
   \else
     \includegraphics[width=#2pt,height=0.22\textheight,keepaspectratio]{#1}%
   \fi}
+
+% Иллюстрация условия с обтеканием: рисунок справа, текст идёт слева от него.
+% Так свёрстаны практико-ориентированные блоки в печатных сборниках — иначе
+% рисунок 200pt шириной забирает всю полосу и работа распухает на страницу.
+% Первый параметр — сколько строк текста обтекает: wrapfig не умеет считать
+% это сам и на глазок оставляет либо дыру, либо наползание.
+\newcommand{\ogeWrap}[4]{% {строк}{ширина pt}{файл}{подпись}
+  \begin{wrapfigure}[#1]{r}{\dimexpr #2pt+10pt\relax}
+    \vspace{-\intextsep}
+    \centering
+    \includegraphics[width=#2pt]{#3}%
+    \ifx\relax#4\relax\else\par\vspace{2pt}{\footnotesize #4}\fi
+  \end{wrapfigure}}
 
 % Обозначение внутри предложения: «имеет ширину [B=195] мм». Такие формулы
 % ФИПИ тоже хранит растром, и вынести их отдельной иллюстрацией — значит
