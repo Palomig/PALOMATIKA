@@ -27,7 +27,9 @@ class GeneratePrintVariantsCommandTest extends TestCase
         foreach (range(1, 4) as $i) {
             Task::create([
                 'task_group_id' => $group->id,
-                'payload' => ['html' => "<p>Найдите значение выражения \$\\dfrac{{$i}}{2}\$.</p>"],
+                // Два абзаца: на них проверяется сшивка задания запретом разрыва.
+                'payload' => ['html' => "<p>Найдите значение выражения \$\\dfrac{{$i}}{2}\$.</p>"
+                    . '<p>Ответ округлите до десятых.</p>'],
                 'answer' => (string) $i,
                 'status' => 'production',
             ]);
@@ -63,6 +65,10 @@ class GeneratePrintVariantsCommandTest extends TestCase
         $this->assertStringContainsString('\begin{document}', $body);
         $this->assertStringContainsString('\begin{zadanie}{6}', $body);
         $this->assertStringContainsString('\dfrac', $body);
+
+        // Абзацы задания сшиты запретом разрыва: иначе условие расползается
+        // по двум листам, а чертёж и строка ответа уезжают от своего номера.
+        $this->assertStringContainsString('\nopagebreak', $body);
 
         // Преамбула и метрики кладутся рядом — сборка не должна зависеть от cwd.
         $this->assertFileExists($this->out . '/build-1/preamble.tex');

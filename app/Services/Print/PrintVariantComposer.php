@@ -322,11 +322,23 @@ class PrintVariantComposer
         $latex = $this->sideBySideIfCompact($latex);
         $latex .= $this->renderOptions($payload, $task->id);
 
-        $out = "\\begin{zadanie}{{$number}}\n" . trim($latex) . "\n";
+        $out = "\\begin{zadanie}{{$number}}\n" . $this->bindParagraphs(trim($latex)) . "\n";
         $out .= $part2 ? "\\ogesolutiongap\n" : "\\otvet\n";
         $out .= "\\end{zadanie}\n\n";
 
         return $out;
+    }
+
+    /**
+     * Запрещает разрыв страницы между абзацами одного задания.
+     *
+     * Высокого штрафа между строками мало: граница абзацев — отдельный,
+     * ничем не защищённый разрыв, и условие из двух абзацев всё равно
+     * расползается по двум листам.
+     */
+    private function bindParagraphs(string $latex): string
+    {
+        return str_replace("\n\n", "\n\n\\nopagebreak\n", $latex);
     }
 
     /**
@@ -362,13 +374,11 @@ class PrintVariantComposer
      * то до условия, то после. В печатном бланке он всегда справа от текста,
      * иначе половина страницы уходит на воздух вокруг маленького треугольника.
      * Переносим только одиночный небольшой чертёж, стоящий отдельным абзацем:
-     * широкий план участка и чертёж внутри предложения должны остаться на месте.
+     * широкий план участка и чертёж внутри предложения остаются на месте.
      */
     private function sideBySideIfCompact(string $latex): string
     {
-        // Инлайновые растры в счёт не идут: перенос вправо касается только
-        // самостоятельного чертежа.
-        if (substr_count($latex, '\\includegraphics') - substr_count($latex, '\\ogeRasterInline{') !== 1) {
+        if (substr_count($latex, '\\ogeTaskFig{') !== 1) {
             return $latex;
         }
 
@@ -379,30 +389,32 @@ class PrintVariantComposer
 
         $figureAt = null;
         foreach ($blocks as $i => $block) {
-            if (str_contains($block, '\\includegraphics')) {
-                // Абзац, состоящий только из чертежа: ничего, кроме картинки.
-                if (preg_match('/^\\\\includegraphics\[[^\]]*\]\{[^}]+\}$/', trim($block)) !== 1) {
-                    return $latex;
-                }
-                $figureAt = $i;
+            if (!str_contains($block, '\\ogeTaskFig{')) {
+                continue;
             }
+            // Абзац, состоящий только из чертежа: ничего, кроме картинки.
+            if (preg_match('/^\\\\ogeTaskFig\{([^}]+)\}\{([\d.]+)\}$/', trim($block), $m) !== 1) {
+                return $latex;
+            }
+            $figureAt = $i;
+            $path = $m[1];
+            $width = (float) $m[2];
         }
 
-        if ($figureAt === null) {
+        if ($figureAt === null || $width > 160.0) {
             return $latex;
         }
 
-        if (!preg_match('/width=([\d.]+)pt/', $blocks[$figureAt], $m) || (float) $m[1] > 160.0) {
-            return $latex;
-        }
-
-        $figure = trim($blocks[$figureAt]);
         unset($blocks[$figureAt]);
         $text = trim(implode("\n\n", $blocks));
 
         if ($text === '') {
             return $latex;
         }
+
+        // Внутри minipage нужен голый \includegraphics: макрос блочного
+        // чертежа начинается с \par и порвал бы колонку.
+        $figure = sprintf('\\includegraphics[width=%.1fpt]{%s}', $width, $path);
 
         return '\\ogeSideBySide{' . $text . '}{' . $figure . "}\n\n";
     }
@@ -481,10 +493,12 @@ class PrintVariantComposer
                 $target = 320.0;
             }
 
+            // Блочный чертёж печатается макросом, а не голым \includegraphics:
+            // макрос запрещает разрыв страницы между условием и рисунком.
             $include = sprintf(
-                '\\includegraphics[width=%.1fpt]{%s}',
-                $target,
-                basename($converted['path'], '.pdf')
+                '\\ogeTaskFig{%s}{%.1f}',
+                basename($converted['path'], '.pdf'),
+                $target
             );
 
             $latex = str_replace('\\ogeFigure{' . $index . '}', $include, $latex);

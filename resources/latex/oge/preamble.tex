@@ -33,8 +33,17 @@
 \fancyhead[L]{\OGEheadleft}
 \fancyhead[R]{\OGEheadright}
 \fancyfoot[C]{\thepage}
+% Полосы не растягиваются до низа: в эталоне ФИПИ последняя страница
+% заканчивается там, где кончились задания, а не растянута на весь лист.
+\raggedbottom
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
+
+% Внутри задания разрывы страницы запрещены, во вводном условии — нет:
+% условие бывает почти в полосу высотой, и запрет там дал бы переполненную
+% полосу вместо аккуратного переноса.
+\newif\ifogebind
+\newcommand{\ogebind}{\ifogebind\nopagebreak\fi}
 
 % --- плашка с инструкцией: рамка 1pt, фон yellow!1 ---
 \newtcolorbox{instrbox}{
@@ -74,16 +83,19 @@
     \setlength{\topsep}{0pt}\setlength{\parsep}{0pt}\setlength{\partopsep}{0pt}%
     \setlength{\itemsep}{0pt}\setlength{\rightmargin}{0pt}}%
   \item[{\raisebox{0pt}[\height][0pt]{\makebox[\zbody][l]{\znum{#2}}}}]%
-  % Рвать страницу лучше между заданиями, чем внутри: номер в рамке на одной
-  % странице, а его условие на следующей — худшее, что может случиться с
-  % печатной работой. Полный запрет (\samepage) не годится: задание с большим
-  % чертежом тогда уезжает целиком и оставляет пол-листа пустым.
-  \interlinepenalty=400\relax
+  % Задание не рвётся между страницами. Разорванное задание — худшее, что
+  % может случиться с печатной работой: половина условия на одном листе,
+  % чертёж и строка ответа на другом. Самое высокое задание банка (условие
+  % плюс чертёж на 240pt) занимает меньше половины полосы, поэтому целиком
+  % переносится всегда. Между заданиями разрыв остаётся свободным.
+  \interlinepenalty=10000\relax\ogebindtrue
 }{\end{list}}
 
 % --- строка «Ответ: ____»: линейка 2.75cm, 0.4pt, серая 50% ---
+% Строка ответа тоже привязана к заданию: оторванное «Ответ: ____» в начале
+% страницы не подскажет ученику, к чему оно относится.
 \newcommand{\otvet}[1][0pt]{%
-  \par\vspace{\OGEotvetskip}\vspace{#1}%
+  \par\nopagebreak\vspace{\OGEotvetskip}\vspace{#1}%
   \noindent\hspace*{\fill}Ответ:\kern2.709bp%
   \textcolor[gray]{0.5}{\rule[-0.76bp]{77.954bp}{0.398bp}}\kern0.202bp\par}
 
@@ -97,16 +109,25 @@
   \begin{center}{\bfseries Часть \textnumero{} 2}\end{center}}
 
 % --- иллюстрация задания ---
+% \nopagebreak с обеих сторон обязателен: между условием и его чертежом
+% пролегает законный разрыв страницы, и TeX им пользуется — рисунок к десятому
+% заданию уезжает на следующий лист, а само задание остаётся на предыдущем.
 \newcommand{\ogefig}[2]{%
-  \par\vspace{\OGEfigbefore}%
+  \par\nopagebreak\vspace{\OGEfigbefore}%
   \noindent\hspace*{\fill}\includegraphics[width=#2]{#1}\hspace*{\fill}%
-  \par\vspace{\OGEfigafter}}
+  \par\nopagebreak\vspace{\OGEfigafter}}
+
+% Чертёж задания, свёрстанный отдельным блоком: держится за своё условие.
+\newcommand{\ogeTaskFig}[2]{% {файл}{ширина pt}
+  \par\nopagebreak\vspace{\OGEfigbefore}%
+  \noindent\hspace*{\fill}\includegraphics[width=#2pt]{#1}\hspace*{\fill}%
+  \par\nopagebreak\vspace{\OGEfigafter}}
 
 % Чертёж справа от текста. Ширина текстовой колонки — как в эталоне ФИПИ:
 % текст занимает 311.8bp, остальное отдано чертежу.
 \newlength{\ogetextcol}\setlength{\ogetextcol}{311.8bp}
 \newcommand{\ogeSideBySide}[2]{%
-  \par\noindent
+  \par\ogebind\noindent
   \begin{minipage}[t]{\ogetextcol}#1\end{minipage}\hfill
   \begin{minipage}[t]{\dimexpr\linewidth-\ogetextcol-8pt\relax}%
     \vspace{0pt}\centering #2%
@@ -114,21 +135,23 @@
 
 % Таблица данных из условия — по центру тела задания.
 \newcommand{\ogeTable}[2]{%
-  \par\vspace{\OGEtabbefore}%
+  \par\ogebind\vspace{\OGEtabbefore}%
   \noindent\hspace*{\fill}\begin{tabular}{#1}#2\end{tabular}\hspace*{\fill}%
-  \par\vspace{\OGEtabafter}}
+  \par\ogebind\vspace{\OGEtabafter}}
 
 % Раскладочная таблица ФИПИ — без линеек и с узкими промежутками: ею
 % свёрстаны полосы «А) чертёж Б) чертёж» и подписи под рисунками.
 \newcommand{\ogePlainTable}[2]{%
-  \par\vspace{4pt}%
+  \par\ogebind\vspace{4pt}%
   \noindent\hspace*{\fill}%
   {\setlength{\tabcolsep}{3pt}\begin{tabular}{#1}#2\end{tabular}}%
-  \hspace*{\fill}\par\vspace{4pt}}
+  \hspace*{\fill}\par\ogebind\vspace{4pt}}
 
 % Варианты ответа к заданию с выбором.
-\newcommand{\ogeChoices}[1]{\par\vspace{4pt}#1}
-\newcommand{\ogeChoice}[2]{\par\noindent\makebox[16pt][l]{#1)}\begin{minipage}[t]{\dimexpr\linewidth-16pt\relax}#2\end{minipage}\par}
+\newcommand{\ogeChoices}[1]{\par\ogebind\vspace{4pt}#1}
+\newcommand{\ogeChoice}[2]{%
+  \par\ogebind\noindent\makebox[16pt][l]{#1)}%
+  \begin{minipage}[t]{\dimexpr\linewidth-16pt\relax}#2\end{minipage}\par\ogebind}
 
 % --- таблицы данных ---
 \setlength{\arrayrulewidth}{0.4pt}
