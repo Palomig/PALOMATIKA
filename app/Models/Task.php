@@ -16,7 +16,7 @@ class Task extends Model
 {
     protected $fillable = [
         'task_group_id', 'position', 'type', 'payload', 'answer', 'answer_src',
-        'status', 'source', 'fipi_guid', 'legacy_task_key', 'svg_model',
+        'status', 'source', 'fipi_guid', 'intro_guid', 'legacy_task_key', 'svg_model',
     ];
 
     protected $casts = [

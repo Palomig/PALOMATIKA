@@ -1,0 +1,157 @@
+% Оформление печатного варианта ОГЭ. Воспроизводит эталон ФИПИ: тот же
+% pdfTeX, те же шрифты cm-super, те же рамки и линейки. Проверка совпадения —
+% scripts/print/compare.py (см. docs/print-variants.md).
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usetikzlibrary{calc,arrows}
+
+\geometry{
+  a4paper,
+  left=2cm, right=2cm,
+  top=\OGEtop, bottom=\OGEbottom,
+  headheight=\OGEheadheight, headsep=\OGEheadsep,
+  footskip=\OGEfootskip
+}
+
+% Эталон набран с поднятым порогом: есть строки с межсловным пробелом 6,6bp
+% при норме 3,9. На умолчании 200 TeX такие строки отвергает и рвёт абзацы
+% иначе — совпадения по строкам не будет.
+\tolerance=9999
+
+% --- колонтитул ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\OGEheadleft}
+\fancyhead[R]{\OGEheadright}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% --- плашка с инструкцией: рамка 1pt, фон yellow!1 ---
+\newtcolorbox{instrbox}{
+  colback=yellow!1, colframe=black,
+  boxrule=1pt, arc=0pt, outer arc=1pt,
+  left=0.5cm, right=0.5cm, top=\OGEinstrtop, bottom=\OGEinstrbot,
+  boxsep=0pt, width=\textwidth,
+  before skip=\OGEinstrbefore, after skip=\OGEinstrafter
+}
+
+% --- номер задания: внешний габарит ровно 1cm x 19.708bp, линии 1pt ---
+% Рисуется четырьмя отрезками, а не rectangle: у прямоугольника обводка идёт
+% по центру пути и габарит выходит на полтолщины шире с каждой стороны.
+\newcommand{\znum}[1]{%
+  \begin{tikzpicture}[baseline=(zz.base),x=1bp,y=1bp]
+    \useasboundingbox (0,-0.498) rectangle (28.346,19.209);
+    \draw[line width=1pt] (0,0) -- (28.346,0);
+    \draw[line width=1pt] (0,18.711) -- (28.346,18.711);
+    \draw[line width=1pt] (0.498,0) -- (0.498,18.711);
+    \draw[line width=1pt] (27.848,0) -- (27.848,18.711);
+    \node[anchor=base,inner sep=0pt] (zz) at (14.173,5.48) {\bfseries #1};
+  \end{tikzpicture}%
+}
+
+% --- задание: номер в рамке слева, тело с отступом 2cm ---
+% raisebox с нулевой глубиной обязателен: иначе рамка добавляет 5,48bp
+% глубины первой строке, и строки с «й»/«б» уезжают вниз на полтора пункта.
+\newlength{\zbody}\setlength{\zbody}{2cm}
+\newenvironment{zadanie}[2][0pt]{%
+  \par\penalty-150\vspace{\OGEzskip}\vspace{#1}%
+  \noindent
+  \begin{list}{}{%
+    \setlength{\leftmargin}{\zbody}%
+    \setlength{\labelwidth}{\zbody}%
+    \setlength{\labelsep}{0pt}%
+    \setlength{\itemindent}{0pt}\setlength{\listparindent}{0pt}%
+    \setlength{\topsep}{0pt}\setlength{\parsep}{0pt}\setlength{\partopsep}{0pt}%
+    \setlength{\itemsep}{0pt}\setlength{\rightmargin}{0pt}}%
+  \item[{\raisebox{0pt}[\height][0pt]{\makebox[\zbody][l]{\znum{#2}}}}]%
+  % Рвать страницу лучше между заданиями, чем внутри: номер в рамке на одной
+  % странице, а его условие на следующей — худшее, что может случиться с
+  % печатной работой. Полный запрет (\samepage) не годится: задание с большим
+  % чертежом тогда уезжает целиком и оставляет пол-листа пустым.
+  \interlinepenalty=400\relax
+}{\end{list}}
+
+% --- строка «Ответ: ____»: линейка 2.75cm, 0.4pt, серая 50% ---
+\newcommand{\otvet}[1][0pt]{%
+  \par\vspace{\OGEotvetskip}\vspace{#1}%
+  \noindent\hspace*{\fill}Ответ:\kern2.709bp%
+  \textcolor[gray]{0.5}{\rule[-0.76bp]{77.954bp}{0.398bp}}\kern0.202bp\par}
+
+% --- заголовок работы и шапка части ---
+\newcommand{\ogeTitle}[1]{%
+  \begin{center}
+    {\Large\bfseries #1}\\[11.862pt]
+    {\bfseries Часть \textnumero{} 1}
+  \end{center}}
+\newcommand{\ogePartTwo}{%
+  \begin{center}{\bfseries Часть \textnumero{} 2}\end{center}}
+
+% --- иллюстрация задания ---
+\newcommand{\ogefig}[2]{%
+  \par\vspace{\OGEfigbefore}%
+  \noindent\hspace*{\fill}\includegraphics[width=#2]{#1}\hspace*{\fill}%
+  \par\vspace{\OGEfigafter}}
+
+% Чертёж справа от текста. Ширина текстовой колонки — как в эталоне ФИПИ:
+% текст занимает 311.8bp, остальное отдано чертежу.
+\newlength{\ogetextcol}\setlength{\ogetextcol}{311.8bp}
+\newcommand{\ogeSideBySide}[2]{%
+  \par\noindent
+  \begin{minipage}[t]{\ogetextcol}#1\end{minipage}\hfill
+  \begin{minipage}[t]{\dimexpr\linewidth-\ogetextcol-8pt\relax}%
+    \vspace{0pt}\centering #2%
+  \end{minipage}\par}
+
+% Таблица данных из условия — по центру тела задания.
+\newcommand{\ogeTable}[2]{%
+  \par\vspace{\OGEtabbefore}%
+  \noindent\hspace*{\fill}\begin{tabular}{#1}#2\end{tabular}\hspace*{\fill}%
+  \par\vspace{\OGEtabafter}}
+
+% Раскладочная таблица ФИПИ — без линеек и с узкими промежутками: ею
+% свёрстаны полосы «А) чертёж Б) чертёж» и подписи под рисунками.
+\newcommand{\ogePlainTable}[2]{%
+  \par\vspace{4pt}%
+  \noindent\hspace*{\fill}%
+  {\setlength{\tabcolsep}{3pt}\begin{tabular}{#1}#2\end{tabular}}%
+  \hspace*{\fill}\par\vspace{4pt}}
+
+% Варианты ответа к заданию с выбором.
+\newcommand{\ogeChoices}[1]{\par\vspace{4pt}#1}
+\newcommand{\ogeChoice}[2]{\par\noindent\makebox[16pt][l]{#1)}\begin{minipage}[t]{\dimexpr\linewidth-16pt\relax}#2\end{minipage}\par}
+
+% --- таблицы данных ---
+\setlength{\arrayrulewidth}{0.4pt}
+\newcommand{\cs}{\rule[-7.0pt]{0pt}{23.036pt}}
+
+% Вводное условие блока 1–5: без рамки и номера, во всю ширину полосы.
+\newcommand{\ogeIntro}[1]{\par\vspace{4pt}#1\par\vspace{6pt}}
+
+% Растровая иллюстрация условия (планы, графики ФИПИ). Ширина ограничена
+% полосой набора, высота — третью страницы: иначе один план участка вытесняет
+% с листа все пять вопросов, к которым он относится.
+\newcommand{\ogeRaster}[1]{%
+  \par\vspace{\OGEfigbefore}%
+  \noindent\hspace*{\fill}%
+  \includegraphics[width=\linewidth,height=0.33\textheight,keepaspectratio]{#1}%
+  \hspace*{\fill}\par\vspace{\OGEfigafter}}
+
+% Та же иллюстрация внутри ячейки таблицы: без отбивок и переводов строки,
+% иначе \par порвёт ячейку, а ширина в полосу вытолкнет таблицу за поля.
+\newcommand{\ogeRasterCell}[1]{%
+  \includegraphics[width=0.42\linewidth,height=0.22\textheight,keepaspectratio]{#1}}
+
+% Место под решение во второй части.
+\newcommand{\ogesolutiongap}[1][\OGEparttwogap]{\par\vspace{#1}}
+
+% Слова, которые эталон не переносит: его генератор пользовался другим
+% набором русских паттернов, и без этих исключений абзацы рвутся иначе.
+\hyphenation{сколько от-но-си-тельно}
