@@ -18,6 +18,12 @@
     <p style="font-size:12px;color:var(--muted);margin:0 0 16px;">
       Нажми кнопку, в открывшемся чате с ботом нажми «Start» и возвращайся — страница обновится сама.
     </p>
+@if ($isFreshAccount)
+    <p style="font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 16px;padding:10px 12px;border-radius:10px;background:var(--surface-2, rgba(127,127,127,.08));">
+      Уже занимался в Паломатике? Подключи тот же Telegram — мы узнаем тебя и вернём
+      старый аккаунт со всей домашкой. Новую анкету заполнять не придётся.
+    </p>
+@endif
 
     <a :href="deepLink || '#'" @click="onOpen($event)" target="_blank" rel="noopener"
       class="btn btn-left"
@@ -53,6 +59,27 @@ function telegramLink() {
     error: '',
     poller: null,
 
+    // Ученик уходит в приложение Telegram, и вкладку на телефоне часто
+    // выгружает из памяти. Код переживает это в sessionStorage, иначе после
+    // возврата опрос не возобновится и ученик останется на старом аккаунте.
+    init() {
+      try {
+        const saved = sessionStorage.getItem('tg_link_code');
+        if (saved) {
+          this.code = saved;
+          this.startPolling();
+        }
+      } catch (e) {
+        // sessionStorage недоступен (приватный режим) — просто без восстановления.
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && this.code) {
+          this.startPolling();
+        }
+      });
+    },
+
     async onOpen(event) {
       if (this.deepLink) {
         this.startPolling();
@@ -80,6 +107,7 @@ function telegramLink() {
 
         this.code = data.code;
         this.deepLink = data.deep_link;
+        try { sessionStorage.setItem('tg_link_code', data.code); } catch (e) {}
         this.startPolling();
         window.open(data.deep_link, '_blank', 'noopener');
       } catch (e) {
@@ -102,6 +130,7 @@ function telegramLink() {
           if (data.linked) {
             clearInterval(this.poller);
             this.poller = null;
+            try { sessionStorage.removeItem('tg_link_code'); } catch (e) {}
             window.location.href = '/';
           }
         } catch (e) {
