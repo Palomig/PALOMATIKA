@@ -30,7 +30,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.student.bug-report');
 
     // ОГЭ-дашборд для 8-классников (без редиректа на VPR)
-    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding', 'pwa.telegram-link', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
+    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.telegram-link', 'pwa.onboarding', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
 
     // Auth
     Route::get('/login', [AuthController::class, 'showLogin'])->name('pwa.student.login');
@@ -58,7 +58,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     });
 
     // Protected student routes
-    Route::middleware(['auth', 'pwa.onboarding', 'pwa.telegram-link', 'pwa.lesson-lock'])->group(function () {
+    Route::middleware(['auth', 'pwa.telegram-link', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');

@@ -33,6 +33,9 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            // Сразу после старта сессии: если она осталась на слитом аккаунте —
+            // переводим на канонический, пока запрос не пошёл дальше.
+            \App\Http\Middleware\ResolveMergedAccount::class,
             \App\Http\Middleware\UpdateLastActiveAt::class,
             \App\Http\Middleware\CaptureTelegramStartParam::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
