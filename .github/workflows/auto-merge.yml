@@ -1,8 +1,18 @@
-# Только авто-мёрж в main. Деплой отсюда убран (2026-08-07): FTP Timeweb из
-# GitHub Actions регулярно отваливался по таймауту, причём первый шаг мог
-# помечаться зелёным без реального трансфера — в итоге main уезжал вперёд, а
-# прод молча оставался на старом коде. Доставка теперь ручная и проверяемая:
-# scripts/deploy-prod.sh с dev-VPS (заливка + сверка хешей + deploy:refresh).
+# Ветки `claude/**` авто-мержатся в `develop` — интеграционную песочницу.
+# На прод НИЧЕГО отсюда не уезжает.
+#
+# Почему не в main (изменено 2026-08-26): раньше целью был `main`, а `main` —
+# это то, что деплоится. Фича становилась «релизной» в момент первого пуша,
+# ещё не будучи готовой. Так генератор печатных вариантов месяц провисел в
+# main незалитым и сломал маркер деплоя: чтобы срочно выкатить фикс, пришлось
+# деплоить точечно и откатывать маркер руками.
+#
+# Теперь:
+#   claude/**  → авто-мёрж в develop        (ничего не деплоится)
+#   готово     → scripts/promote.sh <ветка> (мёрж в main + доставка на прод)
+#
+# `develop` в `main` не мержится НИКОГДА — иначе схема вырождается в прежнюю.
+# Ветки фич отходят от `main`, не от `develop`.
 name: Auto Merge
 
 on:
@@ -29,21 +39,24 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
 
-      - name: Merge to main
+      - name: Merge to develop
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          echo "Merging branch: $BRANCH_NAME"
+          echo "Merging branch: $BRANCH_NAME -> develop"
 
-          git fetch origin main:main || git branch main
-          git checkout main
+          # develop создаётся от main, если её ещё нет.
+          git fetch origin develop:develop || git branch develop origin/main
+          git checkout develop
 
-          git merge --no-ff -m "Auto-merge: $BRANCH_NAME -> main" origin/$BRANCH_NAME
+          if ! git merge --no-ff -m "Auto-merge: $BRANCH_NAME -> develop" "origin/$BRANCH_NAME"; then
+            git merge --abort || true
+            echo "::error::Конфликт при мёрже $BRANCH_NAME в develop — разрулить вручную."
+            exit 1
+          fi
 
-          git push origin main
+          git push origin develop
 
-          # Keep the source branch in sync with main to prevent drift.
-          # main now contains the branch tip (via the merge commit), so updating
-          # the branch to main is a fast-forward — no force, no conflicts next time.
-          # Best-effort: never fail the pipeline if the branch moved concurrently.
-          git push origin main:"$BRANCH_NAME" \
-            || echo "::warning::Could not fast-forward $BRANCH_NAME to main (concurrent update?)"
+          # ВАЖНО: ветка НЕ синхронизируется обратно с develop (раньше main
+          # заливался в ветку «против дрейфа»). Если влить сюда develop, ветка
+          # начнёт таскать чужую незрелую работу, и мёрж её в main утянет на
+          # прод всё подряд — ровно то, от чего уходим.
