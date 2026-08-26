@@ -40,7 +40,7 @@
         <div class="inline-block bg-accent/20 text-accent-light px-4 py-1 rounded-full text-sm font-medium mb-4 border border-accent/30">
             Профильный уровень
         </div>
-        <h1 class="text-4xl font-bold text-white mb-3">Генератор вариантов ЕГЭ</h1>
+        <h1 class="text-4xl font-bold text-white mb-3">Генератор вариантов ЕГЭ (П)</h1>
         <p class="text-gray-400 text-lg">Выберите типы заданий для генерации тренировочного варианта</p>
     </div>
 

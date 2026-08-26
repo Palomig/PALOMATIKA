@@ -9,7 +9,7 @@
     {{-- Block Header --}}
     <div class="flex justify-between items-center mb-6 text-sm text-slate-500 italic border-b border-slate-700 pb-4">
         <span>Е. А. Ширяева</span>
-        <span>Задачник {{ ($bank ?? 'oge') === 'ege' ? 'ЕГЭ профиль' : 'ОГЭ' }} 2026 (тренажер)</span>
+        <span>Задачник {{ ($bank ?? 'oge') === 'ege' ? 'ЕГЭ (П)' : 'ОГЭ' }} 2026 (тренажер)</span>
     </div>
 
     <div class="text-center mb-8">

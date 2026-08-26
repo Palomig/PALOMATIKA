@@ -50,7 +50,7 @@ class TaskBankResolver
         $this->requireRefs($refs, ['topic_id', 'zadanie_number', 'task_id']);
         $topic = (new EgeTaskDataService())->getTopicData($refs['topic_id']);
         [$z, $task] = $this->findTaskInBlocks($topic['blocks'] ?? [], $refs['zadanie_number'], $refs['task_id']);
-        $label = "ЕГЭ · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
+        $label = "ЕГЭ (П) · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
         return $this->normalize($task, $z, $label);
     }
 

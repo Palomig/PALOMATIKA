@@ -105,7 +105,7 @@ class LessonTaskPickerService
             $classes[] = ['id' => '9_oge', 'label' => '9 ОГЭ', 'bank' => 'oge', 'grade' => null, 'banks' => null];
 
             if ($this->bankHasTasks('ege', null)) {
-                $classes[] = ['id' => 'ege', 'label' => '10–11 ЕГЭ', 'bank' => 'ege', 'grade' => 11, 'banks' => null];
+                $classes[] = ['id' => 'ege', 'label' => '10–11 ЕГЭ (П)', 'bank' => 'ege', 'grade' => 11, 'banks' => null];
             }
 
             return $classes;
