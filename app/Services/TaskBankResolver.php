@@ -16,7 +16,8 @@ use InvalidArgumentException;
  */
 class TaskBankResolver
 {
-    public const BANKS = ['oge', 'ege', 'vpr', 'alg-topic', 'alg-skill'];
+    public const BANKS = ['oge', 'ege', EgeTaskDataService::BANK_BASE,
+                          'vpr', 'alg-topic', 'alg-skill'];
 
     public const SUPPORTED_TYPES = ['expression', 'choice'];
 
@@ -29,6 +30,7 @@ class TaskBankResolver
         return match ($bank) {
             'oge'       => $this->fromOge($refs),
             'ege'       => $this->fromEge($refs),
+            EgeTaskDataService::BANK_BASE => $this->fromEge($refs, EgeTaskDataService::LEVEL_BASE),
             'vpr'       => $this->fromVpr($refs),
             'alg-topic' => $this->fromAlgTopic($refs),
             'alg-skill' => $this->fromAlgSkill($refs),
@@ -45,12 +47,18 @@ class TaskBankResolver
         return $this->normalize($task, $z, $label);
     }
 
-    private function fromEge(array $refs): array
+    /**
+     * Профиль и база читаются одинаково — расходятся банк и метка уровня.
+     * Метка попадает в подпись добавленной задачи, и по ней учитель отличает
+     * задание 12 профиля от задания 12 базы: это разные задания.
+     */
+    private function fromEge(array $refs, string $level = EgeTaskDataService::LEVEL_PROF): array
     {
         $this->requireRefs($refs, ['topic_id', 'zadanie_number', 'task_id']);
-        $topic = (new EgeTaskDataService())->getTopicData($refs['topic_id']);
+        $topic = (new EgeTaskDataService($level))->getTopicData($refs['topic_id']);
         [$z, $task] = $this->findTaskInBlocks($topic['blocks'] ?? [], $refs['zadanie_number'], $refs['task_id']);
-        $label = "ЕГЭ (П) · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
+        $mark = $level === EgeTaskDataService::LEVEL_BASE ? 'Б' : 'П';
+        $label = "ЕГЭ ({$mark}) · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
         return $this->normalize($task, $z, $label);
     }
 
