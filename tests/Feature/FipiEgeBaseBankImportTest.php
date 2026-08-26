@@ -154,6 +154,27 @@ class FipiEgeBaseBankImportTest extends TestCase
             ->where('fipi_guid', 'BBBB0000000000000000000000000001')->first()->status);
     }
 
+    public function test_task_with_many_valid_answers_stays_draft(): void
+    {
+        File::put($this->basePath, json_encode([
+            'source' => 'fipi-ege', 'level' => 'base', 'count' => 1,
+            'tasks' => [[
+                'guid' => 'BBBB0000000000000000000000000009',
+                'task_no' => 19, 'task_title' => 'Свойства чисел',
+                'subtype_id' => 'b9', 'subtype_title' => 'Вычеркните цифры',
+                'html' => '<p>Вычеркните в числе 85417627 три цифры…</p>',
+                // Ответ есть, но верных чисел много: автопроверка отвергла бы
+                // другое подходящее, а ученик не понял бы, за что.
+                'answer' => '8172', 'answer_kind' => 'any_valid',
+            ]],
+        ], JSON_UNESCAPED_UNICODE));
+
+        $this->importBase();
+
+        $this->assertSame('draft', Task::query()
+            ->where('fipi_guid', 'BBBB0000000000000000000000000009')->first()->status);
+    }
+
     public function test_images_go_to_their_own_public_folder(): void
     {
         $this->importBase();
