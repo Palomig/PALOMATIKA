@@ -57,7 +57,7 @@ class TaskBankPagesLookAlikeTest extends TestCase
         $page->assertOk()
             ->assertSee('Задание 13. Уравнение (часть 2)')
             ->assertSee('Назад к заданиям ЕГЭ')
-            ->assertSee('Задачник ЕГЭ профиль 2026 (тренажер)');
+            ->assertSee('Задачник ЕГЭ (П) 2026 (тренажер)');
     }
 
     public function test_ege_index_uses_the_shared_showcase(): void

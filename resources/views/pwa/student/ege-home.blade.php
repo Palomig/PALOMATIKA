@@ -26,7 +26,7 @@
 
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
-    <div class="greeting-badge">ЕГЭ · {{ $gradeLabel }} класс</div>
+    <div class="greeting-badge">ЕГЭ (П) · {{ $gradeLabel }} класс</div>
   </div>
 
   @if($user->hasTgPremium())

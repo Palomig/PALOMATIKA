@@ -60,7 +60,7 @@ class TeacherPickerEgeBankTest extends TestCase
         $this->assertContains('oge', $banks);
 
         $ege = collect($classes)->firstWhere('bank', 'ege');
-        $this->assertSame('10–11 ЕГЭ', $ege['label']);
+        $this->assertSame('10–11 ЕГЭ (П)', $ege['label']);
     }
 
     public function test_topics_come_from_the_database_after_the_move(): void

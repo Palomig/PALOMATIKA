@@ -153,7 +153,7 @@ class LessonAndHomeworkForAllGradesTest extends TestCase
 
         // Классы приходят из данных: 5, 6, 7, 9 ОГЭ и ЕГЭ есть, пустого 8-го нет.
         $labels = array_column($picker->availableClasses(), 'label');
-        $this->assertSame(['5 класс', '6 класс', '7 класс', '9 ОГЭ', '10–11 ЕГЭ'], $labels);
+        $this->assertSame(['5 класс', '6 класс', '7 класс', '9 ОГЭ', '10–11 ЕГЭ (П)'], $labels);
     }
 
     public function test_senior_student_gets_ege_variant_not_oge(): void
