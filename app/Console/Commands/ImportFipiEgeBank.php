@@ -67,10 +67,18 @@ class ImportFipiEgeBank extends Command
         return !isset($task['answer']) || $task['answer'] === '' || $task['answer'] === null;
     }
 
-    /** Ответ, который нельзя проверить автоматически («Да»/«Нет»). */
+    /**
+     * Ответы, которые нельзя проверить сравнением со строкой:
+     *   yes_no    — «Да» на вопрос «может ли»;
+     *   any_valid — верных ответов много («вычеркните три цифры так, чтобы
+     *               число делилось на 18; запишите какое-нибудь одно»).
+     *               В базе таких 217 — почти весь номер 19.
+     */
+    private const UNVERIFIABLE_KINDS = ['yes_no', 'any_valid'];
+
     private static function unverifiable(array $task): bool
     {
-        return ($task['answer_kind'] ?? null) === 'yes_no';
+        return in_array($task['answer_kind'] ?? null, self::UNVERIFIABLE_KINDS, true);
     }
 
     public function handle(): int
