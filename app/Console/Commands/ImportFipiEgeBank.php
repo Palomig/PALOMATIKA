@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 /**
- * Импорт профиля ЕГЭ из открытого банка ФИПИ (`ege_prof_katex.json`).
+ * Импорт банка ЕГЭ из открытого банка ФИПИ — профиль или база
+ * (`ege_prof_katex.json` / `ege_base_katex.json`).
  *
  * Выгрузку собирает `fipi-sync/export_ege_katex.py`: условие — готовая
  * разметка с формулами в KaTeX, ответы размечены происхождением, у каждого
@@ -34,21 +35,31 @@ use Illuminate\Support\Facades\File;
  * выгрузке `answer_kind` и уходят в `draft`: автопроверка их принять не
  * может, а показать ученику без проверки — значит соврать.
  *
+ * Уровни живут в разных банках (`ege` и `ege_b`) и не пересекаются нигде:
+ * ни номерами заданий (профиль 1–19, база 1–21), ни каталогом рисунков.
+ * Общий каталог был бы миной: переимпорт одного уровня чистит его папку.
+ *
  *   php artisan tasks:import-fipi-ege --url=https://palomig.ru/ege-bank/export/ege_prof_katex.json
+ *   php artisan tasks:import-fipi-ege --level=base --url=…/ege_base_katex.json --images=…/ege_base_images.tar.gz
  */
 class ImportFipiEgeBank extends Command
 {
     protected $signature = 'tasks:import-fipi-ege
-        {--file= : путь к ege_prof_katex.json, по умолчанию storage/app/imports/ege_prof_katex.json}
+        {--level=prof : уровень ЕГЭ: prof (профиль, банк ege) или base (база, банк ege_b)}
+        {--file= : путь к выгрузке, по умолчанию storage/app/imports/ege_<уровень>_katex.json}
         {--url= : скачать выгрузку по адресу вместо чтения файла}
         {--images= : архив рисунков (tar.gz) — путь или URL}
         {--and-retire : сразу отключить прежний ЕГЭ-банк, в одной транзакции}
         {--dry-run : только посчитать, в базу не писать}';
 
-    protected $description = 'Импортировать профиль ЕГЭ из банка ФИПИ';
+    protected $description = 'Импортировать банк ЕГЭ (профиль или базу) из банка ФИПИ';
 
-    private const BANK = 'ege';
-    private const PUBLIC_IMAGES = 'ege-bank/img';
+    /** Номера заданий: у профиля их 19, у базы 21. */
+    private const NUMBERS = ['prof' => 19, 'base' => 21];
+
+    private string $level = 'prof';
+    private string $bank = EgeTaskDataService::BANK_PROF;
+    private string $publicImages = 'ege-bank/img';
 
     /** Ответ отсутствует. Именно так, а не `empty()`: ответ «0» — настоящий. */
     private static function missingAnswer(array $task): bool
@@ -64,6 +75,21 @@ class ImportFipiEgeBank extends Command
 
     public function handle(): int
     {
+        $level = (string) $this->option('level');
+        if (!isset(self::NUMBERS[$level])) {
+            $this->error('уровень: prof или base');
+            return self::FAILURE;
+        }
+        $this->level = $level;
+        $this->bank = $level === EgeTaskDataService::LEVEL_BASE
+            ? EgeTaskDataService::BANK_BASE
+            : EgeTaskDataService::BANK_PROF;
+        // Каталоги рисунков у уровней разные: переимпорт одного не должен
+        // задевать чертежи другого.
+        $this->publicImages = $level === EgeTaskDataService::LEVEL_BASE
+            ? 'ege-bank/img-base'
+            : 'ege-bank/img';
+
         $bank = $this->loadBank();
         if ($bank === null) {
             return self::FAILURE;
@@ -76,7 +102,7 @@ class ImportFipiEgeBank extends Command
             // Номер задания не определён — в ученическом разделе такой теме
             // неоткуда взяться, поэтому задачи не импортируются, но и молча
             // не пропадают: их перечисляет итог.
-            if ($number < 1 || $number > 19) {
+            if ($number < 1 || $number > self::NUMBERS[$this->level]) {
                 $skipped[] = $task['guid'];
                 continue;
             }
@@ -121,7 +147,7 @@ class ImportFipiEgeBank extends Command
         DB::transaction(function () use ($plan, $bank) {
             // Переимпорт заменяет ранее залитый ФИПИ целиком и не трогает
             // задания Паломатики: они различаются по `source`.
-            TaskGroup::query()->where('bank', self::BANK)->where('source', 'fipi')->delete();
+            TaskGroup::query()->where('bank', $this->bank)->where('source', 'fipi')->delete();
 
             foreach ($plan as $topic => $groups) {
                 $this->upsertTopic($topic, $bank, $groups[0]['items'] ?? []);
@@ -136,10 +162,10 @@ class ImportFipiEgeBank extends Command
             if ($this->option('and-retire')) {
                 Task::query()
                     ->whereIn('task_group_id', TaskGroup::query()
-                        ->where('bank', self::BANK)->where('source', 'palomatika')->select('id'))
+                        ->where('bank', $this->bank)->where('source', 'palomatika')->select('id'))
                     ->where('source', 'palomatika')
                     ->update(['source' => TaskBankRepository::RETIRED]);
-                TaskGroup::query()->where('bank', self::BANK)->where('source', 'palomatika')
+                TaskGroup::query()->where('bank', $this->bank)->where('source', 'palomatika')
                     ->update(['source' => TaskBankRepository::RETIRED]);
             }
         });
@@ -164,11 +190,12 @@ class ImportFipiEgeBank extends Command
                 $this->error("не удалось скачать выгрузку: {$url}");
                 return null;
             }
-            $path = storage_path('app/imports/ege_prof_katex.json');
+            $path = storage_path("app/imports/ege_{$this->level}_katex.json");
             File::ensureDirectoryExists(dirname($path));
             File::put($path, $body);
         } else {
-            $path = $this->option('file') ?: storage_path('app/imports/ege_prof_katex.json');
+            $path = $this->option('file')
+                ?: storage_path("app/imports/ege_{$this->level}_katex.json");
         }
 
         if (!File::exists($path)) {
@@ -181,8 +208,11 @@ class ImportFipiEgeBank extends Command
             $this->error('файл не похож на выгрузку банка ФИПИ');
             return null;
         }
-        if (($bank['level'] ?? null) !== 'prof') {
-            $this->error('ожидается выгрузка профиля ЕГЭ (level=prof)');
+        // Уровень сверяется с выгрузкой: залить базу в банк профиля значило
+        // бы смешать две нумерации заданий в одной теме.
+        if (($bank['level'] ?? null) !== $this->level) {
+            $this->error(sprintf('ожидается выгрузка уровня %s, а в файле %s',
+                $this->level, $bank['level'] ?? 'ничего'));
             return null;
         }
 
@@ -233,7 +263,7 @@ class ImportFipiEgeBank extends Command
                 $this->error("не удалось скачать архив рисунков: {$source}");
                 return null;
             }
-            $archive = storage_path('app/imports/ege_prof_images.tar.gz');
+            $archive = storage_path("app/imports/ege_{$this->level}_images.tar.gz");
             File::ensureDirectoryExists(dirname($archive));
             File::put($archive, $body);
         }
@@ -242,7 +272,7 @@ class ImportFipiEgeBank extends Command
             return null;
         }
 
-        $target = public_path(self::PUBLIC_IMAGES);
+        $target = public_path($this->publicImages);
         File::ensureDirectoryExists($target);
         $command = sprintf('tar -xzf %s --strip-components=1 -C %s',
             escapeshellarg($archive), escapeshellarg($target));
@@ -261,7 +291,7 @@ class ImportFipiEgeBank extends Command
      */
     private function upsertTopic(string $topic, array $bank, array $items = []): void
     {
-        $meta = (new EgeTaskDataService())->getAllTopicsMeta()[$topic] ?? null;
+        $meta = (new EgeTaskDataService($this->level))->getAllTopicsMeta()[$topic] ?? null;
 
         // Название темы берётся из банка, а не из прежней карты: нумерация
         // заданий ЕГЭ с тех пор сместилась, и тема 13 называлась
@@ -272,15 +302,18 @@ class ImportFipiEgeBank extends Command
             $meta = array_merge($meta ?? [], ['title' => $title]);
         }
 
-        TaskTopic::query()->where('bank', self::BANK)->whereNull('grade')
+        TaskTopic::query()->where('bank', $this->bank)->whereNull('grade')
             ->where('topic', $topic)->delete();
         TaskTopic::create([
-            'bank' => self::BANK,
+            'bank' => $this->bank,
             'grade' => null,
             'topic' => $topic,
             'payload' => [
                 'topic_id' => $topic,
                 'exam_type' => 'ege',
+                // Экзамен один, а уровней два: без этой пометки по теме не
+                // сказать, профиль это или база.
+                'level' => $this->level,
                 'source' => 'fipi',
                 'math' => 'katex-0.16.9',
                 'imported_at' => now()->toIso8601String(),
@@ -300,7 +333,7 @@ class ImportFipiEgeBank extends Command
         ];
 
         $model = TaskGroup::create([
-            'bank' => self::BANK,
+            'bank' => $this->bank,
             'grade' => null,
             'topic' => $topic,
             'block_number' => 1,
@@ -332,6 +365,12 @@ class ImportFipiEgeBank extends Command
                         $task['options'] ?? []
                     ) ?: null,
                     'images' => $task['images'] ?? null,
+                    // Задание на соответствие: сколько позиций в ответе и
+                    // какими буквами подписаны столбцы. В профиле таких
+                    // заданий нет вовсе, в базе их 535, и без этих полей
+                    // ответ «3142» не с чем сопоставить.
+                    'answer_slots' => $task['answer_slots'] ?? null,
+                    'answer_letters' => $task['answer_letters'] ?? null,
                     'answer' => $task['answer'] ?? null,
                     // Полный ответ задачи с пунктами а/б/в: в поле ученика
                     // идёт только числовой пункт, но потерять остальное
@@ -358,6 +397,6 @@ class ImportFipiEgeBank extends Command
      */
     private function publicHtml(string $html): string
     {
-        return preg_replace('~(<img[^>]*\bsrc=")img/~i', '$1/' . self::PUBLIC_IMAGES . '/', $html);
+        return preg_replace('~(<img[^>]*\bsrc=")img/~i', '$1/' . $this->publicImages . '/', $html);
     }
 }

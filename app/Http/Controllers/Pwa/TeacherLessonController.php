@@ -15,6 +15,7 @@ use App\Services\HomeworkReviewService;
 use App\Services\LessonHomeworkSuggestionService;
 use App\Services\LessonSessionService;
 use App\Services\LessonTaskPickerService;
+use App\Services\TaskBankResolver;
 use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,7 +57,7 @@ class TeacherLessonController extends Controller
     public function pickerOptions(Request $request, LessonTaskPickerService $picker): JsonResponse
     {
         $bank = (string) $request->query('bank', '');
-        if (!in_array($bank, ['oge', 'ege', 'vpr', 'alg-topic', 'alg-skill'], true)) {
+        if (!in_array($bank, TaskBankResolver::BANKS, true)) {
             return response()->json(['error' => 'Unknown bank'], 422);
         }
 
