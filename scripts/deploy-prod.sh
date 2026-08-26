@@ -20,6 +20,10 @@
 #   scripts/deploy-prod.sh --base <ref>       # первый запуск / маркер не в счёт
 #   scripts/deploy-prod.sh --dry-run          # только показать план
 #   scripts/deploy-prod.sh --no-refresh       # без deploy:refresh
+#   scripts/deploy-prod.sh --allow-dirty      # разрешить незакоммиченные правки
+#
+# Дерево обязано стоять ровно на деплоимой ревизии — скрипт заливает файлы из
+# рабочего дерева, а не из git-объектов. Проверка встроена, обойти нельзя.
 #
 # Секреты: TMW_PSW в /home/dev/.agent-secrets/timeweb.env,
 #          DEPLOY_WEBHOOK_SECRET в .mcp.json репозитория.
@@ -38,6 +42,7 @@ REV="origin/main"
 BASE=""
 DRY_RUN=0
 DO_REFRESH=1
+ALLOW_DIRTY=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -45,6 +50,7 @@ while [ $# -gt 0 ]; do
     --base) BASE="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
     --no-refresh) DO_REFRESH=0; shift ;;
+    --allow-dirty) ALLOW_DIRTY=1; shift ;;
     -h|--help) sed -n '2,30p' "$0"; exit 0 ;;
     *) echo "Неизвестный аргумент: $1" >&2; exit 2 ;;
   esac
@@ -125,6 +131,37 @@ fi
 REV_SHA=$(git rev-parse "$REV") || exit 1
 BASE_SHA=$(git rev-parse "$BASE")
 
+# ── Стоп-кран: дерево обязано БЫТЬ той ревизией, которую деплоим ─────────────
+# Скрипт заливает файлы из РАБОЧЕГО ДЕРЕВА (`-T "$path"`), а список берёт из
+# `git diff`. Если чекаут отстал от деплоимой ревизии, на прод молча уедут
+# старые версии файлов, и MD5-сверка этого не поймает — она сверяет прод с тем,
+# что залили, а не с ревизией. 26.08.2026 главный чекаут отставал на 51 коммит:
+# деплой из него откатил бы прод на месяц назад.
+HEAD_SHA=$(git rev-parse HEAD)
+if [ "$HEAD_SHA" != "$REV_SHA" ]; then
+  cat >&2 <<MSG
+Рабочее дерево не на деплоимой ревизии.
+  дерево:  $HEAD_SHA ($(git log -1 --format=%s "$HEAD_SHA" | cut -c1-50))
+  ревизия: $REV_SHA ($(git log -1 --format=%s "$REV_SHA" | cut -c1-50))
+Заливаются файлы РАБОЧЕГО ДЕРЕВА — уехали бы не те версии.
+Почини: git fetch origin && git checkout $REV && git status
+MSG
+  exit 1
+fi
+
+DIRTY=$(git status --porcelain --untracked-files=no)
+if [ -n "$DIRTY" ] && [ "$ALLOW_DIRTY" != "1" ]; then
+  echo "В рабочем дереве есть незакоммиченные правки — они уехали бы на прод:" >&2
+  echo "$DIRTY" | head -20 >&2
+  echo "Закоммить их или запусти с --allow-dirty, если это осознанно." >&2
+  exit 1
+fi
+[ -n "$DIRTY" ] && echo "ВНИМАНИЕ: --allow-dirty, на прод едут незакоммиченные правки."
+
+if [ "$REV_SHA" != "$(git rev-parse origin/main 2>/dev/null)" ]; then
+  echo "ВНИМАНИЕ: деплоится не origin/main. Готовое на прод везёт scripts/promote.sh."
+fi
+
 echo "База:     $BASE_SHA ($(git log -1 --format=%s "$BASE_SHA" | cut -c1-60))"
 echo "Ревизия:  $REV_SHA ($(git log -1 --format=%s "$REV_SHA" | cut -c1-60))"
 
@@ -141,7 +178,7 @@ is_runtime_file() {
     .github/*|.claude/*|.vscode/*|.idea/*|agent-board/*) return 1 ;;
     tests/*|phpunit.xml|node_modules/*|vendor/*) return 1 ;;
     docs/*|*.md|.gitignore|.gitattributes|.editorconfig) return 1 ;;
-    scripts/deploy-prod.sh|scripts/blade-lint.php) return 1 ;;
+    scripts/deploy-prod.sh|scripts/promote.sh|scripts/blade-lint.php) return 1 ;;
     *) return 0 ;;
   esac
 }
