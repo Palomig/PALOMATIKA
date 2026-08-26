@@ -50,32 +50,6 @@ class NewTelegramAccountLinkFirstTest extends TestCase
             ->assertRedirect('https://' . $this->studentHost() . '/onboarding');
     }
 
-    public function test_link_page_explains_account_recovery_to_fresh_account(): void
-    {
-        $fresh = User::factory()->withoutTelegram()->create([
-            'role' => 'student',
-            'onboarding_completed_at' => null,
-        ]);
-
-        $this->actingAs($fresh)
-            ->get('https://' . $this->studentHost() . '/link-telegram')
-            ->assertOk()
-            ->assertSee('Уже занимался в Паломатике?', false);
-    }
-
-    public function test_link_page_does_not_show_recovery_hint_to_existing_student(): void
-    {
-        $existing = User::factory()->withoutTelegram()->create([
-            'role' => 'student',
-            'onboarding_completed_at' => now(),
-        ]);
-
-        $this->actingAs($existing)
-            ->get('https://' . $this->studentHost() . '/link-telegram')
-            ->assertOk()
-            ->assertDontSee('Уже занимался в Паломатике?', false);
-    }
-
     public function test_snooze_still_lets_the_student_through_to_onboarding(): void
     {
         $fresh = User::factory()->withoutTelegram()->create([

@@ -30,10 +30,6 @@ class TelegramLinkController extends Controller
 
         return view('pwa.student.link-telegram', [
             'botUsername' => (string) config('services.telegram.bot_username', 'palomatika_auth_bot'),
-            // Ученик, который ещё не проходил анкету, мог просто не узнаться при
-            // входе (OIDC даёт псевдоним, а не chat_id) — ему объясняем, что
-            // привязка вернёт старый аккаунт, а не заведёт второй.
-            'isFreshAccount' => $user->onboarding_completed_at === null,
         ]);
     }
 
