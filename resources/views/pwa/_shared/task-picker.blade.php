@@ -307,8 +307,8 @@ function taskPicker(config) {
     bankOverride: null,
 
     get bank() { return this.bankOverride || this.cls?.bank; },
-    /** ОГЭ, ВПР и ЕГЭ ходят одинаково: тема → задания. */
-    get isTopicBank() { return ['oge', 'vpr', 'ege', 'alg-topic'].includes(this.bank); },
+    /** ОГЭ, ВПР и оба уровня ЕГЭ ходят одинаково: тема → задания. */
+    get isTopicBank() { return ['oge', 'vpr', 'ege', 'ege_b', 'alg-topic'].includes(this.bank); },
     get currentTopicTitle() {
       return this.topics.find(t => String(t.id) === String(this.topicId))?.title || '';
     },

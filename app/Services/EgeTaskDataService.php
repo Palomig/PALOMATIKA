@@ -6,14 +6,30 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
 /**
- * Сервис для работы с данными заданий ЕГЭ
+ * Сервис для работы с данными заданий ЕГЭ — профиль (П) или база (Б).
  *
- * Хранит задания в JSON-файлах в storage/app/tasks/ege/
- * Обособленный от ОГЭ источник данных
+ * Уровни — два независимых проекта банка ФИПИ с разной нумерацией заданий
+ * (профиль 1–19, база 1–21), поэтому в БД это разные банки: `ege` и
+ * `ege_b`. Вторым классом их не разводим: правила чтения, фильтр статусов
+ * и сборка варианта у уровней одни, расходятся только НАБОР тем и место
+ * хранения — ровно то, что здесь параметризовано. Копия разошлась бы с
+ * оригиналом, как уже случилось с картами названий.
+ *
+ *   new EgeTaskDataService()                              // профиль
+ *   new EgeTaskDataService(EgeTaskDataService::LEVEL_BASE) // база
  */
 class EgeTaskDataService
 {
+    public const LEVEL_PROF = 'prof';
+    public const LEVEL_BASE = 'base';
+
+    /** Банк уровня в таблицах заданий. */
+    public const BANK_PROF = 'ege';
+    public const BANK_BASE = 'ege_b';
+
     protected string $basePath;
+    protected string $level;
+    protected string $bank;
 
     /**
      * Метаданные заданий ЕГЭ (1-19) — запасные, если темы нет в базе.
@@ -140,14 +156,65 @@ class EgeTaskDataService
         ],
     ];
 
-    public function __construct()
+    /**
+     * Метаданные заданий базы ЕГЭ (1–21) — запасные, как и у профиля.
+     *
+     * Названия те же, что в классификаторе банка (`classify_ege_tasks.py`,
+     * карта TITLES) и в спецификации ФИПИ-2026. Настоящее название темы
+     * приходит с самой задачей при импорте, эта карта нужна там, где банк
+     * ещё не залит: цвет, иконка, подпись пустой темы.
+     */
+    protected array $baseTopicsMeta = [
+        '01' => ['title' => 'Простейшая текстовая задача', 'description' => 'Бытовой расчёт в одно действие', 'color' => 'purple', 'icon' => 'calculator'],
+        '02' => ['title' => 'Соответствие величин и значений', 'description' => 'Величины и их правдоподобные значения', 'color' => 'indigo', 'icon' => 'link'],
+        '03' => ['title' => 'Чтение таблицы', 'description' => 'Выбор значения из таблицы', 'color' => 'blue', 'icon' => 'table'],
+        '04' => ['title' => 'Расчёт по формуле', 'description' => 'Подстановка в готовую формулу', 'color' => 'cyan', 'icon' => 'function'],
+        '05' => ['title' => 'Вероятность', 'description' => 'Простейшие вероятности', 'color' => 'teal', 'icon' => 'dice'],
+        '06' => ['title' => 'Выбор оптимального варианта', 'description' => 'Сравнение вариантов по цене и условиям', 'color' => 'emerald', 'icon' => 'scale'],
+        '07' => ['title' => 'График реальной зависимости', 'description' => 'Чтение графиков и диаграмм', 'color' => 'green', 'icon' => 'trending-up'],
+        '08' => ['title' => 'Логика', 'description' => 'Верные и неверные утверждения', 'color' => 'lime', 'icon' => 'check-square'],
+        '09' => ['title' => 'Площадь по клеткам', 'description' => 'Фигуры на клетчатой бумаге', 'color' => 'yellow', 'icon' => 'grid'],
+        '10' => ['title' => 'Планиметрия', 'description' => 'Геометрия на плоскости', 'color' => 'amber', 'icon' => 'shapes'],
+        '11' => ['title' => 'Объёмы и подобие', 'description' => 'Объём и изменение размеров', 'color' => 'orange', 'icon' => 'cube'],
+        '12' => ['title' => 'Планиметрия', 'description' => 'Геометрия на плоскости по рисунку', 'color' => 'red', 'icon' => 'shapes'],
+        '13' => ['title' => 'Стереометрия', 'description' => 'Геометрия в пространстве', 'color' => 'rose', 'icon' => 'cube'],
+        '14' => ['title' => 'Вычисления', 'description' => 'Значение числового выражения', 'color' => 'pink', 'icon' => 'equals'],
+        '15' => ['title' => 'Проценты', 'description' => 'Проценты, доли и отношения', 'color' => 'fuchsia', 'icon' => 'percent'],
+        '16' => ['title' => 'Степени и стандартный вид', 'description' => 'Действия со степенями', 'color' => 'violet', 'icon' => 'superscript'],
+        '17' => ['title' => 'Уравнение', 'description' => 'Простейшие уравнения', 'color' => 'purple', 'icon' => 'variable'],
+        '18' => ['title' => 'Числа на координатной прямой', 'description' => 'Числа, прямая и неравенства', 'color' => 'indigo', 'icon' => 'ruler'],
+        '19' => ['title' => 'Свойства чисел', 'description' => 'Делимость и признаки', 'color' => 'blue', 'icon' => 'hash'],
+        '20' => ['title' => 'Текстовая задача', 'description' => 'Движение, работа, смеси', 'color' => 'cyan', 'icon' => 'route'],
+        '21' => ['title' => 'Текстовая задача повышенной сложности', 'description' => 'Перебор и рассуждение', 'color' => 'teal', 'icon' => 'brain'],
+    ];
+
+    public function __construct(string $level = self::LEVEL_PROF)
     {
+        $this->level = $level === self::LEVEL_BASE ? self::LEVEL_BASE : self::LEVEL_PROF;
+        $this->bank = $this->level === self::LEVEL_BASE ? self::BANK_BASE : self::BANK_PROF;
+        if ($this->level === self::LEVEL_BASE) {
+            $this->topicsMeta = $this->baseTopicsMeta;
+        }
+
+        // JSON-файлы остались только у профиля: база приезжает сразу в БД,
+        // отката на файл у неё нет и быть не может.
         $this->basePath = storage_path('app/tasks/ege');
 
         // Автоматически создаём директорию если её нет
         if (!File::isDirectory($this->basePath)) {
             File::makeDirectory($this->basePath, 0755, true);
         }
+    }
+
+    /** Банк уровня — им адресуются таблицы заданий. */
+    public function bank(): string
+    {
+        return $this->bank;
+    }
+
+    public function level(): string
+    {
+        return $this->level;
     }
 
     /**
@@ -183,7 +250,7 @@ class EgeTaskDataService
      */
     public function getTopicData(string $topicId): array
     {
-        $cacheKey = "ege_topic_data_{$topicId}";
+        $cacheKey = "{$this->bank}_topic_data_{$topicId}";
 
         return Cache::remember($cacheKey, 3600, fn () => $this->readTopic($topicId));
     }
@@ -199,8 +266,12 @@ class EgeTaskDataService
     protected function readTopic(string $topicId): array
     {
         $repository = app(TaskBankRepository::class);
-        if ($repository->hasData('ege', $topicId)) {
-            return $repository->topicData('ege', $topicId);
+        if ($repository->hasData($this->bank, $topicId)) {
+            return $repository->topicData($this->bank, $topicId);
+        }
+
+        if ($this->level === self::LEVEL_BASE) {
+            return [];          // у базы файлов нет — только БД
         }
 
         $filePath = "{$this->basePath}/topic_{$topicId}.json";
@@ -309,11 +380,12 @@ class EgeTaskDataService
         // Сначала база: после переезда файла темы может не быть вовсе —
         // например, `topic_03.json` не существовало никогда, и тема
         // «Стереометрия» показывалась как «данные не готовы».
-        if (app(TaskBankRepository::class)->hasData('ege', $topicId)) {
+        if (app(TaskBankRepository::class)->hasData($this->bank, $topicId)) {
             return true;
         }
 
-        return File::exists("{$this->basePath}/topic_{$topicId}.json");
+        return $this->level === self::LEVEL_PROF
+            && File::exists("{$this->basePath}/topic_{$topicId}.json");
     }
 
     /**
@@ -424,7 +496,7 @@ class EgeTaskDataService
     public function clearCache(): void
     {
         foreach (array_keys($this->topicsMeta) as $topicId) {
-            Cache::forget("ege_topic_data_{$topicId}");
+            Cache::forget("{$this->bank}_topic_data_{$topicId}");
         }
     }
 }

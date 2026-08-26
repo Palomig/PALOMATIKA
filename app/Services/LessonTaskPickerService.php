@@ -78,7 +78,8 @@ class LessonTaskPickerService
      */
     public function availableClasses(): array
     {
-        return Cache::remember('picker:classes:v2', now()->addHours(12), function () {
+        // v3: рядом с профилем встала база ЕГЭ, состав вкладок изменился.
+        return Cache::remember('picker:classes:v3', now()->addHours(12), function () {
             $classes = [];
 
             foreach ([5, 6, 7, 8] as $grade) {
@@ -107,6 +108,13 @@ class LessonTaskPickerService
             if ($this->bankHasTasks('ege', null)) {
                 $classes[] = ['id' => 'ege', 'label' => '10–11 ЕГЭ (П)', 'bank' => 'ege', 'grade' => 11, 'banks' => null];
             }
+            // База ЕГЭ — отдельный банк с собственной нумерацией заданий
+            // (1–21), поэтому и отдельная вкладка, а не второй раздел внутри
+            // профиля: номер 12 у уровней означает разные задания.
+            if ($this->bankHasTasks(EgeTaskDataService::BANK_BASE, null)) {
+                $classes[] = ['id' => 'ege_b', 'label' => '10–11 ЕГЭ (Б)',
+                              'bank' => EgeTaskDataService::BANK_BASE, 'grade' => 11, 'banks' => null];
+            }
 
             return $classes;
         });
@@ -129,6 +137,7 @@ class LessonTaskPickerService
         return match ($bank) {
             'oge'       => [9],
             'ege'       => [11],
+            EgeTaskDataService::BANK_BASE => [11],
             'vpr'       => [5, 6, 7, 8],
             'alg-topic' => AlgTaskDataService::GRADES,
             'alg-skill' => AlgTaskDataService::GRADES,
@@ -144,6 +153,7 @@ class LessonTaskPickerService
         $topics = match ($bank) {
             'oge'       => $this->ogeTopics(),
             'ege'       => $this->egeTopics(),
+            EgeTaskDataService::BANK_BASE => $this->egeTopics(EgeTaskDataService::LEVEL_BASE),
             'vpr'       => $grade ? $this->vprTopics($grade) : [],
             'alg-topic' => $grade ? $this->algTopics($grade) : [],
             default     => [],
@@ -377,6 +387,8 @@ class LessonTaskPickerService
         return match ($bank) {
             'oge'       => (new TaskDataService())->getBlocks($topicId) ?? [],
             'ege'       => (new EgeTaskDataService())->getTopicData($topicId)['blocks'] ?? [],
+            EgeTaskDataService::BANK_BASE => (new EgeTaskDataService(EgeTaskDataService::LEVEL_BASE))
+                ->getTopicData($topicId)['blocks'] ?? [],
             'vpr'       => isset($refs['grade'])
                 ? ((new VprTaskDataService((int) $refs['grade']))->getTopicData($topicId)['blocks'] ?? [])
                 : [],
@@ -533,17 +545,22 @@ class LessonTaskPickerService
         return $result;
     }
 
-    private function egeTopics(): array
+    /** @param string $level prof (банк ege) или base (банк ege_b) */
+    private function egeTopics(string $level = EgeTaskDataService::LEVEL_PROF): array
     {
+        $svc = new EgeTaskDataService($level);
+
         // Темы берутся из базы, если банк туда перенесён, и только иначе —
         // из файлов. Список по файлам врал после переезда: у ФИПИ 19 номеров
         // заданий, а файла topic_03 в прежнем банке не было вовсе, и тема
         // «Стереометрия» у учителя просто отсутствовала.
         $ids = TaskTopic::query()
-            ->where('bank', 'ege')->whereNull('grade')
+            ->where('bank', $svc->bank())->whereNull('grade')
             ->orderBy('topic')->pluck('topic')->all();
 
-        if ($ids === []) {
+        // Отката на файлы у базы нет: её JSON-ов не существует, банк живёт
+        // только в БД.
+        if ($ids === [] && $level === EgeTaskDataService::LEVEL_PROF) {
             $base = storage_path('app/tasks/ege');
             if (File::isDirectory($base)) {
                 foreach (File::files($base) as $file) {
@@ -554,7 +571,6 @@ class LessonTaskPickerService
             }
         }
         sort($ids);
-        $svc = new EgeTaskDataService();
         $allMeta = method_exists($svc, 'getAllTopicsMeta') ? $svc->getAllTopicsMeta() : [];
         $result = [];
         foreach ($ids as $id) {
