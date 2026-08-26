@@ -130,6 +130,39 @@
   .stat-label { font-size: 10px; font-weight: 700; color: var(--muted); margin-top: 2px; }
   .stat-bar { height: 6px; border-radius: 3px; background: var(--surface2); margin-top: 8px; overflow: hidden; }
   .stat-bar-fill { height: 100%; background: var(--green); }
+  .hw-card-fold { padding: 0; }
+  .hw-fold-head {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px; cursor: pointer; user-select: none;
+  }
+  .hw-fold-head:active { background: var(--surface2); border-radius: 12px; }
+  .hw-chevron {
+    color: var(--muted); font-size: 20px; line-height: 1; flex-shrink: 0;
+    transform: rotate(90deg); transition: transform .2s;
+  }
+  .hw-chevron.is-open { transform: rotate(-90deg); }
+  .hw-fold-body { border-top: 1px solid var(--border); padding: 4px 14px 12px; }
+  .hw-fold-label {
+    font-size: 10px; font-weight: 800; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .06em; margin: 12px 0 6px;
+  }
+  .hw-fold-empty { font-size: 12px; font-weight: 600; color: var(--muted); padding: 2px 0 4px; }
+  .hw-stu {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .hw-stu:last-child { border-bottom: none; }
+  .hw-stu-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--muted2); }
+  .hw-stu-dot.dot-completed { background: var(--green); }
+  .hw-stu-dot.dot-partial { background: var(--yellow); }
+  .hw-stu-dot.dot-opened { background: var(--accent); }
+  .hw-stu-dot.dot-untouched { background: var(--muted2); }
+  .hw-stu-body { flex: 1; min-width: 0; }
+  .hw-stu-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .hw-stu-sub { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+  .hw-stu-go { color: var(--muted); font-size: 18px; flex-shrink: 0; }
+
   .debtor-row {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
     background: var(--surface); border: 1px solid var(--border);
@@ -366,14 +399,46 @@
 
     <div class="sec-label">По домашкам</div>
     @forelse($stats['by_homework'] as $row)
-      <div class="hw-card">
-        <div class="hw-title">{{ $row['title'] }}</div>
-        <div class="hw-meta">{{ $row['assigned_at']?->format('d.m.Y') }}</div>
-        <div class="stat-bar">
-          <div class="stat-bar-fill" style="width: {{ $row['total'] > 0 ? round($row['submitted'] / $row['total'] * 100) : 0 }}%"></div>
+      @php
+        $submittedRows = collect($row['students'])->filter(fn ($s) => $s['submitted'] > 0 || $s['state'] === 'completed');
+        $missingRows = collect($row['students'])->reject(fn ($s) => $s['submitted'] > 0 || $s['state'] === 'completed');
+      @endphp
+      <div class="hw-card hw-card-fold" x-data="{ open: false }">
+        <div class="hw-fold-head" role="button" tabindex="0"
+             @click="open = !open" @keydown.enter.prevent="open = !open" @keydown.space.prevent="open = !open"
+             :aria-expanded="open ? 'true' : 'false'">
+          <div style="flex:1;min-width:0;">
+            <div class="hw-title">{{ $row['title'] }}</div>
+            <div class="hw-meta">{{ $row['assigned_at']?->format('d.m.Y') }}</div>
+            <div class="stat-bar">
+              <div class="stat-bar-fill" style="width: {{ $row['total'] > 0 ? round($row['submitted'] / $row['total'] * 100) : 0 }}%"></div>
+            </div>
+            <div class="hw-meta" style="margin-top:6px;">
+              сдали {{ $row['submitted'] }} из {{ $row['total'] }}@if($row['completed'] !== $row['submitted']) · доделали до конца {{ $row['completed'] }}@endif
+            </div>
+            @if($row['tracks_open'])
+              <div class="hw-meta">
+                открыли {{ $row['opened'] }} из {{ $row['total'] }}@if($row['opened'] < $row['total']) · не открывали: {{ $row['total'] - $row['opened'] }}@endif
+              </div>
+            @endif
+          </div>
+          <span class="hw-chevron" :class="open && 'is-open'">›</span>
         </div>
-        <div class="hw-meta" style="margin-top:6px;">
-          сдали {{ $row['submitted'] }} из {{ $row['total'] }}@if($row['completed'] !== $row['submitted']) · доделали до конца {{ $row['completed'] }}@endif
+
+        <div x-show="open" x-cloak x-transition.opacity class="hw-fold-body">
+          <div class="hw-fold-label">Не сдали · {{ $missingRows->count() }}</div>
+          @forelse($missingRows as $s)
+            @include('pwa.teacher.partials.homework-student-row', ['s' => $s])
+          @empty
+            <div class="hw-fold-empty">Сдали все.</div>
+          @endforelse
+
+          <div class="hw-fold-label">Сдали · {{ $submittedRows->count() }}</div>
+          @forelse($submittedRows as $s)
+            @include('pwa.teacher.partials.homework-student-row', ['s' => $s])
+          @empty
+            <div class="hw-fold-empty">Пока никто не сдал.</div>
+          @endforelse
         </div>
       </div>
     @empty
