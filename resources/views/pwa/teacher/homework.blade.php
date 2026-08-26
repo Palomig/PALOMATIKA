@@ -413,14 +413,17 @@
             <div class="stat-bar">
               <div class="stat-bar-fill" style="width: {{ $row['total'] > 0 ? round($row['submitted'] / $row['total'] * 100) : 0 }}%"></div>
             </div>
-            <div class="hw-meta" style="margin-top:6px;">
-              сдали {{ $row['submitted'] }} из {{ $row['total'] }}@if($row['completed'] !== $row['submitted']) · доделали до конца {{ $row['completed'] }}@endif
-            </div>
-            @if($row['tracks_open'])
-              <div class="hw-meta">
-                открыли {{ $row['opened'] }} из {{ $row['total'] }}@if($row['opened'] < $row['total']) · не открывали: {{ $row['total'] - $row['opened'] }}@endif
+            {{-- Сводка нужна только у закрытой плашки: раскрытая говорит то же самое поимённо. --}}
+            <div x-show="!open">
+              <div class="hw-meta" style="margin-top:6px;">
+                сдали {{ $row['submitted'] }} из {{ $row['total'] }}@if($row['completed'] !== $row['submitted']) · доделали до конца {{ $row['completed'] }}@endif
               </div>
-            @endif
+              @if($row['tracks_open'])
+                <div class="hw-meta">
+                  открыли {{ $row['opened'] }} из {{ $row['total'] }}@if($row['opened'] < $row['total']) · не открывали: {{ $row['total'] - $row['opened'] }}@endif
+                </div>
+              @endif
+            </div>
           </div>
           <span class="hw-chevron" :class="open && 'is-open'">›</span>
         </div>
