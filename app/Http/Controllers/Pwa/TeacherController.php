@@ -563,6 +563,54 @@ class TeacherController extends Controller
         return $at->format('d.m') . ' в ' . $at->format('H:i');
     }
 
+    /** Порядок в раскрытом списке учеников: сначала те, кому надо напомнить. */
+    private const STATE_ORDER = ['untouched' => 0, 'opened' => 1, 'partial' => 2, 'completed' => 3];
+
+    /** Открыл ли ученик домашку: статус уходит с `assigned` при первом заходе на страницу. */
+    private function isHomeworkOpened(HomeworkAssignment $a): bool
+    {
+        return $a->started_at !== null
+            || $a->status !== 'assigned'
+            || $a->topic_task_submissions_count > 0;
+    }
+
+    /**
+     * Строка ученика в раскрытой плашке домашки.
+     *
+     * @param  array<int, string>  $aliases
+     * @return array<string, mixed>
+     */
+    private function homeworkStudentRow(HomeworkAssignment $a, array $aliases): array
+    {
+        $submitted = (int) $a->topic_task_submissions_count;
+        $opened = $this->isHomeworkOpened($a);
+
+        if ($a->status === 'completed') {
+            $state = 'completed';
+        } elseif ($submitted > 0) {
+            $state = 'partial';
+        } else {
+            $state = $opened ? 'opened' : 'untouched';
+        }
+
+        return [
+            'assignment' => $a,
+            'name' => $aliases[$a->student_id] ?? $a->student?->name ?? 'Ученик',
+            'grade' => $a->student?->grade_num,
+            'state' => $state,
+            'opened' => $opened,
+            'submitted' => $submitted,
+            'done' => (int) $a->tasks_completed,
+            'total' => (int) $a->tasks_total,
+            'reviewed' => $a->reviewed_at !== null,
+            'is_debt' => $a->isDebt(),
+            'at' => $this->humanSubmittedAt($a->topic_task_submissions_max_updated_at),
+            'tracks_open' => $a->homework?->homework_type === 'topic_photo_practice',
+            // Страница проверки есть только у фото-практики и только если что-то сдано.
+            'can_open' => $submitted > 0 && $a->homework?->homework_type === 'topic_photo_practice',
+        ];
+    }
+
     /**
      * Сводка по домашкам: кто сдал, кто нет и кто не делает раз за разом.
      *
@@ -574,8 +622,14 @@ class TeacherController extends Controller
         $byHomework = $assignments
             ->filter(fn ($a) => $a->homework !== null)
             ->groupBy('homework_id')
-            ->map(function ($group) {
+            ->map(function ($group) use ($aliases) {
                 $first = $group->first();
+                $students = $group
+                    ->map(fn ($a) => $this->homeworkStudentRow($a, $aliases))
+                    // Сверху те, до кого не дошло: не открывал → открыл, но не сдал → сдал.
+                    ->sortBy(fn ($row) => sprintf('%d %s', self::STATE_ORDER[$row['state']], $row['name']))
+                    ->values()
+                    ->all();
 
                 return [
                     'title' => $first->homework->title ?? 'Домашнее задание',
@@ -583,6 +637,11 @@ class TeacherController extends Controller
                     'total' => $group->count(),
                     'submitted' => $group->filter(fn ($a) => $a->topic_task_submissions_count > 0 || $a->status === 'completed')->count(),
                     'completed' => $group->where('status', 'completed')->count(),
+                    'opened' => $group->filter(fn ($a) => $this->isHomeworkOpened($a))->count(),
+                    // Момент открытия пишется только у фото-практики — у остальных типов
+                    // «не открывал» было бы выдумкой, поэтому строку прячем.
+                    'tracks_open' => $first->homework?->homework_type === 'topic_photo_practice',
+                    'students' => $students,
                 ];
             })
             ->sortByDesc(fn ($row) => $row['assigned_at'])
