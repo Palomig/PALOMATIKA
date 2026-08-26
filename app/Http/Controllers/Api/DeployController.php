@@ -57,6 +57,9 @@ class DeployController extends Controller
         'tasks:attach-legacy-solutions',
         'tasks:seed-solutions',
         'tasks:seed-subtypes',
+        // Точечный перенос заданий между темами банка: классификатор ФИПИ
+        // ошибается номером, переимпорт ради одной серии слишком груб.
+        'tasks:move-groups',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',

@@ -126,7 +126,7 @@ class EgeFipiVariantTest extends TestCase
             ->assertSee('premium-strip', false)
             ->assertSee('tiles-grid', false)
             ->assertSee('База заданий')
-            ->assertSee('ЕГЭ · 11 класс');
+            ->assertSee('ЕГЭ (П) · 11 класс');
 
         // Класс и число заданий берутся из данных, а не из констант ОГЭ:
         // на экране стояло «9 класс · 20 заданий».
