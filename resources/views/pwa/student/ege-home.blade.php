@@ -162,6 +162,16 @@
           </div>
         </a>
 
+        {{-- Базовый уровень — отдельный банк ФИПИ со своей нумерацией
+             (1–21), поэтому он третьим пунктом, а не частью профиля. --}}
+        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'base']) }}" class="fv-option">
+          <div class="fv-opt-icon">📐</div>
+          <div>
+            <div class="fv-opt-name">Базовый уровень (Б)</div>
+            <div class="fv-opt-desc">Задания 1–21 · краткий ответ</div>
+          </div>
+        </a>
+
         <button class="fv-cancel" @click="showTaskBase = false">Отмена</button>
       </div>
     </div>
