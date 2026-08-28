@@ -19,7 +19,10 @@ class EgeVariantPoolService
      */
     public function getOrCreateVariant(User $user): OgeVariant
     {
-        $exclude = StudentSolvedTasks::mapByTopic($user, OgeVariant::EXAM_EGE);
+        // Уровень берётся у сервиса данных: он же решает, из какого банка
+        // собирать вариант и какие задачи считать уже решёнными.
+        $level = $this->taskData->level();
+        $exclude = StudentSolvedTasks::mapByTopic($user, OgeVariant::EXAM_EGE, $level);
         $built = $this->builder->build(Str::random(12), $exclude);
 
         if (empty($built['tasks'])) throw new \RuntimeException('No EGE production tasks');
@@ -29,13 +32,17 @@ class EgeVariantPoolService
             $hash = strtolower(Str::random(6));
         }
 
+        $mark = $level === EgeTaskDataService::LEVEL_BASE ? 'Б' : 'П';
+
         return OgeVariant::create([
             'hash'        => $hash,
             'exam_type'   => OgeVariant::EXAM_EGE,
-            'title'       => 'Вариант ЕГЭ',
+            'title'       => "Вариант ЕГЭ ({$mark})",
             'mode'        => OgeVariant::MODE_FULL,
             'source'      => OgeVariant::SOURCE_MINIAPP,
-            'config_json' => ['tasks' => $built['tasks']],
+            // Уровень внутри варианта: по нему анти-повтор отличает банки,
+            // у которых номера заданий совпадают.
+            'config_json' => ['level' => $level, 'tasks' => $built['tasks']],
         ]);
     }
 }

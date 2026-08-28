@@ -20,11 +20,21 @@ class EgeStudentController extends Controller
     use MiniAppHelpers;
     use NormalizesTaskImageViewer;
 
-    private function makePool(): EgeVariantPoolService
+    private function makePool(string $level = EgeTaskDataService::LEVEL_PROF): EgeVariantPoolService
     {
-        $taskData = app(EgeTaskDataService::class);
+        $taskData = $level === EgeTaskDataService::LEVEL_BASE
+            ? new EgeTaskDataService($level)
+            : app(EgeTaskDataService::class);
         $builder  = new EgeVariantBuilderService($taskData);
         return new EgeVariantPoolService($taskData, $builder);
+    }
+
+    /** Уровень из запроса: по умолчанию профиль. */
+    private function levelFrom(Request $request): string
+    {
+        return $request->input('level') === EgeTaskDataService::LEVEL_BASE
+            ? EgeTaskDataService::LEVEL_BASE
+            : EgeTaskDataService::LEVEL_PROF;
     }
 
     public function home(Request $request)
@@ -89,7 +99,7 @@ class EgeStudentController extends Controller
             abort(403, 'ЕГЭ доступно только для 10–11 классов');
         }
 
-        $variant = $this->makePool()->getOrCreateVariant($user);
+        $variant = $this->makePool($this->levelFrom($request))->getOrCreateVariant($user);
         [$variant, $attempt] = $attemptService->startAttempt($user, $variant->hash, [
             'user_agent' => $request->userAgent(),
             'ip'         => $request->ip(),
