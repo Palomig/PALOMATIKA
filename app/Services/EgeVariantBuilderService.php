@@ -3,13 +3,22 @@ namespace App\Services;
 
 class EgeVariantBuilderService
 {
-    /** Номера заданий профиля ЕГЭ: их 19, двадцатого не существует. */
-    protected array $allTopics = [
-        '01','02','03','04','05','06','07','08','09','10',
-        '11','12','13','14','15','16','17','18','19',
-    ];
-
     public function __construct(private readonly EgeTaskDataService $taskData) {}
+
+    /**
+     * Номера заданий берутся из карты уровня: у профиля их 19, у базы 21.
+     * Ключи карты — строки «01»…«21», но «10» и дальше PHP хранит целыми,
+     * поэтому приводим обратно.
+     *
+     * @return array<int, string>
+     */
+    private function topics(): array
+    {
+        return array_map(
+            static fn ($topic) => str_pad((string) $topic, 2, '0', STR_PAD_LEFT),
+            array_keys($this->taskData->getAllTopicsMeta())
+        );
+    }
 
     /** @param array<string, array<int,int>> $excludeByTopic анти-повтор: topic_id => решённые task_ids */
     public function build(string $hash, array $excludeByTopic = []): array
@@ -20,7 +29,7 @@ class EgeVariantBuilderService
         $variantNumber = (abs($seed) % 999) + 1;
         $tasks = [];
 
-        foreach ($this->allTopics as $topicId) {
+        foreach ($this->topics() as $topicId) {
             $item = $this->taskData->getRandomTaskFromTopic($topicId, 'production', $excludeByTopic[$topicId] ?? []);
             if (!$item) continue;
 

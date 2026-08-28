@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Pwa;
 
+use App\Models\OgeVariant;
 use App\Models\Task;
 use App\Models\TaskGroup;
 use App\Models\TaskTopic;
@@ -219,6 +220,50 @@ class EgeFipiVariantTest extends TestCase
 
         // Номер 21 есть только у базы: у профиля номера кончаются на 19.
         $this->assertStringContainsString('topic=21', $page);
+    }
+
+    public function test_base_variant_is_built_from_the_base_bank(): void
+    {
+        // Полный вариант базы — свой банк и своя нумерация. Уровень пишется
+        // внутрь варианта: по нему анти-повтор отличает банки, у которых
+        // номера заданий совпадают.
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+
+        TaskTopic::create([
+            'bank' => EgeTaskDataService::BANK_BASE, 'grade' => null, 'topic' => '21',
+            'payload' => ['topic_id' => '21', 'level' => 'base',
+                          'meta' => ['title' => 'Текстовая задача повышенной сложности']],
+        ]);
+        $group = TaskGroup::create([
+            'bank' => EgeTaskDataService::BANK_BASE, 'grade' => null, 'topic' => '21',
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 1,
+            'position' => 0, 'instruction' => 'Перебор', 'type' => 'fipi',
+            'payload' => ['instruction' => 'Перебор', 'type' => 'fipi',
+                          'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'fipi',
+            'payload' => ['id' => 1, 'status' => 'production', 'answer' => '7',
+                          'html' => '<p>Найдите наименьшее число.</p>'],
+            'answer' => '7', 'answer_src' => 'claude', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad('V21', 32, 'E'),
+        ]);
+        Cache::flush();
+
+        $this->actingAs($user)
+            ->postJson(route('pwa.student.ege.start'), ['level' => 'base'])
+            ->assertOk()
+            ->assertJsonStructure(['redirect']);
+
+        $variant = OgeVariant::query()->latest('id')->first();
+        $this->assertSame('Вариант ЕГЭ (Б)', $variant->title);
+        $this->assertSame('base', $variant->config_json['level']);
+        $numbers = array_column($variant->config_json['tasks'], 'task_number');
+        $this->assertSame([21], $numbers,
+            'в варианте базы только её задания — профильных номеров там быть не может');
     }
 
     public function test_test_screen_renders_the_condition(): void
