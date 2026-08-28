@@ -7,13 +7,16 @@
      * она вынесена в переменные, а разметка одна.
      */
     $bank = $bank ?? 'oge';
-    $isEge = $bank === 'ege';
-    $bankTopics = $isEge
+    $isBase = $bank === 'ege_b';
+    $isEge = $bank === 'ege' || $isBase;
+    $bankTopics = $isBase
+        ? ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21']
+        : ($isEge
         ? ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19']
-        : ['06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25'];
-    $indexUrl   = $isEge ? route('ege.index') : route('topics.index');
-    $showRoute  = $isEge ? 'ege.show' : 'topics.show';
-    $backLabel  = $isEge ? 'Назад к заданиям ЕГЭ' : 'Назад к темам';
+        : ['06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25']);
+    $indexUrl   = $isBase ? route('ege-base.index') : ($isEge ? route('ege.index') : route('topics.index'));
+    $showRoute  = $isBase ? 'ege-base.show' : ($isEge ? 'ege.show' : 'topics.show');
+    $backLabel  = $isBase ? 'Назад к заданиям базы' : ($isEge ? 'Назад к заданиям ЕГЭ' : 'Назад к темам');
     $unitLabel  = $isEge ? 'Задание' : 'Тема';
     $headTitle  = $isEge ? 'Задание ' . ltrim($topicId, '0') : $topicId;
     $accent     = $topicMeta['color'] ?? ($isEge ? 'purple' : 'blue');
@@ -75,7 +78,7 @@
     {{-- Header --}}
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-white mb-2">{{ $headTitle }}. {{ $topicMeta['title'] }}</h1>
-        <p class="text-gray-400 text-lg">{{ $topicMeta['description'] }}</p>
+        <p class="text-gray-400 text-lg">{{ $topicMeta['description'] ?? '' }}</p>
     </div>
 
     {{-- Stats --}}

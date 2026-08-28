@@ -24,6 +24,20 @@ class EgeController extends Controller
      */
     public function index()
     {
+        return $this->showcase(EgeTaskDataService::LEVEL_PROF);
+    }
+
+    /** Витрина базового уровня: свой банк, свои 21 номер. */
+    public function indexBase()
+    {
+        return $this->showcase(EgeTaskDataService::LEVEL_BASE);
+    }
+
+    private function showcase(string $level)
+    {
+        $service = $level === EgeTaskDataService::LEVEL_BASE
+            ? new EgeTaskDataService($level)
+            : $this->taskService;
         $topics = [];
 
         // Названия берём через getTopicMeta(): она читает банк, а к карте в
@@ -31,16 +45,17 @@ class EgeController extends Controller
         // getAllTopicsMeta() витрина показывала прежние названия, и задание,
         // подписанное здесь «Графики», на своей странице открывалось как
         // «Текстовая задача».
-        foreach (array_keys($this->taskService->getAllTopicsMeta()) as $topicId) {
-            $exists = $this->taskService->topicDataExists($topicId);
-            $topics[$topicId] = array_merge($this->taskService->getTopicMeta($topicId), [
+        foreach (array_keys($service->getAllTopicsMeta()) as $topicId) {
+            $topicId = str_pad((string) $topicId, 2, '0', STR_PAD_LEFT);
+            $exists = $service->topicDataExists($topicId);
+            $topics[$topicId] = array_merge($service->getTopicMeta($topicId), [
                 'exists' => $exists,
-                'stats' => $exists ? $this->taskService->getTopicStats($topicId) : null,
+                'stats' => $exists ? $service->getTopicStats($topicId) : null,
             ]);
         }
 
         // Витрина общая с ОГЭ: данные одинаковые, разница в подписях.
-        return view('topics.index', ['topics' => $topics, 'bank' => 'ege']);
+        return view('topics.index', ['topics' => $topics, 'bank' => $service->bank()]);
     }
 
     /**
@@ -48,19 +63,33 @@ class EgeController extends Controller
      */
     public function show(string $id)
     {
+        return $this->topicPage($id, EgeTaskDataService::LEVEL_PROF);
+    }
+
+    /** Страница задания базового уровня. */
+    public function showBase(string $id)
+    {
+        return $this->topicPage($id, EgeTaskDataService::LEVEL_BASE);
+    }
+
+    private function topicPage(string $id, string $level)
+    {
+        $service = $level === EgeTaskDataService::LEVEL_BASE
+            ? new EgeTaskDataService($level)
+            : $this->taskService;
         $topicId = str_pad($id, 2, '0', STR_PAD_LEFT);
 
         // Проверяем существование данных
-        if (!$this->taskService->topicDataExists($topicId)) {
+        if (!$service->topicDataExists($topicId)) {
             abort(404, "Задание ЕГЭ №$topicId не найдено");
         }
 
-        // Получаем данные из JSON
-        $blocks = $this->taskService->getBlocks($topicId);
-        $topicMeta = $this->taskService->getTopicMeta($topicId);
-        $stats = $this->taskService->getTopicStats($topicId);
+        $blocks = $service->getBlocks($topicId);
+        $topicMeta = $service->getTopicMeta($topicId);
+        $stats = $service->getTopicStats($topicId);
+        $bank = $service->bank();
 
-        return view('ege.show', compact('blocks', 'topicId', 'topicMeta', 'stats'));
+        return view('ege.show', compact('blocks', 'topicId', 'topicMeta', 'stats', 'bank'));
     }
 
     /**

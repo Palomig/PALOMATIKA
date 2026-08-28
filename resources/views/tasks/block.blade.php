@@ -9,11 +9,12 @@
     {{-- Block Header --}}
     <div class="flex justify-between items-center mb-6 text-sm text-slate-500 italic border-b border-slate-700 pb-4">
         <span>Е. А. Ширяева</span>
-        <span>Задачник {{ ($bank ?? 'oge') === 'ege' ? 'ЕГЭ (П)' : 'ОГЭ' }} 2026 (тренажер)</span>
+        @php($bankLabel = ['ege' => 'ЕГЭ (П)', 'ege_b' => 'ЕГЭ (Б)'][$bank ?? 'oge'] ?? 'ОГЭ')
+        <span>Задачник {{ $bankLabel }} 2026 (тренажер)</span>
     </div>
 
     <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold text-white">{{ ($bank ?? 'oge') === 'ege' ? 'Задание ' . ltrim($topicId, '0') : $topicId }}. {{ $topicMeta['title'] ?? '' }}</h2>
+        <h2 class="text-2xl font-bold text-white">{{ in_array($bank ?? 'oge', ['ege', 'ege_b'], true) ? 'Задание ' . ltrim($topicId, '0') : $topicId }}. {{ $topicMeta['title'] ?? '' }}</h2>
         <p class="text-{{ $color }}-400 text-lg mt-1">Блок {{ $block['number'] }}. {{ $block['title'] }}</p>
     </div>
 
