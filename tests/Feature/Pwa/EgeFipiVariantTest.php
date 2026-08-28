@@ -10,6 +10,7 @@ use App\Services\EgeVariantBuilderService;
 use App\Services\TaskBankRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use App\Services\EgeTaskDataService;
 use Tests\TestCase;
 
 /**
@@ -174,6 +175,50 @@ class EgeFipiVariantTest extends TestCase
         $this->assertStringContainsString('Задания 13–19 · развёрнутый ответ', $second);
         $this->assertStringContainsString('topic=13', $second);
         $this->assertStringNotContainsString('topic=12', $second);
+    }
+
+    public function test_base_level_is_a_separate_entry_in_the_task_database(): void
+    {
+        // База — отдельный банк ФИПИ со своей нумерацией (1–21), поэтому в
+        // выборе она третьим пунктом, а не частью профиля.
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+
+        $topic = TaskTopic::create([
+            'bank' => EgeTaskDataService::BANK_BASE, 'grade' => null, 'topic' => '21',
+            'payload' => ['topic_id' => '21', 'level' => 'base',
+                          'meta' => ['title' => 'Текстовая задача повышенной сложности']],
+        ]);
+        $group = TaskGroup::create([
+            'bank' => EgeTaskDataService::BANK_BASE, 'grade' => null, 'topic' => '21',
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 1,
+            'position' => 0, 'instruction' => 'Перебор', 'type' => 'fipi',
+            'payload' => ['instruction' => 'Перебор', 'type' => 'fipi',
+                          'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'fipi',
+            'payload' => ['id' => 1, 'status' => 'production', 'answer' => '7',
+                          'html' => '<p>Найдите наименьшее число.</p>'],
+            'answer' => '7', 'answer_src' => 'claude', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad('B21', 32, 'C'),
+        ]);
+        $this->assertNotNull($topic->id);
+
+        $this->actingAs($user)->get(route('pwa.student.ege.home'))
+            ->assertSee(route('pwa.student.ege.tasks', ['level' => 'base']), false);
+
+        $page = $this->actingAs($user)
+            ->get(route('pwa.student.ege.tasks', ['level' => 'base']))
+            ->assertOk()
+            ->assertSee('База заданий ЕГЭ (Б)')
+            ->assertSee('Задания 1–21 · краткий ответ')
+            ->getContent();
+
+        // Номер 21 есть только у базы: у профиля номера кончаются на 19.
+        $this->assertStringContainsString('topic=21', $page);
     }
 
     public function test_test_screen_renders_the_condition(): void
