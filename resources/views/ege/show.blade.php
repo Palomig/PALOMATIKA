@@ -1,4 +1,4 @@
-@extends('layouts.topic', ['bank' => 'ege'])
+@extends('layouts.topic', ['bank' => $bank ?? 'ege'])
 
 @section('content')
     @foreach($blocks as $block)
@@ -7,7 +7,7 @@
             'topicId' => $topicId,
             'topicMeta' => $topicMeta,
             'color' => $topicMeta['color'] ?? 'purple',
-            'bank' => 'ege',
+            'bank' => $bank ?? 'ege',
         ])
     @endforeach
 @endsection

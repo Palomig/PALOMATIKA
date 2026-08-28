@@ -333,6 +333,13 @@ Route::get('/oge/{hash}', fn() => redirect('https://student.palomatika.ru'))->na
 // ========================================================================
 // ЕГЭ Routes (обособленная система)
 // ========================================================================
+// Базовый уровень — отдельный банк со своей нумерацией (1–21), поэтому и
+// отдельная витрина, а не раздел внутри профиля.
+Route::prefix('ege-base')->name('ege-base.')->group(function () {
+    Route::get('/', [EgeController::class, 'indexBase'])->name('index');
+    Route::get('/topics/{id}', [EgeController::class, 'showBase'])->name('show')->where('id', '[0-9]+');
+});
+
 Route::prefix('ege')->name('ege.')->group(function () {
     Route::get('/', [EgeController::class, 'index'])->name('index');
     Route::get('/topics/{id}', [EgeController::class, 'show'])->name('show')->where('id', '[0-9]+');
