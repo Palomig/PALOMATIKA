@@ -68,13 +68,19 @@
   </div>
   @endif
 
-  {{-- Мини-варианта у ЕГЭ нет: профиль сдают целиком, короткой формы для
-       него не заводили. Поэтому большая плитка одна, во всю ширину. --}}
+  {{-- Мини-варианта у ЕГЭ нет: экзамен сдают целиком, короткой формы для
+       него не заводили. Зато уровня два, и это разные экзамены: профиль —
+       19 заданий, база — 21, поэтому по плитке на каждый. --}}
   <div class="tile-row">
-    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull()">
+    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull('prof')">
       <div class="tile-icon">📝</div>
-      <div class="tile-name">Полный вариант</div>
+      <div class="tile-name">Профиль (П)</div>
       <div class="tile-desc">Задания 1–{{ $taskCount }}, как на экзамене</div>
+    </a>
+    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull('base')">
+      <div class="tile-icon">📐</div>
+      <div class="tile-name">База (Б)</div>
+      <div class="tile-desc">Задания 1–21, как на экзамене</div>
     </a>
   </div>
 
@@ -260,12 +266,12 @@ function egeDashboardPage() {
     startingFull: false,
     grade: {{ $grade }},
 
-    async startFull() {
+    async startFull(level = 'prof') {
       if (this.startingFull) return;
       this.startingFull = true;
 
       try {
-        const res = await window.fetchPost('{{ route("pwa.student.ege.start") }}', {});
+        const res = await window.fetchPost('{{ route("pwa.student.ege.start") }}', { level });
         const data = await res.json();
         if (res.ok && data.redirect) {
           window.location.href = data.redirect;
