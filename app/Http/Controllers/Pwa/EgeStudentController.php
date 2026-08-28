@@ -117,14 +117,28 @@ class EgeStudentController extends Controller
     public function taskDatabase(Request $request)
     {
         $user = Auth::user();
-        $taskData = new EgeTaskDataService();
+
+        // Уровень: профиль (1–19, две части) или база (1–21, все с кратким
+        // ответом). У базы делить нечего — развёрнутых заданий в ней нет.
+        $level = $request->query('level') === EgeTaskDataService::LEVEL_BASE
+            ? EgeTaskDataService::LEVEL_BASE
+            : EgeTaskDataService::LEVEL_PROF;
+        $isBase = $level === EgeTaskDataService::LEVEL_BASE;
+        $taskData = new EgeTaskDataService($level);
 
         // Часть экзамена: 1–12 дают краткий ответ, 13–19 — развёрнутый.
         // Деление приходит от самого ФИПИ (qkind) и совпадает с номерами.
         $part = $request->query('part') === '2' ? 2 : 1;
-        $partTopics = $part === 2
-            ? ['13', '14', '15', '16', '17', '18', '19']
-            : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        // Ключи карты тем — строки «01»…«21», но PHP превращает «10» и
+        // дальше в целые числа, а сравнение ниже строгое. Приводим обратно.
+        $partTopics = $isBase
+            ? array_map(
+                static fn ($topic) => str_pad((string) $topic, 2, '0', STR_PAD_LEFT),
+                array_keys($taskData->getAllTopicsMeta())
+            )
+            : ($part === 2
+                ? ['13', '14', '15', '16', '17', '18', '19']
+                : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']);
 
         $topicIds = collect(array_keys($taskData->getAllTopicsMeta()))
             ->map(fn ($topicId) => str_pad((string) $topicId, 2, '0', STR_PAD_LEFT))
@@ -184,12 +198,18 @@ class EgeStudentController extends Controller
 
         $taskCount = array_sum(array_map(fn ($group) => count($group['tasks']), $zadaniya));
 
-        $partLabel = $part === 2 ? '2я часть' : '1я часть';
-        $partHint = $part === 2 ? 'Задания 13–19 · развёрнутый ответ' : 'Задания 1–12 · краткий ответ';
+        if ($isBase) {
+            $partLabel = 'базовый уровень';
+            $partHint = 'Задания 1–21 · краткий ответ';
+        } else {
+            $partLabel = $part === 2 ? '2я часть' : '1я часть';
+            $partHint = $part === 2 ? 'Задания 13–19 · развёрнутый ответ' : 'Задания 1–12 · краткий ответ';
+        }
+        $levelMark = $isBase ? 'Б' : 'П';
 
         return view('pwa.student.ege-tasks', compact(
             'user', 'topicIds', 'selected', 'maxTopic', 'zadaniya', 'taskCount',
-            'part', 'partLabel', 'partHint'
+            'part', 'partLabel', 'partHint', 'level', 'isBase', 'levelMark'
         ));
     }
 
