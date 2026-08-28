@@ -5,12 +5,16 @@
      * одинаковые, отличаются только подписи и маршруты.
      */
     $bank = $bank ?? 'oge';
-    $isEge = $bank === 'ege';
-    $pageTitle = $isEge ? 'База заданий ЕГЭ (П)' : 'База заданий ОГЭ';
-    $pageLead = $isEge
+    $isBase = $bank === 'ege_b';
+    $isEge = $bank === 'ege' || $isBase;
+    $pageTitle = $isBase ? 'База заданий ЕГЭ (Б)'
+        : ($isEge ? 'База заданий ЕГЭ (П)' : 'База заданий ОГЭ');
+    $pageLead = $isBase
+        ? 'Задания 1–21 базового уровня. Выберите номер задания.'
+        : ($isEge
         ? 'Задания 1–19 профильного уровня. Выберите номер задания.'
-        : 'Темы 6–19. Выберите тему для решения и повторения.';
-    $showRoute = $isEge ? 'ege.show' : 'topics.show';
+        : 'Темы 6–19. Выберите тему для решения и повторения.');
+    $showRoute = $isBase ? 'ege-base.show' : ($isEge ? 'ege.show' : 'topics.show');
 @endphp
 <!DOCTYPE html>
 <html lang="ru">
@@ -48,7 +52,9 @@
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-white font-medium group-hover:text-{{ $color }}-300 transition truncate">{{ $topic['title'] }}</h2>
-                        <p class="text-sm text-slate-500 leading-snug">{{ $topic['description'] }}</p>
+                        {{-- Описание есть не у всякой темы: у банка ФИПИ подпись приходит
+                             с задачей, а карта сервиса запасная. --}}
+                        <p class="text-sm text-slate-500 leading-snug">{{ $topic['description'] ?? '' }}</p>
                     </div>
                 </div>
 
