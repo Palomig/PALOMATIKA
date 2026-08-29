@@ -5,23 +5,19 @@
 @include('pwa.student.partials.home-styles')
 <style>
   .ege-level-switch {
-    display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px;
-    border:1px solid var(--border); border-radius:14px; background:var(--surface2);
+    display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px;
     opacity:0; animation:fadeDown .3s ease forwards;
   }
   .ege-level-option {
-    min-height:42px; display:flex; align-items:center; justify-content:center; gap:6px;
-    border:1px solid transparent; border-radius:10px; color:var(--muted);
+    min-width:0; min-height:42px; display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border); border-radius:12px; background:var(--surface);
+    color:var(--muted);
     font-size:12px; font-weight:800; text-decoration:none; transition:.15s ease;
   }
   .ege-level-option:active { transform:scale(.98); }
   .ege-level-option.is-active {
-    background:var(--surface); border-color:var(--accent-bd); color:var(--accent);
-    box-shadow:0 3px 12px rgba(0,0,0,.12);
-  }
-  .ege-level-mark {
-    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
-    border-radius:7px; background:var(--accent-bg); font-family:var(--display); font-size:10px;
+    background:var(--accent-bg); border-color:var(--accent-bd); color:var(--accent);
+    box-shadow:0 3px 12px rgba(79,142,247,.12);
   }
 </style>
 @endpush
@@ -39,12 +35,12 @@
     <a href="{{ route('pwa.student.ege.home', ['level' => 'prof']) }}"
        class="ege-level-option {{ $level === 'prof' ? 'is-active' : '' }}"
        @if($level === 'prof') aria-current="page" @click.prevent @endif>
-      <span class="ege-level-mark">П</span> Профиль (П)
+      Профиль
     </a>
     <a href="{{ route('pwa.student.ege.home', ['level' => 'base']) }}"
        class="ege-level-option {{ $level === 'base' ? 'is-active' : '' }}"
        @if($level === 'base') aria-current="page" @click.prevent @endif>
-      <span class="ege-level-mark">Б</span> База (Б)
+      База
     </a>
   </nav>
 

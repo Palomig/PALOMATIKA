@@ -162,11 +162,14 @@ class EgeLevelsTest extends TestCase
         $content = $this->actingAs($user)
             ->get('http://student.palomatika.ru/ege-app')
             ->assertOk()
-            ->assertSee('Профиль (П)')
-            ->assertSee('База (Б)')
             ->assertSee('Задания 1–21, как на экзамене')
             ->getContent();
 
+        $this->assertMatchesRegularExpression('/>\s*Профиль\s*<\/a>/u', $content);
+        $this->assertMatchesRegularExpression('/>\s*База\s*<\/a>/u', $content);
+        $this->assertStringContainsString('grid-template-columns:repeat(2,minmax(0,1fr))', str_replace(' ', '', $content));
+        $this->assertStringNotContainsString('ege-level-mark', $content);
+        $this->assertMatchesRegularExpression('/class="ege-level-option is-active"[^>]*aria-current="page"[^>]*>\s*База\s*<\/a>/u', $content);
         $this->assertSame(1, substr_count($content, '<div class="tile-name">Полный вариант</div>'));
         $this->assertStringContainsString('/ege-app?level=prof', $content);
         $this->assertStringContainsString('/ege-app?level=base', $content);
