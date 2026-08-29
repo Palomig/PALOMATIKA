@@ -3,7 +3,6 @@
 
 @push('styles')
 @include('pwa.student.partials.home-styles')
-<style>
   .ege-level-switch {
     display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px;
     opacity:0; animation:fadeDown .3s ease forwards;
@@ -19,7 +18,6 @@
     background:var(--accent-bg); border-color:var(--accent-bd); color:var(--accent);
     box-shadow:0 3px 12px rgba(79,142,247,.12);
   }
-</style>
 @endpush
 
 @section('body')

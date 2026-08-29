@@ -167,6 +167,7 @@ class EgeLevelsTest extends TestCase
 
         $this->assertMatchesRegularExpression('/>\s*Профиль\s*<\/a>/u', $content);
         $this->assertMatchesRegularExpression('/>\s*База\s*<\/a>/u', $content);
+        $this->assertSame(1, substr_count($content, '<style>'), 'Стили переключателя не должны создавать вложенный <style>.');
         $this->assertStringContainsString('grid-template-columns:repeat(2,minmax(0,1fr))', str_replace(' ', '', $content));
         $this->assertStringNotContainsString('ege-level-mark', $content);
         $this->assertMatchesRegularExpression('/class="ege-level-option is-active"[^>]*aria-current="page"[^>]*>\s*База\s*<\/a>/u', $content);
