@@ -2,7 +2,7 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Put the primary formulas of EGE task-bank topics 13 and 15 on a separate line while keeping intervals and later formulas inline.
+**Goal:** Put the primary formulas of EGE task-bank topics 13 and 15 on a separate line while keeping intervals and later formulas inline, and preserve real data tables in topic 16 on mobile.
 
 **Architecture:** Add a presentation-only formatter that inserts one line break before the first math fragment in the first paragraph. Invoke it in the EGE task-bank Blade view only for topics 13 and 15, leaving stored task HTML untouched.
 
@@ -32,3 +32,14 @@
 3. Run the focused feature test, then `EgeFipiVariantTest` and `EgeLevelsTest` completely.
 4. Run `php scripts/blade-lint.php resources/views/pwa/student/ege-tasks.blade.php` and `git diff --check`.
 5. Commit and push `claude/ege-task-format`; production promotion requires explicit approval.
+
+### Task 3: Preserve topic 16 financial tables
+
+**Files:**
+- Modify: `resources/views/pwa/student/ege-tasks.blade.php`
+- Modify: `tests/Feature/Pwa/EgeFipiVariantTest.php`
+
+1. Add a failing feature test with the real table structure used by the financial task.
+2. Remove the nested `<style>` element from the layout stack.
+3. Keep data tables as tables with horizontal scrolling; scope the old mobile stacking rule to figure-layout tables only.
+4. Run the focused tests, the complete EGE feature suites, Blade lint, and `git diff --check`.
