@@ -160,9 +160,12 @@ class EgeFipiVariantTest extends TestCase
         ]);
 
         // Вход в базу предлагает части, как в ОГЭ.
-        $this->actingAs($user)->get(route('pwa.student.ege.home'))
-            ->assertSee(route('pwa.student.ege.tasks', ['part' => 1]), false)
-            ->assertSee(route('pwa.student.ege.tasks', ['part' => 2]), false);
+        $home = $this->actingAs($user)
+            ->get(route('pwa.student.ege.home'))
+            ->getContent();
+
+        $this->assertStringContainsString('ege-app/tasks?level=prof&amp;part=1', $home);
+        $this->assertStringContainsString('ege-app/tasks?level=prof&amp;part=2', $home);
 
         // В первой части номера 1–12, во второй 13–19: краткий ответ и
         // развёрнутый смешивать нельзя, у них разный формат ответа.
@@ -178,10 +181,10 @@ class EgeFipiVariantTest extends TestCase
         $this->assertStringNotContainsString('topic=12', $second);
     }
 
-    public function test_base_level_is_a_separate_entry_in_the_task_database(): void
+    public function test_base_level_uses_its_own_task_database_entry(): void
     {
-        // База — отдельный банк ФИПИ со своей нумерацией (1–21), поэтому в
-        // выборе она третьим пунктом, а не частью профиля.
+        // Уровень выбирается на всём экране ЕГЭ. После выбора базы её плитка
+        // ведёт прямо в отдельный банк ФИПИ с нумерацией 1–21.
         $user = User::factory()->create([
             'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
         ]);
@@ -208,7 +211,7 @@ class EgeFipiVariantTest extends TestCase
         ]);
         $this->assertNotNull($topic->id);
 
-        $this->actingAs($user)->get(route('pwa.student.ege.home'))
+        $this->actingAs($user)->get(route('pwa.student.ege.home', ['level' => 'base']))
             ->assertSee(route('pwa.student.ege.tasks', ['level' => 'base']), false);
 
         $page = $this->actingAs($user)
@@ -260,6 +263,8 @@ class EgeFipiVariantTest extends TestCase
 
         $variant = OgeVariant::query()->latest('id')->first();
         $this->assertSame('Вариант ЕГЭ (Б)', $variant->title);
+        $this->assertSame('base', $variant->level,
+            'индексируемая колонка нужна фильтру незавершённых попыток');
         $this->assertSame('base', $variant->config_json['level']);
         $numbers = array_column($variant->config_json['tasks'], 'task_number');
         $this->assertSame([21], $numbers,

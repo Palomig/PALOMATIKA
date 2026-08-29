@@ -1174,7 +1174,7 @@ class StudentController extends Controller
     {
         $attemptsQuery = OgeAttempt::where('student_id', $student->id)
             ->whereIn('status', ['submitted', 'scored'])
-            ->with(['variant:id,hash,title,mode,exam_type,config_json', 'scorings:id,attempt_id,is_correct'])
+            ->with(['variant:id,hash,title,mode,exam_type,level,config_json', 'scorings:id,attempt_id,is_correct'])
             ->orderByDesc('submitted_at')
             ->limit(50);
 
@@ -1216,7 +1216,7 @@ class StudentController extends Controller
             ->whereIn('status', ['submitted', 'scored'])
             ->with([
                 'student:id,name,grade_num',
-                'variant:id,hash,title,mode,exam_type,config_json',
+                'variant:id,hash,title,mode,exam_type,level,config_json',
                 'answers:id,attempt_id,task_number,current_answer',
                 'scorings:id,attempt_id,task_number,is_correct,correct_answer',
             ])
