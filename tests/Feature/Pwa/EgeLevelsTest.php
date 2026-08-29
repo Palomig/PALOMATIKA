@@ -212,4 +212,77 @@ class EgeLevelsTest extends TestCase
         $this->assertCount(count($numbers), array_unique($numbers));
         $this->assertEmpty(array_diff($numbers, [1, 2, 3]));
     }
+
+    public function test_mini_start_creates_an_attempt_for_the_selected_level(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+        $this->bankTask(EgeTaskDataService::BANK_BASE, '01', 201);
+
+        $response = $this->actingAs($user)->postJson(
+            'http://student.palomatika.ru/ege-app/mini/start',
+            ['level' => 'base', 'mode' => 'practical']
+        );
+
+        $response->assertOk()->assertJsonStructure(['redirect']);
+        $variant = OgeVariant::query()->latest('id')->firstOrFail();
+        $this->assertSame('base', $variant->level);
+        $this->assertSame(OgeVariant::MODE_MINI_PRACTICAL, $variant->mode);
+        $this->assertSame('practical', $variant->config_json['mini_mode']);
+        $this->assertDatabaseHas('oge_attempts', [
+            'student_id' => $user->id,
+            'variant_id' => $variant->id,
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_mini_start_rejects_a_mode_from_the_other_level(): void
+    {
+        $user = $this->student(['ege_level' => 'prof']);
+
+        $this->actingAs($user)->postJson(
+            'http://student.palomatika.ru/ege-app/mini/start',
+            ['level' => 'prof', 'mode' => 'practical']
+        )->assertStatus(422)->assertJson(['error' => 'Недоступный режим мини-ЕГЭ']);
+    }
+
+    public function test_mini_start_returns_422_when_the_mode_has_no_tasks(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+
+        $this->actingAs($user)->postJson(
+            'http://student.palomatika.ru/ege-app/mini/start',
+            ['level' => 'base', 'mode' => 'practical']
+        )->assertStatus(422)->assertJson(['error' => 'Нет доступных заданий для этого режима']);
+    }
+
+    public function test_ninth_grader_cannot_start_mini_ege(): void
+    {
+        $user = $this->student(['grade_num' => 9]);
+
+        $this->actingAs($user)->postJson(
+            'http://student.palomatika.ru/ege-app/mini/start',
+            ['level' => 'prof', 'mode' => 'geometry']
+        )->assertForbidden();
+    }
+
+    public function test_home_shows_only_the_selected_levels_mini_modes(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+
+        $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app')
+            ->assertOk()
+            ->assertSee('Мини-ЕГЭ')
+            ->assertSee('Практические задачи')
+            ->assertSee('Вычисления и алгебра')
+            ->assertDontSee('1-я часть')
+            ->assertDontSee('2-я часть');
+
+        $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app?level=prof')
+            ->assertOk()
+            ->assertSee('1-я часть')
+            ->assertSee('2-я часть')
+            ->assertDontSee('Практические задачи');
+    }
 }

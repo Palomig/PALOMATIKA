@@ -14,6 +14,7 @@ use App\Services\EgeVariantPoolService;
 use App\Services\OgeAttemptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EgeStudentController extends Controller
 {
@@ -116,13 +117,14 @@ class EgeStudentController extends Controller
         $taskData = new EgeTaskDataService($level);
         $topics = array_keys($taskData->getAllTopicsMeta());
         $taskCount = max(array_map('intval', $topics));
+        $miniModes = EgeVariantBuilderService::miniModes($level);
 
         // Слабые темы по ЕГЭ пока не считаются: экран показывает блок только
         // при непустом списке, как и ВПР до появления там статистики.
         $weakTopics = [];
 
         return view('pwa.student.ege-home', compact(
-            'user', 'grade', 'gradeLabel', 'level', 'levelMark', 'taskCount', 'activeList',
+            'user', 'grade', 'gradeLabel', 'level', 'levelMark', 'taskCount', 'miniModes', 'activeList',
             'hasTeacher', 'showLessonTile', 'weakTopics'
         ));
     }
@@ -153,6 +155,47 @@ class EgeStudentController extends Controller
         }
 
         return redirect()->route('pwa.student.ege.test', $attempt->id);
+    }
+
+    public function startMini(Request $request, OgeAttemptService $attemptService)
+    {
+        $user = $request->user();
+        if (
+            !$this->supportsStudentViewContext($request, $user)
+            && ($user->grade_num < 10 || $user->grade_num > 11)
+        ) {
+            abort(403, 'ЕГЭ доступно только для 10–11 классов');
+        }
+
+        $request->validate(['mode' => 'required|string']);
+        $level = $this->resolveLevel($request);
+        $mode = (string) $request->input('mode');
+        if (!array_key_exists($mode, EgeVariantBuilderService::miniModes($level))) {
+            return response()->json(['error' => 'Недоступный режим мини-ЕГЭ'], 422);
+        }
+
+        try {
+            $variant = $this->makePool($level)->getOrCreateVariant($user, $mode);
+        } catch (\Throwable $e) {
+            Log::warning('PWA EGE mini start pool error', [
+                'user' => $user->id, 'level' => $level, 'mode' => $mode, 'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Нет доступных заданий для этого режима'], 422);
+        }
+
+        try {
+            [$variant, $attempt] = $attemptService->startAttempt($user, $variant->hash, [
+                'user_agent' => $request->userAgent(),
+                'ip' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('PWA EGE mini start attempt error', [
+                'user' => $user->id, 'level' => $level, 'mode' => $mode, 'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Ошибка создания попытки'], 500);
+        }
+
+        return response()->json(['redirect' => route('pwa.student.ege.test', $attempt->id)]);
     }
 
     /**

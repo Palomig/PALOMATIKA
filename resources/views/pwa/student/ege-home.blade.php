@@ -105,6 +105,11 @@
   {{-- Уровень выбирается один раз наверху, поэтому действие полного
        варианта здесь одно и всегда работает внутри выбранного банка. --}}
   <div class="tile-row">
+    <a href="#" class="tile-big tile-purple" @click.prevent="showMiniChoice = true">
+      <div class="tile-icon">⚡</div>
+      <div class="tile-name">Мини-ЕГЭ</div>
+      <div class="tile-desc">Короткая тренировка по темам</div>
+    </a>
     <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull()">
       <div class="tile-icon">📝</div>
       <div class="tile-name">Полный вариант</div>
@@ -170,6 +175,29 @@
     @endforeach
   </div>
   @endif
+
+  <template x-if="showMiniChoice">
+    <div class="fv-overlay" @click.self="showMiniChoice = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">Мини-ЕГЭ ({{ $levelMark }})</div>
+
+        @foreach($miniModes as $modeKey => $mode)
+        <button type="button" class="fv-option" style="width:100%;text-align:left;"
+                @click="startMini('{{ $modeKey }}')" :disabled="startingMini">
+          <div class="fv-opt-icon">{{ $mode['icon'] }}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="fv-opt-name">{{ $mode['title'] }}</div>
+            <div class="fv-opt-desc">{{ $mode['description'] }}</div>
+            <div class="fv-opt-badge badge-blue">{{ $mode['count'] }} {{ $mode['count'] === 3 ? 'задания' : 'заданий' }}</div>
+          </div>
+        </button>
+        @endforeach
+
+        <button class="fv-cancel" @click="showMiniChoice = false">Отмена</button>
+      </div>
+    </div>
+  </template>
 
   {{-- Выбор части экзамена: 1–12 дают краткий ответ, 13–19 — развёрнутый,
        и смотреть их вперемешку неудобно. Так же устроен вход в базу
@@ -290,9 +318,32 @@ function egeDashboardPage() {
     refLink: '{{ url("/") }}?ref={{ $user->id }}',
     showUnfinished: false,
     showTaskBase: false,
+    showMiniChoice: false,
     startingMini: false,
     startingFull: false,
     grade: {{ $grade }},
+
+    async startMini(mode) {
+      if (this.startingMini) return;
+      this.startingMini = true;
+
+      try {
+        const res = await window.fetchPost('{{ route("pwa.student.ege.mini.start") }}', {
+          level: '{{ $level }}', mode
+        });
+        const data = await res.json();
+        if (res.ok && data.redirect) {
+          window.location.href = data.redirect;
+          return;
+        }
+        alert(data.error || data.message || 'Ошибка запуска мини-ЕГЭ');
+      } catch (e) {
+        console.error('startMini error:', e);
+        alert('Ошибка соединения: ' + e.message);
+      } finally {
+        this.startingMini = false;
+      }
+    },
 
     async startFull() {
       if (this.startingFull) return;
