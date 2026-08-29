@@ -324,4 +324,36 @@ class EgeLevelsTest extends TestCase
         $this->assertStringContainsString('level=base', $content);
         $this->assertStringNotContainsString('part=2', $content);
     }
+
+    public function test_history_labels_every_ege_level_and_mini_mode(): void
+    {
+        $user = $this->student();
+        $cases = [
+            ['base', OgeVariant::MODE_FULL, 'histb1', 'Полный вариант ЕГЭ (Б)'],
+            ['prof', OgeVariant::MODE_MINI_GEOMETRY, 'histp1', 'Мини-ЕГЭ (П) — геометрия'],
+            ['base', OgeVariant::MODE_MINI_CALCULATION, 'histb2', 'Мини-ЕГЭ (Б) — вычисления и алгебра'],
+            [null, OgeVariant::MODE_FULL, 'histl1', 'Полный вариант ЕГЭ (П)'],
+        ];
+
+        foreach ($cases as [$level, $mode, $hash]) {
+            $variant = OgeVariant::create([
+                'hash' => $hash, 'exam_type' => OgeVariant::EXAM_EGE, 'level' => $level,
+                'title' => 'Старый заголовок', 'source' => OgeVariant::SOURCE_MINIAPP,
+                'config_json' => ['level' => $level, 'tasks' => [['id' => 1]]], 'mode' => $mode,
+            ]);
+            OgeAttempt::create([
+                'variant_id' => $variant->id, 'student_id' => $user->id,
+                'status' => 'submitted', 'started_at' => now()->subMinute(),
+                'submitted_at' => now(), 'last_seen_at' => now(),
+            ]);
+        }
+
+        $page = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/history')
+            ->assertOk();
+
+        foreach ($cases as $case) {
+            $page->assertSee($case[3]);
+        }
+    }
 }
