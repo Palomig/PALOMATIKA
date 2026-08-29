@@ -285,4 +285,43 @@ class EgeLevelsTest extends TestCase
             ->assertSee('2-я часть')
             ->assertDontSee('Практические задачи');
     }
+
+    public function test_task_bank_entry_is_scoped_to_the_selected_level(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+
+        $base = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app')
+            ->assertOk()
+            ->assertSee(route('pwa.student.ege.tasks', ['level' => 'base']), false)
+            ->assertDontSee('Базовый уровень (Б)')
+            ->getContent();
+        $this->assertStringNotContainsString('ege-app/tasks?part=2', $base);
+
+        $profile = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app?level=prof')
+            ->assertOk()
+            ->getContent();
+        $this->assertStringContainsString('ege-app/tasks?level=prof&amp;part=1', $profile);
+        $this->assertStringContainsString('ege-app/tasks?level=prof&amp;part=2', $profile);
+    }
+
+    public function test_base_task_bank_navigation_keeps_level_and_has_no_parts(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+        $this->bankTask(EgeTaskDataService::BANK_BASE, '01', 301);
+        $this->bankTask(EgeTaskDataService::BANK_BASE, '21', 321);
+
+        $content = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app/tasks?level=base')
+            ->assertOk()
+            ->assertSee('База заданий ЕГЭ (Б)')
+            ->assertSee('Задания 1–21 · краткий ответ')
+            ->getContent();
+
+        $this->assertStringContainsString('ege-app?level=base', $content);
+        $this->assertStringContainsString('topic=21', $content);
+        $this->assertStringContainsString('level=base', $content);
+        $this->assertStringNotContainsString('part=2', $content);
+    }
 }

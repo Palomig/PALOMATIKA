@@ -86,7 +86,7 @@
 <div class="page task-render-scope">
 
   <div style="display:flex;align-items:center;gap:12px;opacity:0;animation:fadeDown .3s ease forwards;">
-    <a href="{{ route('pwa.student.ege.home') }}" class="back-btn">‹</a>
+    <a href="{{ route('pwa.student.ege.home', ['level' => $level]) }}" class="back-btn">‹</a>
     <div style="flex:1;">
       <div style="font-family:var(--display);font-size:16px;color:var(--text);">База заданий ЕГЭ ({{ $levelMark }})</div>
       <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:1px;">{{ $partLabel }} · {{ $partHint }}</div>
@@ -102,7 +102,9 @@
   <div class="topics-row">
     @foreach($topicIds as $tid)
       <a class="topic-pill {{ $selected === $tid ? 'active' : '' }}"
-         href="{{ route('pwa.student.ege.tasks', array_filter(['topic' => (int)$tid, 'part' => $part, 'level' => $isBase ? 'base' : null])) }}">
+         href="{{ route('pwa.student.ege.tasks', $isBase
+             ? ['topic' => (int)$tid, 'level' => 'base']
+             : ['topic' => (int)$tid, 'level' => 'prof', 'part' => $part]) }}">
         {{ (int)$tid }}
       </a>
     @endforeach

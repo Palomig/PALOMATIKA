@@ -118,11 +118,19 @@
   </div>
 
   <div class="tiles-grid">
+    @if($level === 'base')
+    <a href="{{ route('pwa.student.ege.tasks', ['level' => 'base']) }}" class="tile-sm">
+      <div class="tile-sm-icon">📚</div>
+      <div class="tile-sm-name">База заданий</div>
+      <div class="tile-sm-desc">Задания 1–21</div>
+    </a>
+    @else
     <a href="#" class="tile-sm" @click.prevent="showTaskBase = true">
       <div class="tile-sm-icon">📚</div>
       <div class="tile-sm-name">База заданий</div>
       <div class="tile-sm-desc">1я и 2я части</div>
     </a>
+    @endif
     <a href="/practice" class="tile-sm">
       <div class="tile-sm-icon">🎮</div>
       <div class="tile-sm-name">Практика</div>
@@ -199,16 +207,15 @@
     </div>
   </template>
 
-  {{-- Выбор части экзамена: 1–12 дают краткий ответ, 13–19 — развёрнутый,
-       и смотреть их вперемешку неудобно. Так же устроен вход в базу
-       заданий ОГЭ. --}}
+  {{-- Части есть только у профиля. База ведёт сразу к номерам 1–21. --}}
+  @if($level === 'prof')
   <template x-if="showTaskBase">
     <div class="fv-overlay" @click.self="showTaskBase = false">
       <div class="fv-sheet">
         <div class="fv-handle"></div>
         <div class="fv-title">База заданий</div>
 
-        <a href="{{ route('pwa.student.ege.tasks', ['part' => 1]) }}" class="fv-option">
+        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 1]) }}" class="fv-option">
           <div class="fv-opt-icon">📝</div>
           <div>
             <div class="fv-opt-name">1я часть</div>
@@ -216,7 +223,7 @@
           </div>
         </a>
 
-        <a href="{{ route('pwa.student.ege.tasks', ['part' => 2]) }}" class="fv-option">
+        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 2]) }}" class="fv-option">
           <div class="fv-opt-icon">✍️</div>
           <div>
             <div class="fv-opt-name">2я часть</div>
@@ -224,20 +231,11 @@
           </div>
         </a>
 
-        {{-- Базовый уровень — отдельный банк ФИПИ со своей нумерацией
-             (1–21), поэтому он третьим пунктом, а не частью профиля. --}}
-        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'base']) }}" class="fv-option">
-          <div class="fv-opt-icon">📐</div>
-          <div>
-            <div class="fv-opt-name">Базовый уровень (Б)</div>
-            <div class="fv-opt-desc">Задания 1–21 · краткий ответ</div>
-          </div>
-        </a>
-
         <button class="fv-cancel" @click="showTaskBase = false">Отмена</button>
       </div>
     </div>
   </template>
+  @endif
 
   @if(count($activeList) > 1)
   <template x-if="showUnfinished">
