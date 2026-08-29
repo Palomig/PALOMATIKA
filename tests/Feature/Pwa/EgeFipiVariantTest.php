@@ -181,6 +181,74 @@ class EgeFipiVariantTest extends TestCase
         $this->assertStringNotContainsString('topic=12', $second);
     }
 
+    public function test_task_database_separates_primary_formulas_only_for_topics_13_and_15(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+        $task = Task::query()->firstOrFail();
+
+        $renderTopic = function (int $topic, string $html) use ($user, $task): string {
+            $topicId = str_pad((string) $topic, 2, '0', STR_PAD_LEFT);
+            TaskTopic::query()->update(['topic' => $topicId]);
+            TaskGroup::query()->update(['topic' => $topicId]);
+            $task->update(['payload' => array_merge($task->payload, ['html' => $html])]);
+            Cache::flush();
+            TaskBankRepository::forgetTableCheck();
+
+            return $this->actingAs($user)
+                ->get(route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 2, 'topic' => $topic]))
+                ->assertOk()
+                ->getContent();
+        };
+
+        $topic13 = $renderTopic(
+            13,
+            '<p>а) Решите уравнение $x^2-1=0$.</p><p>б) Найдите корни на отрезке $[0;5]$.</p>'
+        );
+        $this->assertStringContainsString('Решите уравнение<br class="fipi-primary-formula-break">$x^2-1=0$.', $topic13);
+        $this->assertStringContainsString('отрезке $[0;5]$.', $topic13);
+
+        $topic15 = $renderTopic(15, '<p>Решите неравенство $\log_3(x)\leq 2$.</p>');
+        $this->assertStringContainsString('Решите неравенство<br class="fipi-primary-formula-break">', $topic15);
+
+        $topic14 = $renderTopic(14, '<p>Найдите объём $V=12$.</p>');
+        $this->assertStringNotContainsString('fipi-primary-formula-break', $topic14);
+    }
+
+    public function test_task_database_keeps_financial_data_as_a_table_on_mobile(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+        TaskTopic::query()->update(['topic' => '16']);
+        TaskGroup::query()->update(['topic' => '16']);
+        $task = Task::query()->firstOrFail();
+        $task->update(['payload' => array_merge($task->payload, [
+            'html' => '<p>Условия возврата:</p><table><tbody><tr>'
+                . '<td>Месяц и год</td><td>Июль 2016</td><td>Июль 2017</td>'
+                . '</tr><tr><td>Долг</td><td>$S$</td><td>$0{,}6S$</td>'
+                . '</tr></tbody></table>',
+        ])]);
+        Cache::flush();
+        TaskBankRepository::forgetTableCheck();
+
+        $content = $this->actingAs($user)
+            ->get(route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 2, 'topic' => 16]))
+            ->assertOk()
+            ->assertSee('<table>', false)
+            ->getContent();
+
+        // Таблица остаётся таблицей, а узкая карточка прокручивается по
+        // горизонтали. Общий display:block склеивал все ячейки в строку.
+        $this->assertStringContainsString('.fipi-table-scroll', $content);
+        $this->assertStringNotContainsString(
+            '.fipi-condition table, .fipi-condition tbody,',
+            $content
+        );
+        $this->assertSame(1, substr_count($content, '<style>'));
+    }
+
     public function test_base_level_uses_its_own_task_database_entry(): void
     {
         // Уровень выбирается на всём экране ЕГЭ. После выбора базы её плитка

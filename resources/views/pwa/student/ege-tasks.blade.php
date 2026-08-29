@@ -6,7 +6,6 @@
 @endpush
 
 @push('styles')
-<style>
   .topics-row {
     display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
     opacity: 0; animation: fadeUp 0.3s ease 0.08s forwards;
@@ -68,18 +67,37 @@
     padding: 0 2px; height: 1.35em; width: auto; vertical-align: -0.28em;
   }
 
+  /* Финансовые условия ФИПИ содержат настоящие таблицы. На узком экране
+     сохраняем строки и столбцы, а недостающую ширину отдаём прокрутке. */
+  .fipi-table-scroll {
+    overflow-x: auto; overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+  .fipi-table-scroll table {
+    width: 100%; min-width: 520px; margin: 10px 0 8px;
+    border-collapse: collapse; font-size: 12px;
+  }
+  .fipi-table-scroll td {
+    padding: 8px 10px; border: 1px solid var(--border);
+    text-align: center; vertical-align: middle; white-space: nowrap;
+  }
+  .fipi-table-scroll td:first-child {
+    text-align: left; white-space: normal; font-weight: 700;
+  }
+
   /* Условие и чертёж лежат в соседних ячейках таблицы: на телефоне рисунок
      зажимается в узкую колонку и превращается в марку. Раскладываем в
      столбик — так же, как в базе заданий ОГЭ. */
   @media (max-width: 640px) {
-    .fipi-condition table, .fipi-condition tbody,
-    .fipi-condition tr, .fipi-condition td {
+    .fipi-condition table:has(.fipi-figure),
+    .fipi-condition table:has(.fipi-figure) tbody,
+    .fipi-condition table:has(.fipi-figure) tr,
+    .fipi-condition table:has(.fipi-figure) td {
       display: block; width: 100%; padding-left: 0; padding-right: 0;
     }
   }
   .fipi-condition p { margin: 0 0 .5rem; }
   .fipi-condition p:last-child { margin-bottom: 0; }
-</style>
 @endpush
 
 @section('body')
@@ -150,7 +168,15 @@
               {{-- Условие банка ФИПИ приходит готовой разметкой с формулами
                    в $…$ — выводим как есть, KaTeX разберёт её на месте. --}}
               @if(!empty($task['html']))
-                <div class="task-item-text fipi-condition">{!! $task['html'] !!}</div>
+                @php
+                  $taskHtml = (string) $task['html'];
+                  if (in_array((int) $selected, [13, 15], true)) {
+                    $taskHtml = \App\Support\EgeTaskBankFormatter::separatePrimaryFormula($taskHtml);
+                  }
+                  $hasDataTable = str_contains($taskHtml, '<table')
+                    && !str_contains($taskHtml, 'fipi-figure');
+                @endphp
+                <div class="task-item-text fipi-condition{{ $hasDataTable ? ' fipi-table-scroll' : '' }}">{!! $taskHtml !!}</div>
               @elseif($task['text'] !== '')
                 <div class="task-item-text">{!! nl2br(e($task['text'])) !!}</div>
               @elseif(!empty($task['expression']))
