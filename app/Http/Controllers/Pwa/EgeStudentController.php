@@ -76,7 +76,19 @@ class EgeStudentController extends Controller
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
             ->where('status', 'active')
             ->where('last_seen_at', '>=', now()->subDays(7))
-            ->whereHas('variant', fn($q) => $q->where('exam_type', 'ege'))
+            ->whereHas('variant', function ($query) use ($level): void {
+                $query->where('exam_type', OgeVariant::EXAM_EGE)
+                    ->where(function ($levelQuery) use ($level): void {
+                        if ($level === EgeTaskDataService::LEVEL_BASE) {
+                            $levelQuery->where('level', EgeTaskDataService::LEVEL_BASE);
+                        } else {
+                            // До появления отдельной колонки все ЕГЭ-варианты
+                            // были профильными. Null сохраняет их на экране П.
+                            $levelQuery->where('level', EgeTaskDataService::LEVEL_PROF)
+                                ->orWhereNull('level');
+                        }
+                    });
+            })
             ->with('variant')
             ->orderByDesc('last_seen_at')
             ->get();

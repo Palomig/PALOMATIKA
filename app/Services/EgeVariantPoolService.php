@@ -37,6 +37,7 @@ class EgeVariantPoolService
         return OgeVariant::create([
             'hash'        => $hash,
             'exam_type'   => OgeVariant::EXAM_EGE,
+            'level'       => $level,
             'title'       => "Вариант ЕГЭ ({$mark})",
             'mode'        => OgeVariant::MODE_FULL,
             'source'      => OgeVariant::SOURCE_MINIAPP,

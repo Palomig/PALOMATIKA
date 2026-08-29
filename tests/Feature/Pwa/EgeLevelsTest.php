@@ -3,6 +3,7 @@
 namespace Tests\Feature\Pwa;
 
 use App\Models\OgeVariant;
+use App\Models\OgeAttempt;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,27 @@ class EgeLevelsTest extends TestCase
             'grade_num' => 11,
             'onboarding_completed_at' => now(),
         ], $attributes));
+    }
+
+    private function activeAttempt(User $user, ?string $level, string $title, string $hash): OgeAttempt
+    {
+        $variant = OgeVariant::create([
+            'hash' => $hash,
+            'exam_type' => OgeVariant::EXAM_EGE,
+            'level' => $level,
+            'title' => $title,
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'config_json' => ['level' => $level, 'tasks' => [['id' => 1]]],
+            'mode' => OgeVariant::MODE_FULL,
+        ]);
+
+        return OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now(),
+            'last_seen_at' => now(),
+        ]);
     }
 
     public function test_level_columns_exist_and_are_mass_assignable(): void
@@ -100,5 +122,44 @@ class EgeLevelsTest extends TestCase
             ->assertSee('ЕГЭ (Б) · 11 класс');
 
         $this->assertSame('prof', $teacher->fresh()->ege_level);
+    }
+
+    public function test_home_has_one_level_scoped_full_variant_and_switcher(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+
+        $content = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app')
+            ->assertOk()
+            ->assertSee('Профиль (П)')
+            ->assertSee('База (Б)')
+            ->assertSee('Задания 1–21, как на экзамене')
+            ->getContent();
+
+        $this->assertSame(1, substr_count($content, '<div class="tile-name">Полный вариант</div>'));
+        $this->assertStringContainsString('/ege-app?level=prof', $content);
+        $this->assertStringContainsString('/ege-app?level=base', $content);
+    }
+
+    public function test_home_only_shows_active_attempts_for_selected_level(): void
+    {
+        $user = $this->student(['ege_level' => 'base']);
+        $this->activeAttempt($user, 'base', 'Продолжить базу', 'base01');
+        $this->activeAttempt($user, 'prof', 'Не показывать профиль', 'prof01');
+        $this->activeAttempt($user, null, 'Старый профиль', 'oldp01');
+
+        $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app')
+            ->assertOk()
+            ->assertSee('Продолжить базу')
+            ->assertDontSee('Не показывать профиль')
+            ->assertDontSee('Старый профиль');
+
+        $this->actingAs($user)
+            ->get('http://student.palomatika.ru/ege-app?level=prof')
+            ->assertOk()
+            ->assertDontSee('Продолжить базу')
+            ->assertSee('Не показывать профиль')
+            ->assertSee('Старый профиль');
     }
 }

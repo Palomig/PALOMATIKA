@@ -260,6 +260,8 @@ class EgeFipiVariantTest extends TestCase
 
         $variant = OgeVariant::query()->latest('id')->first();
         $this->assertSame('Вариант ЕГЭ (Б)', $variant->title);
+        $this->assertSame('base', $variant->level,
+            'индексируемая колонка нужна фильтру незавершённых попыток');
         $this->assertSame('base', $variant->config_json['level']);
         $numbers = array_column($variant->config_json['tasks'], 'task_number');
         $this->assertSame([21], $numbers,

@@ -3,6 +3,27 @@
 
 @push('styles')
 @include('pwa.student.partials.home-styles')
+<style>
+  .ege-level-switch {
+    display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px;
+    border:1px solid var(--border); border-radius:14px; background:var(--surface2);
+    opacity:0; animation:fadeDown .3s ease forwards;
+  }
+  .ege-level-option {
+    min-height:42px; display:flex; align-items:center; justify-content:center; gap:6px;
+    border:1px solid transparent; border-radius:10px; color:var(--muted);
+    font-size:12px; font-weight:800; text-decoration:none; transition:.15s ease;
+  }
+  .ege-level-option:active { transform:scale(.98); }
+  .ege-level-option.is-active {
+    background:var(--surface); border-color:var(--accent-bd); color:var(--accent);
+    box-shadow:0 3px 12px rgba(0,0,0,.12);
+  }
+  .ege-level-mark {
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
+    border-radius:7px; background:var(--accent-bg); font-family:var(--display); font-size:10px;
+  }
+</style>
 @endpush
 
 @section('body')
@@ -13,6 +34,19 @@
   @if(!empty($showLessonTile))
     @include('pwa.student.partials.lesson-tile')
   @endif
+
+  <nav class="ege-level-switch" aria-label="Уровень ЕГЭ">
+    <a href="{{ route('pwa.student.ege.home', ['level' => 'prof']) }}"
+       class="ege-level-option {{ $level === 'prof' ? 'is-active' : '' }}"
+       @if($level === 'prof') aria-current="page" @click.prevent @endif>
+      <span class="ege-level-mark">П</span> Профиль (П)
+    </a>
+    <a href="{{ route('pwa.student.ege.home', ['level' => 'base']) }}"
+       class="ege-level-option {{ $level === 'base' ? 'is-active' : '' }}"
+       @if($level === 'base') aria-current="page" @click.prevent @endif>
+      <span class="ege-level-mark">Б</span> База (Б)
+    </a>
+  </nav>
 
   {{-- Повторение ОГЭ — десятым и одиннадцатым классам --}}
   @if(in_array((int)($user->grade_num ?? 0), [10, 11], true))
@@ -68,19 +102,13 @@
   </div>
   @endif
 
-  {{-- Мини-варианта у ЕГЭ нет: экзамен сдают целиком, короткой формы для
-       него не заводили. Зато уровня два, и это разные экзамены: профиль —
-       19 заданий, база — 21, поэтому по плитке на каждый. --}}
+  {{-- Уровень выбирается один раз наверху, поэтому действие полного
+       варианта здесь одно и всегда работает внутри выбранного банка. --}}
   <div class="tile-row">
-    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull('prof')">
+    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull()">
       <div class="tile-icon">📝</div>
-      <div class="tile-name">Профиль (П)</div>
+      <div class="tile-name">Полный вариант</div>
       <div class="tile-desc">Задания 1–{{ $taskCount }}, как на экзамене</div>
-    </a>
-    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull('base')">
-      <div class="tile-icon">📐</div>
-      <div class="tile-name">База (Б)</div>
-      <div class="tile-desc">Задания 1–21, как на экзамене</div>
     </a>
   </div>
 
@@ -266,12 +294,12 @@ function egeDashboardPage() {
     startingFull: false,
     grade: {{ $grade }},
 
-    async startFull(level = 'prof') {
+    async startFull() {
       if (this.startingFull) return;
       this.startingFull = true;
 
       try {
-        const res = await window.fetchPost('{{ route("pwa.student.ege.start") }}', { level });
+        const res = await window.fetchPost('{{ route("pwa.student.ege.start") }}', { level: '{{ $level }}' });
         const data = await res.json();
         if (res.ok && data.redirect) {
           window.location.href = data.redirect;
