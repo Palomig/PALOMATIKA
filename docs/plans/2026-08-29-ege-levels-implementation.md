@@ -111,4 +111,3 @@
 3. Run relevant OGE/VPR dashboard and mini-variant tests to prove shared constants/helpers remain compatible.
 4. Inspect the diff, confirm migrations are reversible, and confirm no unrelated worktree files changed.
 5. Commit any test-driven corrections and report branch, commits, and verification results. Do not promote or deploy without an explicit follow-up instruction.
-
