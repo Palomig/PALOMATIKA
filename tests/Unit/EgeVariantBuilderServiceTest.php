@@ -11,8 +11,10 @@ class EgeVariantBuilderServiceTest extends TestCase
     {
         $taskData = $this->getMockBuilder(EgeTaskDataService::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getRandomTaskFromTopic', 'getTopicMeta'])
+            ->onlyMethods(['getRandomTaskFromTopic', 'getTopicMeta', 'topicDataExists'])
             ->getMock();
+
+        $taskData->method('topicDataExists')->willReturn(true);
 
         $taskData->method('getTopicMeta')
             ->willReturnCallback(fn(string $topicId) => [
@@ -94,5 +96,29 @@ class EgeVariantBuilderServiceTest extends TestCase
 
         $this->assertCount(3, $result['tasks']);
         $this->assertSame([1, 2, 3], array_values(array_unique(array_column($result['tasks'], 'task_number'))));
+    }
+
+    public function test_build_mini_selects_only_topics_that_have_data(): void
+    {
+        $taskData = $this->getMockBuilder(EgeTaskDataService::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getRandomTaskFromTopic', 'getTopicMeta', 'topicDataExists'])
+            ->getMock();
+        $taskData->method('topicDataExists')
+            ->willReturnCallback(fn (string $topicId): bool => $topicId === '01');
+        $taskData->method('getTopicMeta')->willReturn(['title' => 'Задание 01']);
+        $taskData->method('getRandomTaskFromTopic')->willReturn([
+            'task' => ['id' => 1, 'answer' => '2'],
+            'type' => 'expression', 'instruction' => 'Решите',
+            'block_number' => 1, 'zadanie_number' => 1,
+        ]);
+
+        $result = (new EgeVariantBuilderService($taskData))->buildMini(
+            'sparse-bank',
+            ['01', '02', '03', '04', '05', '06', '07', '08'],
+            5
+        );
+
+        $this->assertSame([1], array_column($result['tasks'], 'task_number'));
     }
 }

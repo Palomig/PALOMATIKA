@@ -118,6 +118,15 @@ class EgeVariantBuilderService
             static fn ($topic): string => str_pad((string) $topic, 2, '0', STR_PAD_LEFT),
             $topics
         )));
+        $topics = array_values(array_filter(
+            $topics,
+            fn (string $topic): bool => $this->taskData->topicDataExists($topic)
+        ));
+
+        if ($topics === []) {
+            return ['tasks' => [], 'variantNumber' => (abs($seed) % 999) + 1];
+        }
+
         shuffle($topics);
         $topics = array_slice($topics, 0, min($count, count($topics)));
         usort($topics, static fn (string $a, string $b): int => (int) $a <=> (int) $b);
