@@ -48,6 +48,7 @@ class User extends Authenticatable
         'timezone',
         'grade_num',
         'grade_letter',
+        'ege_level',
         'school_number',
         'city',
         'onboarding_completed_at',

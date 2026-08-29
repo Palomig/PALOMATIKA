@@ -3,6 +3,27 @@
 
 @push('styles')
 @include('pwa.student.partials.home-styles')
+<style>
+  .ege-level-switch {
+    display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px;
+    border:1px solid var(--border); border-radius:14px; background:var(--surface2);
+    opacity:0; animation:fadeDown .3s ease forwards;
+  }
+  .ege-level-option {
+    min-height:42px; display:flex; align-items:center; justify-content:center; gap:6px;
+    border:1px solid transparent; border-radius:10px; color:var(--muted);
+    font-size:12px; font-weight:800; text-decoration:none; transition:.15s ease;
+  }
+  .ege-level-option:active { transform:scale(.98); }
+  .ege-level-option.is-active {
+    background:var(--surface); border-color:var(--accent-bd); color:var(--accent);
+    box-shadow:0 3px 12px rgba(0,0,0,.12);
+  }
+  .ege-level-mark {
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
+    border-radius:7px; background:var(--accent-bg); font-family:var(--display); font-size:10px;
+  }
+</style>
 @endpush
 
 @section('body')
@@ -13,6 +34,19 @@
   @if(!empty($showLessonTile))
     @include('pwa.student.partials.lesson-tile')
   @endif
+
+  <nav class="ege-level-switch" aria-label="Уровень ЕГЭ">
+    <a href="{{ route('pwa.student.ege.home', ['level' => 'prof']) }}"
+       class="ege-level-option {{ $level === 'prof' ? 'is-active' : '' }}"
+       @if($level === 'prof') aria-current="page" @click.prevent @endif>
+      <span class="ege-level-mark">П</span> Профиль (П)
+    </a>
+    <a href="{{ route('pwa.student.ege.home', ['level' => 'base']) }}"
+       class="ege-level-option {{ $level === 'base' ? 'is-active' : '' }}"
+       @if($level === 'base') aria-current="page" @click.prevent @endif>
+      <span class="ege-level-mark">Б</span> База (Б)
+    </a>
+  </nav>
 
   {{-- Повторение ОГЭ — десятым и одиннадцатым классам --}}
   @if(in_array((int)($user->grade_num ?? 0), [10, 11], true))
@@ -26,7 +60,7 @@
 
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
-    <div class="greeting-badge">ЕГЭ (П) · {{ $gradeLabel }} класс</div>
+    <div class="greeting-badge">ЕГЭ ({{ $levelMark }}) · {{ $gradeLabel }} класс</div>
   </div>
 
   @if($user->hasTgPremium())
@@ -68,28 +102,35 @@
   </div>
   @endif
 
-  {{-- Мини-варианта у ЕГЭ нет: экзамен сдают целиком, короткой формы для
-       него не заводили. Зато уровня два, и это разные экзамены: профиль —
-       19 заданий, база — 21, поэтому по плитке на каждый. --}}
+  {{-- Уровень выбирается один раз наверху, поэтому действие полного
+       варианта здесь одно и всегда работает внутри выбранного банка. --}}
   <div class="tile-row">
-    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull('prof')">
-      <div class="tile-icon">📝</div>
-      <div class="tile-name">Профиль (П)</div>
-      <div class="tile-desc">Задания 1–{{ $taskCount }}, как на экзамене</div>
+    <a href="#" class="tile-big tile-purple" @click.prevent="showMiniChoice = true">
+      <div class="tile-icon">⚡</div>
+      <div class="tile-name">Мини-ЕГЭ</div>
+      <div class="tile-desc">Короткая тренировка по темам</div>
     </a>
-    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull('base')">
-      <div class="tile-icon">📐</div>
-      <div class="tile-name">База (Б)</div>
-      <div class="tile-desc">Задания 1–21, как на экзамене</div>
+    <a href="#" class="tile-big tile-blue" style="flex:1" @click.prevent="startFull()">
+      <div class="tile-icon">📝</div>
+      <div class="tile-name">Полный вариант</div>
+      <div class="tile-desc">Задания 1–{{ $taskCount }}, как на экзамене</div>
     </a>
   </div>
 
   <div class="tiles-grid">
+    @if($level === 'base')
+    <a href="{{ route('pwa.student.ege.tasks', ['level' => 'base']) }}" class="tile-sm">
+      <div class="tile-sm-icon">📚</div>
+      <div class="tile-sm-name">База заданий</div>
+      <div class="tile-sm-desc">Задания 1–21</div>
+    </a>
+    @else
     <a href="#" class="tile-sm" @click.prevent="showTaskBase = true">
       <div class="tile-sm-icon">📚</div>
       <div class="tile-sm-name">База заданий</div>
       <div class="tile-sm-desc">1я и 2я части</div>
     </a>
+    @endif
     <a href="/practice" class="tile-sm">
       <div class="tile-sm-icon">🎮</div>
       <div class="tile-sm-name">Практика</div>
@@ -143,16 +184,38 @@
   </div>
   @endif
 
-  {{-- Выбор части экзамена: 1–12 дают краткий ответ, 13–19 — развёрнутый,
-       и смотреть их вперемешку неудобно. Так же устроен вход в базу
-       заданий ОГЭ. --}}
+  <template x-if="showMiniChoice">
+    <div class="fv-overlay" @click.self="showMiniChoice = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">Мини-ЕГЭ ({{ $levelMark }})</div>
+
+        @foreach($miniModes as $modeKey => $mode)
+        <button type="button" class="fv-option" style="width:100%;text-align:left;"
+                @click="startMini('{{ $modeKey }}')" :disabled="startingMini">
+          <div class="fv-opt-icon">{{ $mode['icon'] }}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="fv-opt-name">{{ $mode['title'] }}</div>
+            <div class="fv-opt-desc">{{ $mode['description'] }}</div>
+            <div class="fv-opt-badge badge-blue">{{ $mode['count'] }} {{ $mode['count'] === 3 ? 'задания' : 'заданий' }}</div>
+          </div>
+        </button>
+        @endforeach
+
+        <button class="fv-cancel" @click="showMiniChoice = false">Отмена</button>
+      </div>
+    </div>
+  </template>
+
+  {{-- Части есть только у профиля. База ведёт сразу к номерам 1–21. --}}
+  @if($level === 'prof')
   <template x-if="showTaskBase">
     <div class="fv-overlay" @click.self="showTaskBase = false">
       <div class="fv-sheet">
         <div class="fv-handle"></div>
         <div class="fv-title">База заданий</div>
 
-        <a href="{{ route('pwa.student.ege.tasks', ['part' => 1]) }}" class="fv-option">
+        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 1]) }}" class="fv-option">
           <div class="fv-opt-icon">📝</div>
           <div>
             <div class="fv-opt-name">1я часть</div>
@@ -160,7 +223,7 @@
           </div>
         </a>
 
-        <a href="{{ route('pwa.student.ege.tasks', ['part' => 2]) }}" class="fv-option">
+        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 2]) }}" class="fv-option">
           <div class="fv-opt-icon">✍️</div>
           <div>
             <div class="fv-opt-name">2я часть</div>
@@ -168,20 +231,11 @@
           </div>
         </a>
 
-        {{-- Базовый уровень — отдельный банк ФИПИ со своей нумерацией
-             (1–21), поэтому он третьим пунктом, а не частью профиля. --}}
-        <a href="{{ route('pwa.student.ege.tasks', ['level' => 'base']) }}" class="fv-option">
-          <div class="fv-opt-icon">📐</div>
-          <div>
-            <div class="fv-opt-name">Базовый уровень (Б)</div>
-            <div class="fv-opt-desc">Задания 1–21 · краткий ответ</div>
-          </div>
-        </a>
-
         <button class="fv-cancel" @click="showTaskBase = false">Отмена</button>
       </div>
     </div>
   </template>
+  @endif
 
   @if(count($activeList) > 1)
   <template x-if="showUnfinished">
@@ -262,16 +316,39 @@ function egeDashboardPage() {
     refLink: '{{ url("/") }}?ref={{ $user->id }}',
     showUnfinished: false,
     showTaskBase: false,
+    showMiniChoice: false,
     startingMini: false,
     startingFull: false,
     grade: {{ $grade }},
 
-    async startFull(level = 'prof') {
+    async startMini(mode) {
+      if (this.startingMini) return;
+      this.startingMini = true;
+
+      try {
+        const res = await window.fetchPost('{{ route("pwa.student.ege.mini.start") }}', {
+          level: '{{ $level }}', mode
+        });
+        const data = await res.json();
+        if (res.ok && data.redirect) {
+          window.location.href = data.redirect;
+          return;
+        }
+        alert(data.error || data.message || 'Ошибка запуска мини-ЕГЭ');
+      } catch (e) {
+        console.error('startMini error:', e);
+        alert('Ошибка соединения: ' + e.message);
+      } finally {
+        this.startingMini = false;
+      }
+    },
+
+    async startFull() {
       if (this.startingFull) return;
       this.startingFull = true;
 
       try {
-        const res = await window.fetchPost('{{ route("pwa.student.ege.start") }}', { level });
+        const res = await window.fetchPost('{{ route("pwa.student.ege.start") }}', { level: '{{ $level }}' });
         const data = await res.json();
         if (res.ok && data.redirect) {
           window.location.href = data.redirect;

@@ -70,6 +70,24 @@ trait MiniAppHelpers
     {
         if (!$variant) return 'Вариант ОГЭ';
 
+        if ($variant->exam_type === OgeVariant::EXAM_EGE) {
+            $configLevel = $variant->config_json['level'] ?? null;
+            $level = $variant->level === 'base' || $configLevel === 'base' ? 'base' : 'prof';
+            $mark = $level === 'base' ? 'Б' : 'П';
+
+            return match ($variant->mode) {
+                OgeVariant::MODE_FULL => "Полный вариант ЕГЭ ({$mark})",
+                OgeVariant::MODE_FULL_WITH_PART2 => "Полный вариант ЕГЭ ({$mark}) (1+2 часть)",
+                OgeVariant::MODE_MINI_PART1 => "Мини-ЕГЭ ({$mark}) — 1-я часть",
+                OgeVariant::MODE_MINI_PART2 => "Мини-ЕГЭ ({$mark}) — 2-я часть",
+                OgeVariant::MODE_MINI_GEOMETRY => "Мини-ЕГЭ ({$mark}) — геометрия",
+                OgeVariant::MODE_MINI_MIXED => "Мини-ЕГЭ ({$mark}) — смешанный",
+                OgeVariant::MODE_MINI_PRACTICAL => "Мини-ЕГЭ ({$mark}) — практические задачи",
+                OgeVariant::MODE_MINI_CALCULATION => "Мини-ЕГЭ ({$mark}) — вычисления и алгебра",
+                default => $variant->title ?: "Вариант ЕГЭ ({$mark})",
+            };
+        }
+
         $isVpr = in_array($variant->exam_type, [
             OgeVariant::EXAM_VPR5,
             OgeVariant::EXAM_VPR6,
