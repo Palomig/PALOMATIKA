@@ -4,8 +4,16 @@ namespace Tests\Feature\Pwa;
 
 use App\Models\OgeVariant;
 use App\Models\OgeAttempt;
+use App\Models\Task;
+use App\Models\TaskGroup;
+use App\Models\TaskTopic;
 use App\Models\User;
+use App\Services\EgeTaskDataService;
+use App\Services\EgeVariantBuilderService;
+use App\Services\EgeVariantPoolService;
+use App\Services\TaskBankRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -41,6 +49,29 @@ class EgeLevelsTest extends TestCase
             'started_at' => now(),
             'last_seen_at' => now(),
         ]);
+    }
+
+    private function bankTask(string $bank, string $topic, int $id): void
+    {
+        TaskTopic::firstOrCreate(
+            ['bank' => $bank, 'grade' => null, 'topic' => $topic],
+            ['payload' => ['topic_id' => $topic, 'meta' => ['title' => "Задание {$topic}"]]]
+        );
+        $group = TaskGroup::create([
+            'bank' => $bank, 'grade' => null, 'topic' => $topic,
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 1,
+            'position' => 0, 'instruction' => 'Решите', 'type' => 'fipi',
+            'payload' => ['instruction' => 'Решите', 'type' => 'fipi', 'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'fipi',
+            'payload' => ['id' => $id, 'html' => '<p>Условие</p>', 'answer' => '1', 'status' => 'production'],
+            'answer' => '1', 'answer_src' => 'test', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad((string) $id, 32, 'A'),
+        ]);
+        Cache::flush();
+        TaskBankRepository::forgetTableCheck();
     }
 
     public function test_level_columns_exist_and_are_mass_assignable(): void
@@ -161,5 +192,24 @@ class EgeLevelsTest extends TestCase
             ->assertDontSee('Продолжить базу')
             ->assertSee('Не показывать профиль')
             ->assertSee('Старый профиль');
+    }
+
+    public function test_pool_creates_a_level_scoped_mini_ege_variant(): void
+    {
+        $user = $this->student();
+        $this->bankTask(EgeTaskDataService::BANK_PROF, '01', 101);
+        $data = new EgeTaskDataService(EgeTaskDataService::LEVEL_PROF);
+        $pool = new EgeVariantPoolService($data, new EgeVariantBuilderService($data));
+
+        $variant = $pool->getOrCreateVariant($user, 'geometry');
+
+        $this->assertSame('prof', $variant->level);
+        $this->assertSame(OgeVariant::MODE_MINI_GEOMETRY, $variant->mode);
+        $this->assertSame('Мини-ЕГЭ (П) — Геометрия', $variant->title);
+        $this->assertSame('geometry', $variant->config_json['mini_mode']);
+        $numbers = array_column($variant->config_json['tasks'], 'task_number');
+        $this->assertNotEmpty($numbers);
+        $this->assertCount(count($numbers), array_unique($numbers));
+        $this->assertEmpty(array_diff($numbers, [1, 2, 3]));
     }
 }

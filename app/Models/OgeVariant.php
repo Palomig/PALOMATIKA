@@ -21,6 +21,9 @@ class OgeVariant extends Model
     public const MODE_MINI_MIXED = 'mini_mixed';
     public const MODE_FULL_WITH_PART2 = 'full_with_part2';
     public const MODE_MINI_PART2 = 'mini_part2';
+    public const MODE_MINI_PART1 = 'mini_part1';
+    public const MODE_MINI_PRACTICAL = 'mini_practical';
+    public const MODE_MINI_CALCULATION = 'mini_calculation';
 
     public const EXAM_OGE  = 'oge';
     public const EXAM_VPR5 = 'vpr_5';
