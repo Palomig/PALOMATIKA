@@ -29,17 +29,42 @@ class EgeStudentController extends Controller
         return new EgeVariantPoolService($taskData, $builder);
     }
 
-    /** Уровень из запроса: по умолчанию профиль. */
-    private function levelFrom(Request $request): string
+    /**
+     * Единый источник уровня для всего раздела ЕГЭ.
+     *
+     * Явный query/body-параметр запоминается только у настоящего ученика.
+     * Учитель и админ на student-домене могут переключать превью, не меняя
+     * собственный профиль.
+     */
+    private function resolveLevel(Request $request): string
     {
-        return $request->input('level') === EgeTaskDataService::LEVEL_BASE
-            ? EgeTaskDataService::LEVEL_BASE
-            : EgeTaskDataService::LEVEL_PROF;
+        $user = $request->user();
+        $requested = $request->input('level');
+        $valid = [EgeTaskDataService::LEVEL_PROF, EgeTaskDataService::LEVEL_BASE];
+
+        if (in_array($requested, $valid, true)) {
+            if (!$this->supportsStudentViewContext($request, $user)
+                && $user?->role === 'student'
+                && $user->ege_level !== $requested) {
+                $user->update(['ege_level' => $requested]);
+            }
+
+            return $requested;
+        }
+
+        if (!$this->supportsStudentViewContext($request, $user)
+            && in_array($user?->ege_level, $valid, true)) {
+            return $user->ege_level;
+        }
+
+        return EgeTaskDataService::LEVEL_PROF;
     }
 
     public function home(Request $request)
     {
         $user  = Auth::user();
+        $level = $this->resolveLevel($request);
+        $levelMark = $level === EgeTaskDataService::LEVEL_BASE ? 'Б' : 'П';
         // Учитель в режиме просмотра видел «9 класс» — значение по умолчанию
         // ОГЭ. Для ЕГЭ это 10–11, и подпись на экране должна совпадать с
         // экзаменом, иначе она сбивает с толку первой же строкой.
@@ -76,15 +101,16 @@ class EgeStudentController extends Controller
         // максимальный номер, а не количество тем: пока банк наполняется,
         // какой-то номер может временно отсутствовать, и «1–17» соврало бы
         // про сам экзамен.
-        $topics = array_keys((new EgeTaskDataService())->getAvailableTopics());
-        $taskCount = $topics ? max(array_map('intval', $topics)) : 19;
+        $taskData = new EgeTaskDataService($level);
+        $topics = array_keys($taskData->getAllTopicsMeta());
+        $taskCount = max(array_map('intval', $topics));
 
         // Слабые темы по ЕГЭ пока не считаются: экран показывает блок только
         // при непустом списке, как и ВПР до появления там статистики.
         $weakTopics = [];
 
         return view('pwa.student.ege-home', compact(
-            'user', 'grade', 'gradeLabel', 'taskCount', 'activeList',
+            'user', 'grade', 'gradeLabel', 'level', 'levelMark', 'taskCount', 'activeList',
             'hasTeacher', 'showLessonTile', 'weakTopics'
         ));
     }
@@ -99,7 +125,7 @@ class EgeStudentController extends Controller
             abort(403, 'ЕГЭ доступно только для 10–11 классов');
         }
 
-        $variant = $this->makePool($this->levelFrom($request))->getOrCreateVariant($user);
+        $variant = $this->makePool($this->resolveLevel($request))->getOrCreateVariant($user);
         [$variant, $attempt] = $attemptService->startAttempt($user, $variant->hash, [
             'user_agent' => $request->userAgent(),
             'ip'         => $request->ip(),
@@ -130,9 +156,7 @@ class EgeStudentController extends Controller
 
         // Уровень: профиль (1–19, две части) или база (1–21, все с кратким
         // ответом). У базы делить нечего — развёрнутых заданий в ней нет.
-        $level = $request->query('level') === EgeTaskDataService::LEVEL_BASE
-            ? EgeTaskDataService::LEVEL_BASE
-            : EgeTaskDataService::LEVEL_PROF;
+        $level = $this->resolveLevel($request);
         $isBase = $level === EgeTaskDataService::LEVEL_BASE;
         $taskData = new EgeTaskDataService($level);
 
