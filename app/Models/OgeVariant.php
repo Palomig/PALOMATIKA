@@ -33,6 +33,7 @@ class OgeVariant extends Model
     protected $fillable = [
         'hash',
         'exam_type',
+        'level',
         'owner_teacher_id',
         'title',
         'source',
