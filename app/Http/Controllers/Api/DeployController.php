@@ -60,6 +60,9 @@ class DeployController extends Controller
         // Точечный перенос заданий между темами банка: классификатор ФИПИ
         // ошибается номером, переимпорт ради одной серии слишком груб.
         'tasks:move-groups',
+        // По той же причине точечная правка ответа: ошибки решателя
+        // находятся поштучно, на живой домашке.
+        'tasks:fix-answer',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
