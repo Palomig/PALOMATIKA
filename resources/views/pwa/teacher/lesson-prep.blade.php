@@ -40,7 +40,14 @@
     /* У блока с прокруткой базовая линия — нижний край; без выравнивания
        формула съезжает относительно текста вокруг. */
     vertical-align: middle;
+    /* Полосу прокрутки прячем. У KaTeX корень и дроби вылезают за коробку
+       на доли пикселя, и браузер рисовал полосу со стрелками под «3√5» —
+       коротким формулам, которым прокрутка не нужна вовсе. Сама прокрутка
+       (колесо, свайп) остаётся страховкой для длинных условий. */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .lesson-task-expr .katex::-webkit-scrollbar { width: 0; height: 0; }
   /* Растры банка ЕГЭ: чертёж отдельным блоком, обозначения внутри
      предложения («SABCD», «AM = 2») — строкой. Оба чёрным по прозрачному,
      поэтому на тёмном фоне нужна подложка; display обязателен, иначе
@@ -52,6 +59,10 @@
   }
   .lesson-task-expr img.fipi-figure { display: block; max-width: 100%; padding: 6px; margin: 8px 0; }
   .lesson-task-image { display: flex; justify-content: center; background: var(--surface); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
+  /* Растр ФИПИ — чёрным по прозрачному, как и внутри условия: на тёмной
+     подложке чертёж почти не читается, в банке он выведен на белом листе.
+     Свои SVG рисуются под тему интерфейса, им белое не нужно. */
+  .lesson-task-image.is-raster { background: #fff; }
   .lesson-task-image svg, .lesson-task-image img { max-width: 250px; width: 100%; height: auto; max-height: 220px; }
   .lesson-task-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
   .lesson-task-option { padding: 3px 9px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--muted); }
@@ -430,7 +441,7 @@
         <div class="lesson-task-body">
           <div class="lesson-task-image" x-show="task.task_payload.image_svg" x-html="task.task_payload.image_svg"></div>
           <template x-if="!task.task_payload.image_svg && task.task_payload.image_url">
-            <div class="lesson-task-image"><img :src="task.task_payload.image_url" alt=""></div>
+            <div class="lesson-task-image is-raster"><img :src="task.task_payload.image_url" alt=""></div>
           </template>
           <div class="lesson-task-expr" x-html="taskConditionHtml(task.task_payload.expression)"
                x-init="$nextTick(() => fitFormulas($el))"
