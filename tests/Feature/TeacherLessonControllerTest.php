@@ -5,9 +5,15 @@ namespace Tests\Feature;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\Task;
+use App\Models\TaskGroup;
+use App\Models\TaskTopic;
 use App\Models\TeacherStudent;
 use App\Models\User;
+use App\Services\EgeTaskDataService;
+use App\Services\TaskBankRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -757,5 +763,49 @@ class TeacherLessonControllerTest extends TestCase
                 'text'        => 'привет',
             ])
             ->assertForbidden();
+    }
+
+    /**
+     * Банк ЕГЭ (Б) виден в пикере, значит и добавляться на урок обязан:
+     * жёсткий список банков в валидации отставал от TaskBankResolver::BANKS
+     * и рубил ege_b на 422 уже после выбора задачи.
+     */
+    public function test_add_task_accepts_ege_base_bank(): void
+    {
+        $topic = '21';
+        TaskTopic::firstOrCreate(
+            ['bank' => EgeTaskDataService::BANK_BASE, 'grade' => null, 'topic' => $topic],
+            ['payload' => ['topic_id' => $topic, 'meta' => ['title' => "Задание {$topic}"]]]
+        );
+        $group = TaskGroup::create([
+            'bank' => EgeTaskDataService::BANK_BASE, 'grade' => null, 'topic' => $topic,
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 21,
+            'position' => 0, 'instruction' => 'Решите', 'type' => 'expression',
+            'payload' => ['instruction' => 'Решите', 'type' => 'expression', 'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'expression',
+            'payload' => ['id' => 501, 'expression' => '2 + 2', 'answer' => '4', 'status' => 'production'],
+            'answer' => '4', 'answer_src' => 'test', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad('501', 32, 'A'),
+        ]);
+        Cache::flush();
+        TaskBankRepository::forgetTableCheck();
+
+        $teacher = $this->teacher();
+        $sessionId = $this->actingAs($teacher)
+            ->postJson(self::BASE . '/lessons')
+            ->assertCreated()->json('session.id');
+
+        $resp = $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$sessionId}/tasks", [
+                'bank' => EgeTaskDataService::BANK_BASE,
+                'refs' => ['topic_id' => $topic, 'zadanie_number' => 21, 'task_id' => 501],
+            ])->assertCreated();
+
+        $this->assertSame('4', $resp->json('task.correct_answer'));
+        $this->assertStringContainsString('ЕГЭ (Б)', (string) $resp->json('task.task_payload.source_label'));
+        $this->assertDatabaseHas('lesson_session_tasks', ['bank' => EgeTaskDataService::BANK_BASE]);
     }
 }

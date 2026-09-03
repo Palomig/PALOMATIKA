@@ -200,7 +200,9 @@ class TeacherLessonController extends Controller
         $session = $this->loadOwnSession($request, $id);
 
         $data = $request->validate([
-            'bank'                => 'required|string|in:oge,ege,vpr,alg-topic,alg-skill',
+            // Список банков берём у резолвера: жёсткий in:… уже отставал от него
+            // и молча резал ЕГЭ (Б) — задачи выбирались, но не добавлялись (422).
+            'bank'                => 'required|string|in:' . implode(',', TaskBankResolver::BANKS),
             'refs'                => 'required|array',
             'assigned_student_id' => 'nullable|integer',
         ]);
