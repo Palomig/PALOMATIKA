@@ -52,13 +52,20 @@
     overflow-x: auto;
     overflow-y: hidden;
     vertical-align: middle;
+    /* Полоса прокрутки скрыта: KaTeX вылезает за коробку на доли пикселя,
+       и под короткими формулами рисовалась полоса со стрелками. */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .lesson-task-expr .katex::-webkit-scrollbar { width: 0; height: 0; }
   /* Подпункты «а) б) в)» второй части — каждый со своей строки, маркер
      выступает влево. Формула плюс прилипшая к ней точка — одним куском. */
   .cond-lead, .cond-sub { display: block; }
   .cond-sub { padding-left: 16px; text-indent: -16px; margin-top: 4px; }
   .lesson-task-expr .nb { white-space: nowrap; }
   .lesson-task-image { width: 100%; display: flex; justify-content: center; background: var(--surface2); border-radius: 10px; padding: 12px; overflow: hidden; }
+  /* Растр ФИПИ чёрным по прозрачному — на тёмной подложке не читается. */
+  .lesson-task-image.is-raster { background: #fff; }
   .lesson-task-image svg, .lesson-task-image img { max-width: 100%; height: auto; max-height: 320px; }
   .lesson-answer-row { display: flex; gap: 8px; align-items: center; }
   .lesson-answer-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: ui-monospace, monospace; }
@@ -175,7 +182,7 @@
 
       <div class="lesson-task-image" x-show="task.payload.image_svg" x-html="task.payload.image_svg"></div>
       <template x-if="!task.payload.image_svg && task.payload.image_url">
-        <div class="lesson-task-image"><img :src="task.payload.image_url" alt=""></div>
+        <div class="lesson-task-image is-raster"><img :src="task.payload.image_url" alt=""></div>
       </template>
       <div class="lesson-task-expr" x-html="renderMath(task.payload.expression)"></div>
 
