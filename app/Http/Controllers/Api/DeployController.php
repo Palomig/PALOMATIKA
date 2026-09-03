@@ -63,6 +63,8 @@ class DeployController extends Controller
         // По той же причине точечная правка ответа: ошибки решателя
         // находятся поштучно, на живой домашке.
         'tasks:fix-answer',
+        // и разноска правки по уже розданным снимкам задачи.
+        'tasks:resync-answer',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
