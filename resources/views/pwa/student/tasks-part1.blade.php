@@ -105,6 +105,48 @@
   }
   .spoiler[open] .spoiler-chevron { transform: rotate(90deg); }
   .spoiler-body { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 8px; }
+  /* Второй уровень: внутри группы задачи разложены по подтипам —
+     сериям с разными условиями, которые решаются по-разному. */
+  .subtype {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255,255,255,.02);
+  }
+  .subtype + .subtype { margin-top: -2px; }
+  .subtype summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .subtype summary::-webkit-details-marker { display: none; }
+  .subtype-chevron {
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1;
+    transition: transform .15s ease;
+  }
+  .subtype[open] .subtype-chevron { transform: rotate(90deg); }
+  .subtype-title {
+    flex: 1; min-width: 0;
+    font-family: var(--display);
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--text);
+  }
+  .subtype-count {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+  }
+  .subtype-body { padding: 0 8px 8px; display: flex; flex-direction: column; gap: 8px; }
 
   .task-list {
     margin-top: 12px;
@@ -232,74 +274,28 @@
           <span class="spoiler-chevron">›</span>
         </summary>
         <div class="spoiler-body">
-          @foreach($group['tasks'] as $task)
-            <div class="task-item">
-              @php
-                $svg = is_string($task['svg'] ?? null) ? $task['svg'] : '';
-                $image = is_string($task['image'] ?? null) ? $task['image'] : '';
-              @endphp
-
-              @php
-                $svgMarkup = $svg !== '' ? $svg : (\Illuminate\Support\Str::startsWith($image, '<svg') ? $image : '');
-                $isWide = (int)$selectedTopic === 11;
-              @endphp
-              @if($svgMarkup !== '')
-                <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; background:#0a1628; padding:8px;{{ $isWide ? ' overflow-x:auto; -webkit-overflow-scrolling:touch;' : '' }}">
-                  <div style="{{ $isWide ? 'min-width:600px;' : '' }}">{!! $svgMarkup !!}</div>
-                </div>
-              @endif
-
-              @if(!empty($task['question']))
-                <div class="task-item-text" style="margin-bottom:6px; color:var(--muted); font-size:12px;">{{ $task['question'] }}</div>
-              @endif
-
-              @if(!empty($task['drawing']))
-                {{-- Чертёж вынесен из таблицы условия и показан крупно сверху --}}
-                <div class="fipi-drawing">{!! $task['drawing'] !!}</div>
-              @endif
-
-              @if(!empty($task['html']))
-                {{-- Банк ФИПИ: условие уже свёрстано — формулы в KaTeX,
-                     чертежи инлайновыми SVG. Экранировать нельзя. --}}
-                <div class="task-item-text fipi-html">{!! $task['html'] !!}</div>
-              @elseif($task['text'] !== '')
-                <div class="task-item-text">{!! nl2br(e($task['text'])) !!}</div>
-              @elseif(!empty($task['expression']))
-                <div class="task-item-text" style="font-size:15px;">$${{ $task['expression'] }}$$</div>
-              @endif
-
-              @if(!empty($task['options']) && is_array($task['options']))
-                <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
-                  @foreach($task['options'] as $opt)
-                    @if(is_array($opt) && isset($opt['html']))
-                      <div style="display:flex; gap:8px; align-items:flex-start;">
-                        <span style="color:var(--muted); font-size:12px; flex:0 0 auto;">{{ $opt['n'] ?? $loop->iteration }})</span>
-                        <div class="fipi-html" style="min-width:0;">{!! $opt['html'] !!}</div>
-                      </div>
-                    @else
-                      <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ \App\Support\OptionLabelFormatter::optionLabel($opt, $loop->index) }}. {{ \App\Support\OptionLabelFormatter::optionText($opt) }}</span>
-                    @endif
+          @if(!empty($group['subtypes']))
+            {{-- Второй уровень: задачи группы разложены по подтипам — сериям
+                 с разными условиями, которые решаются по-разному. --}}
+            @foreach($group['subtypes'] as $subtype)
+              <details class="subtype">
+                <summary>
+                  <span class="subtype-chevron">›</span>
+                  <span class="subtype-title">{{ $subtype['title'] }}</span>
+                  <span class="subtype-count">{{ count($subtype['tasks']) }}</span>
+                </summary>
+                <div class="subtype-body">
+                  @foreach($subtype['tasks'] as $task)
+                    @include('pwa.student.partials.part1-task')
                   @endforeach
                 </div>
-              @endif
-
-              @if(!empty($task['answer']))
-                <div class="answer-row">
-                  <span class="answer-label">Ответ:</span>
-                  @if($isPremium)
-                    <span class="answer-value">{{ \App\Support\OptionLabelFormatter::formatAnswer($task['answer'], is_array($task['options'] ?? null) ? $task['options'] : []) }}</span>
-                  @else
-                    <span class="answer-blur">{{ \App\Support\OptionLabelFormatter::formatAnswer($task['answer'], is_array($task['options'] ?? null) ? $task['options'] : []) }}</span>
-                    <span class="premium-cta" @click="showPremium = true">Premium</span>
-                  @endif
-                </div>
-              @endif
-
-              @if(!empty($task['id']))
-                <div class="task-item-meta">#{{ $task['id'] }}</div>
-              @endif
-            </div>
-          @endforeach
+              </details>
+            @endforeach
+          @else
+            @foreach($group['tasks'] as $task)
+              @include('pwa.student.partials.part1-task')
+            @endforeach
+          @endif
         </div>
       </details>
     @empty
