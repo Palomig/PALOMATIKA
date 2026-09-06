@@ -379,7 +379,11 @@ class LessonTaskPickerService
         return $result;
     }
 
-    private function resolveBlocks(string $bank, array $refs): array
+    /**
+     * Блоки банка для темы. Не private: тестам нужно подставить сюда
+     * готовую структуру банка, не поднимая базу.
+     */
+    protected function resolveBlocks(string $bank, array $refs): array
     {
         $topicId = (string) ($refs['topic_id'] ?? '');
         if ($topicId === '') return [];
