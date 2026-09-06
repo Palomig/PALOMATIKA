@@ -37,6 +37,9 @@
   }
   .fipi-drawing svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 460px; }
   .fipi-html svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 350px; }
+  /* KaTeX рисует знак корня инлайновым SVG, и его высоту задаёт обёртка.
+     Без этой строки правило для чертежей выше съедает сам радикал. */
+  .fipi-html .katex svg { height: inherit; max-width: none; margin: 0; }
   .fipi-html svg[class*="max-w-[250px]"] { max-width: 250px; }
   .fipi-html svg[class*="max-w-[280px]"] { max-width: 280px; }
   .fipi-html svg[class*="max-w-[320px]"] { max-width: 320px; }

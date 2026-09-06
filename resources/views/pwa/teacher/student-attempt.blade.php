@@ -71,8 +71,37 @@
   .task-svg-wide { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .task-svg-wide > div { min-width: 600px; }
   .task-svg-wide svg { width: 100%; max-width: none; }
-  .task-options { margin-top: 8px; padding-left: 18px; font-size: 12px; }
-  .task-options li { margin: 3px 0; color: var(--text); }
+  /* Метку варианта («1.», «А.») печатает сам шаблон, поэтому маркеры
+     списка выключены — иначе выходило «1. 1. точка A». */
+  .task-options { margin-top: 8px; padding-left: 0; font-size: 12px; list-style: none; }
+  .task-options li { margin: 3px 0; color: var(--text); display: flex; gap: 6px; align-items: baseline; }
+  .task-options .task-option-label { flex: 0 0 auto; color: var(--muted); }
+  .task-options .task-option-body { min-width: 0; }
+
+  /* Разметка условия из банка ФИПИ: абзацы, таблицы соответствий, чертежи.
+     Ширину инлайновых SVG задают их же классы Tailwind, здесь — страховка
+     от переполнения карточки. */
+  .fipi-html p { margin: 0 0 8px; }
+  .fipi-html p:last-child { margin-bottom: 0; }
+  .fipi-html img { max-width: 100%; height: auto; }
+  .fipi-html svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 350px; }
+  /* KaTeX рисует знак корня инлайновым SVG, и его высота задаётся обёрткой.
+     Без этой строки правило для чертежей выше съедало сам радикал. */
+  .fipi-html .katex svg { height: inherit; max-width: none; margin: 0; }
+  .fipi-html svg[class*="max-w-[250px]"] { max-width: 250px; }
+  .fipi-html svg[class*="max-w-[280px]"] { max-width: 280px; }
+  .fipi-html svg[class*="max-w-[320px]"] { max-width: 320px; }
+  .fipi-html svg[class*="max-w-[420px]"] { max-width: 420px; }
+  .fipi-html svg[class*="max-w-[1200px]"] { max-width: 100%; }
+  .fipi-html table { border-collapse: collapse; max-width: 100%; }
+  .fipi-html td { vertical-align: top; padding: 2px 6px; }
+  /* Условие и чертёж лежат в соседних ячейках таблицы — в узкой карточке
+     разбора они не помещаются рядом, поэтому раскладываем в столбик. */
+  .fipi-html table, .fipi-html tbody, .fipi-html tr, .fipi-html td {
+    display: block; width: 100%; padding-left: 0; padding-right: 0;
+  }
+  .task-options .fipi-html { display: inline-block; vertical-align: top; }
+  .task-options .fipi-html p { margin: 0; }
 
   .no-errors {
     text-align: center; padding: 30px 20px;
@@ -144,7 +173,11 @@
         <div class="task-instruction">{{ $w['task_instruction'] }}</div>
       @endif
       @if(!empty($w['task_text']))
-        <div class="task-text">{!! nl2br(e($w['task_text'])) !!}</div>
+        {{-- Условие банка ФИПИ приходит размеченным (абзацы, таблицы
+             соответствий, инлайновые чертежи) — экранированное, оно
+             показывало ученику сами теги. --}}
+        @php $textIsMarkup = \App\Support\TaskConditionHtml::looksLikeMarkup($w['task_text']); @endphp
+        <div class="task-text{{ $textIsMarkup ? ' fipi-html' : '' }}">{!! \App\Support\TaskConditionHtml::render($w['task_text']) !!}</div>
       @endif
       @if(!empty($w['task_expression']))
         <div class="task-expression">\({{ $w['task_expression'] }}\)</div>
@@ -162,9 +195,11 @@
             @php
               $optText = \App\Support\OptionLabelFormatter::optionText($opt);
               $optLabel = \App\Support\OptionLabelFormatter::optionLabel($opt, $loop->index);
-              $hasLatex = (bool) preg_match('/\\\\[a-zA-Z]/', $optText);
+              $optIsMarkup = \App\Support\TaskConditionHtml::looksLikeMarkup($optText);
+              $hasLatex = !$optIsMarkup && (bool) preg_match('/\\\\[a-zA-Z]/', $optText);
             @endphp
-            <li>{{ $optLabel }}. @if($hasLatex)\({{ $optText }}\)@else{{ $optText }}@endif</li>
+            {{-- Варианты ФИПИ тоже размечены: «<p>точка $A$</p>». --}}
+            <li><span class="task-option-label">{{ $optLabel }}.</span><span class="task-option-body{{ $optIsMarkup ? ' fipi-html' : '' }}">@if($optIsMarkup){!! \App\Support\TaskConditionHtml::render($optText) !!}@elseif($hasLatex)\({{ $optText }}\)@else{{ $optText }}@endif</span></li>
           @endforeach
         </ol>
       @endif
