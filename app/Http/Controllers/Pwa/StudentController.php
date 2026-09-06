@@ -430,7 +430,7 @@ class StudentController extends Controller
                             : ($short['subtitle'] ?? null),
                         'hint'         => $zadanie['answer_hint'] ?? null,
                         'tasks'        => $tasks,
-                        'subtypes'     => $this->part2Subtypes($zadanie['subtypes'] ?? null, $tasks),
+                        'subtypes'     => $this->groupSubtypes($zadanie['subtypes'] ?? null, $tasks),
                         'has_solution' => $hasSolution,
                     ];
                 }
@@ -450,6 +450,7 @@ class StudentController extends Controller
 
     /**
      * Задачи группы, разложенные по подтипам, — второй уровень раскрытия.
+     * Одинаково нужен обеим витринам банка: и 1-й части, и 2-й.
      * Разметку кладёт `tasks:seed-subtypes`; если она не сошлась с задачами,
      * возвращаем пустой список и группа показывается плоско, как раньше.
      *
@@ -457,7 +458,7 @@ class StudentController extends Controller
      * @param  array<int, array<string, mixed>>  $tasks
      * @return array<int, array{title: string, tasks: array<int, array<string, mixed>>}>
      */
-    private function part2Subtypes(?array $titles, array $tasks): array
+    private function groupSubtypes(?array $titles, array $tasks): array
     {
         if (empty($titles)) {
             return [];
@@ -818,6 +819,7 @@ class StudentController extends Controller
 
                     $tasks[] = [
                         'id'         => $t['id'] ?? null,
+                        'subtype'    => isset($t['subtype']) ? (int) $t['subtype'] : null,
                         'drawing'    => $drawing,
                         'html'       => $htmlRest !== '' ? $htmlRest : null,
                         'text'       => $text,
@@ -842,6 +844,7 @@ class StudentController extends Controller
                         'section' => $blockSection,
                         'title' => $title,
                         'tasks' => $tasks,
+                        'subtypes' => $this->groupSubtypes($zadanie['subtypes'] ?? null, $tasks),
                     ];
                 }
             }
