@@ -2,15 +2,21 @@
 
 > Дата скана: 2026-05-07 (после редизайна #44). Активный модуль в разработке. Источник истины — код, эта карта — навигация.
 
-## Уведомления ученику о ДЗ — Фаза 1 (2026-07-23)
+## Уведомления ученику о ДЗ — убраны (2026-09-08)
 
-- **`StudentNotifier`** (`app/Services/StudentNotifier.php`) — `notify(User, text, url)`; телеграм-канал (нужен `users.telegram_chat_id`), `Http` фасад (fakeable). Web push — Фаза 2 (заглушка).
-- **Новое ДЗ** → `TeacherController::notifyNewHomework()` во ВСЕХ трёх ветках `assignHomework` (picker, тема без picker, мини-вариант); `notified_at` ставится только при успешной доставке, 403 помечает `users.telegram_blocked_at`.
-- **Напоминание о сроке** → команда `homework:remind-deadlines` (планировщик `dailyAt 08:00`), ДЗ со сроком сегодня/завтра, `status != completed`, дедуп `reminded_at`.
-- **In-app поп-ап** (раз в день) → `HomeworkPopupComposer` на `layouts.pwa`, партиал `pwa/shared/homework-popup.blade.php`; частота через `users.homework_popup_shown_on`; скип на homework/lesson-страницах.
-- Новые поля: `homework_assignments.notified_at`/`reminded_at`, `users.homework_popup_shown_on` (миграция `2026_07_23_000002`).
-- Предусловие: `assignFromPicker` сохраняет `deadline` → `homeworks.deadline_at`.
-- Тесты: `StudentNotifierTest`, `HomeworkPopupTest`, `RemindHomeworkDeadlinesTest`, `PwaHomeworkPhotoPracticeTest::test_assign_notifies_*`, `HomeworkNotificationDeliveryTest`.
+По решению Стаса ученику больше не приходит НИЧЕГО о домашке: ни телеграм-сообщения
+о новом ДЗ, ни напоминания о сроке, ни in-app поп-апа «есть невыполненная домашка».
+Удалены `TeacherController::notifyNewHomework()`, команда `homework:remind-deadlines`
+(и её строка в планировщике), `HomeworkPopupComposer` с партиалом
+`pwa/shared/homework-popup.blade.php`, а также их тесты.
+
+- **`StudentNotifier`** (`app/Services/StudentNotifier.php`) оставлен: это общий
+  транспорт (телеграм-канал по `users.telegram_chat_id`), не привязанный к ДЗ.
+  Сейчас его никто не вызывает — пригодится, когда уведомления пойдут родителю.
+- Колонки `homework_assignments.notified_at`/`reminded_at` и
+  `users.homework_popup_shown_on` (миграция `2026_07_23_000002`) остались в схеме,
+  но больше не заполняются. Дропать их отдельной миграцией — по желанию.
+- Домашка видна ученику там же, где и раньше: раздел `/homework` в приложении.
 
 ## Привязка телеграма и склейка аккаунтов (2026-07-25)
 
