@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-08",
+  "tasks": 9805,
+  "templates": 169,
+  "skills": 156,
+  "sections": 13,
+  "bank_sha256": "191079c0cae700b2cce890f26651532f151e5ea0203e70ee530fb06430953900",
+  "symbolic_checks": {
+    "checked": 9805,
+    "failed": [],
+    "seconds": 60.2
+  },
+  "render": "All conditions and answers passed KaTeX parse",
+  "browser": "Desktop 1440×1000 and mobile 390×844: filters, all-tag combinations, variants, persistent selection, export, student link, print, focus containment passed",
+  "ui_review": "ship: all three findings resolved",
+  "limits": [
+    "Difficulty and grade labels are editorial",
+    "Explanations need teacher review",
+    "No direct connection to palomatika.ru lesson API"
+  ]
+}

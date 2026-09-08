@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Алгебра 6–8 · Банк навыков</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="style.css">
+<script src="assets/katex/katex.min.js" defer></script><script type="module" src="app.mjs"></script>
+</head>
+<body>
+<a class="skip" href="#content">К заданиям</a>
+<header class="topbar"><a class="brand" href="./" aria-label="Банк алгебры, начало"><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M5 25 14 7h4l9 18M10 17h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M6 28h20" stroke="currentColor" stroke-width="2"/></svg><span>Паломатика<span class="brand-sub">Банк алгебры</span></span></a><span class="preview-label">6–8 классы · рабочая версия</span><button id="collection-toggle" class="primary">Подборка <span id="top-count">0</span></button></header>
+<div class="workspace">
+<aside class="sidebar"><div class="sidebar-title">Разделы <button id="reset" class="text-button">Сбросить</button></div><nav id="groups" aria-label="Разделы алгебры"></nav><div class="sidebar-note">Один навык — разные задачи.<br>Комбинации доступны по всем участвующим навыкам.</div><a href="guide.html" class="guide-link">Как устроены уровни и база</a></aside>
+<main id="content" tabindex="-1">
+<div class="heading"><div><h1 id="page-title">Банк алгебры</h1><p id="page-description">Выберите навык и соберите задания для урока.</p></div><span id="total" class="total"></span></div>
+<div class="filters">
+<label class="search-label"><span class="sr-only">Поиск заданий</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="Навык, условие или номер задания" autocomplete="off"></label>
+<div class="select-row"><label>Класс<select id="grade"><option value="">Все классы</option><option value="6">6 класс</option><option value="7">7 класс</option><option value="8">8 класс</option></select></label><label class="skill-label">Навык<select id="skill"><option value="">Все навыки раздела</option></select></label><button id="combination-toggle" class="secondary" aria-expanded="false" aria-controls="combination">Сочетание навыков</button></div>
+<div id="combination" class="combination" hidden><p>Выберите навыки, которые должны встретиться <strong>в одной задаче</strong>. Поиск идёт по всему банку.</p><div class="select-row"><label class="skill-label">Добавить навык<select id="extra-skill"><option value="">Выберите из списка</option></select></label><button id="add-skill" class="secondary">Добавить условие</button></div><div id="selected-tags" class="tags"></div><button id="mixed-preset" class="text-button">Уравнения + степени + дроби</button></div>
+<fieldset class="level-field"><legend>Уровень сложности</legend><div id="levels" class="level-options"></div></fieldset>
+</div>
+<div class="results-toolbar"><p id="result-count" role="status" aria-live="polite">Загружаем задания…</p><label class="view-label">Показать<select id="view"><option value="types">Разные конструкции</option><option value="all">Все варианты</option></select></label><button id="add-page" class="text-button">Добавить показанные</button></div>
+<div id="tasks" class="tasks"><div class="loading">Загружаем банк заданий…</div></div>
+<div id="pagination" class="pagination"></div>
+</main>
+<aside class="collection" id="collection" aria-label="Подборка для урока"><div class="collection-heading"><h2>Подборка урока</h2><button id="close-collection" class="icon-button" aria-label="Закрыть подборку"><svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><label class="name-label">Название<input id="lesson-title" value="Алгебра · практика" maxlength="100"></label><p id="collection-meta" class="muted">Выберите задания из банка.</p><ol id="lesson-list" class="lesson-list"></ol><div id="collection-empty" class="collection-empty"><svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="6" width="28" height="36" rx="4"/><path d="M17 17h14M17 24h9M17 31h11"/></svg><p>Здесь будет ваш урок</p><span>Нажмите «В подборку» у нужного задания. Можно сочетать разные темы и уровни.</span></div><div class="collection-actions"><button id="print" class="primary" disabled>Распечатать задания</button><label class="check"><input type="checkbox" id="print-answers"> Добавить ключ с ответами</label><button id="student-link" class="secondary" disabled>Скопировать ссылку на лист</button><div class="button-pair"><button id="export" class="secondary" disabled>Скачать JSON</button><button id="copy" class="secondary" disabled>Копировать текст</button></div><button id="clear" class="text-button" disabled>Очистить подборку</button></div><p class="local-note">Сохраняется в этом браузере. Для переноса используйте выгрузку. Подборка пока не отправляется в урок на palomatika.ru.</p></aside>
+</div>
+<div id="toast" role="status" aria-live="polite"></div><div id="print-area"></div>
+<noscript>Для поиска и выбора заданий включите JavaScript в браузере.</noscript>
+</body></html>
