@@ -793,7 +793,7 @@ class TeacherController extends Controller
                 ]);
             }
 
-            $this->afterHomeworkAssigned($homework, $assignments);
+            $this->afterHomeworkAssigned($assignments);
 
             return back()->with('success', 'ДЗ выдано!');
         }
@@ -844,7 +844,7 @@ class TeacherController extends Controller
                 'status' => 'assigned',
             ]);
             // Мини-вариант у каждого свой, поэтому уведомляем сразу по ученику.
-            $this->afterHomeworkAssigned($homework, [$assignment]);
+            $this->afterHomeworkAssigned([$assignment]);
             $assignedCount++;
         }
 
@@ -1207,7 +1207,7 @@ class TeacherController extends Controller
             ]);
         }
 
-        $this->afterHomeworkAssigned($homework, $assignments);
+        $this->afterHomeworkAssigned($assignments);
 
         $message = 'ДЗ выдано!';
         if ($skipped > 0) {
@@ -1218,15 +1218,13 @@ class TeacherController extends Controller
     }
 
     /**
-     * Что происходит после выдачи ДЗ: старая несданная работа превращается в долг,
-     * ученикам уходит уведомление.
+     * Что происходит после выдачи ДЗ: старая несданная работа превращается в долг.
      *
      * @param  array<int, \App\Models\HomeworkAssignment>  $assignments
      */
-    private function afterHomeworkAssigned(\App\Models\Homework $homework, array $assignments): void
+    private function afterHomeworkAssigned(array $assignments): void
     {
         $this->carryOverUnfinished($assignments);
-        $this->notifyNewHomework($homework, $assignments);
     }
 
     /**
@@ -1249,41 +1247,6 @@ class TeacherController extends Controller
             ->where('status', '!=', 'completed')
             ->whereNull('debt_since')
             ->update(['debt_since' => now()]);
-    }
-
-    /**
-     * Уведомляет учеников о новом ДЗ (телеграм-канал; in-app покрывает поп-ап).
-     *
-     * `notified_at` ставим ТОЛЬКО при успешной доставке: иначе недоставленное
-     * уведомление выглядит отправленным и никогда не повторяется.
-     *
-     * @param  array<int, \App\Models\HomeworkAssignment>  $assignments
-     */
-    private function notifyNewHomework(\App\Models\Homework $homework, array $assignments): void
-    {
-        $notifier = app(\App\Services\StudentNotifier::class);
-        $homeworkUrl = 'https://student.' . config('app.base_domain') . '/homework';
-        $tasksCount = (int) $homework->tasks_count;
-        $deadline = $homework->deadline_at ? ' Срок: ' . $homework->deadline_at->format('d.m') . '.' : '';
-        // У мини-варианта tasks_count не заполняется — тогда без «— N задач».
-        $countPart = $tasksCount > 0
-            ? ' — ' . $tasksCount . ' ' . $this->pluralizeTasks($tasksCount) . '.'
-            : '.';
-
-        foreach ($assignments as $assignment) {
-            if ($assignment->notified_at !== null) {
-                continue;
-            }
-            $student = $assignment->student()->first();
-            if (!$student) {
-                continue;
-            }
-            $text = '📚 Тебе задали домашку: <b>' . e($homework->title) . '</b>' . $countPart . $deadline;
-
-            if ($notifier->notify($student, $text, $homeworkUrl)) {
-                $assignment->update(['notified_at' => now()]);
-            }
-        }
     }
 
     private function isVprGrade(User $student): bool
