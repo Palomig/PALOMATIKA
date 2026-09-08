@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-08T10:52:25.122734+00:00",
+  "title": "Design System: Паломатика — банк алгебры",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "collection-overlay",
+        "value": "-12px 0 40px #0007",
+        "purpose": "Fixed collection overlay below the desktop collection breakpoint."
+      }
+    ],
+    "motion": [
+      {
+        "name": "task-entry",
+        "value": "appear .22s ease-out",
+        "purpose": "Opacity .75 to 1 and translateY(4px) to 0; only with prefers-reduced-motion: no-preference."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile-max",
+        "value": "760px"
+      },
+      {
+        "name": "collection-overlay-max",
+        "value": "1250px"
+      },
+      {
+        "name": "wide-min",
+        "value": "1600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "html": "<button class=\"ds-primary\">Распечатать задания</button>",
+      "css": ".ds-primary{font:14px/1.5 Golos,sans-serif;min-height:40px;padding:8px 13px;border:1px solid var(--line,#314156);border-radius:7px;cursor:pointer;background:var(--accent,#b9dcff);color:var(--ink,#14263a);font-weight:600;border-color:transparent;}.ds-primary:hover:not(:disabled){background:#dbecff}.ds-primary:focus-visible{outline:2px solid var(--blue,#9ac9ff);outline-offset:3px}.ds-primary:disabled{opacity:.45;cursor:default}",
+      "description": "Compact action using the implemented button styling."
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "html": "<button class=\"ds-secondary\">Распечатать задания</button>",
+      "css": ".ds-secondary{font:14px/1.5 Golos,sans-serif;min-height:40px;padding:8px 13px;border:1px solid var(--line,#314156);border-radius:7px;cursor:pointer;background:var(--panel2,#1b2b40);color:var(--text,#edf2f8);}.ds-secondary:hover:not(:disabled){background:#263a52}.ds-secondary:focus-visible{outline:2px solid var(--blue,#9ac9ff);outline-offset:3px}.ds-secondary:disabled{opacity:.45;cursor:default}",
+      "description": "Compact action using the implemented button styling."
+    },
+    {
+      "name": "Text field",
+      "kind": "input",
+      "refersTo": "input",
+      "html": "<label class=\"ds-label\">Название<input class=\"ds-input\" placeholder=\"Алгебра · практика\"></label>",
+      "css": ".ds-label{display:flex;flex-direction:column;gap:7px;font:11px/1.5 Golos,sans-serif;color:var(--muted,#a8b8cc)}.ds-input{font:13px/1.5 Golos,sans-serif;min-height:42px;padding:9px 11px;background:transparent;border:1px solid var(--line,#314156);border-radius:7px;color:var(--text,#edf2f8)}.ds-input::placeholder{color:var(--muted,#a8b8cc);opacity:1}.ds-input:focus-visible{outline:2px solid var(--blue,#9ac9ff);outline-offset:3px}",
+      "description": "Lesson title field."
+    },
+    {
+      "name": "Level filter",
+      "kind": "chip",
+      "html": "<button class=\"ds-level\" aria-pressed=\"true\"><strong>3</strong> Уровень 3</button>",
+      "css": ".ds-level{font:12px/1.5 Golos,sans-serif;min-height:34px;padding:6px 10px;border:1px solid var(--blue,#9ac9ff);border-radius:7px;background:#294261;color:#e3f1ff;cursor:pointer}.ds-level strong{font-weight:600}.ds-level:hover{background:#263a52}.ds-level:focus-visible{outline:2px solid var(--blue,#9ac9ff);outline-offset:3px}",
+      "description": "Selected numbered filter; label here illustrates the component rather than a bank level name."
+    },
+    {
+      "name": "Taxonomy choice",
+      "kind": "nav",
+      "html": "<button class=\"ds-nav\" aria-pressed=\"true\"><span>Весь банк</span></button>",
+      "css": ".ds-nav{display:flex;text-align:left;gap:10px;padding:10px 12px;min-height:42px;border:1px solid transparent;border-radius:7px;background:#253a53;color:var(--text,#edf2f8);font:13px/1.35 Golos,sans-serif;cursor:pointer}.ds-nav:hover{background:#263a52}.ds-nav:focus-visible{outline:2px solid var(--blue,#9ac9ff);outline-offset:3px}",
+      "description": "Active skill taxonomy choice."
+    },
+    {
+      "name": "Inset panel",
+      "kind": "card",
+      "refersTo": "inset-panel",
+      "html": "<div class=\"ds-inset\">Выберите навыки, которые должны встретиться в одной задаче.</div>",
+      "css": ".ds-inset{padding:16px;border-radius:12px;background:var(--panel,#152235);color:var(--muted,#a8b8cc);font:12px/1.5 Golos,sans-serif}",
+      "description": "Combination filter container."
+    }
+  ],
+  "narrative": {
+    "northStar": "Operate",
+    "overview": "This standalone preview extends the incumbent dark navy Palomatika bank. It is a dense teaching workspace: quiet surfaces frame readable mathematical expressions and compact controls. Pale blue identifies actions and selected filters; muted text carries supporting information.\n\nThe visual system is recorded from `index.html`, `style.css`, and `app.mjs`. It describes this preview, without establishing a new brand identity for the wider product.",
+    "keyCharacteristics": [
+      "Flat navy surfaces separated by fine borders.",
+      "Compact Golos interface text alongside larger KaTeX mathematics.",
+      "Pale blue action emphasis and mint collection confirmation.",
+      "Responsive navigation and a collection that becomes a dialog."
+    ],
+    "rules": [
+      {
+        "name": "State Has Text",
+        "body": "Selection is expressed with a label or pressed state as well as color; collection actions change from «В подборку» to «В подборке».",
+        "section": "colors"
+      },
+      {
+        "name": "Formula Space",
+        "body": "Keep mathematical expressions in their dedicated overflow container rather than shrinking the entire task to accommodate them.",
+        "section": "typography"
+      },
+      {
+        "name": "Flat Workspace",
+        "body": "Preserve border and tone separation for persistent panels; reserve the existing shadow treatment for the overlay collection.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** use navy tones and fine dividers for persistent workspace regions.",
+      "**Do** retain independent formula overflow and readable mathematical typesetting.",
+      "**Do** pair selected color treatments with text and pressed-state semantics.",
+      "**Do** preserve horizontal mobile taxonomy and keyboard-operable collection behavior.",
+      "**Do** provide a separate light print presentation for worksheets."
+    ],
+    "donts": [
+      "**Don't** turn task rows into elevated cards when extending this preview.",
+      "**Don't** use mint confirmation styling as the default primary action treatment.",
+      "**Don't** hide all level identifiers when compacting the mobile filters.",
+      "**Don't** imply that local collection persistence sends a lesson to palomatika.ru."
+    ]
+  }
+}
