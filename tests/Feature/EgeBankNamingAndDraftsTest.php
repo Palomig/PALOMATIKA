@@ -133,9 +133,20 @@ class EgeBankNamingAndDraftsTest extends TestCase
         $response = $this->get('/ege/variant/abcde');
 
         $response->assertOk();
+        $content = $response->getContent();
+
         // Условие банка лежит в `html`; шаблон печатал только text/expression,
-        // и в варианте оставалась одна подпись подтипа.
-        $response->assertSee('Расстояние между пристанями', false);
+        // и в варианте оставалась одна подпись подтипа. Какая из двух задач
+        // номера выпадет — дело случайного выбора внутри варианта, поэтому
+        // проверяем не конкретную, а что условие вообще напечаталось.
+        $this->assertTrue(
+            str_contains($content, 'Расстояние между пристанями')
+                || str_contains($content, 'Условие с чертежом'),
+            'в печатном варианте нет условия из банка'
+        );
+        if (str_contains($content, 'Условие с чертежом')) {
+            $this->assertStringContainsString('fipi-figure', $content, 'чертёж не напечатался');
+        }
         $response->assertDontSee('Черновик без ответа', false);
     }
 
