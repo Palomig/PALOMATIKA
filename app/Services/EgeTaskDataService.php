@@ -269,12 +269,15 @@ class EgeTaskDataService
     }
 
     /**
-     * Тема из базы, а при её отсутствии — из JSON-файла, как раньше.
+     * Тема из базы. Отката на `storage/app/tasks/ege/topic_NN.json` больше нет.
      *
-     * Откат на файл нужен, чтобы выкладка кода и переезд данных были
-     * независимы: миграции и импорт на проде запускаются отдельно, и до
-     * этого момента сервис обязан работать по-старому. Тот же порядок уже
-     * действует для ОГЭ ({@see TaskDataService::readTopic}).
+     * Откат был нужен, пока банк переезжал в базу: выкладка кода и перенос
+     * данных идут порознь. Переезд давно закончен, а на переходе профиля
+     * к нумерации КИМ 2027 откат обернулся ложью на витрине: у новых заданий
+     * 6 и 17 задач в банке нет, и вместо честного «данных нет» сервис поднял
+     * файлы 2026 года — под шестым номером всплыло «Простейшие уравнения»,
+     * под семнадцатым «Планиметрия (сложная)». Файлы на проде остались, но
+     * больше не читаются: единственный источник профиля — база.
      */
     protected function readTopic(string $topicId): array
     {
@@ -283,16 +286,7 @@ class EgeTaskDataService
             return $repository->topicData($this->bank, $topicId);
         }
 
-        if ($this->level === self::LEVEL_BASE) {
-            return [];          // у базы файлов нет — только БД
-        }
-
-        $filePath = "{$this->basePath}/topic_{$topicId}.json";
-        if (!File::exists($filePath)) {
-            return [];
-        }
-
-        return json_decode(File::get($filePath), true) ?? [];
+        return [];
     }
 
     /**
@@ -390,15 +384,7 @@ class EgeTaskDataService
      */
     public function topicDataExists(string $topicId): bool
     {
-        // Сначала база: после переезда файла темы может не быть вовсе —
-        // например, `topic_03.json` не существовало никогда, и тема
-        // «Стереометрия» показывалась как «данные не готовы».
-        if (app(TaskBankRepository::class)->hasData($this->bank, $topicId)) {
-            return true;
-        }
-
-        return $this->level === self::LEVEL_PROF
-            && File::exists("{$this->basePath}/topic_{$topicId}.json");
+        return app(TaskBankRepository::class)->hasData($this->bank, $topicId);
     }
 
     /**

@@ -4,6 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Homework;
 use App\Models\OgeVariant;
+use App\Models\Task;
+use App\Models\TaskGroup;
+use App\Models\TaskTopic;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\LessonTaskPickerService;
@@ -26,7 +29,38 @@ class LessonAndHomeworkForAllGradesTest extends TestCase
         parent::setUp();
         Http::fake(['*' => Http::response([], 200)]);
         $this->teacher = User::factory()->create(['role' => 'teacher']);
+        $this->seedEgeTopic('01');
     }
+    /**
+     * Минимальная тема профиля ЕГЭ в БД.
+     *
+     * Раньше эти тесты обходились файлами `storage/app/tasks/ege/topic_NN.json`:
+     * сервис откатывался на них, когда темы не было в базе. Откат убран —
+     * на переходе к нумерации КИМ 2027 он поднимал содержимое 2026 года под
+     * новыми пустыми номерами, — поэтому данные заводим явно.
+     */
+    private function seedEgeTopic(string $topic): void
+    {
+        TaskTopic::create([
+            'bank' => 'ege', 'grade' => null, 'topic' => $topic,
+            'payload' => ['topic_id' => $topic, 'meta' => ['title' => "Задание {$topic}"]],
+        ]);
+        $group = TaskGroup::create([
+            'bank' => 'ege', 'grade' => null, 'topic' => $topic,
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 1,
+            'position' => 0, 'instruction' => 'Решите', 'type' => 'fipi',
+            'payload' => ['instruction' => 'Решите', 'type' => 'fipi', 'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'fipi',
+            'payload' => ['id' => 1, 'status' => 'production', 'answer' => '1',
+                          'html' => "<p>Условие задания {$topic}.</p>"],
+            'answer' => '1', 'answer_src' => 'codex', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad("E{$topic}", 32, 'E'),
+        ]);
+    }
+
 
     private function student(int $grade): User
     {
