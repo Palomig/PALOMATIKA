@@ -129,6 +129,22 @@ class EgeProfRenumber2027Test extends TestCase
             ->pluck('topic', 'id')->all());
     }
 
+    public function test_new_empty_numbers_do_not_resurrect_old_files(): void
+    {
+        Artisan::call('ege:renumber-2027');
+
+        // Заданий 6 и 17 в банке нет. Пока сервис откатывался на
+        // `storage/app/tasks/ege/topic_NN.json`, витрина показывала под ними
+        // содержимое 2026 года: «Простейшие уравнения» и «Планиметрия
+        // (сложная)». Пустой номер обязан быть честно пустым.
+        $service = new EgeTaskDataService();
+
+        $this->assertFalse($service->topicDataExists('06'));
+        $this->assertFalse($service->topicDataExists('17'));
+        $this->assertArrayNotHasKey('06', $service->getAvailableTopics());
+        $this->assertArrayNotHasKey('17', $service->getAvailableTopics());
+    }
+
     public function test_base_level_bank_is_left_alone(): void
     {
         TaskGroup::create([
