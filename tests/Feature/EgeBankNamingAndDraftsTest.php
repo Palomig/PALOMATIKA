@@ -99,6 +99,37 @@ class EgeBankNamingAndDraftsTest extends TestCase
         $this->assertSame('Задача из другого предмета', $meta['17']['title']);
     }
 
+    /**
+     * Витрина обязана показывать ВСЕ номера профиля, включая двадцатый.
+     *
+     * Генератор перебирал номера циклом «до 19» и после перехода на план
+     * КИМ 2027 молча прятал последнее задание — «Числа и их свойства».
+     */
+    public function test_generator_lists_the_twentieth_task(): void
+    {
+        $topic = TaskTopic::create([
+            'bank' => 'ege', 'grade' => null, 'topic' => '20',
+            'payload' => ['topic_id' => '20', 'meta' => ['title' => 'Числа и их свойства']],
+        ]);
+        $group = TaskGroup::create([
+            'bank' => 'ege', 'grade' => null, 'topic' => '20',
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 1,
+            'position' => 0, 'instruction' => 'Числа', 'type' => 'fipi',
+            'payload' => ['instruction' => 'Числа', 'type' => 'fipi', 'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'fipi',
+            'payload' => ['id' => 20, 'status' => 'production', 'answer' => '7',
+                          'html' => '<p>Найдите наименьшее натуральное число.</p>'],
+            'answer' => '7', 'answer_src' => 'codex', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad('20A', 32, 'A'),
+        ]);
+        Cache::flush();
+
+        $this->get('/ege/generator')->assertOk()->assertSee('Числа и их свойства');
+    }
+
     public function test_random_tasks_skip_drafts(): void
     {
         $service = new EgeTaskDataService();

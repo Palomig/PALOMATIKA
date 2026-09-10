@@ -95,12 +95,28 @@ class EgeController extends Controller
     /**
      * Генератор вариантов ЕГЭ
      */
+    /**
+     * Номера заданий профиля строками «01»…«20».
+     *
+     * Ключи карты тем PHP хранит как целые, начиная с «10», поэтому padding
+     * возвращаем обратно: сравнение с `topic` в банке строгое.
+     *
+     * @return array<int, string>
+     */
+    private function profileTopicIds(): array
+    {
+        return array_map(
+            static fn ($topicId): string => str_pad((string) $topicId, 2, '0', STR_PAD_LEFT),
+            array_keys($this->taskService->getAllTopicsMeta())
+        );
+    }
+
     public function generator()
     {
-        $topicIds = [];
-        for ($i = 1; $i <= 19; $i++) {
-            $topicIds[] = str_pad($i, 2, '0', STR_PAD_LEFT);
-        }
+        // Номера берём из карты уровня, а не из захардкоженного предела: на
+        // переходе к плану КИМ 2027 профиль вырос до двадцати заданий, и
+        // цикл «до 19» молча прятал последнее — «Числа и их свойства».
+        $topicIds = $this->profileTopicIds();
 
         $topicsWithZadaniya = [];
 
@@ -191,8 +207,7 @@ class EgeController extends Controller
         if (!$selectedZadaniya) {
             // По умолчанию: все zadaniya из всех доступных тем
             $selectedZadaniya = [];
-            for ($i = 1; $i <= 19; $i++) {
-                $topicId = str_pad($i, 2, '0', STR_PAD_LEFT);
+            foreach ($this->profileTopicIds() as $topicId) {
                 if (!$this->taskService->topicDataExists($topicId)) continue;
 
                 $blocks = $this->taskService->getBlocks($topicId);
