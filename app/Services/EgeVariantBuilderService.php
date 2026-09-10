@@ -50,13 +50,13 @@ class EgeVariantBuilderService
             'part1' => [
                 'title' => '1-я часть',
                 'description' => 'Короткие задания с кратким ответом',
-                'icon' => '⚡', 'topics' => $range(1, 12), 'count' => 5,
+                'icon' => '⚡', 'topics' => $range(1, 13), 'count' => 5,
                 'variant_mode' => \App\Models\OgeVariant::MODE_MINI_PART1,
             ],
             'part2' => [
                 'title' => '2-я часть',
                 'description' => 'Задания с развёрнутым решением',
-                'icon' => '✍️', 'topics' => $range(13, 19), 'count' => 3,
+                'icon' => '✍️', 'topics' => $range(14, 20), 'count' => 3,
                 'variant_mode' => \App\Models\OgeVariant::MODE_MINI_PART2,
             ],
             'geometry' => [
@@ -68,14 +68,15 @@ class EgeVariantBuilderService
             'mixed' => [
                 'title' => 'Смешанный',
                 'description' => 'Задания из обеих частей профиля',
-                'icon' => '🔀', 'topics' => $range(1, 19), 'count' => 5,
+                'icon' => '🔀', 'topics' => $range(1, 20), 'count' => 5,
                 'variant_mode' => \App\Models\OgeVariant::MODE_MINI_MIXED,
             ],
         ];
     }
 
     /**
-     * Номера заданий берутся из карты уровня: у профиля их 19, у базы 21.
+     * Номера заданий берутся из карты уровня: у профиля их 20 (план КИМ 2027),
+     * у базы 21.
      * Ключи карты — строки «01»…«21», но «10» и дальше PHP хранит целыми,
      * поэтому приводим обратно.
      *

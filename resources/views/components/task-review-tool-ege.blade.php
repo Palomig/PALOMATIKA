@@ -430,7 +430,7 @@ function closeExportModalEge() {
     document.getElementById('exportModalEge').style.display = 'none';
 }
 
-// Собрать все пометки со всех тем ЕГЭ (темы 01-19 + возможно больше)
+// Собрать все пометки со всех тем ЕГЭ (темы 01-20 + возможно больше)
 function getAllReviewsEge() {
     const allReviews = {};
 
