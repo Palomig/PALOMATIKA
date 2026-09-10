@@ -63,11 +63,11 @@
             </button>
             <button @click="selectCategory('part1')"
                     class="px-4 py-3 bg-gradient-to-r from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 text-blue-400 font-medium rounded-lg border border-blue-500/30 transition-all">
-                Часть 1 (1-12)
+                Часть 1 (1-13)
             </button>
             <button @click="selectCategory('part2')"
                     class="px-4 py-3 bg-gradient-to-r from-fuchsia-500/20 to-fuchsia-600/20 hover:from-fuchsia-500/30 hover:to-fuchsia-600/30 text-fuchsia-400 font-medium rounded-lg border border-fuchsia-500/30 transition-all">
-                Часть 2 (13-19)
+                Часть 2 (14-20)
             </button>
             <button @click="clearAll()"
                     class="px-4 py-3 bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-400 font-medium rounded-lg border border-red-500/30 transition-all">

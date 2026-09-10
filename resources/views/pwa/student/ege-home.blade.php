@@ -213,7 +213,7 @@
           <div class="fv-opt-icon">📝</div>
           <div>
             <div class="fv-opt-name">1я часть</div>
-            <div class="fv-opt-desc">Задания 1–12 · краткий ответ</div>
+            <div class="fv-opt-desc">Задания 1–13 · краткий ответ</div>
           </div>
         </a>
 
@@ -221,7 +221,7 @@
           <div class="fv-opt-icon">✍️</div>
           <div>
             <div class="fv-opt-name">2я часть</div>
-            <div class="fv-opt-desc">Задания 13–19 · развёрнутый ответ</div>
+            <div class="fv-opt-desc">Задания 14–20 · развёрнутый ответ</div>
           </div>
         </a>
 

@@ -38,14 +38,14 @@ class EgeVariantBuilderServiceTest extends TestCase
         return new EgeVariantBuilderService($taskData);
     }
 
-    /** В профиле 19 номеров заданий — двадцатого не существует. */
+    /** В профиле по плану КИМ 2027 двадцать номеров заданий. */
     public function test_build_returns_a_task_per_exam_number(): void
     {
         $result = $this->makeService()->build('hash123');
 
-        $this->assertCount(19, $result['tasks']);
+        $this->assertCount(20, $result['tasks']);
         $this->assertSame(
-            range(1, 19),
+            range(1, 20),
             array_column($result['tasks'], 'task_number')
         );
     }
@@ -64,8 +64,10 @@ class EgeVariantBuilderServiceTest extends TestCase
         $profile = EgeVariantBuilderService::miniModes(EgeTaskDataService::LEVEL_PROF);
         $base = EgeVariantBuilderService::miniModes(EgeTaskDataService::LEVEL_BASE);
 
-        $this->assertSame(range(1, 12), array_map('intval', $profile['part1']['topics']));
+        // Граница частей профиля с 2027 года — между 13 и 14.
+        $this->assertSame(range(1, 13), array_map('intval', $profile['part1']['topics']));
         $this->assertSame(5, $profile['part1']['count']);
+        $this->assertSame(range(14, 20), array_map('intval', $profile['part2']['topics']));
         $this->assertSame([1, 2, 3], array_map('intval', $profile['geometry']['topics']));
         $this->assertSame(3, $profile['geometry']['count']);
         $this->assertSame(range(1, 8), array_map('intval', $base['practical']['topics']));

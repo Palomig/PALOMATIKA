@@ -147,9 +147,9 @@ class EgeController extends Controller
                 }
 
                 if (!empty($zadaniyaData)) {
-                    // Категории ЕГЭ: часть 1 (1-12) vs часть 2 (13-19)
+                    // Категории ЕГЭ по плану КИМ 2027: часть 1 (1–13) vs часть 2 (14–20)
                     $topicNum = (int) ltrim($topicId, '0');
-                    $category = $topicNum <= 12 ? 'part1' : 'part2';
+                    $category = $topicNum <= 13 ? 'part1' : 'part2';
 
                     $topicsWithZadaniya[] = [
                         'topic_id' => $topicId,

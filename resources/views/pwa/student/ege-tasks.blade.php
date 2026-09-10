@@ -170,7 +170,9 @@
               @if(!empty($task['html']))
                 @php
                   $taskHtml = (string) $task['html'];
-                  if (in_array((int) $selected, [13, 15], true)) {
+                  // Уравнение части 2 и неравенство — по плану КИМ 2027 это
+                  // задания 14 и 16 (были 13 и 15).
+                  if (in_array((int) $selected, [14, 16], true)) {
                     $taskHtml = \App\Support\EgeTaskBankFormatter::separatePrimaryFormula($taskHtml);
                   }
                   $hasDataTable = str_contains($taskHtml, '<table')

@@ -82,14 +82,21 @@ class EgeBankNamingAndDraftsTest extends TestCase
         $page->assertSee('Движение, работа, проценты и смеси');
     }
 
+    /** Запасная карта названий обязана совпадать с планом КИМ 2027. */
     public function test_fallback_map_matches_fipi_numbering(): void
     {
         $meta = (new EgeTaskDataService())->getAllTopicsMeta();
 
-        $this->assertSame('Текстовая задача', $meta['10']['title']);
-        $this->assertSame('Графики функций', $meta['11']['title']);
-        $this->assertSame('Неравенство', $meta['15']['title']);
-        $this->assertSame('Задача с параметром', $meta['18']['title']);
+        // Номера, приехавшие на новые места.
+        $this->assertSame('Прикладная задача с формулой', $meta['10']['title']);
+        $this->assertSame('Текстовая задача', $meta['11']['title']);
+        $this->assertSame('Экономическая задача', $meta['13']['title']);
+        $this->assertSame('Стереометрия (часть 2)', $meta['15']['title']);
+        $this->assertSame('Планиметрия (часть 2)', $meta['18']['title']);
+        $this->assertSame('Числа и их свойства', $meta['20']['title']);
+        // Два задания, которых в банке ФИПИ пока нет, но в работе они есть.
+        $this->assertSame('Случайная величина и распределения', $meta['06']['title']);
+        $this->assertSame('Задача из другого предмета', $meta['17']['title']);
     }
 
     public function test_random_tasks_skip_drafts(): void
