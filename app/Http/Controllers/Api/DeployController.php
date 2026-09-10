@@ -65,6 +65,9 @@ class DeployController extends Controller
         'tasks:fix-answer',
         // и разноска правки по уже розданным снимкам задачи.
         'tasks:resync-answer',
+        // Разовый переезд профиля ЕГЭ на нумерацию КИМ 2027: переимпорт
+        // ради него не годится — стёр бы ручные переносы и подтипы.
+        'ege:renumber-2027',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',

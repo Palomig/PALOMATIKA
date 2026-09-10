@@ -167,21 +167,21 @@ class EgeFipiVariantTest extends TestCase
         $this->assertStringContainsString('ege-app/tasks?level=prof&amp;part=1', $home);
         $this->assertStringContainsString('ege-app/tasks?level=prof&amp;part=2', $home);
 
-        // В первой части номера 1–12, во второй 13–19: краткий ответ и
-        // развёрнутый смешивать нельзя, у них разный формат ответа.
-        // Ссылки сравниваем по фрагменту: в разметке «&» экранируется.
+        // В первой части номера 1–13, во второй 14–20 (план КИМ 2027):
+        // краткий ответ и развёрнутый смешивать нельзя, у них разный формат
+        // ответа. Ссылки сравниваем по фрагменту: в разметке «&» экранируется.
         $first = $this->actingAs($user)->get(route('pwa.student.ege.tasks', ['part' => 1]))->getContent();
-        $this->assertStringContainsString('Задания 1–12 · краткий ответ', $first);
-        $this->assertStringContainsString('topic=12', $first);
-        $this->assertStringNotContainsString('topic=13', $first);
+        $this->assertStringContainsString('Задания 1–13 · краткий ответ', $first);
+        $this->assertStringContainsString('topic=13', $first);
+        $this->assertStringNotContainsString('topic=14', $first);
 
         $second = $this->actingAs($user)->get(route('pwa.student.ege.tasks', ['part' => 2]))->getContent();
-        $this->assertStringContainsString('Задания 13–19 · развёрнутый ответ', $second);
-        $this->assertStringContainsString('topic=13', $second);
-        $this->assertStringNotContainsString('topic=12', $second);
+        $this->assertStringContainsString('Задания 14–20 · развёрнутый ответ', $second);
+        $this->assertStringContainsString('topic=14', $second);
+        $this->assertStringNotContainsString('topic=13', $second);
     }
 
-    public function test_task_database_separates_primary_formulas_only_for_topics_13_and_15(): void
+    public function test_task_database_separates_primary_formulas_only_for_topics_14_and_16(): void
     {
         $user = User::factory()->create([
             'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
@@ -202,18 +202,19 @@ class EgeFipiVariantTest extends TestCase
                 ->getContent();
         };
 
-        $topic13 = $renderTopic(
-            13,
+        $equation = $renderTopic(
+            14,
             '<p>а) Решите уравнение $x^2-1=0$.</p><p>б) Найдите корни на отрезке $[0;5]$.</p>'
         );
-        $this->assertStringContainsString('Решите уравнение<br class="fipi-primary-formula-break">$x^2-1=0$.', $topic13);
-        $this->assertStringContainsString('отрезке $[0;5]$.', $topic13);
+        $this->assertStringContainsString('Решите уравнение<br class="fipi-primary-formula-break">$x^2-1=0$.', $equation);
+        $this->assertStringContainsString('отрезке $[0;5]$.', $equation);
 
-        $topic15 = $renderTopic(15, '<p>Решите неравенство $\log_3(x)\leq 2$.</p>');
-        $this->assertStringContainsString('Решите неравенство<br class="fipi-primary-formula-break">', $topic15);
+        $inequality = $renderTopic(16, '<p>Решите неравенство $\log_3(x)\leq 2$.</p>');
+        $this->assertStringContainsString('Решите неравенство<br class="fipi-primary-formula-break">', $inequality);
 
-        $topic14 = $renderTopic(14, '<p>Найдите объём $V=12$.</p>');
-        $this->assertStringNotContainsString('fipi-primary-formula-break', $topic14);
+        // Стереометрия рядом с ними формулу на отдельную строку не выносит.
+        $solid = $renderTopic(15, '<p>Найдите объём $V=12$.</p>');
+        $this->assertStringNotContainsString('fipi-primary-formula-break', $solid);
     }
 
     public function test_task_database_keeps_financial_data_as_a_table_on_mobile(): void
@@ -221,8 +222,9 @@ class EgeFipiVariantTest extends TestCase
         $user = User::factory()->create([
             'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
         ]);
-        TaskTopic::query()->update(['topic' => '16']);
-        TaskGroup::query()->update(['topic' => '16']);
+        // Экономическая задача — по плану КИМ 2027 это задание 13 первой части.
+        TaskTopic::query()->update(['topic' => '13']);
+        TaskGroup::query()->update(['topic' => '13']);
         $task = Task::query()->firstOrFail();
         $task->update(['payload' => array_merge($task->payload, [
             'html' => '<p>Условия возврата:</p><table><tbody><tr>'
@@ -234,7 +236,7 @@ class EgeFipiVariantTest extends TestCase
         TaskBankRepository::forgetTableCheck();
 
         $content = $this->actingAs($user)
-            ->get(route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 2, 'topic' => 16]))
+            ->get(route('pwa.student.ege.tasks', ['level' => 'prof', 'part' => 1, 'topic' => 13]))
             ->assertOk()
             ->assertSee('<table>', false)
             ->getContent();
