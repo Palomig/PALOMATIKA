@@ -36,6 +36,11 @@
     display: inline-block; padding: 0 2px; height: 1.3em; width: auto; vertical-align: -0.26em;
   }
   .lesson-task-expr img.fipi-figure { display: block; max-width: 100%; padding: 6px; margin: 8px 0; }
+  @include('pwa._shared.partials.fipi-condition-css')
+  .lesson-task-expr.fipi-condition { font-size: 17px; }
+  /* Внутри разметки ФИПИ формулы переносятся как обычный текст:
+     правило «одной строкой» — для плоского условия. */
+  .lesson-task-expr.fipi-condition .katex { white-space: normal; display: inline; overflow: visible; }
   .lesson-task-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .lesson-task-card.is-answered { border-color: var(--accent); background: var(--accent-bg); }
   .lesson-task-num { font-family: var(--display); font-size: 18px; color: var(--accent); }
@@ -168,6 +173,7 @@
   </template>
 
   @include('pwa._shared.photo-viewer')
+  @include('pwa._shared.partials.fipi-condition-js')
 
   <template x-for="task in tasks" :key="task.id">
     <div class="lesson-task-card" :class="task.my_answer ? 'is-answered' : ''" :data-task-id="task.id">
@@ -181,10 +187,15 @@
       </div>
 
       <div class="lesson-task-image" x-show="task.payload.image_svg" x-html="task.payload.image_svg"></div>
-      <template x-if="!task.payload.image_svg && task.payload.image_url">
+      <template x-if="!task.payload.image_svg && task.payload.image_url && !task.payload.condition_html">
         <div class="lesson-task-image is-raster"><img :src="task.payload.image_url" alt=""></div>
       </template>
-      <div class="lesson-task-expr" x-html="renderMath(task.payload.expression)"></div>
+      {{-- Банк ЕГЭ: условие целиком в разметке ФИПИ (таблицы соответствия,
+           графики-варианты, обозначения-растры); формулы $…$ дорисует
+           auto-render, который обходит DOM после загрузки задач. --}}
+      <div class="lesson-task-expr fipi-condition" x-show="task.payload.condition_html"
+           x-html="window.paloFipiHtml ? window.paloFipiHtml(task.payload.condition_html) : (task.payload.condition_html || '')"></div>
+      <div class="lesson-task-expr" x-show="!task.payload.condition_html" x-html="renderMath(task.payload.expression)"></div>
 
       {{-- Choice type --}}
       <template x-if="task.payload.type === 'choice'">
@@ -581,7 +592,11 @@
 
       renderMath(text) {
         // KaTeX renders on init; just escape and return — auto-render walks DOM
-        const esc = (t) => { const d = document.createElement('div'); d.textContent = t || ''; return d.innerHTML; };
+        // Растры-обозначения ФИПИ внутри плоского условия остаются картинками.
+        const esc = (t) => {
+          if (window.paloEscapeKeepingFipiImages) return window.paloEscapeKeepingFipiImages(t || '');
+          const d = document.createElement('div'); d.textContent = t || ''; return d.innerHTML;
+        };
         const s = String(text || '');
         // Подпункты «а) б) в)» лежат в банке отдельными абзацами, и при
         // выпрямлении разметки перед каждым остаётся перевод строки. Прочие

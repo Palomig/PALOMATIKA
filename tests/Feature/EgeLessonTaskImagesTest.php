@@ -66,6 +66,34 @@ class EgeLessonTaskImagesTest extends TestCase
         $this->assertStringContainsString('Четырёхугольник', $resolved['expression']);
     }
 
+    public function test_condition_travels_with_its_markup(): void
+    {
+        // Соответствие «графики ↔ характеристики»: четыре чертежа-варианта.
+        // Плоское условие показывало ученику один график из четырёх — первый
+        // `fipi-figure` уезжал в image_url, остальные вырезались с тегами.
+        $html = '<table><tr><td><b>А)</b></td><td><img class="fipi-figure" src="/ege-bank/img-base/G/a.png" alt="рисунок"></td>'
+            . '<td><b>Б)</b></td><td><img class="fipi-figure" src="/ege-bank/img-base/G/b.png" alt="рисунок"></td></tr></table>'
+            . '<p>1) функция возрастает на отрезке $[-1;1]$</p>';
+        $this->makeTask($html, '07');
+
+        $resolved = $this->resolve('07');
+
+        $this->assertSame($html, $resolved['condition_html']);
+        $this->assertSame('/ege-bank/img-base/G/a.png', $resolved['image_url'],
+            'плоские поля остаются для уроков и подписей, собранных до появления разметки');
+    }
+
+    public function test_condition_markup_is_kept_from_the_student(): void
+    {
+        // Ученику `raw` не отдаётся (там ответ) — разметка лежит отдельным полем.
+        $this->makeTask('<p>Условие <img class="fipi-inline" src="/ege-bank/img/B/s.png" alt="рисунок">.</p>', '14');
+
+        $resolved = $this->resolve('14');
+        unset($resolved['answer'], $resolved['raw']);
+
+        $this->assertArrayHasKey('condition_html', $resolved);
+    }
+
     public function test_inline_labels_stay_in_the_condition(): void
     {
         $this->makeTask('<p>В пирамиде <img class="fipi-inline" src="/ege-bank/img/B/s.png" alt="рисунок">'
