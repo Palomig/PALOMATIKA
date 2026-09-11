@@ -144,6 +144,8 @@
   </div>
 </div>
 
+@include('pwa._shared.partials.fipi-condition-js')
+
 <style>
   /* Пилюли классов/разделов/тем — как .topic-pill в базе (tasks-part1) */
   .task-picker .tp-pills { display:flex; gap:6px; flex-wrap:wrap; }
@@ -227,6 +229,10 @@
   }
   .task-picker .tp-illus img { background: #fff; border-radius: 6px; padding: 4px; }
   .task-picker .tp-expr { font-size:15px; white-space:normal; }
+  /* Условие ЕГЭ в разметке ФИПИ — общие правила экранов урока. */
+  @include('pwa._shared.partials.fipi-condition-css')
+  .task-picker .fipi-condition { font-size:13px; }
+  .task-picker .fipi-condition img.fipi-figure { max-height:160px; }
   .task-picker .answer-row { margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .task-picker .answer-label { font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
   /* Ответ — мелко и muted (это picker учителя, не витрина базы) */
@@ -522,10 +528,20 @@ function taskPicker(config) {
       this.reset();
     },
 
+    // Условие ЕГЭ в разметке ФИПИ (см. fipi-condition-js); формулы $…$
+    // внутри дорисует auto-render.
+    fipiHtml(html) {
+      if (!html) return '';
+      this.typeset();
+      return window.paloFipiHtml ? window.paloFipiHtml(html) : String(html);
+    },
+
     renderLatex(expr) {
       if (!expr) return '';
       const s = String(expr);
-      const escaped = s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const escaped = window.paloEscapeKeepingFipiImages
+        ? window.paloEscapeKeepingFipiImages(s)
+        : s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       // Проза (кириллица) или текст с $...$ — рендерим как текст (иначе KaTeX в
       // math-режиме съедает пробелы и не переносит строку); формулы дорисует auto-render.
       if (s.includes('$') || /[а-яё]/i.test(s)) { this.typeset(); return escaped; }

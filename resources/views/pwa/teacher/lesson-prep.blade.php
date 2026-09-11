@@ -58,6 +58,8 @@
     display: inline-block; padding: 0 2px; height: 1.3em; width: auto; vertical-align: -0.26em;
   }
   .lesson-task-expr img.fipi-figure { display: block; max-width: 100%; padding: 6px; margin: 8px 0; }
+  @include('pwa._shared.partials.fipi-condition-css')
+  .lesson-task-expr.fipi-condition { font-size: 15px; }
   .lesson-task-image { display: flex; justify-content: center; background: var(--surface); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
   /* Растр ФИПИ — чёрным по прозрачному, как и внутри условия: на тёмной
      подложке чертёж почти не читается, в банке он выведен на белом листе.
@@ -440,10 +442,16 @@
         <div class="lesson-task-num" x-text="task.position + ')'"></div>
         <div class="lesson-task-body">
           <div class="lesson-task-image" x-show="task.task_payload.image_svg" x-html="task.task_payload.image_svg"></div>
-          <template x-if="!task.task_payload.image_svg && task.task_payload.image_url">
+          <template x-if="!task.task_payload.image_svg && task.task_payload.image_url && !task.task_payload.condition_html">
             <div class="lesson-task-image is-raster"><img :src="task.task_payload.image_url" alt=""></div>
           </template>
-          <div class="lesson-task-expr" x-html="taskConditionHtml(task.task_payload.expression)"
+          {{-- Банк ЕГЭ: условие целиком в разметке ФИПИ (таблицы соответствия,
+               графики-варианты, обозначения-растры); плоский текст — для остальных
+               банков и уроков, собранных до этого поля. --}}
+          <div class="lesson-task-expr fipi-condition" x-show="task.task_payload.condition_html"
+               x-html="fipiHtml(task.task_payload.condition_html)"></div>
+          <div class="lesson-task-expr" x-show="!task.task_payload.condition_html"
+               x-html="taskConditionHtml(task.task_payload.expression)"
                x-init="$nextTick(() => fitFormulas($el))"
                @resize.window.debounce.150ms="fitFormulas($el)"></div>
           <template x-if="task.task_payload.type === 'choice'">
@@ -916,6 +924,14 @@
        * диаметром»), поэтому разбиваем ТОЛЬКО по подпунктам, а не по каждому
        * переводу строки.
        */
+      // Условие ЕГЭ в разметке ФИПИ (см. fipi-condition-js); формулы $…$
+      // внутри дорисует auto-render.
+      fipiHtml(html) {
+        if (!html) return '';
+        this.typeset();
+        return window.paloFipiHtml ? window.paloFipiHtml(html) : String(html);
+      },
+
       taskConditionHtml(expr) {
         const s = String(expr || '');
         const parts = s.split(/\n(?=[ \t]*[абвгд]\))/);
@@ -979,6 +995,8 @@
       },
 
       escapeHtml(s) {
+        // Растры-обозначения ФИПИ внутри плоского условия остаются картинками.
+        if (window.paloEscapeKeepingFipiImages) return window.paloEscapeKeepingFipiImages(s);
         return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       },
 

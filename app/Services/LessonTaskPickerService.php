@@ -279,7 +279,7 @@ class LessonTaskPickerService
      * 'part1'/'part2' — все остальные. Без $section — легаси-поведение (без «новых»).
      *
      * @return array<int, array{
-     *   id:string|int, expression:string, text?:string, image?:string, answer:string,
+     *   id:string|int, expression:string, text?:string, html?:string, image?:string, answer:string,
      *   group_key:string|int, group_label:string, subtype_key?:string|null, subtype_label?:string,
      *   section?:string|null,
      *   zadanie_number?:int, level_id?:string
@@ -294,6 +294,11 @@ class LessonTaskPickerService
         if (empty($refs['topic_id'])) return [];
 
         $filterBySection = $bank === 'oge' && $section !== null;
+        // У банка ЕГЭ условие — размеченный HTML ФИПИ: таблицы соответствия,
+        // растры-обозначения внутри предложения, графики как варианты ответа.
+        // Сведённое к строке, оно теряет рисунки и структуру, поэтому карточка
+        // получает разметку целиком и выводит её как база заданий.
+        $keepsHtml = in_array($bank, ['ege', EgeTaskDataService::BANK_BASE], true);
 
         $blocks = $this->resolveBlocks($bank, $refs);
         $result = [];
@@ -334,6 +339,7 @@ class LessonTaskPickerService
                         'id'             => $taskId,
                         'expression'     => $expression,
                         'text'           => (string) ($t['text'] ?? ''),
+                        'html'           => $keepsHtml ? (string) ($t['html'] ?? '') : '',
                         // У банка ЕГЭ чертёж — растр внутри разметки условия;
                         // без этого карточка задачи оставалась без рисунка.
                         'image'          => (string) ($t['image'] ?? self::figureFromHtml((string) ($t['html'] ?? ''))),

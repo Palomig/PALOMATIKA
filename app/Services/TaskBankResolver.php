@@ -23,7 +23,7 @@ class TaskBankResolver
 
     /**
      * @param  array<string, mixed>  $refs
-     * @return array{expression:string,type:string,answer:string,options?:array,source_label:string,raw:array}
+     * @return array{expression:string,type:string,answer:string,options?:array,condition_html?:string,source_label:string,raw:array}
      */
     public function resolve(string $bank, array $refs): array
     {
@@ -59,7 +59,19 @@ class TaskBankResolver
         [$z, $task] = $this->findTaskInBlocks($topic['blocks'] ?? [], $refs['zadanie_number'], $refs['task_id']);
         $mark = $level === EgeTaskDataService::LEVEL_BASE ? 'Б' : 'П';
         $label = "ЕГЭ ({$mark}) · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
-        return $this->normalize($task, $z, $label);
+        $resolved = $this->normalize($task, $z, $label);
+
+        // Условие ЕГЭ едет на экраны урока и своей разметкой. Плоский
+        // `expression` остаётся для поиска и подписей, но в нём задания на
+        // соответствие теряют таблицу, а графики-варианты (А–Г — четыре
+        // растра) схлопываются в один «чертёж»; ученик видел один график из
+        // четырёх. `raw` ученику не отдаётся, поэтому поле отдельное.
+        $html = (string) ($task['html'] ?? '');
+        if ($html !== '') {
+            $resolved['condition_html'] = $html;
+        }
+
+        return $resolved;
     }
 
     private function fromVpr(array $refs): array
