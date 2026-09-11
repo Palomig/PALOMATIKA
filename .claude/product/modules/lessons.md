@@ -73,6 +73,8 @@ GUID-картам `resources/task-taxonomies/oge-topic-NN.php`. Поэтому
 
 Бэкенд: `GET /lessons/picker-options?bank=&section=&topic_id=` → `{grades, sections, topics, tasks}`; невалидный section → 422.
 
+**Условие ЕГЭ (банки `ege`/`ege_b`) едет разметкой ФИПИ, а не плоским текстом (2026-09-11).** Карточка picker'а получает поле `html`, задача урока — `condition_html` в `task_payload` (ученику `raw` не отдаётся, поэтому поле отдельное). Экраны выводят его через `x-html` в `.fipi-condition`: общий CSS — `pwa/_shared/partials/fipi-condition-css`, подготовка — `pwa/_shared/partials/fipi-condition-js` (`window.paloFipiHtml` отличает таблицу данных от таблицы-раскладки «А–Г ↔ 1–4», `window.paloEscapeKeepingFipiImages` пропускает растры-обозначения в плоском `expression`). До этого сведённое к строке условие показывало теги `<img>` текстом, а в заданиях на соответствие терялись таблица и три графика из четырёх. Плоские `expression`/`image_url` остаются для ОГЭ/ВПР/алгебры и для уроков, собранных раньше. ОГЭ на разметку сознательно не переведён.
+
 ## Маршруты
 
 **teacher.palomatika.ru** (auth + role:teacher,admin):
@@ -113,6 +115,5 @@ GUID-картам `resources/task-taxonomies/oge-topic-NN.php`. Поэтому
 
 - **Ввод ответа для 2-й части** — отдельный способ (не текстовое поле) на проработке: заметка в Obsidian `PALOMATIKA/Задачи/Ввод ответа для 2 части на уроке.md`.
 - `invite_token` — мёртвая колонка в `lesson_sessions` (не заполняется), можно дропнуть отдельной миграцией.
-- ЕГЭ/ВПР-банки в picker'е урока не выведены (bank поддержан бэкендом, UI — только 7/8/9 ОГЭ).
 - Push-уведомления при старте; история уроков ученика; WebSocket вместо polling.
 - Превью-пример у темы 24 в списке тем пустой (firstTopicExample не знает section).

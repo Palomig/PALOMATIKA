@@ -124,6 +124,52 @@ class TeacherPickerEgeBankTest extends TestCase
             'без обозначений условие в карточке рассыпается');
     }
 
+    public function test_card_carries_the_whole_fipi_markup(): void
+    {
+        // Задание базы на соответствие: четыре растра-варианта, два из них
+        // выше порога и помечены чертежами. Сведённое к строке, условие
+        // показывало теги текстом, а «чертёж» варианта 3 уезжал наверх
+        // карточки. Карточка получает разметку целиком.
+        $html = '<table><tr><td><p>Каждому из четырёх неравенств соответствует решение.</p></td></tr></table>'
+            . '<table><tr><td><b>А)</b></td><td><p>$x>1$</p></td></tr>'
+            . '<tr><td><b>1)</b></td><td><p><img class="fipi-inline" src="/ege-bank/img-base/G/i1.gif" alt="рисунок"></p></td></tr>'
+            . '<tr><td><b>3)</b></td><td><p><img class="fipi-figure" src="/ege-bank/img-base/G/i3.gif" alt="рисунок"></p></td></tr></table>';
+        $group = TaskGroup::where('bank', 'ege')->where('topic', '15')->first();
+        $group->tasks()->update(['payload' => ['id' => 1, 'status' => 'production', 'answer' => '1432', 'html' => $html]]);
+        Cache::flush();
+
+        $tasks = app(LessonTaskPickerService::class)->tasks('ege', ['topic_id' => '15']);
+
+        $this->assertSame($html, $tasks[0]['html']);
+    }
+
+    public function test_oge_card_keeps_plain_text_only(): void
+    {
+        // У ОГЭ чертёж — инлайновый SVG в своём поле; разметку целиком
+        // карточка не выводит, чтобы не менять работающий банк.
+        TaskTopic::create(['bank' => 'oge', 'grade' => null, 'topic' => '06',
+            'payload' => ['topic_id' => '06', 'meta' => ['title' => 'Числа']]]);
+        $group = TaskGroup::create([
+            'bank' => 'oge', 'grade' => null, 'topic' => '06',
+            'block_number' => 1, 'block_title' => 'ФИПИ', 'zadanie_number' => 1,
+            'position' => 0, 'instruction' => 'Найдите значение', 'type' => 'fipi',
+            'payload' => ['instruction' => 'Найдите значение', 'type' => 'fipi', 'status' => 'production'],
+            'status' => 'production', 'source' => 'fipi',
+        ]);
+        Task::create([
+            'task_group_id' => $group->id, 'position' => 0, 'type' => 'fipi',
+            'payload' => ['id' => 1, 'status' => 'production', 'answer' => '7', 'html' => '<p>Найдите $2+5$.</p>'],
+            'answer' => '7', 'answer_src' => 'codex', 'status' => 'production',
+            'source' => 'fipi', 'fipi_guid' => str_pad('06', 32, 'O'),
+        ]);
+        Cache::flush();
+
+        $tasks = app(LessonTaskPickerService::class)->tasks('oge', ['topic_id' => '06'], 'part1');
+
+        $this->assertSame('', $tasks[0]['html']);
+        $this->assertStringContainsString('Найдите', $tasks[0]['expression']);
+    }
+
     public function test_tasks_of_a_topic_are_offered_to_the_teacher(): void
     {
         $tasks = app(LessonTaskPickerService::class)->tasks('ege', ['topic_id' => '01']);
