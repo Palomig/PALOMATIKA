@@ -55,11 +55,6 @@ class TeacherController extends Controller
         $user = $request->user();
         $teacherId = (int) $user->id;
 
-        $studentCount = TeacherStudent::where('teacher_id', $teacherId)->count();
-        $aliasedCount = TeacherStudent::where('teacher_id', $teacherId)->whereNotNull('student_alias')->where('student_alias', '!=', '')->count();
-        $variantsCount = OgeVariant::where('owner_teacher_id', $teacherId)->count();
-        $curatedCount = OgeVariant::where('owner_teacher_id', $teacherId)->where('is_curated', true)->count();
-
         $myStudentIds = TeacherStudent::where('teacher_id', $teacherId)->pluck('student_id');
         $aliasMap = TeacherStudent::where('teacher_id', $teacherId)->whereNotNull('student_alias')->where('student_alias', '!=', '')->pluck('student_alias', 'student_id');
 
@@ -94,10 +89,6 @@ class TeacherController extends Controller
 
         return view('pwa.teacher.dashboard', [
             'user' => $user,
-            'studentCount' => $studentCount,
-            'aliasedCount' => $aliasedCount,
-            'variantsCount' => $variantsCount,
-            'curatedCount' => $curatedCount,
             'recentAttempts' => $recentAttempts,
         ]);
     }
