@@ -535,10 +535,23 @@ class TeacherController extends Controller
             ->take(50)
             ->map($card)->values();
 
+        // Не сделаны: выдано, но до конца не доведено и учитель работу не закрыл.
+        // Свежие домашки сверху, внутри одной домашки — по имени.
+        $undone = $assignments
+            ->filter(fn ($a) => $a->status !== 'completed' && $a->reviewed_at === null)
+            ->sortBy(fn ($a) => sprintf(
+                '%s %05d %s',
+                $a->homework?->assigned_at?->format('Y-m-d H:i:s') ?? '',
+                $a->homework_id,
+                $aliases[$a->student_id] ?? $a->student?->name ?? ''
+            ), SORT_STRING, true)
+            ->map(fn (HomeworkAssignment $a) => $card($a) + $this->homeworkUndoneState($a))
+            ->values();
+
         return view('pwa.teacher.homework', compact(
             'user', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'studentGrades',
-            'pending', 'reviewed'
-        ) + ['stats' => $this->homeworkStats($assignments, $aliases)]);
+            'pending', 'reviewed', 'undone'
+        ));
     }
 
     /**
@@ -563,9 +576,6 @@ class TeacherController extends Controller
         return $at->format('d.m') . ' в ' . $at->format('H:i');
     }
 
-    /** Порядок в раскрытом списке учеников: сначала те, кому надо напомнить. */
-    private const STATE_ORDER = ['untouched' => 0, 'opened' => 1, 'partial' => 2, 'completed' => 3];
-
     /** Открыл ли ученик домашку: статус уходит с `assigned` при первом заходе на страницу. */
     private function isHomeworkOpened(HomeworkAssignment $a): bool
     {
@@ -575,108 +585,25 @@ class TeacherController extends Controller
     }
 
     /**
-     * Строка ученика в раскрытой плашке домашки.
+     * Насколько ученик продвинулся по несделанной домашке — для карточки во вкладке «Не сделаны».
      *
-     * @param  array<int, string>  $aliases
-     * @return array<string, mixed>
+     * @return array{state: string, opened: bool, tracks_open: bool, can_open: bool, assigned_at: ?string}
      */
-    private function homeworkStudentRow(HomeworkAssignment $a, array $aliases): array
+    private function homeworkUndoneState(HomeworkAssignment $a): array
     {
+        $isPhoto = $a->homework?->homework_type === 'topic_photo_practice';
         $submitted = (int) $a->topic_task_submissions_count;
         $opened = $this->isHomeworkOpened($a);
 
-        if ($a->status === 'completed') {
-            $state = 'completed';
-        } elseif ($submitted > 0) {
-            $state = 'partial';
-        } else {
-            $state = $opened ? 'opened' : 'untouched';
-        }
-
         return [
-            'assignment' => $a,
-            'name' => $aliases[$a->student_id] ?? $a->student?->name ?? 'Ученик',
-            'grade' => $a->student?->grade_num,
-            'state' => $state,
+            'state' => $submitted > 0 ? 'partial' : ($opened ? 'opened' : 'untouched'),
             'opened' => $opened,
-            'submitted' => $submitted,
-            'done' => (int) $a->tasks_completed,
-            'total' => (int) $a->tasks_total,
-            'reviewed' => $a->reviewed_at !== null,
-            'is_debt' => $a->isDebt(),
-            'at' => $this->humanSubmittedAt($a->topic_task_submissions_max_updated_at),
-            'tracks_open' => $a->homework?->homework_type === 'topic_photo_practice',
+            // Момент открытия пишется только у фото-практики — у остальных типов
+            // «не открывал» было бы выдумкой.
+            'tracks_open' => $isPhoto,
             // Страница проверки есть только у фото-практики и только если что-то сдано.
-            'can_open' => $submitted > 0 && $a->homework?->homework_type === 'topic_photo_practice',
-        ];
-    }
-
-    /**
-     * Сводка по домашкам: кто сдал, кто нет и кто не делает раз за разом.
-     *
-     * @param  \Illuminate\Support\Collection<int, HomeworkAssignment>  $assignments
-     * @param  array<int, string>  $aliases
-     */
-    private function homeworkStats($assignments, array $aliases): array
-    {
-        $byHomework = $assignments
-            ->filter(fn ($a) => $a->homework !== null)
-            ->groupBy('homework_id')
-            ->map(function ($group) use ($aliases) {
-                $first = $group->first();
-                $students = $group
-                    ->map(fn ($a) => $this->homeworkStudentRow($a, $aliases))
-                    // Сверху те, до кого не дошло: не открывал → открыл, но не сдал → сдал.
-                    ->sortBy(fn ($row) => sprintf('%d %s', self::STATE_ORDER[$row['state']], $row['name']))
-                    ->values()
-                    ->all();
-
-                return [
-                    'title' => $first->homework->title ?? 'Домашнее задание',
-                    'assigned_at' => $first->homework->assigned_at,
-                    'total' => $group->count(),
-                    'submitted' => $group->filter(fn ($a) => $a->topic_task_submissions_count > 0 || $a->status === 'completed')->count(),
-                    'completed' => $group->where('status', 'completed')->count(),
-                    'opened' => $group->filter(fn ($a) => $this->isHomeworkOpened($a))->count(),
-                    // Момент открытия пишется только у фото-практики — у остальных типов
-                    // «не открывал» было бы выдумкой, поэтому строку прячем.
-                    'tracks_open' => $first->homework?->homework_type === 'topic_photo_practice',
-                    'students' => $students,
-                ];
-            })
-            ->sortByDesc(fn ($row) => $row['assigned_at'])
-            ->take(10)
-            ->values()
-            ->all();
-
-        // «Не делал несколько раз» — незакрытые работы, начиная со второй.
-        $debtors = $assignments
-            ->filter(fn ($a) => $a->status !== 'completed')
-            ->groupBy('student_id')
-            ->map(function ($group) use ($aliases) {
-                $first = $group->first();
-
-                return [
-                    'name' => $aliases[$first->student_id] ?? $first->student?->name ?? 'Ученик',
-                    'grade' => $first->student?->grade_num,
-                    'missed' => $group->count(),
-                    'debts' => $group->filter(fn ($a) => $a->debt_since !== null)->count(),
-                    'untouched' => $group->filter(fn ($a) => $a->topic_task_submissions_count === 0)->count(),
-                ];
-            })
-            ->filter(fn ($row) => $row['missed'] >= 2)
-            ->sortByDesc('missed')
-            ->values()
-            ->all();
-
-        $totals = $assignments->filter(fn ($a) => $a->homework?->homework_type === 'topic_photo_practice');
-
-        return [
-            'students_total' => $totals->count(),
-            'students_submitted' => $totals->filter(fn ($a) => $a->topic_task_submissions_count > 0)->count(),
-            'waiting_review' => $totals->filter(fn ($a) => $a->topic_task_submissions_count > 0 && $a->reviewed_at === null)->count(),
-            'by_homework' => $byHomework,
-            'debtors' => $debtors,
+            'can_open' => $isPhoto && $submitted > 0,
+            'assigned_at' => $a->homework?->assigned_at?->format('d.m'),
         ];
     }
 
