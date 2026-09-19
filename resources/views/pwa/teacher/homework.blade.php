@@ -39,7 +39,8 @@
     border-radius: 12px; padding: 12px 14px;
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 8px;
-    opacity: 0; animation: fadeUp 0.3s ease calc(var(--i, 0) * 0.04s) forwards;
+    /* Длинный список не должен доезжать секундами: после 12-й карточки задержка не растёт. */
+    opacity: 0; animation: fadeUp 0.3s ease calc(min(var(--i, 0), 12) * 0.04s) forwards;
   }
   .student-name { font-size: 14px; font-weight: 700; color: var(--text); }
   .student-sub { font-size: 11px; color: var(--muted); font-weight: 600; }
@@ -79,22 +80,12 @@
     background: none; border: none; color: var(--muted);
   }
 
-  .hw-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
-  }
-  .hw-title { font-size: 13px; font-weight: 700; color: var(--text); }
-  .hw-meta { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
   .hw-status-badge {
     display: inline-block; font-size: 9px; font-weight: 800;
     text-transform: uppercase; letter-spacing: 0.06em;
     padding: 2px 7px; border-radius: 5px; margin-top: 4px;
   }
-  .badge-assigned { background: rgba(59,130,246,.2); color: #93bbfd; }
-  .badge-started { background: rgba(234,179,8,.2); color: #fcd34d; }
-  .badge-completed { background: rgba(34,197,94,.2); color: #86efac; }
   .badge-debt { background: rgba(234,179,8,.2); color: #fcd34d; }
-  .badge-reviewed { background: rgba(34,197,94,.14); color: #86efac; }
 
   .check-card {
     display: flex; align-items: center; gap: 10px;
@@ -102,14 +93,19 @@
     border-left: 3px solid var(--accent);
     border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
     text-decoration: none; color: inherit;
-    opacity: 0; animation: fadeUp 0.3s ease calc(var(--i, 0) * 0.04s) forwards;
+    /* Длинный список не должен доезжать секундами: после 12-й карточки задержка не растёт. */
+    opacity: 0; animation: fadeUp 0.3s ease calc(min(var(--i, 0), 12) * 0.04s) forwards;
   }
   .check-card:active { background: var(--surface2); }
   .check-card.is-done { border-left-color: var(--border); opacity: .72; }
+  .check-card.is-undone { border-left-color: var(--muted2); }
   .check-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--accent); flex-shrink: 0;
   }
+  .check-dot.dot-untouched { background: var(--muted2); }
+  .check-dot.dot-opened { background: var(--accent); }
+  .check-dot.dot-partial { background: var(--yellow); }
   .check-body { flex: 1; min-width: 0; }
   .check-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .check-name { font-size: 14px; font-weight: 800; color: var(--text); }
@@ -121,54 +117,6 @@
   .check-meta { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 3px; }
   .check-go { color: var(--muted); font-size: 20px; flex-shrink: 0; }
 
-  .stat-row { display: flex; gap: 8px; margin-bottom: 14px; }
-  .stat-box {
-    flex: 1; text-align: center; padding: 14px 6px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  }
-  .stat-num { font-family: var(--display); font-size: 22px; color: var(--text); }
-  .stat-label { font-size: 10px; font-weight: 700; color: var(--muted); margin-top: 2px; }
-  .stat-bar { height: 6px; border-radius: 3px; background: var(--surface2); margin-top: 8px; overflow: hidden; }
-  .stat-bar-fill { height: 100%; background: var(--green); }
-  .hw-card-fold { padding: 0; }
-  .hw-fold-head {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 12px 14px; cursor: pointer; user-select: none;
-  }
-  .hw-fold-head:active { background: var(--surface2); border-radius: 12px; }
-  .hw-chevron {
-    color: var(--muted); font-size: 20px; line-height: 1; flex-shrink: 0;
-    transform: rotate(90deg); transition: transform .2s;
-  }
-  .hw-chevron.is-open { transform: rotate(-90deg); }
-  .hw-fold-body { border-top: 1px solid var(--border); padding: 4px 14px 12px; }
-  .hw-fold-label {
-    font-size: 10px; font-weight: 800; color: var(--muted);
-    text-transform: uppercase; letter-spacing: .06em; margin: 12px 0 6px;
-  }
-  .hw-fold-empty { font-size: 12px; font-weight: 600; color: var(--muted); padding: 2px 0 4px; }
-  .hw-stu {
-    display: flex; align-items: center; gap: 9px;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    text-decoration: none; color: inherit;
-  }
-  .hw-stu:last-child { border-bottom: none; }
-  .hw-stu-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--muted2); }
-  .hw-stu-dot.dot-completed { background: var(--green); }
-  .hw-stu-dot.dot-partial { background: var(--yellow); }
-  .hw-stu-dot.dot-opened { background: var(--accent); }
-  .hw-stu-dot.dot-untouched { background: var(--muted2); }
-  .hw-stu-body { flex: 1; min-width: 0; }
-  .hw-stu-name { font-size: 13px; font-weight: 700; color: var(--text); }
-  .hw-stu-sub { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
-  .hw-stu-go { color: var(--muted); font-size: 18px; flex-shrink: 0; }
-
-  .debtor-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
-  }
-  .sec-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 8px; }
   .empty-state { text-align: center; padding: 36px 16px; color: var(--muted); font-size: 13px; font-weight: 600; }
   .empty-icon { font-size: 32px; margin-bottom: 8px; }
 
@@ -326,9 +274,9 @@
       <div>Проверенные</div>
       <div class="hw-tab-sub">{{ $reviewed->count() ?: '—' }}</div>
     </div>
-    <div class="hw-tab" :class="tab === 'stats' && 'active'" @click="tab = 'stats'">
-      <div>Статистика</div>
-      <div class="hw-tab-sub">{{ $stats['students_submitted'] }}/{{ $stats['students_total'] }}</div>
+    <div class="hw-tab" :class="tab === 'undone' && 'active'" @click="tab = 'undone'">
+      <div>Не сделаны</div>
+      <div class="hw-tab-sub">{{ $undone->count() ?: '—' }}</div>
     </div>
   </div>
 
@@ -381,86 +329,37 @@
     @endforelse
   </div>
 
-  <div x-show="tab === 'stats'" x-cloak>
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-num">{{ $stats['students_submitted'] }}</div>
-        <div class="stat-label">сдали</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">{{ max($stats['students_total'] - $stats['students_submitted'], 0) }}</div>
-        <div class="stat-label">не сдали</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">{{ $stats['waiting_review'] }}</div>
-        <div class="stat-label">ждут проверки</div>
-      </div>
-    </div>
-
-    <div class="sec-label">По домашкам</div>
-    @forelse($stats['by_homework'] as $row)
+  {{-- Не сделаны: выдано, но до конца не доведено. Открыть можно только то, где что-то сдано. --}}
+  <div x-show="tab === 'undone'" x-cloak>
+    @forelse($undone as $i => $row)
       @php
-        $submittedRows = collect($row['students'])->filter(fn ($s) => $s['submitted'] > 0 || $s['state'] === 'completed');
-        $missingRows = collect($row['students'])->reject(fn ($s) => $s['submitted'] > 0 || $s['state'] === 'completed');
+        $subText = match ($row['state']) {
+            'partial' => 'сдано ' . $row['submitted'] . ' из ' . ($row['total'] ?: $row['submitted']),
+            'opened' => 'открыл, но ничего не сдал',
+            default => $row['tracks_open'] ? 'не открывал' : 'не сдал',
+        };
+        $when = $row['state'] === 'partial' ? $row['at'] : ($row['assigned_at'] ? 'выдано ' . $row['assigned_at'] : null);
+        $tag = $row['can_open'] ? 'a' : 'div';
       @endphp
-      <div class="hw-card hw-card-fold" x-data="{ open: false }">
-        <div class="hw-fold-head" role="button" tabindex="0"
-             @click="open = !open" @keydown.enter.prevent="open = !open" @keydown.space.prevent="open = !open"
-             :aria-expanded="open ? 'true' : 'false'">
-          <div style="flex:1;min-width:0;">
-            <div class="hw-title">{{ $row['title'] }}</div>
-            <div class="hw-meta">{{ $row['assigned_at']?->format('d.m.Y') }}</div>
-            <div class="stat-bar">
-              <div class="stat-bar-fill" style="width: {{ $row['total'] > 0 ? round($row['submitted'] / $row['total'] * 100) : 0 }}%"></div>
-            </div>
-            {{-- Сводка нужна только у закрытой плашки: раскрытая говорит то же самое поимённо. --}}
-            <div x-show="!open">
-              <div class="hw-meta" style="margin-top:6px;">
-                сдали {{ $row['submitted'] }} из {{ $row['total'] }}@if($row['completed'] !== $row['submitted']) · доделали до конца {{ $row['completed'] }}@endif
-              </div>
-              @if($row['tracks_open'])
-                <div class="hw-meta">
-                  открыли {{ $row['opened'] }} из {{ $row['total'] }}@if($row['opened'] < $row['total']) · не открывали: {{ $row['total'] - $row['opened'] }}@endif
-                </div>
-              @endif
-            </div>
+      <{{ $tag }} class="check-card is-undone" style="--i:{{ $i }}"
+         @if($row['can_open']) href="{{ route('pwa.teacher.homework.submissions', $row['assignment']) }}" @endif>
+        <span class="check-dot dot-{{ $row['state'] }}"></span>
+        <div class="check-body">
+          <div class="check-head">
+            <span class="check-name">{{ $row['name'] }}</span>
+            @if($row['grade'])<span class="check-grade">{{ $row['grade'] }} класс</span>@endif
+            @if($row['is_debt'])<span class="hw-status-badge badge-debt">долг</span>@endif
           </div>
-          <span class="hw-chevron" :class="open && 'is-open'">›</span>
+          <div class="check-title">{{ $row['title'] }}</div>
+          <div class="check-meta">{{ $subText }}@if($when) · {{ $when }}@endif</div>
         </div>
-
-        <div x-show="open" x-cloak x-transition.opacity class="hw-fold-body">
-          <div class="hw-fold-label">Не сдали · {{ $missingRows->count() }}</div>
-          @forelse($missingRows as $s)
-            @include('pwa.teacher.partials.homework-student-row', ['s' => $s])
-          @empty
-            <div class="hw-fold-empty">Сдали все.</div>
-          @endforelse
-
-          <div class="hw-fold-label">Сдали · {{ $submittedRows->count() }}</div>
-          @forelse($submittedRows as $s)
-            @include('pwa.teacher.partials.homework-student-row', ['s' => $s])
-          @empty
-            <div class="hw-fold-empty">Пока никто не сдал.</div>
-          @endforelse
-        </div>
-      </div>
+        @if($row['can_open'])<span class="check-go">›</span>@endif
+      </{{ $tag }}>
     @empty
-      <div class="empty-note">Домашек пока не было.</div>
-    @endforelse
-
-    <div class="sec-label">Кто не делает</div>
-    @forelse($stats['debtors'] as $row)
-      <div class="debtor-row">
-        <div>
-          <div class="student-name">{{ $row['name'] }}@if($row['grade'])<span class="check-grade">{{ $row['grade'] }} класс</span>@endif</div>
-          <div class="student-sub">
-            не сдано работ: {{ $row['missed'] }}@if($row['untouched']) · не открывал: {{ $row['untouched'] }}@endif
-          </div>
-        </div>
-        @if($row['debts'])<span class="hw-status-badge badge-debt">долгов: {{ $row['debts'] }}</span>@endif
+      <div class="empty-state">
+        <div class="empty-icon">🎉</div>
+        Все выданные домашки сделаны.
       </div>
-    @empty
-      <div class="empty-note">Все всё сдают.</div>
     @endforelse
   </div>
 

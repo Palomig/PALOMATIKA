@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 /**
  * Страница домашки учителя — доска проверки: «Новые» (ученик что-то сдал),
- * «Проверенные», «Статистика». Расписания там больше нет.
+ * «Проверенные», «Не сделаны». Расписания там больше нет.
  */
 class TeacherHomeworkReviewBoardTest extends TestCase
 {
@@ -101,7 +101,7 @@ class TeacherHomeworkReviewBoardTest extends TestCase
         $this->assertStringContainsString('9 класс', $newTab);
         $this->assertStringContainsString('ДЗ по уроку 24.07', $newTab);
         // Работа, к которой никто не притрагивался, в «Новых» не висит
-        // (в статистике она законно есть — там показываем все ДЗ).
+        // (во вкладке «Не сделаны» она законно есть).
         $this->assertStringNotContainsString('ДЗ без единой сдачи', $newTab);
         $this->assertStringNotContainsString('Тихон', $newTab);
     }
@@ -143,13 +143,13 @@ class TeacherHomeworkReviewBoardTest extends TestCase
         $response->assertDontSee('Прошлый');
         $response->assertSee('Новые');
         $response->assertSee('Проверенные');
-        $response->assertSee('Статистика');
+        $response->assertSee('Не сделаны');
         // Резервная выдача и привязки профилей никуда не делись.
         $response->assertSee('Выдать ДЗ');
         $response->assertSee('Привязки учеников');
     }
 
-    public function test_statistics_counts_submitted_and_remaining(): void
+    public function test_undone_tab_counts_everyone_who_has_not_finished(): void
     {
         $a = $this->student('Первый');
         $b = $this->student('Второй');
@@ -174,7 +174,7 @@ class TeacherHomeworkReviewBoardTest extends TestCase
             $assignment = HomeworkAssignment::create([
                 'homework_id' => $homework->id,
                 'student_id' => $student->id,
-                'status' => 'started',
+                'status' => $student->id === $a->id ? 'completed' : 'started',
                 'tasks_total' => 1,
             ]);
             if ($student->id === $a->id) {
@@ -184,27 +184,10 @@ class TeacherHomeworkReviewBoardTest extends TestCase
 
         $html = $this->actingAs($this->teacher)->get($this->url())->assertOk()->getContent();
 
-        $this->assertStringContainsString('сдали 1 из 3', $html);
+        // Счётчик на вкладке: двое из трёх не доделали.
+        $this->assertMatchesRegularExpression('~Не сделаны</div>\s*<div class="hw-tab-sub">2</div>~', $html);
+        $this->assertSame(2, substr_count($html, 'check-card is-undone'));
         $this->assertStringContainsString('Общее ДЗ', $html);
-    }
-
-    public function test_statistics_lists_repeat_offenders(): void
-    {
-        $lazy = $this->student('Прогульщик');
-        $ok = $this->student('Молодец');
-
-        // Два незакрытых ДЗ — попадает в «кто не делает».
-        $this->assign($lazy, 'Первое');
-        $this->assign($lazy, 'Второе');
-
-        // Одно незакрытое — ещё не «несколько раз».
-        $this->assign($ok, 'Единственное');
-
-        $html = $this->actingAs($this->teacher)->get($this->url())->assertOk()->getContent();
-
-        $this->assertStringContainsString('Прогульщик', $html);
-        $this->assertStringContainsString('не сдано работ: 2', $html);
-        $this->assertStringNotContainsString('не сдано работ: 1', $html);
     }
 
     public function test_teacher_sees_only_own_homework(): void
