@@ -17,7 +17,7 @@ use InvalidArgumentException;
 class TaskBankResolver
 {
     public const BANKS = ['oge', 'ege', EgeTaskDataService::BANK_BASE,
-                          'vpr', 'alg-topic', 'alg-skill'];
+                          'vpr', 'alg-topic', 'alg-skill', SkillsTaskDataService::BANK];
 
     public const SUPPORTED_TYPES = ['expression', 'choice'];
 
@@ -34,6 +34,7 @@ class TaskBankResolver
             'vpr'       => $this->fromVpr($refs),
             'alg-topic' => $this->fromAlgTopic($refs),
             'alg-skill' => $this->fromAlgSkill($refs),
+            SkillsTaskDataService::BANK => $this->fromSkills($refs),
             default     => throw new InvalidArgumentException("Unknown bank: {$bank}"),
         };
     }
@@ -89,6 +90,17 @@ class TaskBankResolver
         $topic = (new AlgTaskDataService((int) $refs['grade']))->getTopicData($refs['topic_id']);
         [$z, $task] = $this->findTaskInBlocks($topic['blocks'] ?? [], $refs['zadanie_number'], $refs['task_id']);
         $label = "Алгебра · {$refs['grade']} класс · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
+        return $this->normalize($task, $z, $label);
+    }
+
+    private function fromSkills(array $refs): array
+    {
+        $this->requireRefs($refs, ['topic_id', 'zadanie_number', 'task_id']);
+        $svc = new SkillsTaskDataService();
+        $topic = $svc->getTopicData($refs['topic_id']);
+        [$z, $task] = $this->findTaskInBlocks($topic['blocks'] ?? [], $refs['zadanie_number'], $refs['task_id']);
+        $title = $svc->getTopicMeta((string) $refs['topic_id'])['title'];
+        $label = "Скиллы · {$title} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
         return $this->normalize($task, $z, $label);
     }
 

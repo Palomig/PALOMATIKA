@@ -154,6 +154,7 @@ class LessonHomeworkSuggestionService
             'ege'       => new EgeTaskDataService(),
             'vpr'       => new VprTaskDataService((int) $refs['grade']),
             'alg-topic' => new AlgTaskDataService((int) $refs['grade']),
+            SkillsTaskDataService::BANK => new SkillsTaskDataService(),
             default     => throw new InvalidArgumentException("Unknown bank: {$bank}"),
         };
     }

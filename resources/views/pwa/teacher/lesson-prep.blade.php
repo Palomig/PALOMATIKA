@@ -965,8 +965,12 @@
       headerHtml(expr) {
         const s = String(expr || '');
         // В узкой ячейке грида формулы не рендерим — только компактный текст.
-        if (s.includes('$') || /[а-яё]/i.test(s)) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
-        return this.renderLatex(s.slice(0, 40));
+        if (/[а-яё]/i.test(s)) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
+        // Чистая формула в $…$ (банк «Скиллы»): без маркеров это bare-latex,
+        // текстом она показала бы «{,}» и «\cdot» как есть.
+        const bare = s.replace(/^\s*\$+|\$+\s*$/g, '');
+        if (bare.includes('$')) return this.escapeHtml(bare.replace(/\$/g, '').slice(0, 40));
+        return this.renderLatex(bare.length > 40 ? bare.slice(0, 40).replace(/\\[a-z]*$/, '') : bare);
       },
 
       // Прогон KaTeX auto-render по странице (тексты задач 2й части с $...$).

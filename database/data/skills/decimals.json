@@ -1,0 +1,650 @@
+{
+  "bank": "skills",
+  "topic": "01",
+  "meta": {
+    "title": "Десятичные дроби",
+    "description": "Сложение, вычитание, умножение и деление десятичных дробей: сто примеров по три действия в каждом."
+  },
+  "generator": {
+    "script": "scripts/generate-skills-decimals.py",
+    "seed": 20260920
+  },
+  "zadaniya": [
+    {
+      "number": 1,
+      "title": "Сложение, вычитание и умножение",
+      "instruction": "Найдите значение выражения:",
+      "type": "expression",
+      "status": "production",
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "$24{,}2 \\cdot 8{,}8 + 34{,}4 - 25$",
+          "answer": "222,36",
+          "status": "production"
+        },
+        {
+          "id": 2,
+          "expression": "$(12 - 7{,}9) \\cdot (41{,}2 + 38{,}3)$",
+          "answer": "325,95",
+          "status": "production"
+        },
+        {
+          "id": 3,
+          "expression": "$5{,}8 \\cdot (46 - 4{,}3 + 7{,}9)$",
+          "answer": "287,68",
+          "status": "production"
+        },
+        {
+          "id": 4,
+          "expression": "$20 \\cdot 15{,}92 - (14{,}4 + 39{,}3)$",
+          "answer": "264,7",
+          "status": "production"
+        },
+        {
+          "id": 5,
+          "expression": "$25 \\cdot 36{,}1 + 40{,}8 - 5{,}14$",
+          "answer": "938,16",
+          "status": "production"
+        },
+        {
+          "id": 6,
+          "expression": "$22{,}3 + 7{,}69 \\cdot 15{,}5 - 5$",
+          "answer": "136,495",
+          "status": "production"
+        },
+        {
+          "id": 7,
+          "expression": "$4 \\cdot (24{,}9 + 14{,}1 - 6{,}25)$",
+          "answer": "131",
+          "status": "production"
+        },
+        {
+          "id": 8,
+          "expression": "$(16 + 28{,}1) \\cdot 17{,}1 - 5{,}23$",
+          "answer": "748,88",
+          "status": "production"
+        },
+        {
+          "id": 9,
+          "expression": "$10{,}1 \\cdot 28{,}6 - 20 + 7{,}17$",
+          "answer": "276,03",
+          "status": "production"
+        },
+        {
+          "id": 10,
+          "expression": "$(11{,}23 + 29{,}5 - 25) \\cdot 1{,}9$",
+          "answer": "29,887",
+          "status": "production"
+        },
+        {
+          "id": 11,
+          "expression": "$(1{,}9 + 22{,}6 - 14{,}8) \\cdot 35{,}2$",
+          "answer": "341,44",
+          "status": "production"
+        },
+        {
+          "id": 12,
+          "expression": "$(3{,}52 + 11{,}6) \\cdot 38{,}1 - 11$",
+          "answer": "565,072",
+          "status": "production"
+        },
+        {
+          "id": 13,
+          "expression": "$36{,}2 + 10{,}6 \\cdot 14{,}7 - 38{,}7$",
+          "answer": "153,32",
+          "status": "production"
+        },
+        {
+          "id": 14,
+          "expression": "$(3 + 43{,}7 - 28{,}9) \\cdot 9{,}16$",
+          "answer": "163,048",
+          "status": "production"
+        },
+        {
+          "id": 15,
+          "expression": "$10 \\cdot (9{,}7 - 3{,}53 + 21{,}44)$",
+          "answer": "276,1",
+          "status": "production"
+        },
+        {
+          "id": 16,
+          "expression": "$10{,}9 + 17{,}2 \\cdot 16{,}54 - 26{,}5$",
+          "answer": "268,888",
+          "status": "production"
+        },
+        {
+          "id": 17,
+          "expression": "$37{,}3 + (15{,}7 - 3{,}12) \\cdot 19{,}9$",
+          "answer": "287,642",
+          "status": "production"
+        },
+        {
+          "id": 18,
+          "expression": "$(11{,}25 + 14{,}96) \\cdot 13{,}9 - 39$",
+          "answer": "325,319",
+          "status": "production"
+        },
+        {
+          "id": 19,
+          "expression": "$17{,}46 + 14{,}2 \\cdot 31{,}3 - 43{,}2$",
+          "answer": "418,72",
+          "status": "production"
+        },
+        {
+          "id": 20,
+          "expression": "$41{,}3 + 43{,}8 \\cdot (33{,}8 - 21{,}01)$",
+          "answer": "601,502",
+          "status": "production"
+        },
+        {
+          "id": 21,
+          "expression": "$17{,}19 + 11{,}5 \\cdot 20{,}39 - 44$",
+          "answer": "207,675",
+          "status": "production"
+        },
+        {
+          "id": 22,
+          "expression": "$22{,}5 \\cdot 24{,}62 - 4{,}14 + 27{,}5$",
+          "answer": "577,31",
+          "status": "production"
+        },
+        {
+          "id": 23,
+          "expression": "$(7{,}27 - 6{,}36 + 5{,}6) \\cdot 47{,}3$",
+          "answer": "307,923",
+          "status": "production"
+        },
+        {
+          "id": 24,
+          "expression": "$(8{,}49 + 11{,}86) \\cdot (31{,}4 - 5{,}34)$",
+          "answer": "530,321",
+          "status": "production"
+        },
+        {
+          "id": 25,
+          "expression": "$(17{,}7 + 18{,}77 - 15{,}53) \\cdot 6{,}05$",
+          "answer": "126,687",
+          "status": "production"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Сложение, вычитание и деление",
+      "instruction": "Найдите значение выражения:",
+      "type": "expression",
+      "status": "production",
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "$27{,}1 + 33{,}1 - 27{,}2 : 4$",
+          "answer": "53,4",
+          "status": "production"
+        },
+        {
+          "id": 2,
+          "expression": "$38{,}6 - 34{,}6 + 34{,}7 : 2$",
+          "answer": "21,35",
+          "status": "production"
+        },
+        {
+          "id": 3,
+          "expression": "$(15{,}5 - 7{,}4 + 6) : 0{,}5$",
+          "answer": "28,2",
+          "status": "production"
+        },
+        {
+          "id": 4,
+          "expression": "$22{,}9 - (1{,}9 + 3{,}2 : 4)$",
+          "answer": "20,2",
+          "status": "production"
+        },
+        {
+          "id": 5,
+          "expression": "$(33{,}2 - 15{,}8) : 2{,}4 + 4$",
+          "answer": "11,25",
+          "status": "production"
+        },
+        {
+          "id": 6,
+          "expression": "$(25{,}2 + 37{,}8) : 3{,}5 - 15$",
+          "answer": "3",
+          "status": "production"
+        },
+        {
+          "id": 7,
+          "expression": "$48{,}1 : 0{,}4 + 4{,}5 - 6$",
+          "answer": "118,75",
+          "status": "production"
+        },
+        {
+          "id": 8,
+          "expression": "$4 + 34{,}5 : 0{,}05 - 9{,}4$",
+          "answer": "684,6",
+          "status": "production"
+        },
+        {
+          "id": 9,
+          "expression": "$(34{,}8 + 38{,}2) : 0{,}2 - 3{,}6$",
+          "answer": "361,4",
+          "status": "production"
+        },
+        {
+          "id": 10,
+          "expression": "$38{,}7 : 1{,}25 - 20{,}8 + 8$",
+          "answer": "18,16",
+          "status": "production"
+        },
+        {
+          "id": 11,
+          "expression": "$39{,}2 : 0{,}4 + 24{,}2 - 43{,}8$",
+          "answer": "78,4",
+          "status": "production"
+        },
+        {
+          "id": 12,
+          "expression": "$19{,}4 : 0{,}4 - (28{,}4 + 10{,}88)$",
+          "answer": "9,22",
+          "status": "production"
+        },
+        {
+          "id": 13,
+          "expression": "$10{,}2 + 12{,}24 : 0{,}8 - 3{,}8$",
+          "answer": "21,7",
+          "status": "production"
+        },
+        {
+          "id": 14,
+          "expression": "$(6{,}7 + 18{,}66 - 1{,}8) : 0{,}5$",
+          "answer": "47,12",
+          "status": "production"
+        },
+        {
+          "id": 15,
+          "expression": "$(19{,}7 + 3{,}6) : 1{,}25 - 10{,}8$",
+          "answer": "7,84",
+          "status": "production"
+        },
+        {
+          "id": 16,
+          "expression": "$5{,}9 + 20{,}46 - 3{,}3 : 2{,}5$",
+          "answer": "25,04",
+          "status": "production"
+        },
+        {
+          "id": 17,
+          "expression": "$24{,}56 - (11{,}43 + 30{,}1 : 5)$",
+          "answer": "7,11",
+          "status": "production"
+        },
+        {
+          "id": 18,
+          "expression": "$(31{,}3 - 7{,}27) : 0{,}15 + 8$",
+          "answer": "168,2",
+          "status": "production"
+        },
+        {
+          "id": 19,
+          "expression": "$(13{,}25 + 34{,}1 - 27{,}7) : 2{,}5$",
+          "answer": "7,86",
+          "status": "production"
+        },
+        {
+          "id": 20,
+          "expression": "$45 + 19{,}32 : 0{,}8 - 5{,}76$",
+          "answer": "63,39",
+          "status": "production"
+        },
+        {
+          "id": 21,
+          "expression": "$19{,}1 : 0{,}2 - 19{,}25 + 46{,}4$",
+          "answer": "122,65",
+          "status": "production"
+        },
+        {
+          "id": 22,
+          "expression": "$9{,}5 + 14{,}45 : 0{,}05 - 30{,}5$",
+          "answer": "268",
+          "status": "production"
+        },
+        {
+          "id": 23,
+          "expression": "$22{,}8 + 40{,}1 : 0{,}05 - 18{,}27$",
+          "answer": "806,53",
+          "status": "production"
+        },
+        {
+          "id": 24,
+          "expression": "$47{,}8 + 17{,}31 - 8{,}19 : 0{,}6$",
+          "answer": "51,46",
+          "status": "production"
+        },
+        {
+          "id": 25,
+          "expression": "$(34{,}5 + 2{,}47 - 11{,}57) : 0{,}25$",
+          "answer": "101,6",
+          "status": "production"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Сложение, умножение и деление",
+      "instruction": "Найдите значение выражения:",
+      "type": "expression",
+      "status": "production",
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "$(11{,}7 + 10{,}8) \\cdot 11{,}2 : 4$",
+          "answer": "63",
+          "status": "production"
+        },
+        {
+          "id": 2,
+          "expression": "$10{,}8 : 2{,}4 + 6 \\cdot 12{,}8$",
+          "answer": "81,3",
+          "status": "production"
+        },
+        {
+          "id": 3,
+          "expression": "$14{,}4 : 1{,}6 \\cdot (20 + 46{,}9)$",
+          "answer": "602,1",
+          "status": "production"
+        },
+        {
+          "id": 4,
+          "expression": "$48{,}2 : 5 \\cdot (42{,}3 + 5{,}3)$",
+          "answer": "458,864",
+          "status": "production"
+        },
+        {
+          "id": 5,
+          "expression": "$29{,}1 \\cdot 4 : 1{,}5 + 33{,}4$",
+          "answer": "111",
+          "status": "production"
+        },
+        {
+          "id": 6,
+          "expression": "$30 \\cdot (22{,}8 + 36{,}2) : 2{,}5$",
+          "answer": "708",
+          "status": "production"
+        },
+        {
+          "id": 7,
+          "expression": "$11{,}4 \\cdot (45{,}5 : 0{,}7 + 6)$",
+          "answer": "809,4",
+          "status": "production"
+        },
+        {
+          "id": 8,
+          "expression": "$33{,}7 \\cdot 1{,}9 + 12{,}4 : 0{,}4$",
+          "answer": "95,03",
+          "status": "production"
+        },
+        {
+          "id": 9,
+          "expression": "$14{,}1 : 1{,}5 + 34{,}8 \\cdot 15{,}2$",
+          "answer": "538,36",
+          "status": "production"
+        },
+        {
+          "id": 10,
+          "expression": "$(21{,}7 + 22{,}02) : 4 \\cdot 27{,}8$",
+          "answer": "303,854",
+          "status": "production"
+        },
+        {
+          "id": 11,
+          "expression": "$33{,}5 + 31{,}8 \\cdot 4 : 0{,}75$",
+          "answer": "203,1",
+          "status": "production"
+        },
+        {
+          "id": 12,
+          "expression": "$12 \\cdot (39{,}7 + 2{,}8 : 0{,}35)$",
+          "answer": "572,4",
+          "status": "production"
+        },
+        {
+          "id": 13,
+          "expression": "$45{,}9 \\cdot (7{,}1 + 7{,}7 : 0{,}7)$",
+          "answer": "830,79",
+          "status": "production"
+        },
+        {
+          "id": 14,
+          "expression": "$(46{,}3 + 8{,}84 \\cdot 31) : 1{,}5$",
+          "answer": "213,56",
+          "status": "production"
+        },
+        {
+          "id": 15,
+          "expression": "$5 \\cdot 2{,}22 : 0{,}75 + 17{,}3$",
+          "answer": "32,1",
+          "status": "production"
+        },
+        {
+          "id": 16,
+          "expression": "$(12{,}5 \\cdot 0{,}7 + 17{,}85) : 0{,}4$",
+          "answer": "66,5",
+          "status": "production"
+        },
+        {
+          "id": 17,
+          "expression": "$22{,}2 + 3{,}01 : 0{,}5 \\cdot 15{,}5$",
+          "answer": "115,51",
+          "status": "production"
+        },
+        {
+          "id": 18,
+          "expression": "$12{,}57 + 4 : 0{,}25 \\cdot 32{,}7$",
+          "answer": "535,77",
+          "status": "production"
+        },
+        {
+          "id": 19,
+          "expression": "$(25 + 35{,}3) : 0{,}75 \\cdot 6{,}35$",
+          "answer": "510,54",
+          "status": "production"
+        },
+        {
+          "id": 20,
+          "expression": "$(7{,}8 + 18{,}12) \\cdot 14{,}28 : 0{,}6$",
+          "answer": "616,896",
+          "status": "production"
+        },
+        {
+          "id": 21,
+          "expression": "$0{,}1 : 2{,}5 \\cdot (8{,}16 + 21{,}54)$",
+          "answer": "1,188",
+          "status": "production"
+        },
+        {
+          "id": 22,
+          "expression": "$12{,}4 + 4{,}62 \\cdot 11{,}5 : 0{,}75$",
+          "answer": "83,24",
+          "status": "production"
+        },
+        {
+          "id": 23,
+          "expression": "$5{,}54 \\cdot (12{,}25 : 0{,}25 + 13)$",
+          "answer": "343,48",
+          "status": "production"
+        },
+        {
+          "id": 24,
+          "expression": "$24{,}5 : 0{,}25 \\cdot 5{,}59 + 28{,}1$",
+          "answer": "575,92",
+          "status": "production"
+        },
+        {
+          "id": 25,
+          "expression": "$13{,}95 \\cdot 5{,}44 : 2{,}4 + 45{,}5$",
+          "answer": "77,12",
+          "status": "production"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Вычитание, умножение и деление",
+      "instruction": "Найдите значение выражения:",
+      "type": "expression",
+      "status": "production",
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "$25 \\cdot 7{,}2 - 32{,}4 : 1{,}2$",
+          "answer": "153",
+          "status": "production"
+        },
+        {
+          "id": 2,
+          "expression": "$(12 \\cdot 12{,}9 - 24{,}4) : 3{,}2$",
+          "answer": "40,75",
+          "status": "production"
+        },
+        {
+          "id": 3,
+          "expression": "$22{,}7 \\cdot 27{,}6 : 8 - 25{,}5$",
+          "answer": "52,815",
+          "status": "production"
+        },
+        {
+          "id": 4,
+          "expression": "$32{,}3 \\cdot 10{,}6 : 0{,}4 - 4$",
+          "answer": "851,95",
+          "status": "production"
+        },
+        {
+          "id": 5,
+          "expression": "$(41{,}4 \\cdot 10{,}1 - 1{,}1) : 4$",
+          "answer": "104,26",
+          "status": "production"
+        },
+        {
+          "id": 6,
+          "expression": "$33{,}2 \\cdot 12 - 5{,}7 : 0{,}15$",
+          "answer": "360,4",
+          "status": "production"
+        },
+        {
+          "id": 7,
+          "expression": "$42{,}8 : 4 \\cdot (32{,}8 - 14{,}75)$",
+          "answer": "193,135",
+          "status": "production"
+        },
+        {
+          "id": 8,
+          "expression": "$(0{,}9 - 1{,}62 : 4{,}5) \\cdot 8$",
+          "answer": "4,32",
+          "status": "production"
+        },
+        {
+          "id": 9,
+          "expression": "$19{,}8 : 0{,}8 \\cdot 13{,}82 - 3$",
+          "answer": "339,045",
+          "status": "production"
+        },
+        {
+          "id": 10,
+          "expression": "$(29{,}6 - 7 : 2{,}5) \\cdot 7{,}81$",
+          "answer": "209,308",
+          "status": "production"
+        },
+        {
+          "id": 11,
+          "expression": "$18{,}21 \\cdot (30{,}6 : 1{,}8 - 12)$",
+          "answer": "91,05",
+          "status": "production"
+        },
+        {
+          "id": 12,
+          "expression": "$(31{,}2 : 0{,}8 - 8) \\cdot 19{,}59$",
+          "answer": "607,29",
+          "status": "production"
+        },
+        {
+          "id": 13,
+          "expression": "$(33{,}1 - 2{,}3) : 2 \\cdot 24{,}75$",
+          "answer": "381,15",
+          "status": "production"
+        },
+        {
+          "id": 14,
+          "expression": "$(36{,}4 : 1{,}4 - 0{,}9) \\cdot 36{,}8$",
+          "answer": "923,68",
+          "status": "production"
+        },
+        {
+          "id": 15,
+          "expression": "$(43{,}9 : 2 - 17{,}9) \\cdot 23{,}52$",
+          "answer": "95,256",
+          "status": "production"
+        },
+        {
+          "id": 16,
+          "expression": "$9{,}2 \\cdot 4{,}9 : 0{,}4 - 47{,}7$",
+          "answer": "65",
+          "status": "production"
+        },
+        {
+          "id": 17,
+          "expression": "$14{,}6 : 0{,}4 \\cdot (20{,}95 - 5{,}5)$",
+          "answer": "563,925",
+          "status": "production"
+        },
+        {
+          "id": 18,
+          "expression": "$9{,}1 : 1{,}25 \\cdot 22{,}6 - 23{,}1$",
+          "answer": "141,428",
+          "status": "production"
+        },
+        {
+          "id": 19,
+          "expression": "$18{,}3 \\cdot (20 - 23{,}55 : 1{,}25)$",
+          "answer": "21,228",
+          "status": "production"
+        },
+        {
+          "id": 20,
+          "expression": "$(18{,}95 - 8{,}5 : 2{,}5) \\cdot 33{,}9$",
+          "answer": "527,145",
+          "status": "production"
+        },
+        {
+          "id": 21,
+          "expression": "$4{,}21 \\cdot (39{,}2 - 4{,}1 : 0{,}5)$",
+          "answer": "130,51",
+          "status": "production"
+        },
+        {
+          "id": 22,
+          "expression": "$7{,}7 \\cdot (47{,}6 : 0{,}5 - 17{,}67)$",
+          "answer": "596,981",
+          "status": "production"
+        },
+        {
+          "id": 23,
+          "expression": "$17{,}8 \\cdot (16{,}15 - 3{,}2) : 0{,}25$",
+          "answer": "922,04",
+          "status": "production"
+        },
+        {
+          "id": 24,
+          "expression": "$23{,}36 \\cdot 6{,}3 : 0{,}9 - 0{,}67$",
+          "answer": "162,85",
+          "status": "production"
+        },
+        {
+          "id": 25,
+          "expression": "$(24{,}53 : 2{,}2 - 10{,}39) \\cdot 29{,}9$",
+          "answer": "22,724",
+          "status": "production"
+        }
+      ]
+    }
+  ]
+}
