@@ -22,6 +22,9 @@ class LessonTaskPickerService
 {
     public const TASK_TYPE_FALLBACK = 'expression';
 
+    /** Вкладки пикера; сбрасывается импортом банков, у которых состав вкладок зависит от данных. */
+    public const CLASSES_CACHE_KEY = 'picker:classes:v4';
+
     /** Разделы ОГЭ. У прочих банков разделов нет. */
     public const OGE_SECTIONS = [
         'part1' => ['title' => '1я часть',      'topics' => ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19']],
@@ -81,8 +84,8 @@ class LessonTaskPickerService
      */
     public function availableClasses(): array
     {
-        // v3: рядом с профилем встала база ЕГЭ, состав вкладок изменился.
-        return Cache::remember('picker:classes:v3', now()->addHours(12), function () {
+        // v4: добавилась вкладка «Скиллы» — сквозные навыки без класса.
+        return Cache::remember(self::CLASSES_CACHE_KEY, now()->addHours(12), function () {
             $classes = [];
 
             foreach ([5, 6, 7, 8] as $grade) {
@@ -117,6 +120,12 @@ class LessonTaskPickerService
             if ($this->bankHasTasks(EgeTaskDataService::BANK_BASE, null)) {
                 $classes[] = ['id' => 'ege_b', 'label' => '10–11 ЕГЭ (Б)',
                               'bank' => EgeTaskDataService::BANK_BASE, 'grade' => 11, 'banks' => null];
+            }
+            // «Скиллы» — навыки сквозь классы (десятичные дроби и т.п.), поэтому
+            // без grade: вкладка стоит после экзаменов, а не среди классов.
+            if ($this->bankHasTasks(SkillsTaskDataService::BANK, null)) {
+                $classes[] = ['id' => 'skills', 'label' => 'Скиллы',
+                              'bank' => SkillsTaskDataService::BANK, 'grade' => null, 'banks' => null];
             }
 
             return $classes;
@@ -159,6 +168,7 @@ class LessonTaskPickerService
             EgeTaskDataService::BANK_BASE => $this->egeTopics(EgeTaskDataService::LEVEL_BASE),
             'vpr'       => $grade ? $this->vprTopics($grade) : [],
             'alg-topic' => $grade ? $this->algTopics($grade) : [],
+            SkillsTaskDataService::BANK => $this->skillsTopics(),
             default     => [],
         };
 
@@ -314,7 +324,10 @@ class LessonTaskPickerService
                 $number = (int) ($z['number'] ?? 0);
                 // «Новые задания» живут в zadanie с number 0 — для раздела 'new' это валидно.
                 if (!$number && !($isNewZadanie && $section === 'new')) continue;
-                $instruction = $this->shorten((string) ($z['instruction'] ?? ''), 80);
+                // У банка «Скиллы» инструкция одна на тему («Найдите значение
+                // выражения»), а задания различаются набором действий — их
+                // название лежит в `title` и в списке говорит больше инструкции.
+                $instruction = $this->shorten((string) ($z['title'] ?? $z['instruction'] ?? ''), 80);
                 // Подтипы — второй уровень внутри задания: серии с разными
                 // условиями, размеченные `tasks:seed-subtypes`.
                 $subtypes = is_array($z['subtypes'] ?? null) ? array_values($z['subtypes']) : [];
@@ -408,6 +421,7 @@ class LessonTaskPickerService
             'alg-topic' => isset($refs['grade'])
                 ? ((new AlgTaskDataService((int) $refs['grade']))->getBlocks($topicId))
                 : [],
+            SkillsTaskDataService::BANK => (new SkillsTaskDataService())->getBlocks($topicId),
             default     => [],
         };
     }
@@ -617,6 +631,14 @@ class LessonTaskPickerService
             $result[] = ['id' => $id, 'title' => (string) ($meta['title'] ?? "Тема $id")];
         }
         return $result;
+    }
+
+    private function skillsTopics(): array
+    {
+        return array_map(
+            static fn (array $t) => ['id' => $t['id'], 'title' => $t['title']],
+            (new SkillsTaskDataService())->getTopics()
+        );
     }
 
     private function shorten(string $s, int $n): string
