@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Homework;
 use App\Models\LessonSession;
 use App\Models\Task;
+use App\Models\TeacherStudent;
 use App\Models\TaskGroup;
 use App\Models\User;
 use App\Services\LessonSessionService;
@@ -118,6 +120,42 @@ class SkillsBankTest extends TestCase
 
         $this->assertSame('skills', $task->fresh()->bank);
         $this->assertSame($first['answer'], $task->correct_answer);
+    }
+
+    /**
+     * «Домашка по скиллам» с экрана урока: те же picker_tasks, что шлёт
+     * шит урока, только bank='skills' и своё название. Задачи попадают
+     * в домашку снапшотом с ответом — ученику есть что решать и что проверять.
+     */
+    public function test_skills_homework_is_assigned_from_the_lesson_sheet(): void
+    {
+        $this->import();
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'student']);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
+        $session = LessonSession::create(['teacher_id' => $teacher->id, 'status' => LessonSession::STATUS_DRAFT, 'join_code' => '4817']);
+
+        $tasks = app(LessonTaskPickerService::class)->tasks('skills', ['topic_id' => '01']);
+        $picked = array_map(fn ($t) => ['bank' => 'skills', 'refs' => [
+            'topic_id' => '01', 'zadanie_number' => $t['zadanie_number'], 'task_id' => $t['id'],
+        ]], [$tasks[0], $tasks[25], $tasks[50]]);
+
+        $this->actingAs($teacher)->post('https://teacher.' . config('app.base_domain') . '/homework/assign', [
+            'type' => 'topic_photo_practice',
+            'lesson_session_id' => $session->id,
+            'title' => 'ДЗ по скиллам 20.09 — Десятичные дроби',
+            'picker_tasks' => json_encode($picked),
+            'student_ids' => [$student->id],
+        ])->assertSessionDoesntHaveErrors()->assertSessionMissing('error');
+
+        $homework = Homework::where('teacher_id', $teacher->id)->first();
+        $this->assertNotNull($homework);
+        $this->assertSame('ДЗ по скиллам 20.09 — Десятичные дроби', $homework->title);
+        $this->assertSame($session->id, $homework->lesson_session_id);
+        $this->assertCount(3, $homework->topicTasks);
+        $this->assertSame($tasks[25]['answer'], $homework->topicTasks[1]->correct_answer);
+        $this->assertSame($tasks[25]['expression'], $homework->topicTasks[1]->task_payload['expression']);
+        $this->assertStringStartsWith('Скиллы · Десятичные дроби', $homework->topicTasks[1]->task_payload['source_label']);
     }
 
     public function test_topic_meta_comes_from_the_file(): void
