@@ -180,6 +180,13 @@
   .hw-card-text { font-size: 14px; color: var(--text); word-break: break-word; }
   .hw-deadline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 700; margin-top: 10px; }
   .hw-deadline input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+  /* Переключатель источника домашки: аналоги задач урока или банк «Скиллы» */
+  .hw-mode { display: flex; gap: 4px; padding: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; }
+  .hw-mode button { flex: 1; padding: 9px 10px; border: none; border-radius: 9px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 800; cursor: pointer; }
+  .hw-mode button.active { background: var(--accent-bg); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent-bd); }
+  .hw-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .hw-pill { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 13px; font-weight: 700; cursor: pointer; }
+  .hw-pill.active { border-color: var(--accent-bd); background: var(--accent-bg); color: var(--accent); }
 
   /* Разбор домашки — вторая стадия проверки, приехавшая в урок */
   .review-card { border-color: var(--purple-bd); }
@@ -510,8 +517,8 @@
   <div class="btn-row">
     <button class="btn btn-primary" x-show="status === 'draft'" @click="startLesson" :disabled="tasks.length === 0">▶ Запустить</button>
     <button class="btn btn-danger" x-show="status === 'live'" @click="endLesson">■ Завершить</button>
-    <button class="btn" @click="openHomework()" :disabled="tasks.length === 0"
-            title="Предложить ученикам аналогичные задачи как домашку">📚 Домашка по уроку</button>
+    <button class="btn" @click="openHomework()"
+            title="Аналоги задач урока или примеры из банка «Скиллы»">📚 Домашка</button>
     <button class="btn" :disabled="creatingNext" @click="createNextLesson"
             x-text="creatingNext ? 'создаём…' : '📅 Следующий урок'"
             title="Черновик на то же время через неделю — с заметкой и заданиями заранее"></button>
@@ -530,8 +537,14 @@
       </template>
 
       <div class="ns-head">
-        <span class="ns-title">📚 Домашка по уроку</span>
+        <span class="ns-title" x-text="hwMode === 'skills' ? '📚 Домашка по скиллам' : '📚 Домашка по уроку'"></span>
         <button type="button" class="ns-close" @click="hwOpen = false" aria-label="Закрыть">✕</button>
+      </div>
+
+      {{-- Источник задач: аналоги разобранного на уроке или сквозные навыки --}}
+      <div class="hw-mode" role="tablist">
+        <button type="button" :class="hwMode === 'lesson' ? 'active' : ''" @click="hwSetMode('lesson')">По уроку</button>
+        <button type="button" :class="hwMode === 'skills' ? 'active' : ''" @click="hwSetMode('skills')">По скиллам</button>
       </div>
 
       <div class="hw-prior" x-show="hwPrior.length" x-cloak>
@@ -544,6 +557,8 @@
 
       <template x-if="!hwLoading">
         <div>
+          {{-- По уроку: аналоги разобранных задач --}}
+          <div x-show="hwMode === 'lesson'">
           <div class="ns-sub">
             <span x-text="'Выбрано задач: ' + hwSelectedCount()"></span>
             <span style="display: flex; gap: 8px;">
@@ -553,7 +568,8 @@
           </div>
 
           <div x-show="!hwGroups.length" class="hw-muted" style="padding: 12px 0;">
-            Для задач этого урока аналогов не нашлось.
+            <span x-show="tasks.length">Для задач этого урока аналогов не нашлось.</span>
+            <span x-show="!tasks.length">На уроке ещё нет задач — аналоги подбирать не из чего. Загляни в «По скиллам».</span>
           </div>
 
           <template x-for="g in hwGroups" :key="g.key">
@@ -576,6 +592,53 @@
               </div>
             </div>
           </template>
+          </div>
+
+          {{-- По скиллам: навык → группы примеров из банка «Скиллы» --}}
+          <div x-show="hwMode === 'skills'">
+            <div x-show="hwSkillsLoading" class="hw-muted" style="padding: 12px 0;">Загружаю скиллы…</div>
+            <div x-show="!hwSkillsLoading && !hwSkillTopics.length" class="hw-muted" style="padding: 12px 0;">
+              В банке «Скиллы» пока нет тем.
+            </div>
+            <div class="hw-pills" x-show="hwSkillTopics.length > 1">
+              <template x-for="t in hwSkillTopics" :key="'hw-sk-' + t.id">
+                <button type="button" class="hw-pill" :class="hwSkillTopicId === String(t.id) ? 'active' : ''"
+                        @click="hwChooseSkillTopic(t.id)" x-text="t.title"></button>
+              </template>
+            </div>
+            <div class="ns-sub" x-show="hwSkillTopicId">
+              <span x-text="hwSkillTopicTitle() + ' · выбрано: ' + hwSelectedCount()"></span>
+              <span style="display: flex; gap: 8px;">
+                <button type="button" class="ns-toggle-all" @click="hwSkillPickEach(3)">По 3 из каждой</button>
+                <button type="button" class="ns-toggle-all" @click="hwSkillPickRandom(10)">Случайные 10</button>
+                <button type="button" class="ns-toggle-all" @click="hwClear()">Снять всё</button>
+              </span>
+            </div>
+            <div x-show="hwSkillTasksLoading" class="hw-muted" style="padding: 12px 0;">Загружаю примеры…</div>
+            <template x-for="g in hwSkillGroups" :key="'hw-sg-' + g.key">
+              <div class="hw-group" style="margin-top: 10px;">
+                <div class="hw-group-head">
+                  <span class="hw-group-label" x-text="g.label"></span>
+                  <span class="hw-muted" x-text="g.suggestions.length + ' примеров · выбрано ' + hwGroupSelectedCount(g)"></span>
+                </div>
+                <div class="hw-cards">
+                  <template x-for="(s, si) in hwSkillVisible(g)" :key="g.key + '-' + si">
+                    <label class="hw-card" :class="hwIsSelected(s) ? 'active' : ''">
+                      <input type="checkbox" :checked="hwIsSelected(s)" @change="hwToggle(s)">
+                      <span class="hw-card-body">
+                        <span class="hw-card-text" x-html="renderLatex(s.preview_text)"></span>
+                      </span>
+                    </label>
+                  </template>
+                  {{-- 25 примеров в группе: показываем первые шесть, остальное по кнопке --}}
+                  <button type="button" class="ns-toggle-all" style="align-self: flex-start;"
+                          x-show="g.suggestions.length > hwSkillPreview"
+                          @click="hwSkillExpanded[g.key] = !hwSkillExpanded[g.key]; typeset()"
+                          x-text="hwSkillExpanded[g.key] ? 'Свернуть' : ('Ещё ' + (g.suggestions.length - hwSkillPreview))"></button>
+                </div>
+              </div>
+            </template>
+          </div>
 
           <div class="ns-sub" style="margin-top: 8px;">
             <span x-text="'Кому: ' + hwSelectedStudents.length"></span>
@@ -737,9 +800,18 @@
       hwGroups: [],
       hwStudents: [],           // [{id, name, participant}]
       hwPrior: [],
-      hwSelectedKeys: [],       // ключи выбранных задач-аналогов
+      hwSelectedKeys: [],       // ключи выбранных задач (аналоги и скиллы вместе)
       hwSelectedStudents: [],   // id выбранных учеников
       hwDeadline: '',
+      // 📚 По скиллам: банк «Скиллы» без привязки к задачам урока
+      hwMode: 'lesson',         // lesson | skills
+      hwSkillsLoading: false,
+      hwSkillTopics: [],        // [{id, title}]
+      hwSkillTopicId: '',
+      hwSkillTasksLoading: false,
+      hwSkillGroups: [],        // [{key, label, suggestions:[{bank, refs, preview_text}]}]
+      hwSkillPreview: 6,        // сколько карточек группы видно до «Ещё N»
+      hwSkillExpanded: {},      // group_key → развёрнута ли группа
 
       async init() {
         await this.refreshState();
@@ -965,8 +1037,12 @@
       headerHtml(expr) {
         const s = String(expr || '');
         // В узкой ячейке грида формулы не рендерим — только компактный текст.
-        if (s.includes('$') || /[а-яё]/i.test(s)) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
-        return this.renderLatex(s.slice(0, 40));
+        if (/[а-яё]/i.test(s)) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
+        // Чистая формула в $…$ (банк «Скиллы»): без маркеров это bare-latex,
+        // текстом она показала бы «{,}» и «\cdot» как есть.
+        const bare = s.replace(/^\s*\$+|\$+\s*$/g, '');
+        if (bare.includes('$')) return this.escapeHtml(bare.replace(/\$/g, '').slice(0, 40));
+        return this.renderLatex(bare.length > 40 ? bare.slice(0, 40).replace(/\\[a-z]*$/, '') : bare);
       },
 
       // Прогон KaTeX auto-render по странице (тексты задач 2й части с $...$).
@@ -1034,24 +1110,117 @@
         else this.hwSelectedStudents.splice(i, 1);
       },
       hwTitle() {
+        const d = new Date();
+        const dm = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
+        // Выбранное из скиллов и из аналогов может лежать в одной домашке —
+        // заголовок называет то, из чего она собрана.
+        const picked = this.hwPickedSuggestions();
+        const fromSkills = picked.some(s => s.bank === 'skills');
+        const fromLesson = picked.some(s => s.bank !== 'skills');
         const topics = [];
         for (const g of this.hwGroups) {
           const m = String(g.label).match(/Тема\s+([^\s·]+)/);
           if (m && !topics.includes(m[1])) topics.push(m[1]);
         }
-        const d = new Date();
-        const dm = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
-        return topics.length ? `ДЗ по уроку ${dm} — темы ${topics.join(', ')}` : `ДЗ по уроку ${dm}`;
+        const lessonTitle = topics.length ? `ДЗ по уроку ${dm} — темы ${topics.join(', ')}` : `ДЗ по уроку ${dm}`;
+        const skillsTitle = `ДЗ по скиллам ${dm} — ${this.hwSkillTopicTitle() || 'скиллы'}`;
+        if (fromSkills && !fromLesson) return skillsTitle;
+        if (fromSkills && fromLesson) return `${lessonTitle} + скиллы`;
+        return lessonTitle;
+      },
+      // Все карточки обоих режимов, отмеченные галочкой.
+      hwPickedSuggestions() {
+        const picked = [];
+        for (const g of [...this.hwGroups, ...this.hwSkillGroups]) {
+          for (const s of (g.suggestions || [])) {
+            if (this.hwSelectedKeys.includes(this.hwKey(s))) picked.push(s);
+          }
+        }
+        return picked;
       },
       // Собирает [{bank, refs}] по выбранным ключам из всех групп.
       hwPickerTasksJson() {
-        const picked = [];
-        for (const g of this.hwGroups) {
-          for (const s of (g.suggestions || [])) {
-            if (this.hwSelectedKeys.includes(this.hwKey(s))) picked.push({ bank: s.bank, refs: s.refs });
+        return JSON.stringify(this.hwPickedSuggestions().map(s => ({ bank: s.bank, refs: s.refs })));
+      },
+
+      // --- 📚 По скиллам ---
+      async hwSetMode(mode) {
+        this.hwMode = mode;
+        if (mode === 'skills' && !this.hwSkillTopics.length) await this.hwLoadSkillTopics();
+      },
+      hwSkillTopicTitle() {
+        return (this.hwSkillTopics.find(t => String(t.id) === this.hwSkillTopicId) || {}).title || '';
+      },
+      async hwFetchSkills(params) {
+        const q = new URLSearchParams({ bank: 'skills', ...params });
+        const r = await fetch(`/lessons/picker-options?${q}`, { headers: { 'Accept': 'application/json' }, credentials: 'include' });
+        if (!r.ok) throw new Error('load failed');
+        return r.json();
+      },
+      async hwLoadSkillTopics() {
+        this.hwSkillsLoading = true;
+        try {
+          const d = await this.hwFetchSkills({});
+          this.hwSkillTopics = (d.topics || []).map(t => ({ id: String(t.id), title: t.title }));
+          // Один навык — сразу показываем его примеры, пилюли ни к чему.
+          if (this.hwSkillTopics.length && !this.hwSkillTopicId) await this.hwChooseSkillTopic(this.hwSkillTopics[0].id);
+        } catch (e) {
+          alert('Не удалось загрузить банк «Скиллы»');
+        } finally {
+          this.hwSkillsLoading = false;
+        }
+      },
+      async hwChooseSkillTopic(id) {
+        this.hwSkillTopicId = String(id);
+        this.hwSkillGroups = [];
+        this.hwSkillExpanded = {};
+        this.hwSkillTasksLoading = true;
+        try {
+          const d = await this.hwFetchSkills({ topic_id: this.hwSkillTopicId });
+          // Та же форма, что у аналогов урока: {bank, refs, preview_text} —
+          // ключи, галочки и отправка общие.
+          const groups = new Map();
+          for (const t of (d.tasks || [])) {
+            const key = String(t.group_key ?? '');
+            if (!groups.has(key)) groups.set(key, { key, label: t.group_label || '', suggestions: [] });
+            groups.get(key).suggestions.push({
+              bank: 'skills',
+              refs: { topic_id: this.hwSkillTopicId, zadanie_number: t.zadanie_number, task_id: t.id },
+              preview_text: t.expression,
+            });
+          }
+          this.hwSkillGroups = [...groups.values()];
+        } catch (e) {
+          alert('Не удалось загрузить примеры');
+        } finally {
+          this.hwSkillTasksLoading = false;
+          this.typeset();
+        }
+      },
+      hwSkillVisible(g) {
+        return this.hwSkillExpanded[g.key] ? g.suggestions : g.suggestions.slice(0, this.hwSkillPreview);
+      },
+      hwGroupSelectedCount(g) {
+        return (g.suggestions || []).filter(s => this.hwIsSelected(s)).length;
+      },
+      // Быстрый набор: из каждой группы первые N ещё не выбранных — они идут
+      // от простых к сложным, так что «по 3» даёт ровную домашку.
+      hwSkillPickEach(n) {
+        for (const g of this.hwSkillGroups) {
+          let added = 0;
+          for (const s of g.suggestions) {
+            if (added >= n) break;
+            if (!this.hwIsSelected(s)) { this.hwSelectedKeys.push(this.hwKey(s)); added++; }
           }
         }
-        return JSON.stringify(picked);
+      },
+      hwSkillPickRandom(n) {
+        const pool = this.hwSkillGroups.flatMap(g => g.suggestions).filter(s => !this.hwIsSelected(s));
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        for (const s of pool.slice(0, n)) this.hwSelectedKeys.push(this.hwKey(s));
       },
 
       async openHomework() {
@@ -1060,6 +1229,9 @@
         this.hwGroups = [];
         this.hwSelectedKeys = [];
         this.hwSubmitting = false;
+        // Без задач на уроке аналогов не будет — открываем сразу скиллы.
+        this.hwMode = this.tasks.length ? 'lesson' : 'skills';
+        if (this.hwMode === 'skills' && !this.hwSkillTopics.length) this.hwLoadSkillTopics();
         try {
           const r = await fetch(`/lessons/${this.sessionId}/homework-suggestions`,
             { headers: { 'Accept': 'application/json' }, credentials: 'include' });

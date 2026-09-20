@@ -51,6 +51,8 @@ class DeployController extends Controller
         'tasks:import-json',
         'tasks:import-fipi',
         'tasks:import-fipi-ege',
+        // Банк «Скиллы»: файлы едут с кодом, в базу их кладёт эта команда.
+        'tasks:import-skills',
         'tasks:refresh-ege-meta',
         'tasks:dump-json',
         'tasks:retire-legacy',
