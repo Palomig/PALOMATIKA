@@ -11,8 +11,8 @@
     </div>
   </div>
 
-  @if(session('error'))
-  <div class="note" style="border-left-color:var(--red);color:var(--red);">{{ session('error') }}</div>
+  @if(session('error') || !empty($error))
+  <div class="note" style="border-left-color:var(--red);color:var(--red);">{{ session('error') ?: $error }}</div>
   @endif
 
   <div class="card anim-up" style="animation-delay:0.05s;">
