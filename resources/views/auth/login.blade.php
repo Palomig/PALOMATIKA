@@ -256,7 +256,7 @@ function loginForm() {
     return {
         email: '',
         password: '',
-        remember: false,
+        remember: true,
         loading: false,
         error: '',
         shaking: false,

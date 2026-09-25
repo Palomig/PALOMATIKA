@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Auth\RememberDevices;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -19,6 +20,9 @@ class FlushUserSessions extends Command
         // Also clear remember token
         DB::table('users')->where('id', $userId)->update(['remember_token' => null]);
         $this->info("Cleared remember_token for user {$userId}.");
+
+        $devices = RememberDevices::forgetAll($userId);
+        $this->info("Forgot {$devices} remembered device(s) for user {$userId}.");
 
         return 0;
     }
