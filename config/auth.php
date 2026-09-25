@@ -37,7 +37,8 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
+            // session + «запомнить меня» по устройствам (App\Auth\DeviceSessionGuard)
+            'driver' => 'device-session',
             'provider' => 'users',
         ],
     ],
