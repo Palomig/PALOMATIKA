@@ -280,6 +280,9 @@
     </div>
   </div>
 
+
+  @include('pwa.student.partials.skills-bank-entry', ['variant' => 'row'])
+
   <div class="sec-label">Выбери тему</div>
   <div class="topics-row">
     @foreach($topicsMeta as $tid => $meta)

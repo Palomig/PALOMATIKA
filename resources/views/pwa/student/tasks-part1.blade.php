@@ -241,6 +241,9 @@
     <div class="hero-sub">задания 1–19 · {{ $taskCount }} заданий</div>
   </div>
 
+
+  @include('pwa.student.partials.skills-bank-entry', ['variant' => 'row'])
+
   <div class="sec-label">Выбери задание</div>
   <div class="topics-row">
     @foreach($topicIds as $tid)
