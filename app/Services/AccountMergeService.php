@@ -133,19 +133,23 @@ class AccountMergeService
                 return;
             }
 
-            $this->carryOverIdentity($from, $into);
+            // Сначала снимок донора и очистка его уникальных полей (telegram_chat_id
+            // уникален): перенос до очистки падал на дубле и откатывал всё слияние.
+            $source = clone $from;
 
             // Донора не удаляем: внешние ссылки и аудит должны остаться валидными.
-            // Он просто перестаёт быть входной точкой.
+            // oauth_provider/oauth_id оставляем: вход через тот же Google/Яндекс
+            // находит донора, и ResolveMergedAccount переводит сессию на канонический.
+            // Если стереть, следующий такой вход создаст ещё один новый аккаунт.
             $from->update([
-                'oauth_provider'    => null,
-                'oauth_id'          => null,
                 'telegram_chat_id'  => null,
                 'telegram_oidc_sub' => null,
                 'email'             => null,
                 'merged_into_id'    => $into->id,
                 'merged_at'         => now(),
             ]);
+
+            $this->carryOverIdentity($source, $into);
         });
 
         Log::info('accounts_merged', [
