@@ -9,10 +9,12 @@ class TaskAnswerResolver
     public const UNKNOWN_ANSWER = 'нет в базе';
 
     private MathAnswerParser $mathParser;
+    private AlgebraicAnswerComparator $algebra;
 
-    public function __construct(?MathAnswerParser $mathParser = null)
+    public function __construct(?MathAnswerParser $mathParser = null, ?AlgebraicAnswerComparator $algebra = null)
     {
         $this->mathParser = $mathParser ?? new MathAnswerParser();
+        $this->algebra = $algebra ?? new AlgebraicAnswerComparator();
     }
 
     public function resolveFromVariantTask(array $taskData): ?string
@@ -117,6 +119,16 @@ class TaskAnswerResolver
 
         $userRaw = (string) ($userAnswer ?? '');
         $user = $this->normalize($userRaw);
+
+        // Буквенный эталон (банк «Скиллы»: сокращение дробей) — сверяем
+        // значением, а не записью: «2x/3y», «(2x)/(3y)» и «\frac{2x}{3y}» это
+        // один ответ, а дословное сравнение завалило бы их все.
+        if ($this->algebra->looksAlgebraic($correctAnswer)) {
+            $verdict = $this->algebra->equals($correctAnswer, $userRaw);
+            if ($verdict !== null) {
+                return $verdict;
+            }
+        }
 
         // Ответы-множества и промежутки — вторая часть ОГЭ (№20, 22, 23, 25).
         // Строкой их не сверить: «12sqrt(6)», «12√6» и «sqrt(864)» — одно

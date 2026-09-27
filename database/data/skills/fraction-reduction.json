@@ -1,0 +1,2429 @@
+{
+  "bank": "skills",
+  "topic": "02",
+  "meta": {
+    "title": "Сокращение дробей",
+    "description": "Сокращение алгебраических дробей: одночлены и степени, разложение на множители, знаки и группировка. 8 класс, три уровня по 100 примеров."
+  },
+  "generator": {
+    "script": "scripts/generate-skills-fraction-reduction.py",
+    "seed": 20260927
+  },
+  "zadaniya": [
+    {
+      "number": 8,
+      "title": "8 класс",
+      "grade": 8,
+      "instruction": "Сократите дробь:",
+      "type": "expression",
+      "status": "production",
+      "subtypes": [
+        "Уровень 1 — одночлены и степени",
+        "Уровень 2 — общий множитель и формулы",
+        "Уровень 3 — знаки, группировка, кубы"
+      ],
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "$\\dfrac{5m}{11m}$",
+          "answer": "5/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 2,
+          "expression": "$\\dfrac{13z^2}{11z^2}$",
+          "answer": "13/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 3,
+          "expression": "$\\dfrac{11a}{14a}$",
+          "answer": "11/14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 4,
+          "expression": "$\\dfrac{14n^2}{7n^2}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 5,
+          "expression": "$\\dfrac{17d}{12d}$",
+          "answer": "17/12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 6,
+          "expression": "$\\dfrac{12y^2}{18y^2}$",
+          "answer": "2/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 7,
+          "expression": "$\\dfrac{5d^2}{18d^2}$",
+          "answer": "5/18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 8,
+          "expression": "$\\dfrac{19d^2}{17d^2}$",
+          "answer": "19/17",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 9,
+          "expression": "$\\dfrac{20x^2}{16x^2}$",
+          "answer": "5/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 10,
+          "expression": "$\\dfrac{21c}{9c}$",
+          "answer": "7/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 11,
+          "expression": "$\\dfrac{3z^2}{22z^2}$",
+          "answer": "3/22",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 12,
+          "expression": "$\\dfrac{23y^2}{16y^2}$",
+          "answer": "23/16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 13,
+          "expression": "$\\dfrac{25b^2}{21b^2}$",
+          "answer": "25/21",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 14,
+          "expression": "$\\dfrac{15b}{10d}$",
+          "answer": "3b/(2d)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 15,
+          "expression": "$\\dfrac{18d}{8n}$",
+          "answer": "9d/(4n)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 16,
+          "expression": "$\\dfrac{16y}{28z}$",
+          "answer": "4y/(7z)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 17,
+          "expression": "$\\dfrac{10q}{30n}$",
+          "answer": "q/(3n)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 18,
+          "expression": "$\\dfrac{25m}{30a}$",
+          "answer": "5m/(6a)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 19,
+          "expression": "$\\dfrac{32d}{28p}$",
+          "answer": "8d/(7p)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 20,
+          "expression": "$\\dfrac{36z}{18n}$",
+          "answer": "2z/n",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 21,
+          "expression": "$\\dfrac{12z}{36p}$",
+          "answer": "z/(3p)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 22,
+          "expression": "$\\dfrac{36q}{12d}$",
+          "answer": "3q/d",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 23,
+          "expression": "$\\dfrac{40b}{35z}$",
+          "answer": "8b/(7z)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 24,
+          "expression": "$\\dfrac{12z}{48d}$",
+          "answer": "z/(4d)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 25,
+          "expression": "$\\dfrac{48p}{54x}$",
+          "answer": "8p/(9x)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 26,
+          "expression": "$\\dfrac{54b}{36q}$",
+          "answer": "3b/(2q)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 27,
+          "expression": "$\\dfrac{8np}{10px}$",
+          "answer": "4n/(5x)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 28,
+          "expression": "$\\dfrac{4az}{14bz}$",
+          "answer": "2a/(7b)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 29,
+          "expression": "$\\dfrac{6mz}{16bm}$",
+          "answer": "3z/(8b)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 30,
+          "expression": "$\\dfrac{10my}{16mz}$",
+          "answer": "5y/(8z)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 31,
+          "expression": "$\\dfrac{21xy}{15dy}$",
+          "answer": "7x/(5d)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 32,
+          "expression": "$\\dfrac{21ny}{9cn}$",
+          "answer": "7y/(3c)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 33,
+          "expression": "$\\dfrac{18xy}{21dx}$",
+          "answer": "6y/(7d)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 34,
+          "expression": "$\\dfrac{15nq}{24nx}$",
+          "answer": "5q/(8x)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 35,
+          "expression": "$\\dfrac{24qz}{6nz}$",
+          "answer": "4q/n",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 36,
+          "expression": "$\\dfrac{15dx}{25mx}$",
+          "answer": "3d/(5m)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 37,
+          "expression": "$\\dfrac{25dm}{30dn}$",
+          "answer": "5m/(6n)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 38,
+          "expression": "$\\dfrac{35an}{15ay}$",
+          "answer": "7n/(3y)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 39,
+          "expression": "$\\dfrac{20mz}{35bz}$",
+          "answer": "4m/(7b)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 40,
+          "expression": "$\\dfrac{21d^3m}{12d^4m}$",
+          "answer": "7/(4d)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 41,
+          "expression": "$\\dfrac{12nz^2}{18n^2z^4}$",
+          "answer": "2/(3nz^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 42,
+          "expression": "$\\dfrac{36q^5z^2}{12q^5z^3}$",
+          "answer": "3/z",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 43,
+          "expression": "$\\dfrac{27d^4q^2}{6d^3q^5}$",
+          "answer": "9d/(2q^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 44,
+          "expression": "$\\dfrac{49qy^4}{14q^2y^5}$",
+          "answer": "7/(2qy)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 45,
+          "expression": "$\\dfrac{18a^5y^2}{15a^3y^5}$",
+          "answer": "6a^2/(5y^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 46,
+          "expression": "$\\dfrac{28b^5d^3}{56b^4d}$",
+          "answer": "bd^2/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 47,
+          "expression": "$\\dfrac{10m^2n^5}{6m^5n^3}$",
+          "answer": "5n^2/(3m^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 48,
+          "expression": "$\\dfrac{14mn^4}{8m^6n}$",
+          "answer": "7n^3/(4m^5)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 49,
+          "expression": "$\\dfrac{63c^5x^6}{18c^3x^2}$",
+          "answer": "7c^2x^4/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 50,
+          "expression": "$\\dfrac{27b^3z^4}{63b^6z^3}$",
+          "answer": "3z/(7b^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 51,
+          "expression": "$\\dfrac{21d^3p^2}{12d^6p^3}$",
+          "answer": "7/(4d^3p)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 52,
+          "expression": "$\\dfrac{21bz^6}{12b^2z^6}$",
+          "answer": "7/(4b)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 53,
+          "expression": "$\\dfrac{3bp}{-2p^3}$",
+          "answer": "-3b/(2p^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 54,
+          "expression": "$\\dfrac{-2a^2q^3}{-8a^4}$",
+          "answer": "q^3/(4a^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 55,
+          "expression": "$\\dfrac{-4ax^2}{10a^4}$",
+          "answer": "-2x^2/(5a^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 56,
+          "expression": "$\\dfrac{-2an^3}{12n^4}$",
+          "answer": "-a/(6n)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 57,
+          "expression": "$\\dfrac{6b^2n^3}{-9b^3}$",
+          "answer": "-2n^3/(3b)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 58,
+          "expression": "$\\dfrac{-10b^3c}{-7c^4}$",
+          "answer": "10b^3/(7c^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 59,
+          "expression": "$\\dfrac{-11a^2x}{-6x^2}$",
+          "answer": "11a^2/(6x)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 60,
+          "expression": "$\\dfrac{-12cn^2}{6n^4}$",
+          "answer": "-2c/(n^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 61,
+          "expression": "$\\dfrac{11np}{-9n^4}$",
+          "answer": "-11p/(9n^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 62,
+          "expression": "$\\dfrac{12b^2d}{-9b^3}$",
+          "answer": "-4d/(3b)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 63,
+          "expression": "$\\dfrac{-12c^3n^2}{10n^4}$",
+          "answer": "-6c^3/(5n^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 64,
+          "expression": "$\\dfrac{-12b^2q}{12q^3}$",
+          "answer": "-b^2/(q^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 65,
+          "expression": "$6ny^5 : (2ny)$",
+          "answer": "3y^4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 66,
+          "expression": "$6az^3 : (3az^2)$",
+          "answer": "2z",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 67,
+          "expression": "$6ay^4 : (3ay^2)$",
+          "answer": "2y^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 68,
+          "expression": "$9cm^5 : (3cm^3)$",
+          "answer": "3m^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 69,
+          "expression": "$12cq^5 : (2cq^3)$",
+          "answer": "6q^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 70,
+          "expression": "$18m^4p : (6m^3p)$",
+          "answer": "3m",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 71,
+          "expression": "$24dq^4 : (6dq^2)$",
+          "answer": "4q^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 72,
+          "expression": "$28am^5 : (7am^2)$",
+          "answer": "4m^3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 73,
+          "expression": "$32b^5p : (8bp)$",
+          "answer": "4b^4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 74,
+          "expression": "$36c^2m : (6cm)$",
+          "answer": "6c",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 75,
+          "expression": "$36pq^3 : (6pq)$",
+          "answer": "6q^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 76,
+          "expression": "$45pz^4 : (9pz^2)$",
+          "answer": "5z^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 77,
+          "expression": "$\\dfrac{16^{10}}{4^{19}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 78,
+          "expression": "$\\dfrac{125^{12}}{25^{18}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 79,
+          "expression": "$\\dfrac{16^{13}}{4^{25}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 80,
+          "expression": "$\\dfrac{9^{15}}{27^{9}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 81,
+          "expression": "$\\dfrac{4^{18}}{8^{12}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 82,
+          "expression": "$\\dfrac{9^{22}}{81^{11}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 83,
+          "expression": "$\\dfrac{16^{23}}{4^{46}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 84,
+          "expression": "$\\dfrac{4^{24}}{8^{16}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 85,
+          "expression": "$\\dfrac{8^{24}}{4^{36}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 86,
+          "expression": "$\\dfrac{25^{24}}{125^{16}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 87,
+          "expression": "$\\dfrac{16^{25}}{4^{50}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 88,
+          "expression": "$\\dfrac{625^{30}}{25^{60}}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 89,
+          "expression": "$\\dfrac{36z^2}{30z^3}$",
+          "answer": "6/(5z)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 90,
+          "expression": "$\\dfrac{12m^3}{15m}$",
+          "answer": "4m^2/5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 91,
+          "expression": "$\\dfrac{18b}{15b^4}$",
+          "answer": "6/(5b^3)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 92,
+          "expression": "$\\dfrac{8n^2}{16n^4}$",
+          "answer": "1/(2n^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 93,
+          "expression": "$\\dfrac{48n^2}{16n^4}$",
+          "answer": "3/(n^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 94,
+          "expression": "$\\dfrac{60d^4}{24d}$",
+          "answer": "5d^3/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 95,
+          "expression": "$\\dfrac{36b^5}{12b^3}$",
+          "answer": "3b^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 96,
+          "expression": "$\\dfrac{24b^6}{18b^3}$",
+          "answer": "4b^3/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 97,
+          "expression": "$\\dfrac{6d^6}{12d^4}$",
+          "answer": "d^2/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 98,
+          "expression": "$\\dfrac{36b^5}{42b^7}$",
+          "answer": "6/(7b^2)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 99,
+          "expression": "$\\dfrac{20n^3}{16n^7}$",
+          "answer": "5/(4n^4)",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 100,
+          "expression": "$\\dfrac{48n^7}{56n^5}$",
+          "answer": "6n^2/7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 101,
+          "expression": "$\\dfrac{4b(x-7)}{2(x-7)}$",
+          "answer": "2b",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 102,
+          "expression": "$\\dfrac{4c(d-4)}{9(d-4)}$",
+          "answer": "4c/9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 103,
+          "expression": "$\\dfrac{9b(m-9)}{11(m-9)}$",
+          "answer": "9b/11",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 104,
+          "expression": "$\\dfrac{8d(n-12)}{13(n-12)}$",
+          "answer": "8d/13",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 105,
+          "expression": "$\\dfrac{q(n-8)}{15(n-8)}$",
+          "answer": "q/15",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 106,
+          "expression": "$\\dfrac{9n(y-6)}{16(y-6)}$",
+          "answer": "9n/16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 107,
+          "expression": "$\\dfrac{6d(n+9)}{17(n+9)}$",
+          "answer": "6d/17",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 108,
+          "expression": "$\\dfrac{9n(m-7)}{18(m-7)}$",
+          "answer": "n/2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 109,
+          "expression": "$\\dfrac{9b(b+y)}{6y(b+y)}$",
+          "answer": "3b/(2y)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 110,
+          "expression": "$\\dfrac{15d(d+z)}{12z(d+z)}$",
+          "answer": "5d/(4z)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 111,
+          "expression": "$\\dfrac{10b(b+z)}{15z(b+z)}$",
+          "answer": "2b/(3z)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 112,
+          "expression": "$\\dfrac{16b(b+d)}{8d(b+d)}$",
+          "answer": "2b/d",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 113,
+          "expression": "$\\dfrac{20m(m-x)}{10x(m-x)}$",
+          "answer": "2m/x",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 114,
+          "expression": "$\\dfrac{15c(c-d)}{25d(c-d)}$",
+          "answer": "3c/(5d)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 115,
+          "expression": "$\\dfrac{20p(p+z)}{30z(p+z)}$",
+          "answer": "2p/(3z)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 116,
+          "expression": "$\\dfrac{10c(c-q)}{30q(c-q)}$",
+          "answer": "c/(3q)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 117,
+          "expression": "$\\dfrac{2n+8a}{6an}$",
+          "answer": "(n+4a)/(3an)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 118,
+          "expression": "$\\dfrac{3b-12p}{15bp}$",
+          "answer": "(b-4p)/(5bp)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 119,
+          "expression": "$\\dfrac{6p-6q}{15pq}$",
+          "answer": "(2p-2q)/(5pq)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 120,
+          "expression": "$\\dfrac{5x+15n}{20nx}$",
+          "answer": "(x+3n)/(4nx)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 121,
+          "expression": "$\\dfrac{4q-16x}{24qx}$",
+          "answer": "(q-4x)/(6qx)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 122,
+          "expression": "$\\dfrac{25z+10d}{5dz}$",
+          "answer": "(5z+2d)/(dz)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 123,
+          "expression": "$\\dfrac{10m+30c}{5cm}$",
+          "answer": "(2m+6c)/(cm)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 124,
+          "expression": "$\\dfrac{10q+10x}{2q}$",
+          "answer": "(5q+5x)/q",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 125,
+          "expression": "$\\dfrac{9m+12x}{3m}$",
+          "answer": "(3m+4x)/m",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 126,
+          "expression": "$\\dfrac{6n-12d}{6n}$",
+          "answer": "(n-2d)/n",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 127,
+          "expression": "$\\dfrac{10a-14d}{2a}$",
+          "answer": "(5a-7d)/a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 128,
+          "expression": "$\\dfrac{6a+14p}{10a}$",
+          "answer": "(3a+7p)/(5a)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 129,
+          "expression": "$\\dfrac{8m+14x}{2m}$",
+          "answer": "(4m+7x)/m",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 130,
+          "expression": "$\\dfrac{25b+25z}{20b}$",
+          "answer": "(5b+5z)/(4b)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 131,
+          "expression": "$\\dfrac{2n-16}{5(n-8)}$",
+          "answer": "2/5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 132,
+          "expression": "$\\dfrac{3x-6}{6(x-2)}$",
+          "answer": "1/2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 133,
+          "expression": "$\\dfrac{3z-9}{6(z-3)}$",
+          "answer": "1/2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 134,
+          "expression": "$\\dfrac{7d-28}{4(d-4)}$",
+          "answer": "7/4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 135,
+          "expression": "$\\dfrac{8q-48}{4(q-6)}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 136,
+          "expression": "$\\dfrac{9b-27}{4(b-3)}$",
+          "answer": "9/4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 137,
+          "expression": "$\\dfrac{9y-36}{4(y-4)}$",
+          "answer": "9/4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 138,
+          "expression": "$\\dfrac{6n(d+3)}{6d+18}$",
+          "answer": "n",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 139,
+          "expression": "$\\dfrac{6a(x+6)}{6x+36}$",
+          "answer": "a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 140,
+          "expression": "$\\dfrac{8d(y+3)}{3y+9}$",
+          "answer": "8d/3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 141,
+          "expression": "$\\dfrac{3q(m+4)}{8m+32}$",
+          "answer": "3q/8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 142,
+          "expression": "$\\dfrac{3b(x+3)}{9x+27}$",
+          "answer": "b/3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 143,
+          "expression": "$\\dfrac{9y(p+8)}{4p+32}$",
+          "answer": "9y/4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 144,
+          "expression": "$\\dfrac{9x(z+5)}{8z+40}$",
+          "answer": "9x/8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 145,
+          "expression": "$\\dfrac{q+2a}{q^2+2aq}$",
+          "answer": "1/q",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 146,
+          "expression": "$\\dfrac{c-3d}{c^2-3cd}$",
+          "answer": "1/c",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 147,
+          "expression": "$\\dfrac{b-4c}{b^2-4bc}$",
+          "answer": "1/b",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 148,
+          "expression": "$\\dfrac{n+4p}{n^2+4np}$",
+          "answer": "1/n",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 149,
+          "expression": "$\\dfrac{z-6x}{z^2-6xz}$",
+          "answer": "1/z",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 150,
+          "expression": "$\\dfrac{z-8c}{z^2-8cz}$",
+          "answer": "1/z",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 151,
+          "expression": "$\\dfrac{a+9n}{a^2+9an}$",
+          "answer": "1/a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 152,
+          "expression": "$\\dfrac{2z^2-4cz}{z-2c}$",
+          "answer": "2z",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 153,
+          "expression": "$\\dfrac{3n^2+6np}{n+2p}$",
+          "answer": "3n",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 154,
+          "expression": "$\\dfrac{7z^2-35cz}{z-5c}$",
+          "answer": "7z",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 155,
+          "expression": "$\\dfrac{6b^2+36bx}{b+6x}$",
+          "answer": "6b",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 156,
+          "expression": "$\\dfrac{7z^2+42nz}{z+6n}$",
+          "answer": "7z",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 157,
+          "expression": "$\\dfrac{6c^2-42cx}{c-7x}$",
+          "answer": "6c",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 158,
+          "expression": "$\\dfrac{6x^2-54nx}{x-9n}$",
+          "answer": "6x",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 159,
+          "expression": "$\\dfrac{q^2-9}{5q+15}$",
+          "answer": "(q-3)/5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 160,
+          "expression": "$\\dfrac{d^2-25}{7d+35}$",
+          "answer": "(d-5)/7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 161,
+          "expression": "$\\dfrac{a^2-49}{7a+49}$",
+          "answer": "(a-7)/7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 162,
+          "expression": "$\\dfrac{n^2-64}{8n+64}$",
+          "answer": "(n-8)/8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 163,
+          "expression": "$\\dfrac{n^2-100}{3n+30}$",
+          "answer": "(n-10)/3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 164,
+          "expression": "$\\dfrac{m^2-121}{2m+22}$",
+          "answer": "(m-11)/2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 165,
+          "expression": "$\\dfrac{x^2-144}{7x+84}$",
+          "answer": "(x-12)/7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 166,
+          "expression": "$\\dfrac{5a-10b}{a^2-4b^2}$",
+          "answer": "5/(a+2b)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 167,
+          "expression": "$\\dfrac{6d-12a}{d^2-4a^2}$",
+          "answer": "6/(d+2a)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 168,
+          "expression": "$\\dfrac{9n-45q}{n^2-25q^2}$",
+          "answer": "9/(n+5q)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 169,
+          "expression": "$\\dfrac{6m-36b}{m^2-36b^2}$",
+          "answer": "6/(m+6b)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 170,
+          "expression": "$\\dfrac{5n-30d}{n^2-36d^2}$",
+          "answer": "5/(n+6d)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 171,
+          "expression": "$\\dfrac{3d-21m}{d^2-49m^2}$",
+          "answer": "3/(d+7m)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 172,
+          "expression": "$\\dfrac{7q-49m}{q^2-49m^2}$",
+          "answer": "7/(q+7m)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 173,
+          "expression": "$\\dfrac{(d+2)^2}{6d^2+12d}$",
+          "answer": "(d+2)/(6d)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 174,
+          "expression": "$\\dfrac{(z+2)^2}{7z^2+14z}$",
+          "answer": "(z+2)/(7z)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 175,
+          "expression": "$\\dfrac{(b+4)^2}{5b^2+20b}$",
+          "answer": "(b+4)/(5b)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 176,
+          "expression": "$\\dfrac{(y+3)^2}{9y^2+27y}$",
+          "answer": "(y+3)/(9y)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 177,
+          "expression": "$\\dfrac{(c+5)^2}{9c^2+45c}$",
+          "answer": "(c+5)/(9c)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 178,
+          "expression": "$\\dfrac{(q+9)^2}{6q^2+54q}$",
+          "answer": "(q+9)/(6q)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 179,
+          "expression": "$\\dfrac{(q+9)^2}{9q^2+81q}$",
+          "answer": "(q+9)/(9q)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 180,
+          "expression": "$\\dfrac{4nz-8z}{(n-2)^2}$",
+          "answer": "4z/(n-2)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 181,
+          "expression": "$\\dfrac{6px-12x}{(p-2)^2}$",
+          "answer": "6x/(p-2)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 182,
+          "expression": "$\\dfrac{2xy-16x}{(y-8)^2}$",
+          "answer": "2x/(y-8)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 183,
+          "expression": "$\\dfrac{3cd-24d}{(c-8)^2}$",
+          "answer": "3d/(c-8)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 184,
+          "expression": "$\\dfrac{4cx-24c}{(x-6)^2}$",
+          "answer": "4c/(x-6)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 185,
+          "expression": "$\\dfrac{7pq-63p}{(q-9)^2}$",
+          "answer": "7p/(q-9)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 186,
+          "expression": "$\\dfrac{9dp-81p}{(d-9)^2}$",
+          "answer": "9p/(d-9)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 187,
+          "expression": "$\\dfrac{x^2+4x+4}{x^2-4}$",
+          "answer": "(x+2)/(x-2)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 188,
+          "expression": "$\\dfrac{n^2+10n+25}{n^2-25}$",
+          "answer": "(n+5)/(n-5)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 189,
+          "expression": "$\\dfrac{z^2+12z+36}{z^2-36}$",
+          "answer": "(z+6)/(z-6)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 190,
+          "expression": "$\\dfrac{m^2+14m+49}{m^2-49}$",
+          "answer": "(m+7)/(m-7)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 191,
+          "expression": "$\\dfrac{p^2+14p+49}{p^2-49}$",
+          "answer": "(p+7)/(p-7)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 192,
+          "expression": "$\\dfrac{a^2+16a+64}{a^2-64}$",
+          "answer": "(a+8)/(a-8)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 193,
+          "expression": "$\\dfrac{p^2+22p+121}{p^2-121}$",
+          "answer": "(p+11)/(p-11)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 194,
+          "expression": "$\\dfrac{d^2-4}{d^2-4d+4}$",
+          "answer": "(d+2)/(d-2)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 195,
+          "expression": "$\\dfrac{a^2-4}{a^2-4a+4}$",
+          "answer": "(a+2)/(a-2)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 196,
+          "expression": "$\\dfrac{a^2-9}{a^2-6a+9}$",
+          "answer": "(a+3)/(a-3)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 197,
+          "expression": "$\\dfrac{d^2-49}{d^2-14d+49}$",
+          "answer": "(d+7)/(d-7)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 198,
+          "expression": "$\\dfrac{c^2-64}{c^2-16c+64}$",
+          "answer": "(c+8)/(c-8)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 199,
+          "expression": "$\\dfrac{m^2-100}{m^2-20m+100}$",
+          "answer": "(m+10)/(m-10)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 200,
+          "expression": "$\\dfrac{q^2-121}{q^2-22q+121}$",
+          "answer": "(q+11)/(q-11)",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 201,
+          "expression": "$\\dfrac{y(d-3q)}{z(3q-d)}$",
+          "answer": "-y/z",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 202,
+          "expression": "$\\dfrac{y(a-3q)}{d(3q-a)}$",
+          "answer": "-y/d",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 203,
+          "expression": "$\\dfrac{b(q-3m)}{x(3m-q)}$",
+          "answer": "-b/x",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 204,
+          "expression": "$\\dfrac{n(q-5x)}{y(5x-q)}$",
+          "answer": "-n/y",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 205,
+          "expression": "$\\dfrac{n(d-7m)}{p(7m-d)}$",
+          "answer": "-n/p",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 206,
+          "expression": "$\\dfrac{a(x-8z)}{m(8z-x)}$",
+          "answer": "-a/m",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 207,
+          "expression": "$\\dfrac{d(b-8a)}{m(8a-b)}$",
+          "answer": "-d/m",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 208,
+          "expression": "$\\dfrac{q(z-9y)}{a(9y-z)}$",
+          "answer": "-q/a",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 209,
+          "expression": "$\\dfrac{9n-36}{4y-ny}$",
+          "answer": "-9/y",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 210,
+          "expression": "$\\dfrac{9q-54}{6m-mq}$",
+          "answer": "-9/m",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 211,
+          "expression": "$\\dfrac{7p-63}{9d-dp}$",
+          "answer": "-7/d",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 212,
+          "expression": "$\\dfrac{9m-81}{9b-bm}$",
+          "answer": "-9/b",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 213,
+          "expression": "$\\dfrac{5a-55}{11d-ad}$",
+          "answer": "-5/d",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 214,
+          "expression": "$\\dfrac{3n-36}{12m-mn}$",
+          "answer": "-3/m",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 215,
+          "expression": "$\\dfrac{2m-26}{13d-dm}$",
+          "answer": "-2/d",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 216,
+          "expression": "$\\dfrac{7z-105}{15c-cz}$",
+          "answer": "-7/c",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 217,
+          "expression": "$\\dfrac{2c-8c^2}{12c^2-3c}$",
+          "answer": "-2/3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 218,
+          "expression": "$\\dfrac{4p-20p^2}{10p^2-2p}$",
+          "answer": "-2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 219,
+          "expression": "$\\dfrac{2n-6n^2}{18n^2-6n}$",
+          "answer": "-1/3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 220,
+          "expression": "$\\dfrac{4c-20c^2}{30c^2-6c}$",
+          "answer": "-2/3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 221,
+          "expression": "$\\dfrac{3z-15z^2}{40z^2-8z}$",
+          "answer": "-3/8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 222,
+          "expression": "$\\dfrac{6y-18y^2}{21y^2-7y}$",
+          "answer": "-6/7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 223,
+          "expression": "$\\dfrac{7n-14n^2}{18n^2-9n}$",
+          "answer": "-7/9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 224,
+          "expression": "$\\dfrac{25-m^2}{2m-10}$",
+          "answer": "-(m+5)/2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 225,
+          "expression": "$\\dfrac{25-x^2}{8x-40}$",
+          "answer": "-(x+5)/8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 226,
+          "expression": "$\\dfrac{81-z^2}{4z-36}$",
+          "answer": "-(z+9)/4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 227,
+          "expression": "$\\dfrac{81-y^2}{2y-18}$",
+          "answer": "-(y+9)/2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 228,
+          "expression": "$\\dfrac{100-x^2}{6x-60}$",
+          "answer": "-(x+10)/6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 229,
+          "expression": "$\\dfrac{100-z^2}{4z-40}$",
+          "answer": "-(z+10)/4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 230,
+          "expression": "$\\dfrac{144-x^2}{4x-48}$",
+          "answer": "-(x+12)/4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 231,
+          "expression": "$\\dfrac{(x-3)^3}{(3-x)^2}$",
+          "answer": "x-3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 232,
+          "expression": "$\\dfrac{(z-3)^3}{(3-z)^2}$",
+          "answer": "z-3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 233,
+          "expression": "$\\dfrac{(d-5)^3}{(5-d)^2}$",
+          "answer": "d-5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 234,
+          "expression": "$\\dfrac{(p-6)^3}{(6-p)^2}$",
+          "answer": "p-6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 235,
+          "expression": "$\\dfrac{(z-7)^3}{(7-z)^2}$",
+          "answer": "z-7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 236,
+          "expression": "$\\dfrac{(m-10)^3}{(10-m)^2}$",
+          "answer": "m-10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 237,
+          "expression": "$\\dfrac{(n-10)^3}{(10-n)^2}$",
+          "answer": "n-10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 238,
+          "expression": "$\\dfrac{da+na-dm-nm}{na-nm}$",
+          "answer": "(d+n)/n",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 239,
+          "expression": "$\\dfrac{cp+xp-cq-xq}{xp-xq}$",
+          "answer": "(c+x)/x",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 240,
+          "expression": "$\\dfrac{zq+pq-zx-px}{pq-px}$",
+          "answer": "(z+p)/p",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 241,
+          "expression": "$\\dfrac{zc+pc-zd-pd}{pc-pd}$",
+          "answer": "(z+p)/p",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 242,
+          "expression": "$\\dfrac{ax+nx-ac-nc}{nx-nc}$",
+          "answer": "(a+n)/n",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 243,
+          "expression": "$\\dfrac{ab+cb-az-cz}{cb-cz}$",
+          "answer": "(a+c)/c",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 244,
+          "expression": "$\\dfrac{qz+nz-qb-nb}{nz-nb}$",
+          "answer": "(q+n)/n",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 245,
+          "expression": "$\\dfrac{3p+ap-3n-an}{5p-5n}$",
+          "answer": "(3+a)/5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 246,
+          "expression": "$\\dfrac{4q+aq-4x-ax}{4q-4x}$",
+          "answer": "(4+a)/4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 247,
+          "expression": "$\\dfrac{7c+dc-7n-dn}{2c-2n}$",
+          "answer": "(7+d)/2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 248,
+          "expression": "$\\dfrac{7a+ma-7b-mb}{2a-2b}$",
+          "answer": "(7+m)/2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 249,
+          "expression": "$\\dfrac{2p+bp-2z-bz}{8p-8z}$",
+          "answer": "(2+b)/8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 250,
+          "expression": "$\\dfrac{5p+yp-5b-yb}{6p-6b}$",
+          "answer": "(5+y)/6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 251,
+          "expression": "$\\dfrac{4d+bd-4p-bp}{7d-7p}$",
+          "answer": "(4+b)/7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 252,
+          "expression": "$\\dfrac{n^2+n+1}{n^3-1}$",
+          "answer": "1/(n-1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 253,
+          "expression": "$\\dfrac{d^2+3d+9}{d^3-27}$",
+          "answer": "1/(d-3)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 254,
+          "expression": "$\\dfrac{m^2+3m+9}{m^3-27}$",
+          "answer": "1/(m-3)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 255,
+          "expression": "$\\dfrac{q^2+4q+16}{q^3-64}$",
+          "answer": "1/(q-4)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 256,
+          "expression": "$\\dfrac{y^2+5y+25}{y^3-125}$",
+          "answer": "1/(y-5)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 257,
+          "expression": "$\\dfrac{b^2+5b+25}{b^3-125}$",
+          "answer": "1/(b-5)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 258,
+          "expression": "$\\dfrac{m^2+6m+36}{m^3-216}$",
+          "answer": "1/(m-6)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 259,
+          "expression": "$(8+n^3) : (2+n)$",
+          "answer": "n^2-2n+4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 260,
+          "expression": "$(8+z^3) : (2+z)$",
+          "answer": "z^2-2z+4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 261,
+          "expression": "$(27+a^3) : (3+a)$",
+          "answer": "a^2-3a+9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 262,
+          "expression": "$(64+y^3) : (4+y)$",
+          "answer": "y^2-4y+16",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 263,
+          "expression": "$(64+m^3) : (4+m)$",
+          "answer": "m^2-4m+16",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 264,
+          "expression": "$(125+y^3) : (5+y)$",
+          "answer": "y^2-5y+25",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 265,
+          "expression": "$(125+c^3) : (5+c)$",
+          "answer": "c^2-5c+25",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 266,
+          "expression": "$\\dfrac{y^5-y^3}{y^4-y^2}$",
+          "answer": "y",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 267,
+          "expression": "$\\dfrac{x^6-x^3}{x^5-x^2}$",
+          "answer": "x",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 268,
+          "expression": "$\\dfrac{b^6-b^4}{b^5-b^3}$",
+          "answer": "b",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 269,
+          "expression": "$\\dfrac{n^7-n^4}{n^5-n^2}$",
+          "answer": "n^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 270,
+          "expression": "$\\dfrac{n^8+n^6}{n^5+n^3}$",
+          "answer": "n^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 271,
+          "expression": "$\\dfrac{m^8-m^5}{m^6-m^3}$",
+          "answer": "m^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 272,
+          "expression": "$\\dfrac{c^{10}-c^7}{c^7-c^4}$",
+          "answer": "c^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 273,
+          "expression": "$\\dfrac{q^5-q^8}{q^6-q^3}$",
+          "answer": "-q^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 274,
+          "expression": "$\\dfrac{y^5-y^8}{y^6-y^3}$",
+          "answer": "-y^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 275,
+          "expression": "$\\dfrac{q^5-q^8}{q^5-q^2}$",
+          "answer": "-q^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 276,
+          "expression": "$\\dfrac{n^8-n^{10}}{n^5-n^3}$",
+          "answer": "-n^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 277,
+          "expression": "$\\dfrac{b^7-b^{11}}{b^8-b^4}$",
+          "answer": "-b^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 278,
+          "expression": "$\\dfrac{m^7-m^{11}}{m^6-m^2}$",
+          "answer": "-m^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 279,
+          "expression": "$\\dfrac{d^7-d^{11}}{d^7-d^3}$",
+          "answer": "-d^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 280,
+          "expression": "$\\dfrac{5c^2-5b^2}{b^2-2bc+c^2}$",
+          "answer": "5(b+c)/(c-b)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 281,
+          "expression": "$\\dfrac{7n^2-7x^2}{x^2-2xn+n^2}$",
+          "answer": "7(x+n)/(n-x)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 282,
+          "expression": "$\\dfrac{8x^2-8p^2}{p^2-2px+x^2}$",
+          "answer": "8(p+x)/(x-p)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 283,
+          "expression": "$\\dfrac{10p^2-10a^2}{a^2-2ap+p^2}$",
+          "answer": "10(a+p)/(p-a)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 284,
+          "expression": "$\\dfrac{10z^2-10c^2}{c^2-2cz+z^2}$",
+          "answer": "10(c+z)/(z-c)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 285,
+          "expression": "$\\dfrac{12d^2-12z^2}{z^2-2zd+d^2}$",
+          "answer": "12(z+d)/(d-z)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 286,
+          "expression": "$\\dfrac{12q^2-12y^2}{y^2-2yq+q^2}$",
+          "answer": "12(y+q)/(q-y)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 287,
+          "expression": "$\\dfrac{q^2+2qx+x^2}{q^2+qx-qp-xp}$",
+          "answer": "(q+x)/(q-p)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 288,
+          "expression": "$\\dfrac{b^2+2bz+z^2}{b^2+bz-bc-zc}$",
+          "answer": "(b+z)/(b-c)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 289,
+          "expression": "$\\dfrac{z^2+2zd+d^2}{z^2+zd-zc-dc}$",
+          "answer": "(z+d)/(z-c)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 290,
+          "expression": "$\\dfrac{n^2+2nq+q^2}{n^2+nq-np-qp}$",
+          "answer": "(n+q)/(n-p)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 291,
+          "expression": "$\\dfrac{a^2+2ab+b^2}{a^2+ab-ap-bp}$",
+          "answer": "(a+b)/(a-p)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 292,
+          "expression": "$\\dfrac{y^2+2yx+x^2}{y^2+yx-ym-xm}$",
+          "answer": "(y+x)/(y-m)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 293,
+          "expression": "$\\dfrac{p^2+2pz+z^2}{p^2+pz-pc-zc}$",
+          "answer": "(p+z)/(p-c)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 294,
+          "expression": "$\\dfrac{x^2-4x+4}{x^2-2x}$",
+          "answer": "(x-2)/x",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 295,
+          "expression": "$\\dfrac{x^2-6x+9}{x^2-3x}$",
+          "answer": "(x-3)/x",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 296,
+          "expression": "$\\dfrac{n^2-6n+9}{n^2-3n}$",
+          "answer": "(n-3)/n",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 297,
+          "expression": "$\\dfrac{n^2-10n+25}{n^2-5n}$",
+          "answer": "(n-5)/n",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 298,
+          "expression": "$\\dfrac{a^2-14a+49}{a^2-7a}$",
+          "answer": "(a-7)/a",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 299,
+          "expression": "$\\dfrac{m^2-14m+49}{m^2-7m}$",
+          "answer": "(m-7)/m",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 300,
+          "expression": "$\\dfrac{x^2-18x+81}{x^2-9x}$",
+          "answer": "(x-9)/x",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        }
+      ]
+    }
+  ]
+}
