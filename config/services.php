@@ -78,8 +78,11 @@ return [
             'client_secret' => env('TELEGRAM_OIDC_CLIENT_SECRET'),
             'redirect'      => env('TELEGRAM_OIDC_REDIRECT', 'https://palomatika.ru/auth/telegram/callback'),
             'authorize_url' => 'https://oauth.telegram.org/auth',
-            'token_url'     => 'https://oauth.telegram.org/token',
-            'jwks_url'      => 'https://oauth.telegram.org/.well-known/jwks.json',
+            // Серверные запросы — через ретранслятор на dev-VPS: Timeweb то и дело
+            // не может соединиться с oauth.telegram.org (таймауты, ~половина входов 25.09).
+            // Браузерный authorize_url и issuer в JWT остаются настоящими.
+            'token_url'     => env('TELEGRAM_OIDC_TOKEN_URL', 'https://oauth.telegram.org/token'),
+            'jwks_url'      => env('TELEGRAM_OIDC_JWKS_URL', 'https://oauth.telegram.org/.well-known/jwks.json'),
             'issuer'        => 'https://oauth.telegram.org',
         ],
     ],
