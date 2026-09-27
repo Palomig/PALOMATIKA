@@ -225,6 +225,8 @@
           </div>
         </a>
 
+        @include('pwa.student.partials.skills-bank-entry')
+
         <button class="fv-cancel" @click="showTaskBase = false">Отмена</button>
       </div>
     </div>

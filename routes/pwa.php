@@ -6,6 +6,7 @@ use App\Http\Controllers\Pwa\EgeStudentController;
 use App\Http\Controllers\Pwa\Entrance10Controller;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\PracticeController;
+use App\Http\Controllers\Pwa\SkillsBankController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\StudentLessonController;
 use App\Http\Controllers\Pwa\StudentNoteController;
@@ -70,6 +71,10 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
             ->middleware('role:teacher,admin')
             ->name('pwa.student.part2.solution');
         Route::get('/tasks-part1', [StudentController::class, 'tasksPart1'])->name('pwa.student.tasks-part1');
+        // Банк «Скиллы» — сквозные навыки, экран учителя (ученику 403 через role middleware)
+        Route::get('/skills', [SkillsBankController::class, 'index'])
+            ->middleware('role:teacher,admin')
+            ->name('pwa.student.skills');
         Route::post('/mini/start', [StudentController::class, 'startMini'])->name('pwa.student.mini.start');
         Route::post('/full/start', [StudentController::class, 'startFull'])->name('pwa.student.full.start');
         Route::get('/test/{attemptId}', [StudentController::class, 'test'])->name('pwa.student.test');
