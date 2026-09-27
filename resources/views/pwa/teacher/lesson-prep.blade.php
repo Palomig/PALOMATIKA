@@ -1179,10 +1179,15 @@
           const d = await this.hwFetchSkills({ topic_id: this.hwSkillTopicId });
           // Та же форма, что у аналогов урока: {bank, refs, preview_text} —
           // ключи, галочки и отправка общие.
+          // Группа — подтип, если он есть: у «Сокращения дробей» это уровень
+          // внутри класса, и без него три сотни карточек легли бы одной кучей.
           const groups = new Map();
           for (const t of (d.tasks || [])) {
-            const key = String(t.group_key ?? '');
-            if (!groups.has(key)) groups.set(key, { key, label: t.group_label || '', suggestions: [] });
+            const key = String(t.subtype_key ?? t.group_key ?? '');
+            const label = t.subtype_label
+              ? `${t.group_label} · ${t.subtype_label}`
+              : (t.group_label || '');
+            if (!groups.has(key)) groups.set(key, { key, label, suggestions: [] });
             groups.get(key).suggestions.push({
               bank: 'skills',
               refs: { topic_id: this.hwSkillTopicId, zadanie_number: t.zadanie_number, task_id: t.id },
