@@ -37,7 +37,7 @@ Lifecycle: `draft` → `live` → `ended`. Миграции v2: `2026_07_16_0000
 | `app/Http/Controllers/Pwa/StudentLessonController.php` | Student API: `join` (по коду), `state` (с блоком `lock`), `answer`, страница урока |
 | `app/Console/Commands/LessonSessionsAutoCloseCommand.php` | Cron: каждые 15 мин закрывает live сессии где `starts_at < now()-3h` |
 | `resources/views/pwa/_shared/task-picker.blade.php` | Общий picker v2 «как база заданий» (см. ниже) |
-| `resources/views/pwa/teacher/lesson-prep.blade.php` | Prep + live grid (Alpine, polling 4с и в draft, и в live); код урока 48px; чипы участников с «отпустить» |
+| `resources/views/pwa/teacher/lesson-prep.blade.php` | Страница урока учителя, собрана под телефон (2026-09-27, вариант A макета palomig.ru/preview/palomatika-lesson/): код одной строкой (тап — крупно), шторка «кто в уроке» (активность, заметки, «отпустить»), вкладки **Задачи · Ответы · Разбор**, нижняя панель ＋задача · домашка · заметка · Запустить/Завершить (после «Завершить» сразу открывается домашка), редкое — в меню «⋯». На «Задачах» условия целиком, в live под каждым — ответы учеников и «не понимает»; «Ответы» — матрица клеток ✓/✗ (тап — ответ, тап по номеру — к условию). Alpine, polling 4с и в draft, и в live |
 | `resources/views/pwa/student/lesson.blade.php` | Страница урока (KaTeX, polling 5с, таймер лока) |
 | `resources/views/pwa/student/partials/lesson-tile.blade.php` | Плитка «УРОК» на dashboard: всегда видна; live-сессия → открыть, иначе модал ввода кода |
 
