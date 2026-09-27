@@ -39,14 +39,20 @@ class SkillsBankTest extends TestCase
         Cache::flush();
     }
 
+    /** Задачи одной темы банка «Скиллы». */
+    private function tasksOf(string $topic)
+    {
+        return Task::whereHas('group', fn ($q) => $q->where('bank', 'skills')->where('topic', $topic));
+    }
+
     public function test_decimals_file_imports_one_hundred_examples_with_three_operations_each(): void
     {
         $this->import();
 
         $this->assertSame(4, TaskGroup::where('bank', 'skills')->where('topic', '01')->count());
-        $this->assertSame(100, Task::whereHas('group', fn ($q) => $q->where('bank', 'skills'))->count());
+        $this->assertSame(100, $this->tasksOf('01')->count());
 
-        $tasks = Task::whereHas('group', fn ($q) => $q->where('bank', 'skills'))->get();
+        $tasks = $this->tasksOf('01')->get();
         foreach ($tasks as $task) {
             $expr = (string) $task->payload['expression'];
             $ops = preg_match_all('/(?<![\\\\{])[+\-:]|\\\\cdot/u', $expr);
@@ -62,7 +68,8 @@ class SkillsBankTest extends TestCase
         $this->import();
         $this->import();
 
-        $this->assertSame(100, Task::whereHas('group', fn ($q) => $q->where('bank', 'skills'))->count());
+        $this->assertSame(100, $this->tasksOf('01')->count());
+        $this->assertSame(300, $this->tasksOf('02')->count());
     }
 
     public function test_skills_tab_appears_after_the_exams(): void
@@ -87,7 +94,7 @@ class SkillsBankTest extends TestCase
         $picker = app(LessonTaskPickerService::class);
 
         $topics = $picker->topics('skills');
-        $this->assertSame([['01', 'Десятичные дроби']],
+        $this->assertSame([['01', 'Десятичные дроби'], ['02', 'Сокращение дробей']],
             array_map(fn ($t) => [$t['id'], $t['title']], $topics));
         $this->assertStringContainsString('$', $topics[0]['preview'], 'превью темы — первый пример');
 
@@ -95,7 +102,8 @@ class SkillsBankTest extends TestCase
         $this->assertCount(100, $tasks);
         $this->assertSame(4, count(array_unique(array_column($tasks, 'group_key'))),
             'четыре задания по набору действий');
-        $this->assertStringContainsString('Сложение, вычитание и умножение', $tasks[0]['group_label']);
+        $this->assertSame('Сложение, вычитание и умножение', $tasks[0]['group_label'],
+            'в «Скиллах» подпись группы — название задания, без «№N ·»');
         $this->assertNotSame('', $tasks[0]['answer']);
     }
 

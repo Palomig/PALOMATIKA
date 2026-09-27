@@ -331,9 +331,14 @@ class LessonTaskPickerService
                 // Подтипы — второй уровень внутри задания: серии с разными
                 // условиями, размеченные `tasks:seed-subtypes`.
                 $subtypes = is_array($z['subtypes'] ?? null) ? array_values($z['subtypes']) : [];
-                $groupLabel = $isNewZadanie
-                    ? self::NEW_ZADANIE_LABEL
-                    : ($instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}");
+                // В «Скиллах» номера заданий нет: группа — это класс или набор
+                // действий, и «№8 · 8 класс» читалось бы нелепо.
+                $groupLabel = match (true) {
+                    $isNewZadanie => self::NEW_ZADANIE_LABEL,
+                    $bank === SkillsTaskDataService::BANK && $instruction !== '' => $instruction,
+                    $instruction !== '' => "№{$number} · {$instruction}",
+                    default => "№{$number}",
+                };
                 // part2: задачи без эталонного ответа (тема 24 — доказательства)
                 // тоже попадают на урок — учитель видит ответ ученика без ✓/✗.
                 foreach ($this->supportedTasks($z, allowMissingAnswer: $section === 'part2') as $t) {
