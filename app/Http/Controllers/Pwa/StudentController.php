@@ -95,8 +95,11 @@ class StudentController extends Controller
         $unverifiedFlag = (bool) ($data['name_unverified'] ?? false);
 
         if (!$unverifiedFlag && !$names->isKnownName($first)) {
-            return back()->withInput()->withErrors([
-                'first_name' => 'Имя «' . $first . '» не найдено в списке. Если вы ввели имя правильно, отметьте «моё имя отсутствует в списке».',
+            // ValidationException: форма шлёт fetch с Accept: json и получает 422 с
+            // текстом. Раньше тут был back() — fetch шёл по редиректу, видел 200
+            // и уводил ученика на главную, а оттуда снова на онбординг, без единого слова.
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'first_name' => 'Имя «' . $first . '» не найдено в списке. Если вы ввели имя правильно, отметьте «Моё имя отсутствует в списке».',
             ]);
         }
 
@@ -108,7 +111,7 @@ class StudentController extends Controller
             'grade_num'               => $data['grade_num'],
             'grade_letter'            => $data['grade_letter'],
             'school_number'           => $data['school_number'],
-            'city'                    => $data['city'] ?: 'Чехов',
+            'city'                    => ($data['city'] ?? null) ?: 'Чехов',
             'onboarding_completed_at' => now(),
         ]);
 
