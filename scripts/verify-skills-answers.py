@@ -52,6 +52,13 @@ def latex_to_plain(tex: str) -> str:
             den, i = take_group(src, i)
             out += f'(({latex_to_plain(num)})/({latex_to_plain(den)}))'
             continue
+        if src.startswith(r'\sqrt', i):
+            body, i = take_group(src, i + len(r'\sqrt'))
+            # «x\sqrt{p}» — умножение: без явного знака sympy склеит «xsqrt»
+            # в одну переменную и развалит её на буквы.
+            glue = '*' if out and (out[-1].isalnum() or out[-1] == ')') else ''
+            out += f'{glue}sqrt({latex_to_plain(body)})'
+            continue
         if src.startswith(r'\cdot', i):
             out, i = out + '*', i + len(r'\cdot')
             continue
@@ -70,8 +77,43 @@ def latex_to_plain(tex: str) -> str:
 
 
 def parse(src: str):
-    # Между соседними буквами — знак умножения: «yn» иначе уедет в функцию Бесселя.
-    return parse_expr(re.sub(r'(?<=[a-z])(?=[a-z])', '*', src), transformations=TRANSFORMS)
+    # Между соседними буквами — знак умножения: «yn» иначе уедет в функцию
+    # Бесселя. Имя функции от этого правила прячем: иначе «sqrt» распадётся
+    # на произведение четырёх переменных.
+    guarded = src.replace('sqrt', '\x01')
+    guarded = re.sub(r'(?<=[a-z])(?=[a-z])', '*', guarded)
+
+    return parse_expr(guarded.replace('\x01', 'sqrt'), transformations=TRANSFORMS)
+
+
+def split_substitution(expression: str) -> tuple[str, dict]:
+    """«$√(ab)$ при $a=2$, $b=18$» → формула и значения букв."""
+    if ' при ' not in expression:
+        return expression, {}
+
+    head, tail = expression.split(' при ', 1)
+    # Десятичную запятую убираем до разбиения списка: «$a=0{,}5$, $b=2$»
+    # иначе рвётся ровно посередине числа.
+    tail = tail.replace('{,}', '.')
+    values = {}
+    for part in tail.split(','):
+        chunk = part.replace('$', '').strip()
+        if '=' not in chunk:
+            continue
+        name, raw = chunk.split('=', 1)
+        values[name.strip()] = parse(latex_to_plain(raw.strip()))
+
+    return head, values
+
+
+def parse_answer(answer: str):
+    """Ответ банка: «6√2», «37+20√3», «3(√7+√3)», «5√2/2», «1,5»."""
+    s = str(answer).replace(',', '.')
+    s = re.sub(r'√\((.*?)\)', r'sqrt(\1)', s)
+    s = re.sub(r'√(\d+)', r'sqrt(\1)', s)
+    s = re.sub(r'(\d|\))(?=(sqrt|\())', r'\1*', s)
+
+    return parse(s)
 
 
 def check_file(path: Path) -> tuple[int, list[str]]:
@@ -80,10 +122,13 @@ def check_file(path: Path) -> tuple[int, list[str]]:
     for zadanie in data.get('zadaniya', []):
         for task in zadanie.get('tasks', []):
             total += 1
-            expr = latex_to_plain(task['expression'])
-            answer = str(task['answer']).replace(',', '.')
+            head, values = split_substitution(task['expression'])
+            expr = latex_to_plain(head)
             try:
-                diff = sympy.simplify(sympy.cancel(parse(expr) - parse(answer)))
+                left = parse(expr)
+                if values:
+                    left = left.subs({sympy.Symbol(k): v for k, v in values.items()})
+                diff = sympy.simplify(sympy.cancel(left - parse_answer(task['answer'])))
             except Exception as e:  # noqa: BLE001 — любая поломка разбора это ошибка данных
                 errors.append(f'{path.name} №{task["id"]}: не разобрано ({e}) — {task["expression"]}')
                 continue
