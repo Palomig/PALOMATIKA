@@ -70,6 +70,7 @@ class SkillsBankTest extends TestCase
 
         $this->assertSame(100, $this->tasksOf('01')->count());
         $this->assertSame(300, $this->tasksOf('02')->count());
+        $this->assertSame(400, $this->tasksOf('03')->count());
     }
 
     public function test_skills_tab_appears_after_the_exams(): void
@@ -94,8 +95,11 @@ class SkillsBankTest extends TestCase
         $picker = app(LessonTaskPickerService::class);
 
         $topics = $picker->topics('skills');
-        $this->assertSame([['01', 'Десятичные дроби'], ['02', 'Сокращение дробей']],
-            array_map(fn ($t) => [$t['id'], $t['title']], $topics));
+        $this->assertSame([
+            ['01', 'Десятичные дроби'],
+            ['02', 'Сокращение дробей'],
+            ['03', 'Арифметический квадратный корень'],
+        ], array_map(fn ($t) => [$t['id'], $t['title']], $topics));
         $this->assertStringContainsString('$', $topics[0]['preview'], 'превью темы — первый пример');
 
         $tasks = $picker->tasks('skills', ['topic_id' => '01']);

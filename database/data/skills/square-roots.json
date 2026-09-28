@@ -1,0 +1,3230 @@
+{
+  "bank": "skills",
+  "topic": "03",
+  "meta": {
+    "title": "Арифметический квадратный корень",
+    "description": "Извлечение корня, вынесение множителя, действия с корнями и избавление от иррациональности. 8 класс, четыре блока по 100 примеров."
+  },
+  "generator": {
+    "script": "scripts/generate-skills-square-roots.py",
+    "seed": 20260928
+  },
+  "zadaniya": [
+    {
+      "number": 8,
+      "title": "8 класс",
+      "grade": 8,
+      "instruction": "Найдите значение выражения:",
+      "type": "expression",
+      "status": "production",
+      "subtypes": [
+        "Уровень 1 — извлечение корня",
+        "Уровень 2 — вынесение множителя, умножение и деление",
+        "Уровень 3 — действия с корнями",
+        "Тема — избавление от иррациональности"
+      ],
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "$\\sqrt{100}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 2,
+          "expression": "$\\sqrt{144}$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 3,
+          "expression": "$\\sqrt{196}$",
+          "answer": "14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 4,
+          "expression": "$\\sqrt{256}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 5,
+          "expression": "$\\sqrt{484}$",
+          "answer": "22",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 6,
+          "expression": "$\\sqrt{529}$",
+          "answer": "23",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 7,
+          "expression": "$\\sqrt{625}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 8,
+          "expression": "$\\sqrt{676}$",
+          "answer": "26",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 9,
+          "expression": "$\\sqrt{729}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 10,
+          "expression": "$\\sqrt{900}$",
+          "answer": "30",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 11,
+          "expression": "$\\sqrt{\\dfrac{144}{25}}$",
+          "answer": "12/5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 12,
+          "expression": "$\\sqrt{\\dfrac{121}{36}}$",
+          "answer": "11/6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 13,
+          "expression": "$\\sqrt{\\dfrac{121}{49}}$",
+          "answer": "11/7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 14,
+          "expression": "$\\sqrt{\\dfrac{16}{81}}$",
+          "answer": "4/9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 15,
+          "expression": "$\\sqrt{\\dfrac{169}{100}}$",
+          "answer": "13/10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 16,
+          "expression": "$\\sqrt{\\dfrac{169}{121}}$",
+          "answer": "13/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 17,
+          "expression": "$\\sqrt{\\dfrac{49}{121}}$",
+          "answer": "7/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 18,
+          "expression": "$\\sqrt{\\dfrac{36}{121}}$",
+          "answer": "6/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 19,
+          "expression": "$\\sqrt{\\dfrac{49}{144}}$",
+          "answer": "7/12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 20,
+          "expression": "$\\sqrt{\\dfrac{169}{196}}$",
+          "answer": "13/14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 21,
+          "expression": "$\\sqrt{0{,}04}$",
+          "answer": "0,2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 22,
+          "expression": "$\\sqrt{0{,}09}$",
+          "answer": "0,3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 23,
+          "expression": "$\\sqrt{0{,}25}$",
+          "answer": "0,5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 24,
+          "expression": "$\\sqrt{0{,}49}$",
+          "answer": "0,7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 25,
+          "expression": "$\\sqrt{1{,}21}$",
+          "answer": "1,1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 26,
+          "expression": "$\\sqrt{1{,}69}$",
+          "answer": "1,3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 27,
+          "expression": "$\\sqrt{2{,}25}$",
+          "answer": "1,5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 28,
+          "expression": "$\\sqrt{0{,}0256}$",
+          "answer": "0,16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 29,
+          "expression": "$\\sqrt{2{,}56}$",
+          "answer": "1,6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 30,
+          "expression": "$\\sqrt{0{,}0324}$",
+          "answer": "0,18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 31,
+          "expression": "$\\sqrt{100 \\cdot 4}$",
+          "answer": "20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 32,
+          "expression": "$\\sqrt{9 \\cdot 64}$",
+          "answer": "24",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 33,
+          "expression": "$\\sqrt{4 \\cdot 225}$",
+          "answer": "30",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 34,
+          "expression": "$\\sqrt{9 \\cdot 196}$",
+          "answer": "42",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 35,
+          "expression": "$\\sqrt{16 \\cdot 144}$",
+          "answer": "48",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 36,
+          "expression": "$\\sqrt{121 \\cdot 25}$",
+          "answer": "55",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 37,
+          "expression": "$\\sqrt{81 \\cdot 144}$",
+          "answer": "108",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 38,
+          "expression": "$\\sqrt{100 \\cdot 121}$",
+          "answer": "110",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 39,
+          "expression": "$\\sqrt{64 \\cdot 225}$",
+          "answer": "120",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 40,
+          "expression": "$\\sqrt{121 \\cdot 225}$",
+          "answer": "165",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 41,
+          "expression": "$\\sqrt{2^6}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 42,
+          "expression": "$\\sqrt{3^4}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 43,
+          "expression": "$\\sqrt{4^4}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 44,
+          "expression": "$\\sqrt{3^6}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 45,
+          "expression": "$\\sqrt{6^4}$",
+          "answer": "36",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 46,
+          "expression": "$\\sqrt{7^4}$",
+          "answer": "49",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 47,
+          "expression": "$\\sqrt{4^6}$",
+          "answer": "64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 48,
+          "expression": "$\\sqrt{5^6}$",
+          "answer": "125",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 49,
+          "expression": "$\\sqrt{8^6}$",
+          "answer": "512",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 50,
+          "expression": "$\\sqrt{9^6}$",
+          "answer": "729",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 51,
+          "expression": "$\\sqrt{p}$ при $p=169$",
+          "answer": "13",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 52,
+          "expression": "$\\sqrt{c}$ при $c=169$",
+          "answer": "13",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 53,
+          "expression": "$\\sqrt{n}$ при $n=196$",
+          "answer": "14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 54,
+          "expression": "$\\sqrt{p}$ при $p=256$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 55,
+          "expression": "$\\sqrt{b}$ при $b=324$",
+          "answer": "18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 56,
+          "expression": "$\\sqrt{x}$ при $x=576$",
+          "answer": "24",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 57,
+          "expression": "$\\sqrt{c}$ при $c=625$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 58,
+          "expression": "$\\sqrt{y}$ при $y=676$",
+          "answer": "26",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 59,
+          "expression": "$\\sqrt{m}$ при $m=1089$",
+          "answer": "33",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 60,
+          "expression": "$\\sqrt{q}$ при $q=1225$",
+          "answer": "35",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 61,
+          "expression": "$\\sqrt{n^2}$ при $n=0{,}6$",
+          "answer": "0,6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 62,
+          "expression": "$\\sqrt{c^2}$ при $c=7$",
+          "answer": "7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 63,
+          "expression": "$\\sqrt{y^2}$ при $y=0{,}7$",
+          "answer": "0,7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 64,
+          "expression": "$\\sqrt{y^2}$ при $y=0{,}9$",
+          "answer": "0,9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 65,
+          "expression": "$\\sqrt{y^2}$ при $y=1{,}3$",
+          "answer": "1,3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 66,
+          "expression": "$\\sqrt{c^2}$ при $c=2{,}4$",
+          "answer": "2,4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 67,
+          "expression": "$\\sqrt{c^2}$ при $c=2{,}5$",
+          "answer": "2,5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 68,
+          "expression": "$\\sqrt{n^2}$ при $n=2{,}6$",
+          "answer": "2,6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 69,
+          "expression": "$\\sqrt{p^2}$ при $p=34$",
+          "answer": "34",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 70,
+          "expression": "$\\sqrt{q^2}$ при $q=3{,}7$",
+          "answer": "3,7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 71,
+          "expression": "$\\sqrt{qn}$ при $q=4$, $n=25$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 72,
+          "expression": "$\\sqrt{bp}$ при $b=9$, $p=49$",
+          "answer": "21",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 73,
+          "expression": "$\\sqrt{bq}$ при $b=4$, $q=121$",
+          "answer": "22",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 74,
+          "expression": "$\\sqrt{nm}$ при $n=9$, $m=81$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 75,
+          "expression": "$\\sqrt{nc}$ при $n=64$, $c=25$",
+          "answer": "40",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 76,
+          "expression": "$\\sqrt{xa}$ при $x=64$, $a=36$",
+          "answer": "48",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 77,
+          "expression": "$\\sqrt{an}$ при $a=49$, $n=64$",
+          "answer": "56",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 78,
+          "expression": "$\\sqrt{ny}$ при $n=25$, $y=196$",
+          "answer": "70",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 79,
+          "expression": "$\\sqrt{mq}$ при $m=49$, $q=169$",
+          "answer": "91",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 80,
+          "expression": "$\\sqrt{ay}$ при $a=49$, $y=196$",
+          "answer": "98",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 81,
+          "expression": "$\\sqrt{\\dfrac{p}{b}}$ при $p=81$, $b=16$",
+          "answer": "9/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 82,
+          "expression": "$\\sqrt{\\dfrac{y}{b}}$ при $y=4$, $b=25$",
+          "answer": "2/5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 83,
+          "expression": "$\\sqrt{\\dfrac{b}{p}}$ при $b=121$, $p=36$",
+          "answer": "11/6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 84,
+          "expression": "$\\sqrt{\\dfrac{m}{n}}$ при $m=169$, $n=36$",
+          "answer": "13/6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 85,
+          "expression": "$\\sqrt{\\dfrac{y}{q}}$ при $y=64$, $q=49$",
+          "answer": "8/7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 86,
+          "expression": "$\\sqrt{\\dfrac{a}{m}}$ при $a=25$, $m=64$",
+          "answer": "5/8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 87,
+          "expression": "$\\sqrt{\\dfrac{a}{b}}$ при $a=4$, $b=81$",
+          "answer": "2/9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 88,
+          "expression": "$\\sqrt{\\dfrac{y}{a}}$ при $y=25$, $a=121$",
+          "answer": "5/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 89,
+          "expression": "$\\sqrt{\\dfrac{b}{m}}$ при $b=144$, $m=121$",
+          "answer": "12/11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 90,
+          "expression": "$\\sqrt{\\dfrac{c}{b}}$ при $c=121$, $b=196$",
+          "answer": "11/14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 91,
+          "expression": "$y\\sqrt{x}$ при $y=2$, $x=400$",
+          "answer": "40",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 92,
+          "expression": "$a\\sqrt{y}$ при $a=9$, $y=49$",
+          "answer": "63",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 93,
+          "expression": "$y\\sqrt{b}$ при $y=11$, $b=49$",
+          "answer": "77",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 94,
+          "expression": "$n\\sqrt{a}$ при $n=5$, $a=324$",
+          "answer": "90",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 95,
+          "expression": "$x\\sqrt{n}$ при $x=7$, $n=225$",
+          "answer": "105",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 96,
+          "expression": "$x\\sqrt{b}$ при $x=10$, $b=121$",
+          "answer": "110",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 97,
+          "expression": "$b\\sqrt{x}$ при $b=8$, $x=196$",
+          "answer": "112",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 98,
+          "expression": "$c\\sqrt{y}$ при $c=12$, $y=100$",
+          "answer": "120",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 99,
+          "expression": "$b\\sqrt{a}$ при $b=12$, $a=196$",
+          "answer": "168",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 100,
+          "expression": "$m\\sqrt{a}$ при $m=11$, $a=324$",
+          "answer": "198",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 101,
+          "expression": "$\\sqrt{20}$",
+          "answer": "2√5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 102,
+          "expression": "$\\sqrt{72}$",
+          "answer": "6√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 103,
+          "expression": "$\\sqrt{126}$",
+          "answer": "3√14",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 104,
+          "expression": "$\\sqrt{272}$",
+          "answer": "4√17",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 105,
+          "expression": "$\\sqrt{294}$",
+          "answer": "7√6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 106,
+          "expression": "$\\sqrt{320}$",
+          "answer": "8√5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 107,
+          "expression": "$\\sqrt{686}$",
+          "answer": "7√14",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 108,
+          "expression": "$\\sqrt{735}$",
+          "answer": "7√15",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 109,
+          "expression": "$\\sqrt{960}$",
+          "answer": "8√15",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 110,
+          "expression": "$\\sqrt{1215}$",
+          "answer": "9√15",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 111,
+          "expression": "$\\sqrt{3} \\cdot \\sqrt{12}$",
+          "answer": "6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 112,
+          "expression": "$\\sqrt{9} \\cdot \\sqrt{4}$",
+          "answer": "6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 113,
+          "expression": "$\\sqrt{2} \\cdot \\sqrt{50}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 114,
+          "expression": "$\\sqrt{9} \\cdot \\sqrt{16}$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 115,
+          "expression": "$\\sqrt{4} \\cdot \\sqrt{36}$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 116,
+          "expression": "$\\sqrt{4} \\cdot \\sqrt{49}$",
+          "answer": "14",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 117,
+          "expression": "$\\sqrt{4} \\cdot \\sqrt{64}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 118,
+          "expression": "$\\sqrt{2} \\cdot \\sqrt{162}$",
+          "answer": "18",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 119,
+          "expression": "$\\sqrt{4} \\cdot \\sqrt{100}$",
+          "answer": "20",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 120,
+          "expression": "$\\sqrt{14} \\cdot \\sqrt{4}$",
+          "answer": "2√14",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 121,
+          "expression": "$\\sqrt{4} \\cdot \\sqrt{18}$",
+          "answer": "6√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 122,
+          "expression": "$\\sqrt{18} \\cdot \\sqrt{7}$",
+          "answer": "3√14",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 123,
+          "expression": "$\\sqrt{12} \\cdot \\sqrt{11}$",
+          "answer": "2√33",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 124,
+          "expression": "$\\sqrt{9} \\cdot \\sqrt{15}$",
+          "answer": "3√15",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 125,
+          "expression": "$\\sqrt{20} \\cdot \\sqrt{13}$",
+          "answer": "2√65",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 126,
+          "expression": "$\\sqrt{18} \\cdot \\sqrt{16}$",
+          "answer": "12√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 127,
+          "expression": "$\\sqrt{18} \\cdot \\sqrt{19}$",
+          "answer": "3√38",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 128,
+          "expression": "$\\sqrt{19} \\cdot \\sqrt{18}$",
+          "answer": "3√38",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 129,
+          "expression": "$\\sqrt{32} : \\sqrt{2}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 130,
+          "expression": "$\\sqrt{96} : \\sqrt{6}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 131,
+          "expression": "$\\sqrt{98} : \\sqrt{2}$",
+          "answer": "7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 132,
+          "expression": "$\\sqrt{108} : \\sqrt{12}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 133,
+          "expression": "$\\sqrt{112} : \\sqrt{7}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 134,
+          "expression": "$\\sqrt{128} : \\sqrt{8}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 135,
+          "expression": "$\\sqrt{147} : \\sqrt{3}$",
+          "answer": "7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 136,
+          "expression": "$\\sqrt{288} : \\sqrt{2}$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 137,
+          "expression": "$\\sqrt{324} : \\sqrt{4}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 138,
+          "expression": "$\\dfrac{\\sqrt{36}}{\\sqrt{2}}$",
+          "answer": "3√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 139,
+          "expression": "$\\dfrac{\\sqrt{48}}{\\sqrt{6}}$",
+          "answer": "2√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 140,
+          "expression": "$\\dfrac{\\sqrt{64}}{\\sqrt{8}}$",
+          "answer": "2√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 141,
+          "expression": "$\\dfrac{\\sqrt{96}}{\\sqrt{4}}$",
+          "answer": "2√6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 142,
+          "expression": "$\\dfrac{\\sqrt{100}}{\\sqrt{2}}$",
+          "answer": "5√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 143,
+          "expression": "$\\dfrac{\\sqrt{144}}{\\sqrt{2}}$",
+          "answer": "6√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 144,
+          "expression": "$\\dfrac{\\sqrt{320}}{\\sqrt{2}}$",
+          "answer": "4√10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 145,
+          "expression": "$\\dfrac{\\sqrt{378}}{\\sqrt{7}}$",
+          "answer": "3√6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 146,
+          "expression": "$\\dfrac{\\sqrt{400}}{\\sqrt{8}}$",
+          "answer": "5√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 147,
+          "expression": "$4\\sqrt{2} \\cdot 4\\sqrt{5}$",
+          "answer": "16√10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 148,
+          "expression": "$2\\sqrt{7} \\cdot 4\\sqrt{5}$",
+          "answer": "8√35",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 149,
+          "expression": "$3\\sqrt{13} \\cdot 2\\sqrt{6}$",
+          "answer": "6√78",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 150,
+          "expression": "$2\\sqrt{13} \\cdot 5\\sqrt{6}$",
+          "answer": "10√78",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 151,
+          "expression": "$4\\sqrt{10} \\cdot 4\\sqrt{5}$",
+          "answer": "80√2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 152,
+          "expression": "$3\\sqrt{13} \\cdot 6\\sqrt{5}$",
+          "answer": "18√65",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 153,
+          "expression": "$3\\sqrt{13} \\cdot 5\\sqrt{6}$",
+          "answer": "15√78",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 154,
+          "expression": "$6\\sqrt{6} \\cdot 6\\sqrt{7}$",
+          "answer": "36√42",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 155,
+          "expression": "$5\\sqrt{13} \\cdot 5\\sqrt{10}$",
+          "answer": "25√130",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 156,
+          "expression": "$(3\\sqrt{7})^2$",
+          "answer": "63",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 157,
+          "expression": "$(6\\sqrt{2})^2$",
+          "answer": "72",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 158,
+          "expression": "$(5\\sqrt{3})^2$",
+          "answer": "75",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 159,
+          "expression": "$(4\\sqrt{7})^2$",
+          "answer": "112",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 160,
+          "expression": "$(5\\sqrt{15})^2$",
+          "answer": "375",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 161,
+          "expression": "$(8\\sqrt{6})^2$",
+          "answer": "384",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 162,
+          "expression": "$(6\\sqrt{15})^2$",
+          "answer": "540",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 163,
+          "expression": "$(9\\sqrt{7})^2$",
+          "answer": "567",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 164,
+          "expression": "$(8\\sqrt{14})^2$",
+          "answer": "896",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 165,
+          "expression": "$\\sqrt{mb}$ при $m=2$, $b=50$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 166,
+          "expression": "$\\sqrt{my}$ при $m=6$, $y=24$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 167,
+          "expression": "$\\sqrt{na}$ при $n=2$, $a=98$",
+          "answer": "14",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 168,
+          "expression": "$\\sqrt{xa}$ при $x=4$, $a=64$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 169,
+          "expression": "$\\sqrt{ny}$ при $n=6$, $y=54$",
+          "answer": "18",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 170,
+          "expression": "$\\sqrt{ym}$ при $y=11$, $m=44$",
+          "answer": "22",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 171,
+          "expression": "$\\sqrt{ap}$ при $a=6$, $p=216$",
+          "answer": "36",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 172,
+          "expression": "$\\sqrt{cn}$ при $c=6$, $n=294$",
+          "answer": "42",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 173,
+          "expression": "$\\sqrt{pc}$ при $p=8$, $c=288$",
+          "answer": "48",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 174,
+          "expression": "$x\\sqrt{p}$ при $x=3$, $p=20$",
+          "answer": "6√5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 175,
+          "expression": "$x\\sqrt{y}$ при $x=4$, $y=20$",
+          "answer": "8√5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 176,
+          "expression": "$m\\sqrt{q}$ при $m=3$, $q=75$",
+          "answer": "15√3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 177,
+          "expression": "$q\\sqrt{m}$ при $q=6$, $m=27$",
+          "answer": "18√3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 178,
+          "expression": "$y\\sqrt{x}$ при $y=7$, $x=44$",
+          "answer": "14√11",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 179,
+          "expression": "$m\\sqrt{n}$ при $m=8$, $n=40$",
+          "answer": "16√10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 180,
+          "expression": "$a\\sqrt{b}$ при $a=6$, $b=150$",
+          "answer": "30√6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 181,
+          "expression": "$p\\sqrt{y}$ при $p=8$, $y=90$",
+          "answer": "24√10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 182,
+          "expression": "$x\\sqrt{p}$ при $x=8$, $p=325$",
+          "answer": "40√13",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 183,
+          "expression": "$\\dfrac{\\sqrt{n}}{\\sqrt{p}}$ при $n=32$, $p=2$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 184,
+          "expression": "$\\dfrac{\\sqrt{a}}{\\sqrt{m}}$ при $a=72$, $m=8$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 185,
+          "expression": "$\\dfrac{\\sqrt{b}}{\\sqrt{p}}$ при $b=80$, $p=5$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 186,
+          "expression": "$\\dfrac{\\sqrt{c}}{\\sqrt{b}}$ при $c=112$, $b=7$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 187,
+          "expression": "$\\dfrac{\\sqrt{q}}{\\sqrt{p}}$ при $q=200$, $p=8$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 188,
+          "expression": "$\\dfrac{\\sqrt{a}}{\\sqrt{m}}$ при $a=288$, $m=8$",
+          "answer": "6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 189,
+          "expression": "$\\dfrac{\\sqrt{x}}{\\sqrt{m}}$ при $x=384$, $m=6$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 190,
+          "expression": "$\\dfrac{\\sqrt{q}}{\\sqrt{b}}$ при $q=405$, $b=5$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 191,
+          "expression": "$\\dfrac{\\sqrt{m}}{\\sqrt{b}}$ при $m=486$, $b=6$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 192,
+          "expression": "$(x\\sqrt{a})^2$ при $x=4$, $a=6$",
+          "answer": "96",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 193,
+          "expression": "$(c\\sqrt{m})^2$ при $c=3$, $m=15$",
+          "answer": "135",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 194,
+          "expression": "$(q\\sqrt{c})^2$ при $q=7$, $c=3$",
+          "answer": "147",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 195,
+          "expression": "$(c\\sqrt{x})^2$ при $c=4$, $x=11$",
+          "answer": "176",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 196,
+          "expression": "$(y\\sqrt{x})^2$ при $y=4$, $x=14$",
+          "answer": "224",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 197,
+          "expression": "$(x\\sqrt{b})^2$ при $x=6$, $b=7$",
+          "answer": "252",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 198,
+          "expression": "$(c\\sqrt{q})^2$ при $c=5$, $q=13$",
+          "answer": "325",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 199,
+          "expression": "$(y\\sqrt{b})^2$ при $y=5$, $b=15$",
+          "answer": "375",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 200,
+          "expression": "$(c\\sqrt{q})^2$ при $c=7$, $q=10$",
+          "answer": "490",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 201,
+          "expression": "$\\sqrt{8} - \\sqrt{32} + \\sqrt{50}$",
+          "answer": "3√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 202,
+          "expression": "$\\sqrt{48} - \\sqrt{108} + \\sqrt{75}$",
+          "answer": "3√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 203,
+          "expression": "$\\sqrt{50} - \\sqrt{8} + \\sqrt{18}$",
+          "answer": "6√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 204,
+          "expression": "$\\sqrt{96} - \\sqrt{54} + \\sqrt{216}$",
+          "answer": "7√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 205,
+          "expression": "$\\sqrt{108} - \\sqrt{147} + \\sqrt{75}$",
+          "answer": "4√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 206,
+          "expression": "$\\sqrt{150} - \\sqrt{294} + \\sqrt{384}$",
+          "answer": "6√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 207,
+          "expression": "$\\sqrt{180} - \\sqrt{80} + \\sqrt{20}$",
+          "answer": "4√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 208,
+          "expression": "$\\sqrt{320} - \\sqrt{180} + \\sqrt{405}$",
+          "answer": "11√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 209,
+          "expression": "$\\sqrt{360} - \\sqrt{160} + \\sqrt{810}$",
+          "answer": "11√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 210,
+          "expression": "$\\sqrt{384} - \\sqrt{54} + \\sqrt{486}$",
+          "answer": "14√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 211,
+          "expression": "$\\sqrt{468} - \\sqrt{832} + \\sqrt{117}$",
+          "answer": "√13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 212,
+          "expression": "$\\sqrt{490} - \\sqrt{640} + \\sqrt{810}$",
+          "answer": "8√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 213,
+          "expression": "$(\\sqrt{11} - \\sqrt{3})(\\sqrt{11} + \\sqrt{3})$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 214,
+          "expression": "$(\\sqrt{13} - \\sqrt{11})(\\sqrt{13} + \\sqrt{11})$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 215,
+          "expression": "$(\\sqrt{19} - \\sqrt{13})(\\sqrt{19} + \\sqrt{13})$",
+          "answer": "6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 216,
+          "expression": "$(\\sqrt{19} - \\sqrt{14})(\\sqrt{19} + \\sqrt{14})$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 217,
+          "expression": "$(\\sqrt{22} - \\sqrt{19})(\\sqrt{22} + \\sqrt{19})$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 218,
+          "expression": "$(\\sqrt{23} - \\sqrt{2})(\\sqrt{23} + \\sqrt{2})$",
+          "answer": "21",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 219,
+          "expression": "$(\\sqrt{29} - \\sqrt{17})(\\sqrt{29} + \\sqrt{17})$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 220,
+          "expression": "$(\\sqrt{29} - \\sqrt{19})(\\sqrt{29} + \\sqrt{19})$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 221,
+          "expression": "$(\\sqrt{30} - \\sqrt{17})(\\sqrt{30} + \\sqrt{17})$",
+          "answer": "13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 222,
+          "expression": "$(\\sqrt{30} - \\sqrt{11})(\\sqrt{30} + \\sqrt{11})$",
+          "answer": "19",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 223,
+          "expression": "$(\\sqrt{30} - \\sqrt{21})(\\sqrt{30} + \\sqrt{21})$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 224,
+          "expression": "$(4 + 2\\sqrt{5})^2$",
+          "answer": "36+16√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 225,
+          "expression": "$(2 + 5\\sqrt{5})^2$",
+          "answer": "129+20√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 226,
+          "expression": "$(3 + 4\\sqrt{5})^2$",
+          "answer": "89+24√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 227,
+          "expression": "$(4 + 3\\sqrt{6})^2$",
+          "answer": "70+24√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 228,
+          "expression": "$(6 + 3\\sqrt{5})^2$",
+          "answer": "81+36√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 229,
+          "expression": "$(7 + 5\\sqrt{3})^2$",
+          "answer": "124+70√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 230,
+          "expression": "$(7 + 4\\sqrt{5})^2$",
+          "answer": "129+56√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 231,
+          "expression": "$(5 + 3\\sqrt{10})^2$",
+          "answer": "115+30√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 232,
+          "expression": "$(8 + 3\\sqrt{10})^2$",
+          "answer": "154+48√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 233,
+          "expression": "$(6 + 5\\sqrt{10})^2$",
+          "answer": "286+60√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 234,
+          "expression": "$(9 + 4\\sqrt{10})^2$",
+          "answer": "241+72√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 235,
+          "expression": "$(\\sqrt{5} + \\sqrt{2})^2$",
+          "answer": "7+2√10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 236,
+          "expression": "$(\\sqrt{7} - \\sqrt{2})^2$",
+          "answer": "9-2√14",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 237,
+          "expression": "$(\\sqrt{3} - \\sqrt{7})^2$",
+          "answer": "10-2√21",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 238,
+          "expression": "$(\\sqrt{13} - \\sqrt{2})^2$",
+          "answer": "15-2√26",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 239,
+          "expression": "$(\\sqrt{2} + \\sqrt{15})^2$",
+          "answer": "17+2√30",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 240,
+          "expression": "$(\\sqrt{10} + \\sqrt{5})^2$",
+          "answer": "15+10√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 241,
+          "expression": "$(\\sqrt{7} + \\sqrt{15})^2$",
+          "answer": "22+2√105",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 242,
+          "expression": "$(\\sqrt{13} - \\sqrt{10})^2$",
+          "answer": "23-2√130",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 243,
+          "expression": "$(\\sqrt{13} + \\sqrt{10})^2$",
+          "answer": "23+2√130",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 244,
+          "expression": "$(\\sqrt{10} + \\sqrt{15})^2$",
+          "answer": "25+10√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 245,
+          "expression": "$(\\sqrt{14} + \\sqrt{15})^2$",
+          "answer": "29+2√210",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 246,
+          "expression": "$\\sqrt{3}(\\sqrt{27} - 7\\sqrt{3})$",
+          "answer": "-12",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 247,
+          "expression": "$\\sqrt{3}(\\sqrt{48} - 3\\sqrt{3})$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 248,
+          "expression": "$\\sqrt{5}(\\sqrt{80} - 5\\sqrt{5})$",
+          "answer": "-5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 249,
+          "expression": "$\\sqrt{5}(\\sqrt{80} - 7\\sqrt{5})$",
+          "answer": "-15",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 250,
+          "expression": "$\\sqrt{5}(\\sqrt{125} - 6\\sqrt{5})$",
+          "answer": "-5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 251,
+          "expression": "$\\sqrt{5}(\\sqrt{125} - 7\\sqrt{5})$",
+          "answer": "-10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 252,
+          "expression": "$\\sqrt{6}(\\sqrt{150} - 2\\sqrt{6})$",
+          "answer": "18",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 253,
+          "expression": "$\\sqrt{6}(\\sqrt{216} - 2\\sqrt{6})$",
+          "answer": "24",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 254,
+          "expression": "$\\sqrt{6}(\\sqrt{294} - 2\\sqrt{6})$",
+          "answer": "30",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 255,
+          "expression": "$\\sqrt{7}(\\sqrt{343} - 6\\sqrt{7})$",
+          "answer": "7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 256,
+          "expression": "$\\sqrt{10}(\\sqrt{360} - 7\\sqrt{10})$",
+          "answer": "-10",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 257,
+          "expression": "$(\\sqrt{x} - \\sqrt{p})(\\sqrt{x} + \\sqrt{p})$ при $x=13$, $p=2$",
+          "answer": "11",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 258,
+          "expression": "$(\\sqrt{c} - \\sqrt{n})(\\sqrt{c} + \\sqrt{n})$ при $c=15$, $n=7$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 259,
+          "expression": "$(\\sqrt{c} - \\sqrt{b})(\\sqrt{c} + \\sqrt{b})$ при $c=21$, $b=2$",
+          "answer": "19",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 260,
+          "expression": "$(\\sqrt{c} - \\sqrt{m})(\\sqrt{c} + \\sqrt{m})$ при $c=21$, $m=10$",
+          "answer": "11",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 261,
+          "expression": "$(\\sqrt{x} - \\sqrt{p})(\\sqrt{x} + \\sqrt{p})$ при $x=22$, $p=5$",
+          "answer": "17",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 262,
+          "expression": "$(\\sqrt{b} - \\sqrt{y})(\\sqrt{b} + \\sqrt{y})$ при $b=26$, $y=19$",
+          "answer": "7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 263,
+          "expression": "$(\\sqrt{p} - \\sqrt{q})(\\sqrt{p} + \\sqrt{q})$ при $p=26$, $q=10$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 264,
+          "expression": "$(\\sqrt{b} - \\sqrt{x})(\\sqrt{b} + \\sqrt{x})$ при $b=29$, $x=7$",
+          "answer": "22",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 265,
+          "expression": "$(\\sqrt{b} - \\sqrt{m})(\\sqrt{b} + \\sqrt{m})$ при $b=29$, $m=15$",
+          "answer": "14",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 266,
+          "expression": "$(\\sqrt{b} - \\sqrt{y})(\\sqrt{b} + \\sqrt{y})$ при $b=30$, $y=11$",
+          "answer": "19",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 267,
+          "expression": "$(\\sqrt{p} - \\sqrt{c})(\\sqrt{p} + \\sqrt{c})$ при $p=30$, $c=17$",
+          "answer": "13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 268,
+          "expression": "$(a + b\\sqrt{2})^2$ при $a=3$, $b=4$",
+          "answer": "41+24√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 269,
+          "expression": "$(p + x\\sqrt{7})^2$ при $p=2$, $x=2$",
+          "answer": "32+8√7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 270,
+          "expression": "$(y + b\\sqrt{2})^2$ при $y=3$, $b=5$",
+          "answer": "59+30√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 271,
+          "expression": "$(q + p\\sqrt{3})^2$ при $q=6$, $p=2$",
+          "answer": "48+24√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 272,
+          "expression": "$(b + x\\sqrt{3})^2$ при $b=4$, $x=4$",
+          "answer": "64+32√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 273,
+          "expression": "$(y + n\\sqrt{7})^2$ при $y=3$, $n=3$",
+          "answer": "72+18√7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 274,
+          "expression": "$(b + c\\sqrt{2})^2$ при $b=8$, $c=5$",
+          "answer": "114+80√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 275,
+          "expression": "$(c + y\\sqrt{6})^2$ при $c=9$, $y=2$",
+          "answer": "105+36√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 276,
+          "expression": "$(y + p\\sqrt{6})^2$ при $y=9$, $p=2$",
+          "answer": "105+36√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 277,
+          "expression": "$(y + p\\sqrt{6})^2$ при $y=5$, $p=5$",
+          "answer": "175+50√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 278,
+          "expression": "$(y + p\\sqrt{6})^2$ при $y=9$, $p=3$",
+          "answer": "135+54√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 279,
+          "expression": "$q\\sqrt{3} - c\\sqrt{3}$ при $q=7$, $c=6$",
+          "answer": "√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 280,
+          "expression": "$n\\sqrt{6} - c\\sqrt{6}$ при $n=8$, $c=7$",
+          "answer": "√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 281,
+          "expression": "$m\\sqrt{6} - p\\sqrt{6}$ при $m=6$, $p=4$",
+          "answer": "2√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 282,
+          "expression": "$c\\sqrt{2} - q\\sqrt{2}$ при $c=10$, $q=4$",
+          "answer": "6√2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 283,
+          "expression": "$n\\sqrt{6} - c\\sqrt{6}$ при $n=9$, $c=6$",
+          "answer": "3√6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 284,
+          "expression": "$q\\sqrt{3} - b\\sqrt{3}$ при $q=10$, $b=2$",
+          "answer": "8√3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 285,
+          "expression": "$a\\sqrt{5} - n\\sqrt{5}$ при $a=4$, $n=9$",
+          "answer": "-5√5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 286,
+          "expression": "$p\\sqrt{13} - m\\sqrt{13}$ при $p=11$, $m=9$",
+          "answer": "2√13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 287,
+          "expression": "$a\\sqrt{13} - b\\sqrt{13}$ при $a=6$, $b=3$",
+          "answer": "3√13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 288,
+          "expression": "$y\\sqrt{13} - m\\sqrt{13}$ при $y=6$, $m=2$",
+          "answer": "4√13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 289,
+          "expression": "$b\\sqrt{11} - q\\sqrt{11}$ при $b=8$, $q=3$",
+          "answer": "5√11",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 290,
+          "expression": "$(n + q)(n - q)$ при $n=\\sqrt{10}$, $q=\\sqrt{2}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 291,
+          "expression": "$(m + x)(m - x)$ при $m=\\sqrt{13}$, $x=\\sqrt{5}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 292,
+          "expression": "$(p + y)(p - y)$ при $p=\\sqrt{14}$, $y=\\sqrt{13}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 293,
+          "expression": "$(m + n)(m - n)$ при $m=\\sqrt{15}$, $n=\\sqrt{2}$",
+          "answer": "13",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 294,
+          "expression": "$(a + n)(a - n)$ при $a=\\sqrt{15}$, $n=\\sqrt{6}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 295,
+          "expression": "$(p + m)(p - m)$ при $p=\\sqrt{17}$, $m=\\sqrt{13}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 296,
+          "expression": "$(b + p)(b - p)$ при $b=\\sqrt{17}$, $p=\\sqrt{15}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 297,
+          "expression": "$(y + m)(y - m)$ при $y=\\sqrt{17}$, $m=\\sqrt{13}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 298,
+          "expression": "$(m + n)(m - n)$ при $m=\\sqrt{19}$, $n=\\sqrt{2}$",
+          "answer": "17",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 299,
+          "expression": "$(n + c)(n - c)$ при $n=\\sqrt{19}$, $c=\\sqrt{17}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 300,
+          "expression": "$(c + n)(c - n)$ при $c=\\sqrt{19}$, $n=\\sqrt{5}$",
+          "answer": "14",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 301,
+          "expression": "$\\dfrac{3}{\\sqrt{3}}$",
+          "answer": "√3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 302,
+          "expression": "$\\dfrac{4}{\\sqrt{2}}$",
+          "answer": "2√2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 303,
+          "expression": "$\\dfrac{6}{\\sqrt{3}}$",
+          "answer": "2√3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 304,
+          "expression": "$\\dfrac{13}{\\sqrt{13}}$",
+          "answer": "√13",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 305,
+          "expression": "$\\dfrac{14}{\\sqrt{7}}$",
+          "answer": "2√7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 306,
+          "expression": "$\\dfrac{15}{\\sqrt{5}}$",
+          "answer": "3√5",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 307,
+          "expression": "$\\dfrac{24}{\\sqrt{6}}$",
+          "answer": "4√6",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 308,
+          "expression": "$\\dfrac{28}{\\sqrt{7}}$",
+          "answer": "4√7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 309,
+          "expression": "$\\dfrac{42}{\\sqrt{7}}$",
+          "answer": "6√7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 310,
+          "expression": "$\\dfrac{45}{\\sqrt{15}}$",
+          "answer": "3√15",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 311,
+          "expression": "$\\dfrac{55}{\\sqrt{11}}$",
+          "answer": "5√11",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 312,
+          "expression": "$\\dfrac{56}{\\sqrt{14}}$",
+          "answer": "4√14",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 313,
+          "expression": "$\\dfrac{60}{\\sqrt{15}}$",
+          "answer": "4√15",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 314,
+          "expression": "$\\dfrac{75}{\\sqrt{15}}$",
+          "answer": "5√15",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 315,
+          "expression": "$\\dfrac{84}{\\sqrt{14}}$",
+          "answer": "6√14",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 316,
+          "expression": "$\\dfrac{2}{\\sqrt{5}}$",
+          "answer": "2√5/5",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 317,
+          "expression": "$\\dfrac{4}{\\sqrt{3}}$",
+          "answer": "4√3/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 318,
+          "expression": "$\\dfrac{2}{\\sqrt{7}}$",
+          "answer": "2√7/7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 319,
+          "expression": "$\\dfrac{5}{\\sqrt{3}}$",
+          "answer": "5√3/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 320,
+          "expression": "$\\dfrac{4}{\\sqrt{5}}$",
+          "answer": "4√5/5",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 321,
+          "expression": "$\\dfrac{3}{\\sqrt{7}}$",
+          "answer": "3√7/7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 322,
+          "expression": "$\\dfrac{7}{\\sqrt{3}}$",
+          "answer": "7√3/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 323,
+          "expression": "$\\dfrac{8}{\\sqrt{3}}$",
+          "answer": "8√3/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 324,
+          "expression": "$\\dfrac{3}{\\sqrt{10}}$",
+          "answer": "3√10/10",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 325,
+          "expression": "$\\dfrac{3}{\\sqrt{13}}$",
+          "answer": "3√13/13",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 326,
+          "expression": "$\\dfrac{6}{\\sqrt{7}}$",
+          "answer": "6√7/7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 327,
+          "expression": "$\\dfrac{8}{\\sqrt{6}}$",
+          "answer": "4√6/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 328,
+          "expression": "$\\dfrac{5}{\\sqrt{11}}$",
+          "answer": "5√11/11",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 329,
+          "expression": "$\\dfrac{5}{\\sqrt{13}}$",
+          "answer": "5√13/13",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 330,
+          "expression": "$\\dfrac{7}{\\sqrt{10}}$",
+          "answer": "7√10/10",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 331,
+          "expression": "$\\dfrac{\\sqrt{2}}{\\sqrt{4}}$",
+          "answer": "√2/2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 332,
+          "expression": "$\\dfrac{\\sqrt{2}}{\\sqrt{7}}$",
+          "answer": "√14/7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 333,
+          "expression": "$\\dfrac{\\sqrt{5}}{\\sqrt{4}}$",
+          "answer": "√5/2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 334,
+          "expression": "$\\dfrac{\\sqrt{4}}{\\sqrt{6}}$",
+          "answer": "√6/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 335,
+          "expression": "$\\dfrac{\\sqrt{3}}{\\sqrt{9}}$",
+          "answer": "√3/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 336,
+          "expression": "$\\dfrac{\\sqrt{5}}{\\sqrt{6}}$",
+          "answer": "√30/6",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 337,
+          "expression": "$\\dfrac{\\sqrt{4}}{\\sqrt{8}}$",
+          "answer": "√2/2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 338,
+          "expression": "$\\dfrac{\\sqrt{5}}{\\sqrt{9}}$",
+          "answer": "√5/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 339,
+          "expression": "$\\dfrac{\\sqrt{12}}{\\sqrt{5}}$",
+          "answer": "2√15/5",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 340,
+          "expression": "$\\dfrac{\\sqrt{10}}{\\sqrt{8}}$",
+          "answer": "√5/2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 341,
+          "expression": "$\\dfrac{\\sqrt{13}}{\\sqrt{7}}$",
+          "answer": "√91/7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 342,
+          "expression": "$\\dfrac{\\sqrt{12}}{\\sqrt{9}}$",
+          "answer": "2√3/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 343,
+          "expression": "$\\dfrac{\\sqrt{14}}{\\sqrt{8}}$",
+          "answer": "√7/2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 344,
+          "expression": "$\\dfrac{\\sqrt{15}}{\\sqrt{9}}$",
+          "answer": "√15/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 345,
+          "expression": "$\\dfrac{9}{\\sqrt{5} - \\sqrt{2}}$",
+          "answer": "3(√5+√2)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 346,
+          "expression": "$\\dfrac{15}{\\sqrt{30} - \\sqrt{15}}$",
+          "answer": "√30+√15",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 347,
+          "expression": "$\\dfrac{16}{\\sqrt{23} + \\sqrt{7}}$",
+          "answer": "√23-√7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 348,
+          "expression": "$\\dfrac{20}{\\sqrt{23} + \\sqrt{19}}$",
+          "answer": "5(√23-√19)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 349,
+          "expression": "$\\dfrac{20}{\\sqrt{7} - \\sqrt{2}}$",
+          "answer": "4(√7+√2)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 350,
+          "expression": "$\\dfrac{24}{\\sqrt{19} + \\sqrt{13}}$",
+          "answer": "4(√19-√13)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 351,
+          "expression": "$\\dfrac{32}{\\sqrt{19} + \\sqrt{3}}$",
+          "answer": "2(√19-√3)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 352,
+          "expression": "$\\dfrac{35}{\\sqrt{13} - \\sqrt{6}}$",
+          "answer": "5(√13+√6)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 353,
+          "expression": "$\\dfrac{36}{\\sqrt{29} - \\sqrt{17}}$",
+          "answer": "3(√29+√17)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 354,
+          "expression": "$\\dfrac{36}{\\sqrt{30} - \\sqrt{21}}$",
+          "answer": "4(√30+√21)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 355,
+          "expression": "$\\dfrac{38}{\\sqrt{29} - \\sqrt{10}}$",
+          "answer": "2(√29+√10)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 356,
+          "expression": "$\\dfrac{56}{\\sqrt{19} - \\sqrt{5}}$",
+          "answer": "4(√19+√5)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 357,
+          "expression": "$\\dfrac{65}{\\sqrt{15} - \\sqrt{2}}$",
+          "answer": "5(√15+√2)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 358,
+          "expression": "$\\dfrac{135}{\\sqrt{29} + \\sqrt{2}}$",
+          "answer": "5(√29-√2)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 359,
+          "expression": "$\\dfrac{2}{2 + \\sqrt{2}}$",
+          "answer": "2-√2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 360,
+          "expression": "$\\dfrac{3}{3 + \\sqrt{10}}$",
+          "answer": "3(√10-3)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 361,
+          "expression": "$\\dfrac{3}{4 + \\sqrt{19}}$",
+          "answer": "√19-4",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 362,
+          "expression": "$\\dfrac{4}{4 + \\sqrt{14}}$",
+          "answer": "2(4-√14)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 363,
+          "expression": "$\\dfrac{6}{5 + \\sqrt{19}}$",
+          "answer": "5-√19",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 364,
+          "expression": "$\\dfrac{8}{3 + \\sqrt{17}}$",
+          "answer": "√17-3",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 365,
+          "expression": "$\\dfrac{8}{5 - \\sqrt{17}}$",
+          "answer": "5+√17",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 366,
+          "expression": "$\\dfrac{9}{2 - \\sqrt{7}}$",
+          "answer": "-3(2+√7)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 367,
+          "expression": "$\\dfrac{9}{3 - \\sqrt{6}}$",
+          "answer": "3(3+√6)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 368,
+          "expression": "$\\dfrac{10}{3 - \\sqrt{19}}$",
+          "answer": "-(3+√19)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 369,
+          "expression": "$\\dfrac{16}{5 - \\sqrt{17}}$",
+          "answer": "2(5+√17)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 370,
+          "expression": "$\\dfrac{24}{4 + \\sqrt{10}}$",
+          "answer": "4(4-√10)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 371,
+          "expression": "$\\dfrac{24}{5 - \\sqrt{19}}$",
+          "answer": "4(5+√19)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 372,
+          "expression": "$\\dfrac{51}{6 - \\sqrt{19}}$",
+          "answer": "3(6+√19)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 373,
+          "expression": "$\\dfrac{x}{\\sqrt{a}}$ при $x=4$, $a=2$",
+          "answer": "2√2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 374,
+          "expression": "$\\dfrac{p}{\\sqrt{a}}$ при $p=6$, $a=2$",
+          "answer": "3√2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 375,
+          "expression": "$\\dfrac{c}{\\sqrt{m}}$ при $c=10$, $m=2$",
+          "answer": "5√2",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 376,
+          "expression": "$\\dfrac{x}{\\sqrt{m}}$ при $x=12$, $m=6$",
+          "answer": "2√6",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 377,
+          "expression": "$\\dfrac{m}{\\sqrt{p}}$ при $m=14$, $p=7$",
+          "answer": "2√7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 378,
+          "expression": "$\\dfrac{b}{\\sqrt{y}}$ при $b=18$, $y=6$",
+          "answer": "3√6",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 379,
+          "expression": "$\\dfrac{p}{\\sqrt{n}}$ при $p=20$, $n=10$",
+          "answer": "2√10",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 380,
+          "expression": "$\\dfrac{c}{\\sqrt{a}}$ при $c=24$, $a=6$",
+          "answer": "4√6",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 381,
+          "expression": "$\\dfrac{n}{\\sqrt{m}}$ при $n=25$, $m=5$",
+          "answer": "5√5",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 382,
+          "expression": "$\\dfrac{q}{\\sqrt{b}}$ при $q=28$, $b=7$",
+          "answer": "4√7",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 383,
+          "expression": "$\\dfrac{x}{\\sqrt{c}}$ при $x=30$, $c=6$",
+          "answer": "5√6",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 384,
+          "expression": "$\\dfrac{n}{\\sqrt{a}}$ при $n=33$, $a=11$",
+          "answer": "3√11",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 385,
+          "expression": "$\\dfrac{b}{\\sqrt{x}}$ при $b=52$, $x=13$",
+          "answer": "4√13",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 386,
+          "expression": "$\\dfrac{p}{\\sqrt{a}}$ при $p=65$, $a=13$",
+          "answer": "5√13",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 387,
+          "expression": "$\\dfrac{6}{\\sqrt{b} - \\sqrt{p}}$ при $b=5$, $p=2$",
+          "answer": "2(√5+√2)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 388,
+          "expression": "$\\dfrac{6}{\\sqrt{m} - \\sqrt{q}}$ при $m=13$, $q=10$",
+          "answer": "2(√13+√10)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 389,
+          "expression": "$\\dfrac{7}{\\sqrt{p} - \\sqrt{n}}$ при $p=21$, $n=14$",
+          "answer": "√21+√14",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 390,
+          "expression": "$\\dfrac{10}{\\sqrt{b} - \\sqrt{x}}$ при $b=11$, $x=6$",
+          "answer": "2(√11+√6)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 391,
+          "expression": "$\\dfrac{10}{\\sqrt{a} - \\sqrt{y}}$ при $a=7$, $y=2$",
+          "answer": "2(√7+√2)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 392,
+          "expression": "$\\dfrac{18}{\\sqrt{m} - \\sqrt{q}}$ при $m=21$, $q=15$",
+          "answer": "3(√21+√15)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 393,
+          "expression": "$\\dfrac{20}{\\sqrt{x} - \\sqrt{q}}$ при $x=22$, $q=17$",
+          "answer": "4(√22+√17)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 394,
+          "expression": "$\\dfrac{24}{\\sqrt{x} - \\sqrt{q}}$ при $x=19$, $q=13$",
+          "answer": "4(√19+√13)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 395,
+          "expression": "$\\dfrac{24}{\\sqrt{n} - \\sqrt{p}}$ при $n=15$, $p=3$",
+          "answer": "2(√15+√3)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 396,
+          "expression": "$\\dfrac{27}{\\sqrt{n} - \\sqrt{x}}$ при $n=30$, $x=21$",
+          "answer": "3(√30+√21)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 397,
+          "expression": "$\\dfrac{33}{\\sqrt{m} - \\sqrt{x}}$ при $m=26$, $x=15$",
+          "answer": "3(√26+√15)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 398,
+          "expression": "$\\dfrac{33}{\\sqrt{q} - \\sqrt{n}}$ при $q=26$, $n=15$",
+          "answer": "3(√26+√15)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 399,
+          "expression": "$\\dfrac{40}{\\sqrt{m} - \\sqrt{c}}$ при $m=17$, $c=7$",
+          "answer": "4(√17+√7)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        },
+        {
+          "id": 400,
+          "expression": "$\\dfrac{60}{\\sqrt{p} - \\sqrt{n}}$ при $p=26$, $n=11$",
+          "answer": "4(√26+√11)",
+          "status": "production",
+          "subtype": 3,
+          "level": 3
+        }
+      ]
+    }
+  ]
+}
