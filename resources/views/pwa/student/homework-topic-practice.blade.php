@@ -211,6 +211,13 @@
           <input class="task-input" type="text" name="answer" placeholder="Ответ" required x-ref="answer"
                  value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
 
+          {{-- Дробный ответ («две целых семь одиннадцатых») ученик собирает
+               в трёх полях, а в поле выше уходит готовое «2 7/11». --}}
+          @include('pwa._shared.partials.fraction-input', [
+              'scope' => 'form',
+              'target' => 'input[name=answer]',
+          ])
+
           <template x-if="pages.length">
             <div class="page-list">
               <template x-for="(page, index) in pages" :key="page.key">

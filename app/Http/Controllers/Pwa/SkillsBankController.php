@@ -66,17 +66,48 @@ class SkillsBankController extends Controller
                     continue;
                 }
 
+                $subtypes = $this->subtypes($zadanie['subtypes'] ?? null, $tasks);
+                foreach ($subtypes as $i => $subtype) {
+                    $subtypes[$i]['chunks'] = $this->chunks($subtype['tasks']);
+                }
+
                 $groups[] = [
                     'number' => (int) ($zadanie['number'] ?? count($groups) + 1),
                     'title' => (string) ($zadanie['title'] ?? $zadanie['instruction'] ?? 'Задания'),
                     'instruction' => (string) ($zadanie['instruction'] ?? ''),
                     'tasks' => $tasks,
-                    'subtypes' => $this->subtypes($zadanie['subtypes'] ?? null, $tasks),
+                    'subtypes' => $subtypes,
+                    'chunks' => $subtypes === [] ? $this->chunks($tasks) : [],
                 ];
             }
         }
 
         return $groups;
+    }
+
+    /**
+     * Подуровень — двадцать задач подряд. Внутри уровня они отсортированы от
+     * простых к сложным, поэтому «№21–40» — следующая ступень сложности.
+     * Короткие списки не режем: спойлер ради пяти карточек только мешает.
+     *
+     * @return array<int, array{title:string,tasks:array}>
+     */
+    private function chunks(array $tasks, int $size = 20): array
+    {
+        if (count($tasks) <= $size * 2) {
+            return [];
+        }
+
+        $chunks = [];
+        foreach (array_chunk($tasks, $size) as $i => $part) {
+            $from = $i * $size + 1;
+            $chunks[] = [
+                'title' => sprintf('Подуровень %d · №%d–%d', $i + 1, $from, $from + count($part) - 1),
+                'tasks' => $part,
+            ];
+        }
+
+        return $chunks;
     }
 
     /**

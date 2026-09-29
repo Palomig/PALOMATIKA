@@ -89,6 +89,22 @@ class SkillsBankPageTest extends TestCase
         $this->assertSame(300, substr_count($response->getContent(), 'class="answer-value"'));
     }
 
+    /**
+     * Сотня примеров уровня разложена на подуровни по двадцать: внутри уровня
+     * они идут от простых к сложным, и целая сотня карточек подряд нечитаема.
+     */
+    public function test_level_is_split_into_sub_levels_of_twenty(): void
+    {
+        $response = $this->actingAs($this->teacher)->get($this->url('/skills?topic=02'));
+
+        $response->assertOk();
+        foreach ([[1, 1, 20], [2, 21, 40], [5, 81, 100]] as [$n, $from, $to]) {
+            $response->assertSee("Подуровень {$n} · №{$from}–{$to}");
+        }
+        // Пять подуровней на каждый из трёх уровней.
+        $this->assertSame(15, substr_count($response->getContent(), 'Подуровень'));
+    }
+
     public function test_unknown_skill_falls_back_to_the_first(): void
     {
         $response = $this->actingAs($this->teacher)->get($this->url('/skills?topic=99'));
