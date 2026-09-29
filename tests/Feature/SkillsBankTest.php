@@ -70,7 +70,7 @@ class SkillsBankTest extends TestCase
 
         $this->assertSame(100, $this->tasksOf('01')->count());
         $this->assertSame(300, $this->tasksOf('02')->count());
-        $this->assertSame(400, $this->tasksOf('03')->count());
+        $this->assertSame(700, $this->tasksOf('03')->count());
     }
 
     public function test_skills_tab_appears_after_the_exams(): void
@@ -98,7 +98,7 @@ class SkillsBankTest extends TestCase
         $this->assertSame([
             ['01', 'Десятичные дроби'],
             ['02', 'Сокращение дробей'],
-            ['03', 'Арифметический квадратный корень'],
+            ['03', 'Арифметический корень'],
         ], array_map(fn ($t) => [$t['id'], $t['title']], $topics));
         $this->assertStringContainsString('$', $topics[0]['preview'], 'превью темы — первый пример');
 

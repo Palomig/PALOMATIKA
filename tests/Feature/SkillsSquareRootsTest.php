@@ -32,36 +32,69 @@ class SkillsSquareRootsTest extends TestCase
         Cache::flush();
     }
 
-    public function test_four_blocks_of_one_hundred(): void
+    public function test_two_grades_with_blocks_of_one_hundred(): void
     {
-        $group = TaskGroup::where('bank', 'skills')->where('topic', '03')->first();
+        $groups = TaskGroup::where('bank', 'skills')->where('topic', '03')->orderBy('position')->get();
 
-        $this->assertNotNull($group);
-        $this->assertSame('8 класс', $group->payload['title']);
+        $this->assertCount(2, $groups, 'скилл живёт двумя классами: 8 и 10–11');
+        $this->assertSame(['8 класс', '10–11 класс'], $groups->pluck('payload.title')->all());
+
         $this->assertSame([
             'Уровень 1 — извлечение корня',
             'Уровень 2 — вынесение множителя, умножение и деление',
             'Уровень 3 — действия с корнями',
             'Тема — избавление от иррациональности',
-        ], $group->payload['subtypes']);
+        ], $groups[0]->payload['subtypes']);
+        $this->assertSame([
+            'Уровень 1 — корень n-й степени',
+            'Уровень 2 — степень с дробным показателем',
+            'Уровень 3 — свойства степеней и корней',
+        ], $groups[1]->payload['subtypes']);
 
-        $tasks = Task::where('task_group_id', $group->id)->get();
-        $this->assertCount(400, $tasks);
+        foreach ($groups as $group) {
+            $perBlock = Task::where('task_group_id', $group->id)->get()
+                ->groupBy(fn (Task $t) => $t->payload['subtype'])->map->count();
+            $this->assertSame(array_fill(0, count($group->payload['subtypes']), 100),
+                $perBlock->values()->all(), "в блоках {$group->payload['title']} не по сотне");
+        }
+    }
 
-        $perBlock = $tasks->groupBy(fn (Task $t) => $t->payload['subtype'])->map->count();
-        $this->assertSame([100, 100, 100, 100], [$perBlock[0], $perBlock[1], $perBlock[2], $perBlock[3]]);
+    /**
+     * Буква в задании обязана требовать работы до подстановки: вынести
+     * степень, сократить, применить формулу. «√p при p = 169» — это просто
+     * подстановка, такие задания Стас забраковал 29.09.
+     */
+    public function test_letter_tasks_demand_a_transformation(): void
+    {
+        $trivial = [];
+        foreach ($this->tasks() as $task) {
+            $expr = (string) $task->payload['expression'];
+            if (!str_contains($expr, ' при ')) {
+                continue;
+            }
+            [$formula] = explode(' при ', $expr, 2);
+            // Голый корень из одной буквы — ровно тот случай, когда делать нечего.
+            if (preg_match('/^\$\\sqrt\{[a-z]\}\$$/u', $formula)) {
+                $trivial[] = $expr;
+            }
+        }
+
+        $this->assertSame([], $trivial, 'буквенное задание свелось к подстановке');
     }
 
     public function test_every_block_has_tasks_with_letters(): void
     {
         $tasks = $this->tasks();
 
-        for ($block = 0; $block < 4; $block++) {
-            $withLetters = $tasks
-                ->filter(fn (Task $t) => $t->payload['subtype'] === $block)
-                ->filter(fn (Task $t) => str_contains($t->payload['expression'], ' при '));
-            $this->assertGreaterThanOrEqual(20, $withLetters->count(),
-                "в блоке {$block} почти нет буквенных заданий");
+        foreach (TaskGroup::where('bank', 'skills')->where('topic', '03')->get() as $group) {
+            foreach (array_keys($group->payload['subtypes']) as $block) {
+                $withLetters = $tasks
+                    ->where('task_group_id', $group->id)
+                    ->filter(fn (Task $t) => $t->payload['subtype'] === $block)
+                    ->filter(fn (Task $t) => str_contains($t->payload['expression'], ' при '));
+                $this->assertGreaterThanOrEqual(20, $withLetters->count(),
+                    "в блоке {$block} класса {$group->payload['title']} почти нет буквенных заданий");
+            }
         }
     }
 
@@ -101,9 +134,10 @@ class SkillsSquareRootsTest extends TestCase
     {
         $tasks = app(LessonTaskPickerService::class)->tasks('skills', ['topic_id' => '03']);
 
-        $this->assertCount(400, $tasks);
-        $this->assertSame(['8 класс'], array_values(array_unique(array_column($tasks, 'group_label'))));
-        $this->assertSame(4, count(array_unique(array_column($tasks, 'subtype_key'))));
+        $this->assertCount(700, $tasks);
+        $this->assertSame(['8 класс', '10–11 класс'],
+            array_values(array_unique(array_column($tasks, 'group_label'))));
+        $this->assertSame(7, count(array_unique(array_column($tasks, 'subtype_key'))));
         $this->assertContains('Тема — избавление от иррациональности',
             array_column($tasks, 'subtype_label'));
     }
