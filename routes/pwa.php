@@ -3,6 +3,7 @@
 use App\Http\Controllers\Pwa\AuthController;
 use App\Http\Controllers\Pwa\BugReportController;
 use App\Http\Controllers\Pwa\EgeStudentController;
+use App\Http\Controllers\Pwa\FriendInviteController;
 use App\Http\Controllers\Pwa\Entrance10Controller;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\PracticeController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Pwa\StudentLessonController;
 use App\Http\Controllers\Pwa\StudentNoteController;
 use App\Http\Controllers\Pwa\TelegramLinkController;
 use App\Http\Controllers\Pwa\TeacherController;
+use App\Http\Controllers\Pwa\TeacherFriendInviteController;
 use App\Http\Controllers\Pwa\TeacherLessonController;
 use App\Http\Controllers\Pwa\VprController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +63,11 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     // Protected student routes
     Route::middleware(['auth', 'pwa.telegram-link', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
+        // «Позови друга» — 8–11 класс, прикреплённые к учителю (гейт в FriendInviteService)
+        Route::get('/friends', [FriendInviteController::class, 'show'])->name('pwa.student.friends');
+        Route::post('/friends/notes', [FriendInviteController::class, 'storeNote'])->name('pwa.student.friends.notes.store');
+        Route::delete('/friends/notes/{id}', [FriendInviteController::class, 'destroyNote'])->whereNumber('id')->name('pwa.student.friends.notes.destroy');
+        Route::post('/friends/board', [FriendInviteController::class, 'boardVisibility'])->name('pwa.student.friends.board');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
         Route::get('/part2', [StudentController::class, 'part2'])->name('pwa.student.part2');
@@ -217,5 +224,12 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
 
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');
+        // «Позови друга»: кто привёл новичка, второе оплаченное занятие, выдача денег
+        Route::get('/friends', [TeacherFriendInviteController::class, 'index'])->name('pwa.teacher.friends');
+        Route::post('/friends', [TeacherFriendInviteController::class, 'store'])->name('pwa.teacher.friends.store');
+        Route::post('/friends/{invite}/qualify', [TeacherFriendInviteController::class, 'qualify'])->whereNumber('invite')->name('pwa.teacher.friends.qualify');
+        Route::post('/friends/{invite}/cancel', [TeacherFriendInviteController::class, 'cancel'])->whereNumber('invite')->name('pwa.teacher.friends.cancel');
+        Route::post('/friends/credits/{credit}/paid', [TeacherFriendInviteController::class, 'payCredit'])->whereNumber('credit')->name('pwa.teacher.friends.credit.paid');
+        Route::post('/friends/bonuses/{bonus}/paid', [TeacherFriendInviteController::class, 'payBonus'])->whereNumber('bonus')->name('pwa.teacher.friends.bonus.paid');
     });
 });
