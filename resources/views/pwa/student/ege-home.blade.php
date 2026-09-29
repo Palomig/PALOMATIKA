@@ -28,6 +28,7 @@
   @if(!empty($showLessonTile))
     @include('pwa.student.partials.lesson-tile')
   @endif
+  @include('pwa.student.partials.friend-strip')
 
   <nav class="ege-level-switch" aria-label="Уровень ЕГЭ">
     <a href="{{ route('pwa.student.ege.home', ['level' => 'prof']) }}"
@@ -158,7 +159,7 @@
     </a>
     <div class="tile-sm" @click="showShare = true">
       <div class="tile-sm-icon">🎁</div>
-      <div class="tile-sm-name">Пригласить друга</div>
+      <div class="tile-sm-name">{{ !empty($friendStrip) ? 'Поделиться приложением' : 'Пригласить друга' }}</div>
       <div class="tile-sm-desc">Поделиться ссылкой</div>
     </div>
   </div>

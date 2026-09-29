@@ -160,6 +160,7 @@
   @if(!empty($showLessonTile))
     @include('pwa.student.partials.lesson-tile')
   @endif
+  @include('pwa.student.partials.friend-strip')
 
   {{-- OGE toggle for grade 8 --}}
   @if((int)($user->grade_num ?? 0) === 8)
@@ -267,7 +268,7 @@
     </a>
     <div class="tile-sm" @click="showShare = true">
       <div class="tile-sm-icon">🎁</div>
-      <div class="tile-sm-name">Пригласить друга</div>
+      <div class="tile-sm-name">{{ !empty($friendStrip) ? 'Поделиться приложением' : 'Пригласить друга' }}</div>
       <div class="tile-sm-desc">Поделиться ссылкой</div>
     </div>
   </div>
