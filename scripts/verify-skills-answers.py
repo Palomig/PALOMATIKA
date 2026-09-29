@@ -52,6 +52,17 @@ def latex_to_plain(tex: str) -> str:
             den, i = take_group(src, i)
             out += f'(({latex_to_plain(num)})/({latex_to_plain(den)}))'
             continue
+        if src.startswith(r'\sqrt[', i):
+            # Корень n-й степени: \sqrt[3]{-125} → real_root(-125, 3).
+            close = src.index(']', i)
+            index = latex_to_plain(src[i + len(r'\sqrt['):close])
+            body, i = take_group(src, close + 1)
+            glue = '*' if out and (out[-1].isalnum() or out[-1] == ')') else ''
+            out += f'{glue}real_root({latex_to_plain(body)},{index})'
+            continue
+        if src.startswith(r'\left', i) or src.startswith(r'\right', i):
+            i += len(r'\left') if src.startswith(r'\left', i) else len(r'\right')
+            continue
         if src.startswith(r'\sqrt', i):
             body, i = take_group(src, i + len(r'\sqrt'))
             # «x\sqrt{p}» — умножение: без явного знака sympy склеит «xsqrt»
@@ -76,14 +87,21 @@ def latex_to_plain(tex: str) -> str:
     return out
 
 
-def parse(src: str):
-    # Между соседними буквами — знак умножения: «yn» иначе уедет в функцию
-    # Бесселя. Имя функции от этого правила прячем: иначе «sqrt» распадётся
-    # на произведение четырёх переменных.
-    guarded = src.replace('sqrt', '\x01')
-    guarded = re.sub(r'(?<=[a-z])(?=[a-z])', '*', guarded)
+# Имена, которые нельзя рвать на отдельные переменные.
+KNOWN_NAMES = ('real_root', 'Rational', 'sqrt')
 
-    return parse_expr(guarded.replace('\x01', 'sqrt'), transformations=TRANSFORMS)
+
+def parse(src: str):
+    # Между соседними буквами ставим знак умножения: «yn» иначе уедет в
+    # функцию Бесселя, а «ab» станет одной переменной. Имена функций от этого
+    # правила защищены — «sqrt» распался бы на произведение четырёх букв.
+    def split_word(m):
+        word = m.group(0)
+        return word if word in KNOWN_NAMES else '*'.join(word)
+
+    guarded = re.sub(r'[A-Za-z_]+', split_word, src)
+
+    return parse_expr(guarded, transformations=TRANSFORMS)
 
 
 def split_substitution(expression: str) -> tuple[str, dict]:
