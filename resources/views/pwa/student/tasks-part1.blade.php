@@ -6,7 +6,6 @@
 @endpush
 
 @push('styles')
-<style>
   .topics-row {
     display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;
     opacity: 0; animation: fadeUp 0.3s ease 0.08s forwards;
@@ -187,7 +186,6 @@
   .pm-btn-trial { background: var(--purple-bg); border: 1px solid var(--purple-bd); color: var(--purple); }
   .pm-btn-trial:active { filter: brightness(0.9); }
   .pm-cancel { display: block; width: 100%; padding: 14px; background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 700; cursor: pointer; }
-</style>
 @endpush
 
 @push('scripts')

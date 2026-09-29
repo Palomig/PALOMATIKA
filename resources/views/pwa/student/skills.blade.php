@@ -6,13 +6,12 @@
 @endpush
 
 @push('styles')
-<style>
+  /* Названия навыков длинные — переносим их по строкам, а не прячем в
+     горизонтальную прокрутку: иначе третья пилюля наезжает на вторую. */
   .topics-row {
-    display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
+    display: flex; flex-wrap: wrap; gap: 6px;
     opacity: 0; animation: fadeUp 0.3s ease 0.08s forwards;
-    scrollbar-width: none;
   }
-  .topics-row::-webkit-scrollbar { display: none; }
   .topic-pill {
     padding: 8px 12px; border-radius: 10px; white-space: nowrap; flex-shrink: 0;
     border: 1px solid var(--border); background: var(--surface);
@@ -46,6 +45,16 @@
   .subtype[open] summary::after { transform: rotate(180deg); }
   .subtype-count { font-size: 11px; color: var(--muted); font-weight: 400; }
   .subtype-body { padding: 0 8px 8px; display: flex; flex-direction: column; gap: 8px; }
+  /* Третий уровень: подуровни по двадцать примеров */
+  .chunk { border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,.02); }
+  .chunk summary {
+    list-style: none; cursor: pointer; padding: 9px 11px;
+    display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--muted);
+  }
+  .chunk summary::-webkit-details-marker { display: none; }
+  .chunk summary::after { content: '▾'; margin-left: auto; color: var(--muted); transition: transform .15s ease; }
+  .chunk[open] summary::after { transform: rotate(180deg); }
+  .chunk-body { padding: 0 6px 6px; display: flex; flex-direction: column; gap: 8px; }
   .task-list { display: flex; flex-direction: column; gap: 8px; opacity: 0; animation: fadeUp 0.3s ease 0.12s forwards; }
   .task-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
   .task-item-text { font-size: 15px; line-height: 1.5; color: var(--text); }
@@ -54,7 +63,6 @@
   .answer-label { font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
   .answer-value { font-family: ui-monospace, monospace; font-size: 13px; color: var(--green); }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.6; }
-</style>
 @endpush
 
 @section('body')
@@ -104,7 +112,37 @@
                   <span class="subtype-count">{{ count($subtype['tasks']) }}</span>
                 </summary>
                 <div class="subtype-body">
-                  @foreach($subtype['tasks'] as $task)
+                  {{-- Сотня примеров идёт от простых к сложным: внутри уровня
+                       режем её на подуровни по двадцать. --}}
+                  @forelse($subtype['chunks'] as $chunk)
+                    <details class="chunk">
+                      <summary>
+                        {{ $chunk['title'] }}
+                        <span class="subtype-count">{{ count($chunk['tasks']) }}</span>
+                      </summary>
+                      <div class="chunk-body">
+                        @foreach($chunk['tasks'] as $task)
+                          @include('pwa.student.partials.skills-task', ['task' => $task, 'instruction' => $group['instruction']])
+                        @endforeach
+                      </div>
+                    </details>
+                  @empty
+                    @foreach($subtype['tasks'] as $task)
+                      @include('pwa.student.partials.skills-task', ['task' => $task, 'instruction' => $group['instruction']])
+                    @endforeach
+                  @endforelse
+                </div>
+              </details>
+            @endforeach
+          @elseif(!empty($group['chunks']))
+            @foreach($group['chunks'] as $chunk)
+              <details class="subtype">
+                <summary>
+                  {{ $chunk['title'] }}
+                  <span class="subtype-count">{{ count($chunk['tasks']) }}</span>
+                </summary>
+                <div class="subtype-body">
+                  @foreach($chunk['tasks'] as $task)
                     @include('pwa.student.partials.skills-task', ['task' => $task, 'instruction' => $group['instruction']])
                   @endforeach
                 </div>

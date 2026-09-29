@@ -72,7 +72,8 @@
   /* Растр ФИПИ чёрным по прозрачному — на тёмной подложке не читается. */
   .lesson-task-image.is-raster { background: #fff; }
   .lesson-task-image svg, .lesson-task-image img { max-width: 100%; height: auto; max-height: 320px; }
-  .lesson-answer-row { display: flex; gap: 8px; align-items: center; }
+  /* flex-wrap: под полем ответа живёт виджет дробного ввода */
+  .lesson-answer-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   .lesson-answer-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: ui-monospace, monospace; }
   .lesson-answer-input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
   .lesson-submit-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 12px 18px; font-weight: 800; cursor: pointer; font-size: 14px; }
@@ -224,12 +225,20 @@
                  @keydown.enter.prevent="submitAnswer(task.id, $event.target.value)"
                  @paste="onAnswerPaste(task.id, $event)"
                  @blur="if($event.target.value && $event.target.value !== (task.my_answer||'')) submitAnswer(task.id, $event.target.value)">
+          {{-- Поле ищем по строке, а не через previousElementSibling: клик
+               попадает во внутренний span кнопки, да и рядом теперь виджет дроби. --}}
           <button class="lesson-submit-btn"
                   :disabled="!!(status === 'ended' || sending[task.id])"
-                  @click="submitAnswer(task.id, $event.target.previousElementSibling.value)">
+                  @click="submitAnswer(task.id, $el.closest('.lesson-answer-row').querySelector('.lesson-answer-input').value)">
             <span x-show="!sending[task.id]" x-text="task.my_answer ? '↻' : '→'"></span>
             <span x-show="sending[task.id]" x-cloak>…</span>
           </button>
+
+          {{-- Дробный ответ: целая часть и числитель над знаменателем. --}}
+          @include('pwa._shared.partials.fraction-input', [
+              'scope' => '.lesson-answer-row',
+              'target' => '.lesson-answer-input',
+          ])
         </div>
       </template>
     </div>

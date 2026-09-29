@@ -6,7 +6,6 @@
 @endpush
 
 @push('styles')
-<style>
   .topics-row {
     display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
     opacity: 0; animation: fadeUp 0.3s ease 0.08s forwards;
@@ -52,7 +51,6 @@
   .answer-label { font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
   .answer-value { font-family: var(--display); font-size: 14px; color: var(--green); }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.6; }
-</style>
 @endpush
 
 @section('body')
