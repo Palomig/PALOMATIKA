@@ -28,6 +28,7 @@
   <a class="btn btn-accent" href="/students">Ученики</a>
   <a class="btn btn-accent" href="/homework">Домашка</a>
   <a class="btn btn-accent" href="/lessons">Урок</a>
+  <a class="btn btn-surface" href="/friends">Позови друга</a>
 
   <div class="sec-label">Недавние попытки учеников</div>
   <div class="list">
