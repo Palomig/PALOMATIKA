@@ -68,13 +68,46 @@
                           x-text="groupAllSelected(sub) ? 'Снять' : 'Выбрать'"></button>
                 </summary>
                 <div class="tp-sub-body">
-                  <template x-for="t in sub.tasks" :key="t.uid">
+                  {{-- Сотня задач идёт от простых к сложным, поэтому внутри
+                       уровня режем её на подуровни по двадцать. --}}
+                  <template x-for="chunk in sub.chunks" :key="chunk.key">
+                    <details class="tp-chunk">
+                      <summary>
+                        <span class="tp-chunk-label" x-text="chunk.label"></span>
+                        <span class="tp-count" x-text="'(' + chunk.tasks.length + ')'"></span>
+                        <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(chunk)"
+                                x-text="groupAllSelected(chunk) ? 'Снять' : 'Выбрать'"></button>
+                      </summary>
+                      <div class="tp-chunk-body">
+                        <template x-for="t in chunk.tasks" :key="t.uid">
+                          @include('pwa._shared.partials.task-picker-card')
+                        </template>
+                      </div>
+                    </details>
+                  </template>
+                  <template x-for="t in (sub.chunks.length ? [] : sub.tasks)" :key="t.uid">
                     @include('pwa._shared.partials.task-picker-card')
                   </template>
                 </div>
               </details>
             </template>
-            <template x-for="t in (g.subs.length ? [] : g.tasks)" :key="t.uid">
+            {{-- Задание без подтипов: подуровни те же, если задач много --}}
+            <template x-for="chunk in (g.subs.length ? [] : g.chunks)" :key="chunk.key">
+              <details class="tp-sub">
+                <summary>
+                  <span class="tp-sub-label" x-text="chunk.label"></span>
+                  <span class="tp-count" x-text="'(' + chunk.tasks.length + ')'"></span>
+                  <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(chunk)"
+                          x-text="groupAllSelected(chunk) ? 'Снять' : 'Выбрать'"></button>
+                </summary>
+                <div class="tp-sub-body">
+                  <template x-for="t in chunk.tasks" :key="t.uid">
+                    @include('pwa._shared.partials.task-picker-card')
+                  </template>
+                </div>
+              </details>
+            </template>
+            <template x-for="t in ((g.subs.length || g.chunks.length) ? [] : g.tasks)" :key="t.uid">
               @include('pwa._shared.partials.task-picker-card')
             </template>
           </div>
@@ -192,6 +225,14 @@
   .task-picker .tp-sub[open] summary::after { transform:rotate(180deg); }
   .task-picker .tp-sub-label { font-size:13px; line-height:1.3; color:var(--text); min-width:0; }
   .task-picker .tp-sub-body { padding:0 8px 8px; display:flex; flex-direction:column; gap:8px; }
+  /* Третий уровень: подуровни по двадцать задач внутри уровня сложности */
+  .task-picker .tp-chunk { border:1px solid var(--border); border-radius:8px; background:rgba(255,255,255,.02); }
+  .task-picker .tp-chunk summary { list-style:none; cursor:pointer; padding:8px 10px; display:flex; align-items:center; gap:8px; }
+  .task-picker .tp-chunk summary::-webkit-details-marker { display:none; }
+  .task-picker .tp-chunk summary::after { content:'⌄'; margin-left:auto; color:var(--muted); transition:transform .15s ease; }
+  .task-picker .tp-chunk[open] summary::after { transform:rotate(180deg); }
+  .task-picker .tp-chunk-label { font-size:12px; color:var(--muted); font-weight:700; }
+  .task-picker .tp-chunk-body { padding:0 6px 6px; display:flex; flex-direction:column; gap:8px; }
   .task-picker .tp-summary-label { flex:1; min-width:0; }
   .task-picker .tp-count { font-size:11px; color:var(--muted); font-weight:400; }
   .task-picker .tp-block-btn {
@@ -305,6 +346,7 @@ function taskPicker(config) {
     step: 'strips',                      // strips | buckets | tasks
     strips: [], bucketKey: null,
     tasks: [],                           // задачи выбранной темы/навыка
+    chunkSize: 20,                       // размер подуровня внутри уровня
     selected: [],                        // ГЛОБАЛЬНАЯ корзина: не сбрасывается при навигации
     loading: false, error: '',
     katexReady: !!window.katex,
@@ -435,9 +477,29 @@ function taskPicker(config) {
       for (const g of out) {
         const covered = g.subs.reduce((n, s) => n + s.tasks.length, 0);
         if (g.subs.length < 2 || covered !== g.tasks.length) g.subs = [];
+        g.chunks = this.chunksOf(g);
+        for (const s of g.subs) s.chunks = this.chunksOf(s);
       }
       return out;
     },
+    // Подуровень — двадцать задач подряд. Они уже отсортированы от простых к
+    // сложным, поэтому «№21–40» это ровно следующая ступень. Короткие списки
+    // не режем: спойлер ради пяти карточек только мешает.
+    chunksOf(group) {
+      const size = this.chunkSize;
+      if (group.tasks.length <= size * 2) return [];
+      const chunks = [];
+      for (let i = 0; i < group.tasks.length; i += size) {
+        const tasks = group.tasks.slice(i, i + size);
+        chunks.push({
+          key: group.key + '#' + (i / size),
+          label: 'Подуровень ' + (i / size + 1) + ' · №' + (i + 1) + '–' + (i + tasks.length),
+          tasks,
+        });
+      }
+      return chunks;
+    },
+
     get buckets() {
       return this.groups.map(g => ({ key: g.key, label: g.label, count: g.tasks.length }));
     },

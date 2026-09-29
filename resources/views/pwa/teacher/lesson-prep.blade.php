@@ -781,6 +781,19 @@
                 <div class="hw-group-head">
                   <span class="hw-group-label" x-text="g.label"></span>
                   <span class="hw-muted" x-text="g.suggestions.length + ' примеров · выбрано ' + hwGroupSelectedCount(g)"></span>
+
+                </div>
+                {{-- Сотня примеров уровня разложена на подуровни по двадцать:
+                     внутри уровня они идут от простых к сложным. --}}
+                <div class="hw-pills" x-show="hwChunks(g).length > 1" style="margin-bottom:0">
+                  <template x-for="chunk in hwChunks(g)" :key="chunk.key">
+                    <button type="button" class="hw-pill" :class="hwChunkKey[g.key] === chunk.key ? 'active' : ''"
+                            @click="hwChooseChunk(g, chunk.key)">
+                      <span x-text="chunk.short"></span>
+                      <span x-show="hwGroupSelectedCount(chunk)" style="opacity:.7"
+                            x-text="' · ' + hwGroupSelectedCount(chunk)"></span>
+                    </button>
+                  </template>
                 </div>
                 <div class="hw-cards">
                   <template x-for="(s, si) in hwSkillVisible(g)" :key="g.key + '-' + si">
@@ -791,11 +804,10 @@
                       </span>
                     </label>
                   </template>
-                  {{-- 25 примеров в группе: показываем первые шесть, остальное по кнопке --}}
                   <button type="button" class="ns-toggle-all" style="align-self: flex-start;"
-                          x-show="g.suggestions.length > hwSkillPreview"
+                          x-show="hwVisiblePool(g).length > hwSkillPreview"
                           @click="hwSkillExpanded[g.key] = !hwSkillExpanded[g.key]; typeset()"
-                          x-text="hwSkillExpanded[g.key] ? 'Свернуть' : ('Ещё ' + (g.suggestions.length - hwSkillPreview))"></button>
+                          x-text="hwSkillExpanded[g.key] ? 'Свернуть' : ('Ещё ' + (hwVisiblePool(g).length - hwSkillPreview))"></button>
                 </div>
               </div>
             </template>
@@ -898,6 +910,8 @@
       hwSkillGroups: [],        // [{key, label, suggestions:[{bank, refs, preview_text}]}]
       hwSkillPreview: 6,        // сколько карточек группы видно до «Ещё N»
       hwSkillExpanded: {},      // group_key → развёрнута ли группа
+      hwChunkSize: 20,          // размер подуровня
+      hwChunkKey: {},           // group_key → выбранный подуровень
       // Компоновка под телефон: вкладки, меню «⋯», код крупно, шторка учеников
       tab: 'tasks',             // tasks | answers | review
       menuOpen: false,
@@ -1288,6 +1302,7 @@
             });
           }
           this.hwSkillGroups = [...groups.values()];
+          this.hwChunkKey = {};
         } catch (e) {
           alert('Не удалось загрузить примеры');
         } finally {
@@ -1295,8 +1310,36 @@
           this.typeset();
         }
       },
+      // Подуровни уровня: по двадцать примеров, «№21–40» — следующая ступень.
+      hwChunks(g) {
+        const size = this.hwChunkSize;
+        if (g.suggestions.length <= size * 2) return [];
+        const chunks = [];
+        for (let i = 0; i < g.suggestions.length; i += size) {
+          const tasks = g.suggestions.slice(i, i + size);
+          chunks.push({
+            key: g.key + '#' + (i / size),
+            short: '№' + (i + 1) + '–' + (i + tasks.length),
+            suggestions: tasks,
+          });
+        }
+        return chunks;
+      },
+      hwChooseChunk(g, key) {
+        this.hwChunkKey[g.key] = key;
+        this.hwSkillExpanded[g.key] = false;
+        this.typeset();
+      },
+      // Пул текущего подуровня (или всей группы, если подуровней нет).
+      hwVisiblePool(g) {
+        const chunks = this.hwChunks(g);
+        if (!chunks.length) return g.suggestions;
+        const key = this.hwChunkKey[g.key] || chunks[0].key;
+        return (chunks.find(c => c.key === key) || chunks[0]).suggestions;
+      },
       hwSkillVisible(g) {
-        return this.hwSkillExpanded[g.key] ? g.suggestions : g.suggestions.slice(0, this.hwSkillPreview);
+        const pool = this.hwVisiblePool(g);
+        return this.hwSkillExpanded[g.key] ? pool : pool.slice(0, this.hwSkillPreview);
       },
       hwGroupSelectedCount(g) {
         return (g.suggestions || []).filter(s => this.hwIsSelected(s)).length;
@@ -1304,11 +1347,15 @@
       // Быстрый набор: из каждой группы первые N ещё не выбранных — они идут
       // от простых к сложным, так что «по 3» даёт ровную домашку.
       hwSkillPickEach(n) {
+        // Берём из каждого подуровня: иначе «по 3 из каждой» собирало бы
+        // домашку из одних только самых простых примеров уровня.
         for (const g of this.hwSkillGroups) {
-          let added = 0;
-          for (const s of g.suggestions) {
-            if (added >= n) break;
-            if (!this.hwIsSelected(s)) { this.hwSelectedKeys.push(this.hwKey(s)); added++; }
+          for (const part of (this.hwChunks(g).length ? this.hwChunks(g) : [g])) {
+            let added = 0;
+            for (const s of part.suggestions) {
+              if (added >= n) break;
+              if (!this.hwIsSelected(s)) { this.hwSelectedKeys.push(this.hwKey(s)); added++; }
+            }
           }
         }
       },
