@@ -40,13 +40,11 @@ class AuthController extends Controller
                 return redirect('https://teacher.' . config('app.base_domain') . '/dashboard');
             }
 
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            $request->session()->flash('error', 'Этот аккаунт не имеет доступа к кабинету репетитора.');
-
+            // Не разлогиниваем: кука общая на весь palomatika.ru, и ученик,
+            // случайно открывший teacher., вылетел бы и из своего кабинета.
             return view('pwa.shared.login', [
                 'context' => 'teacher',
+                'error' => 'Этот аккаунт не имеет доступа к кабинету репетитора.',
             ]);
         }
 
@@ -124,10 +122,7 @@ class AuthController extends Controller
         $user = $this->findOrCreateUser($socialUser, $provider);
 
         if (!in_array($user->role, ['teacher', 'admin'], true)) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
+            // Этот аккаунт мы ещё не залогинили — текущую сессию (если есть) не трогаем.
             return redirect('https://teacher.' . config('app.base_domain') . '/login')
                 ->with('error', 'Этот аккаунт не имеет доступа к кабинету репетитора.');
         }

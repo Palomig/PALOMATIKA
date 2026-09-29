@@ -142,4 +142,30 @@ class MergedAccountSessionTest extends TestCase
 
         $this->assertSame($canonical->id, Auth::id());
     }
+
+    /** Донор сохраняет вход через свой Google/Яндекс — иначе следующий вход плодит новый аккаунт. */
+    public function test_merge_keeps_donor_login_identity(): void
+    {
+        $canonical = User::factory()->withoutTelegram()->create([
+            'role' => 'student',
+            'oauth_provider' => 'yandex',
+            'oauth_id' => 'ya-51',
+        ]);
+
+        $donor = User::factory()->create([
+            'role' => 'student',
+            'oauth_provider' => 'google',
+            'oauth_id' => 'g-106',
+            'telegram_chat_id' => 700700700,
+        ]);
+
+        app(AccountMergeService::class)->merge($donor, $canonical);
+
+        $donor->refresh();
+        $this->assertSame($canonical->id, $donor->merged_into_id);
+        $this->assertSame('google', $donor->oauth_provider);
+        $this->assertSame('g-106', $donor->oauth_id);
+        $this->assertNull($donor->telegram_chat_id);
+        $this->assertSame(700700700, (int) $canonical->fresh()->telegram_chat_id);
+    }
 }

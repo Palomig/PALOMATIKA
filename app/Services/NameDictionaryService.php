@@ -32,14 +32,14 @@ class NameDictionaryService
         }
 
         $parts = preg_split('/[\-\']+/u', $normalized) ?: [$normalized];
-        $dict = $this->dictionary();
+        $dict = array_map(fn ($n) => $this->foldYo($n), $this->dictionary());
 
         foreach ($parts as $part) {
             $part = trim($part);
             if ($part === '' || mb_strlen($part) < 2) {
                 return false;
             }
-            if (!in_array($part, $dict, true)) {
+            if (!in_array($this->foldYo($part), $dict, true)) {
                 return false;
             }
         }
@@ -78,6 +78,12 @@ class NameDictionaryService
     private function normalize(string $name): string
     {
         return mb_strtolower(trim($name));
+    }
+
+    /** «ё» → «е»: на телефоне «Артем» пишут чаще, чем «Артём». */
+    private function foldYo(string $name): string
+    {
+        return str_replace('ё', 'е', $name);
     }
 
     /**

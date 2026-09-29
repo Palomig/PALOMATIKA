@@ -229,54 +229,163 @@
   .review-offer-text { font-size: 12px; color: var(--text); line-height: 1.4; word-break: break-word; }
   .review-add { width: 100%; margin-top: 4px; padding: 10px; border: none; border-radius: 10px; background: var(--purple); color: #fff; font-family: var(--display); font-size: 13px; cursor: pointer; }
   .review-add:disabled { opacity: .45; cursor: default; }
+  /* ── Компоновка урока под телефон (вариант A): код строкой, вкладки, панель внизу ── */
+  .lp-page { padding-bottom: calc(112px + var(--safe-bottom, 0px)); }
+  .lp-top { display: flex; align-items: center; gap: 10px; }
+  .lp-top .topbar-title { flex: 1; min-width: 0; }
+  .lp-more { background: none; border: none; color: var(--muted); font-size: 22px; line-height: 1; padding: 4px 8px; border-radius: 10px; cursor: pointer; }
+  .lp-menu { position: absolute; right: 0; top: 44px; z-index: 60; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 6px; min-width: 230px; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+  .lp-menu button { display: block; width: 100%; text-align: left; padding: 11px 12px; border: none; background: none; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; }
+  .lp-menu button:hover { background: var(--surface); }
+  .lp-codebar { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
+  .lp-codebar-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .lp-code { background: none; border: none; padding: 0; font-family: ui-monospace, 'SF Mono', monospace; font-size: 22px; font-weight: 800; letter-spacing: 3px; color: var(--text); cursor: pointer; }
+  .lp-grow { flex: 1; }
+  .lp-who { display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 10px; border: none; background: var(--surface2); color: var(--text); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+  .lp-dots { display: inline-flex; gap: 3px; }
+  .lp-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--muted2); flex-shrink: 0; }
+  .lp-dot.present { background: var(--green); }
+  .lp-dot.away { background: var(--red); }
+  .lp-bigcode { position: fixed; inset: 0; z-index: 1100; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; text-align: center; cursor: pointer; }
+  .lp-bigcode .c { font-family: ui-monospace, monospace; font-size: clamp(48px, 16vw, 96px); font-weight: 800; letter-spacing: 6px; line-height: 1; color: var(--text); }
+  .lp-bigcode .s { color: var(--muted); font-size: 15px; }
+  .lp-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: var(--surface); border: 1px solid var(--border); }
+  .lp-tabs button { flex: 1; padding: 9px 4px; border-radius: 10px; border: none; background: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+  .lp-tabs button.on { background: var(--surface2); color: var(--text); }
+  .lp-tabs .n { font-size: 11px; color: var(--muted); margin-left: 3px; }
+  .lp-list { display: flex; flex-direction: column; gap: 8px; }
+  .lp-empty { color: var(--muted); font-size: 14px; line-height: 1.5; padding: 24px 12px; text-align: center; }
+  /* Ответы под условием задачи — чтобы помогать, глядя на условие */
+  .lp-res { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .lp-res-head { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: var(--muted); }
+  .lp-res-head .lp-grow { min-width: 0; }
+  .lp-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .lp-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 8px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .lp-chip.ok { color: var(--green); border-color: var(--green-bd); background: var(--green-bg); }
+  .lp-chip.bad { color: var(--red); border-color: var(--red-bd); background: var(--red-bg); }
+  .lp-chip b { color: var(--text); font-weight: 700; }
+  .lp-chip .ans { font-family: ui-monospace, monospace; font-weight: 800; }
+  /* Матрица ответов */
+  .lp-mx-wrap { overflow-x: auto; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); padding: 10px; }
+  .lp-mx { display: grid; gap: 5px; align-items: center; min-width: min-content; }
+  .lp-mx-hd { font-size: 12px; font-weight: 800; color: var(--muted); text-align: center; padding: 4px 0; border: none; background: none; border-radius: 6px; cursor: pointer; font-family: inherit; }
+  .lp-mx-hd:hover { background: var(--surface2); color: var(--text); }
+  .lp-mx-name { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 13px; font-weight: 700; color: var(--text); background: none; border: none; padding: 0; font-family: inherit; cursor: pointer; text-align: left; }
+  .lp-mx-name span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lp-cell { position: relative; aspect-ratio: 1; min-width: 26px; border-radius: 7px; border: none; display: grid; place-items: center; font-size: 13px; font-weight: 800; cursor: pointer; background: var(--surface2); color: var(--muted2); font-family: inherit; }
+  .lp-cell.ok { background: var(--green-bg); color: var(--green); box-shadow: inset 0 0 0 1px var(--green-bd); }
+  .lp-cell.bad { background: var(--red-bg); color: var(--red); box-shadow: inset 0 0 0 1px var(--red-bd); }
+  .lp-cell.na { background: none; box-shadow: inset 0 0 0 1px var(--border); cursor: default; }
+  .lp-cell.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .lp-cell .flag { position: absolute; top: 3px; right: 3px; width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+  .lp-mx-sum { font-size: 11px; font-weight: 800; text-align: center; }
+  .lp-mx-foot { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); }
+  .lp-mx-foot i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); margin-right: 4px; }
+  .lp-peek { padding: 10px 12px; border-radius: 12px; background: var(--surface2); font-size: 13px; line-height: 1.5; color: var(--text); }
+  .lp-peek .ok { color: var(--green); font-weight: 800; }
+  .lp-peek .bad { color: var(--red); font-weight: 800; }
+  .lp-silent { font-size: 12px; color: var(--muted); }
+  .lp-silent b { color: var(--red); }
+  /* Шторка «кто в уроке» */
+  .lp-veil { position: fixed; inset: 0; z-index: 900; background: rgba(0,0,0,.5); }
+  .lp-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 901; max-width: 480px; margin: 0 auto; max-height: 80dvh; overflow-y: auto; background: var(--surface); border-radius: 22px 22px 0 0; border-top: 1px solid var(--border); padding: 8px 16px calc(18px + var(--safe-bottom, 0px)); }
+  .lp-grab { width: 38px; height: 4px; border-radius: 4px; background: var(--muted2); margin: 2px auto 12px; }
+  .lp-sheet-t { font-family: var(--display); font-size: 17px; color: var(--text); }
+  .lp-sheet-s { font-size: 13px; color: var(--muted); margin: 4px 0 8px; }
+  .lp-person { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); }
+  .lp-person-b { flex: 1; min-width: 0; }
+  .lp-person-n { font-size: 15px; font-weight: 700; color: var(--text); }
+  .lp-person-m { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .lp-mini { padding: 7px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+  .lp-mini.warn { color: var(--red); border-color: var(--red-bd); }
+  /* Нижняя панель действий — всегда под пальцем */
+  .lp-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; }
+  .lp-dock-in { max-width: 480px; margin: 0 auto; display: flex; gap: 8px; padding: 10px 12px calc(12px + var(--safe-bottom, 0px)); background: linear-gradient(to top, var(--bg) 72%, transparent); }
+  .lp-ib { width: 58px; flex-shrink: 0; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px 0 7px; font: inherit; cursor: pointer; }
+  .lp-ib small { font-size: 10px; font-weight: 800; color: var(--muted); }
+  .lp-primary { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; border-radius: 16px; padding: 14px 10px; background: var(--accent); color: #fff; font-family: var(--display); font-size: 15px; cursor: pointer; }
+  .lp-primary.stop { background: var(--red-bg); color: var(--red); box-shadow: inset 0 0 0 1px var(--red-bd); }
+  .lp-primary.ghost { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
+  .lp-primary:disabled { opacity: .45; cursor: default; }
+  /* Кнопка «сообщить о баге» из общего шаблона — над панелью, а не поверх «Завершить» */
+  .bug-report-trigger { bottom: calc(96px + var(--safe-bottom, 0px)) !important; }
+  /* В полноэкранных окнах (задачи, домашка, заметки) она ложилась на их главную кнопку */
+  body:has(.ns-overlay:not([style*="none"])) .bug-report-trigger,
+  body:has(.picker-overlay:not([style*="none"])) .bug-report-trigger { display: none; }
 @endpush
 
 @section('body')
-<div class="page" x-data="lessonPrep({{ $session->id }}, '{{ $session->status }}')" x-init="init()"
+<div class="page lp-page" x-data="lessonPrep({{ $session->id }}, '{{ $session->status }}')" x-init="init()"
      @picker-add.window="onPickerAdd($event.detail.items)"
      @keydown.escape.window="viewer && close()"
      @keydown.arrow-left.window="viewer && step(-1)"
      @keydown.arrow-right.window="viewer && step(1)">
-  <div class="topbar">
+  <div class="topbar lp-top" style="position: relative;">
     <a href="{{ route('pwa.teacher.lessons') }}" class="back-btn">‹</a>
     <div class="topbar-title">Урок #{{ $session->id }}</div>
     <span :class="'status-badge-' + status" x-text="statusLabel(status)" class="status-badge-{{ $session->status }}">{{ $session->status }}</span>
+    <button type="button" class="lp-more" @click="menuOpen = !menuOpen" aria-label="Ещё">⋯</button>
+    <div class="lp-menu" x-show="menuOpen" x-cloak @click.outside="menuOpen = false">
+      <button type="button" @click="menuOpen = false; createNextLesson()"
+              x-text="creatingNext ? 'Создаём…' : 'Следующий урок через неделю'"></button>
+      <button type="button" x-show="joinCode && status !== 'ended'" @click="menuOpen = false; copyCode()">Скопировать код урока</button>
+    </div>
   </div>
 
-  {{-- Код входа (draft и live) --}}
+  {{-- Код входа одной строкой; тап — крупно, чтобы продиктовать --}}
   <template x-if="status !== 'ended' && joinCode">
-    <div class="code-block">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size: 13px; font-weight: 800; color: var(--text);">🔑 Код урока</div>
-        <div style="font-size: 11px; color: var(--muted);" x-text="`${participants.length} в уроке`"></div>
-      </div>
-      <div class="join-code" x-text="joinCode"></div>
-      <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">
-        Продиктуй код ученикам: они вводят его на своей странице «Урок» и попадают сюда.
-        После входа ученик остаётся на странице урока 60 минут — отпустить раньше можно кнопкой ✕ у имени.
-      </div>
-      <template x-if="participants.length">
-        <div class="participant-chips">
-          <template x-for="p in participants" :key="'chip-' + p.id">
-            <span class="participant-chip">
-              <span x-text="activityDot(p)" :title="activityTitle(p)"></span>
-              <button type="button" class="chip-name" @click="openStudentNotes(p)"
-                      :title="'Заметки: ' + (p.name || ('#' + p.id))">
-                <span x-text="p.name || ('#' + p.id)"></span>
-                <span class="chip-notes" x-show="p.notes_count" x-text="'📝' + p.notes_count"></span>
-              </button>
-              <span x-show="p.locked" title="Лок активен">🔒</span>
-              <button type="button" class="chip-release" x-show="p.locked"
-                      @click="releaseStudent(p.id)" title="Отпустить с урока">✕ отпустить</button>
-            </span>
+    <div class="lp-codebar">
+      <span class="lp-codebar-lbl">Код</span>
+      <button type="button" class="lp-code" @click="codeBig = true" x-text="formatCode(joinCode)"></button>
+      <span class="lp-grow"></span>
+      <button type="button" class="lp-who" @click="peopleOpen = true" aria-label="Ученики в уроке">
+        <span class="lp-dots">
+          <template x-for="p in participants.slice(0, 8)" :key="'dot-' + p.id">
+            <span class="lp-dot" :class="dotClass(p)"></span>
           </template>
-        </div>
-      </template>
+        </span>
+        <span x-text="participants.length"></span>
+      </button>
     </div>
   </template>
 
-  {{-- 📝 Заметки об учениках (ученики не видят) --}}
-  <button class="btn btn-primary" @click="openNotes()" style="align-self: flex-start;">📝 Заметки</button>
+  <div class="lp-bigcode" x-show="codeBig" x-cloak @click="codeBig = false">
+    <div class="s">Код урока</div>
+    <div class="c" x-text="formatCode(joinCode)"></div>
+    <div class="s">Ученики вводят его на своей странице «Урок».<br>Тап — закрыть.</div>
+  </div>
+
+  {{-- Кто в уроке: активность, заметки, «отпустить» --}}
+  <template x-if="peopleOpen">
+    <div>
+      <div class="lp-veil" @click="peopleOpen = false"></div>
+      <div class="lp-sheet">
+        <div class="lp-grab"></div>
+        <div class="lp-sheet-t" x-text="'В уроке: ' + participants.length"></div>
+        <div class="lp-sheet-s">Зелёный — на странице урока, красный — свернул, серый — не заходил.</div>
+        <div class="lp-empty" x-show="!participants.length">Пока никто не вошёл по коду.</div>
+        <template x-for="p in participants" :key="'pp-' + p.id">
+          <div class="lp-person">
+            <span class="lp-dot" :class="dotClass(p)"></span>
+            <div class="lp-person-b">
+              <div class="lp-person-n" x-text="p.name || ('#' + p.id)"></div>
+              <div class="lp-person-m" x-show="p.activity" x-text="activityMeta(p)"></div>
+            </div>
+            <button type="button" class="lp-mini" @click="peopleOpen = false; openStudentNotes(p)"
+                    x-text="p.notes_count ? 'Заметки · ' + p.notes_count : 'Заметки'"></button>
+            <button type="button" class="lp-mini warn" x-show="p.locked" @click="releaseStudent(p.id)">Отпустить</button>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <div class="lp-tabs" role="tablist">
+    <button type="button" :class="tab === 'tasks' ? 'on' : ''" @click="tab = 'tasks'">Задачи<span class="n" x-text="tasks.length"></span></button>
+    <button type="button" :class="tab === 'answers' ? 'on' : ''" @click="tab = 'answers'" x-show="status !== 'draft'">Ответы</button>
+    <button type="button" :class="tab === 'review' ? 'on' : ''" @click="tab = 'review'"
+            x-show="reviewPending.length || reviewPlanned.length">Разбор<span class="n" x-text="reviewPlanned.length + reviewPending.length"></span></button>
+  </div>
 
   {{-- Полноэкранный попап: заметка об учениках --}}
   <div class="ns-overlay" x-show="notesOpen" x-cloak>
@@ -355,25 +464,129 @@
   {{-- Тост после сохранения заметки --}}
   <div class="notes-toast" x-show="noteToast" x-cloak x-text="noteToast"></div>
 
+
+  @include('pwa._shared.photo-viewer')
+
+  {{-- Вкладка «Задачи»: условия целиком — по ним учитель помогает --}}
+  <div class="lp-list" x-show="tab === 'tasks'">
+    <template x-for="task in tasks" :key="task.id">
+      <div class="lesson-task" :id="'lt-' + task.id">
+        <div class="lesson-task-num" x-text="task.position + ')'"></div>
+        <div class="lesson-task-body">
+          <div class="lesson-task-image" x-show="task.task_payload.image_svg" x-html="task.task_payload.image_svg"></div>
+          <template x-if="!task.task_payload.image_svg && task.task_payload.image_url && !task.task_payload.condition_html">
+            <div class="lesson-task-image is-raster"><img :src="task.task_payload.image_url" alt=""></div>
+          </template>
+          {{-- Банк ЕГЭ: условие целиком в разметке ФИПИ (таблицы соответствия,
+               графики-варианты, обозначения-растры); плоский текст — для остальных
+               банков и уроков, собранных до этого поля. --}}
+          <div class="lesson-task-expr fipi-condition" x-show="task.task_payload.condition_html"
+               x-html="fipiHtml(task.task_payload.condition_html)"></div>
+          <div class="lesson-task-expr" x-show="!task.task_payload.condition_html"
+               x-html="taskConditionHtml(task.task_payload.expression)"
+               x-init="$nextTick(() => fitFormulas($el))"
+               @resize.window.debounce.150ms="fitFormulas($el)"></div>
+          <template x-if="task.task_payload.type === 'choice'">
+            <div class="lesson-task-options">
+              <template x-for="(opt, oi) in task.task_payload.options" :key="opt.id">
+                <span class="lesson-task-option" x-html="renderLatex(opt.label)"></span>
+              </template>
+            </div>
+          </template>
+          <div class="lesson-task-meta">
+            <span class="lesson-task-meta-text">
+              <span x-text="task.bank"></span>
+              · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
+              <span class="personal-badge" x-show="task.assigned_student_id"
+                    x-text="'для ' + (task.assigned_name || '#' + task.assigned_student_id)"></span>
+            </span>
+            <button class="btn btn-icon btn-danger" x-show="status === 'draft'"
+                    @click="removeTask(task.id)" title="Убрать задачу из урока">×</button>
+          </div>
+          {{-- Во время урока и после — ответы прямо под условием --}}
+          <div class="lp-res" x-show="status !== 'draft'">
+            <div class="lp-res-head">
+              <span class="lp-grow" x-text="taskStatLine(task)"></span>
+              <div x-show="status === 'live'" style="position: relative;">
+                <button type="button" class="du-btn" @click="toggleDu(task.id)"
+                        x-text="duFor === task.id ? '✕ отмена' : 'не понимает'"></button>
+                <div class="du-pick" x-show="duFor === task.id" x-cloak style="left: auto; right: 0;">
+                  <template x-for="p in participants" :key="'du-' + task.id + '-' + p.id">
+                    <button type="button" class="du-pick-item" @click="dontUnderstand(task.id, p.id)"
+                            x-text="p.name || ('#' + p.id)"></button>
+                  </template>
+                  <div x-show="!participants.length" style="color: var(--muted); font-size: 11px; padding: 4px;">нет учеников</div>
+                </div>
+                <div class="du-done" x-show="duDone === (task.id + '-done')" x-cloak>записано ✓</div>
+              </div>
+            </div>
+            <div class="lp-chips">
+              <template x-for="r in taskResults(task)" :key="'r-' + task.id + '-' + r.id">
+                <span class="lp-chip" :class="r.cls">
+                  <b x-text="r.name"></b>
+                  <span class="ans" x-show="r.answer !== null" x-text="(r.cls === 'ok' ? '✓ ' : '✗ ') + r.answer + r.flags"></span>
+                  <span x-show="r.answer === null">—</span>
+                </span>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <div class="lp-empty" x-show="tasks.length === 0">Пока ни одной задачи.<br>Добавь кнопкой «＋ задача» внизу.</div>
+  </div>
+
+  {{-- Вкладка «Ответы»: матрица — вся группа одним взглядом --}}
+  <div class="lp-list" x-show="tab === 'answers'" x-cloak>
+    <div class="lp-empty" x-show="!participants.length">В уроке пока нет учеников.</div>
+    <template x-if="participants.length && tasks.length">
+      <div class="lp-mx-wrap">
+        <div class="lp-mx" :style="`grid-template-columns: 72px repeat(${tasks.length}, minmax(26px, 1fr))`">
+          <span></span>
+          <template x-for="t in tasks" :key="'h-' + t.id">
+            <button type="button" class="lp-mx-hd" @click="goToTask(t.id)" x-text="t.position"
+                    :title="'Условие задачи ' + t.position"></button>
+          </template>
+          <template x-for="p in participants" :key="'row-' + p.id">
+            <div style="display: contents;">
+              <button type="button" class="lp-mx-name" @click="openStudentNotes(p)">
+                <span class="lp-dot" :class="dotClass(p)"></span><span x-text="firstName(p)"></span>
+              </button>
+              <template x-for="t in tasks" :key="'c-' + p.id + '-' + t.id">
+                <button type="button" class="lp-cell" :class="mxCellClass(p.id, t.id)"
+                        @click="togglePeek(p.id, t.id)">
+                  <span x-text="mxCellMark(p.id, t.id)"></span>
+                  <i class="flag" x-show="cellFlagged(p.id, t.id)"></i>
+                </button>
+              </template>
+            </div>
+          </template>
+          <span class="lp-mx-sum" style="text-align: left; color: var(--muted);">верно</span>
+          <template x-for="t in tasks" :key="'s-' + t.id">
+            <span class="lp-mx-sum" :style="`color: ${pctColor(t.id)}`"
+                  x-text="taskAnsweredCount(t.id) ? taskCorrectPct(t.id) + '%' : '—'"></span>
+          </template>
+        </div>
+        <div class="lp-mx-foot">
+          <span><i></i>ответ вставлен из буфера или дан сразу после возврата</span>
+          <span x-show="status === 'live'">обновляется сам</span>
+        </div>
+      </div>
+    </template>
+    <div class="lp-peek" x-show="peek" x-cloak x-html="peekHtml()"></div>
+    <div class="lp-silent" x-show="silentStudents.length">
+      Не отвечают: <b x-text="silentStudents.map(p => p.name || '#' + p.id).join(', ')"></b>
+    </div>
+  </div>
+
   {{--
     Разбор домашки — вторая стадия проверки. В draft это очередь предложений
     («что взять на урок»), в live — раскрытые карточки с тетрадью ученика.
     В lesson_session_tasks эти пункты не попадают: там у строки есть поле
     ответа, а разбор — это «смотрим на то, что уже написано».
   --}}
-  <template x-if="reviewPending.length || reviewPlanned.length">
+  <div class="lp-list" x-show="tab === 'review'" x-cloak>
     <div class="lesson-card review-card">
-      <div class="review-head" @click="reviewOpen = !reviewOpen">
-        <div class="review-title">
-          🔍 Разбор домашки
-          <span class="review-count" x-text="reviewPlanned.length + ' в уроке'"></span>
-          <span class="review-count review-count-muted" x-show="reviewPending.length"
-                x-text="'+' + reviewPending.length + ' предложено'"></span>
-        </div>
-        <button type="button" class="review-fold" x-text="reviewOpen ? '▾' : '▸'" aria-label="Свернуть"></button>
-      </div>
-
-      <div x-show="reviewOpen" x-cloak>
         {{-- Уже в повестке урока --}}
         <template x-for="card in reviewPlanned" :key="'rp-' + card.id">
           <div class="review-item" :class="reviewDone.includes(card.id) ? 'is-done' : ''">
@@ -430,60 +643,6 @@
                     x-text="reviewBusy ? 'Добавляю…' : ('Добавить в урок' + (reviewPicked.length ? ' (' + reviewPicked.length + ')' : ''))"></button>
           </div>
         </template>
-      </div>
-    </div>
-  </template>
-
-  @include('pwa._shared.photo-viewer')
-
-  {{-- Tasks list --}}
-  <div class="lesson-card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="font-size: 14px; font-weight: 700;">Задачи (<span x-text="tasks.length"></span>)</div>
-      <button class="btn btn-icon" @click="pickerOpen = !pickerOpen" x-show="status !== 'ended'">+ Добавить</button>
-    </div>
-
-    {{-- Полный вид задания — как у ученика: картинка + текст + варианты --}}
-    <template x-for="task in tasks" :key="task.id">
-      <div class="lesson-task">
-        <div class="lesson-task-num" x-text="task.position + ')'"></div>
-        <div class="lesson-task-body">
-          <div class="lesson-task-image" x-show="task.task_payload.image_svg" x-html="task.task_payload.image_svg"></div>
-          <template x-if="!task.task_payload.image_svg && task.task_payload.image_url && !task.task_payload.condition_html">
-            <div class="lesson-task-image is-raster"><img :src="task.task_payload.image_url" alt=""></div>
-          </template>
-          {{-- Банк ЕГЭ: условие целиком в разметке ФИПИ (таблицы соответствия,
-               графики-варианты, обозначения-растры); плоский текст — для остальных
-               банков и уроков, собранных до этого поля. --}}
-          <div class="lesson-task-expr fipi-condition" x-show="task.task_payload.condition_html"
-               x-html="fipiHtml(task.task_payload.condition_html)"></div>
-          <div class="lesson-task-expr" x-show="!task.task_payload.condition_html"
-               x-html="taskConditionHtml(task.task_payload.expression)"
-               x-init="$nextTick(() => fitFormulas($el))"
-               @resize.window.debounce.150ms="fitFormulas($el)"></div>
-          <template x-if="task.task_payload.type === 'choice'">
-            <div class="lesson-task-options">
-              <template x-for="(opt, oi) in task.task_payload.options" :key="opt.id">
-                <span class="lesson-task-option" x-html="renderLatex(opt.label)"></span>
-              </template>
-            </div>
-          </template>
-          <div class="lesson-task-meta">
-            <span class="lesson-task-meta-text">
-              <span x-text="task.bank"></span>
-              · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
-              <span class="personal-badge" x-show="task.assigned_student_id"
-                    x-text="'для ' + (task.assigned_name || '#' + task.assigned_student_id)"></span>
-            </span>
-            <button class="btn btn-icon btn-danger" x-show="status === 'draft'"
-                    @click="removeTask(task.id)" title="Убрать задачу из урока">×</button>
-          </div>
-        </div>
-      </div>
-    </template>
-
-    <div x-show="tasks.length === 0" style="color: var(--muted); font-size: 13px; padding: 12px; text-align: center;">
-      Пока ни одной задачи. Жми «Добавить» — выбери из банка alg-skill 7 класса.
     </div>
   </div>
 
@@ -513,15 +672,17 @@
     </div>
   </div>
 
-  {{-- Action buttons --}}
-  <div class="btn-row">
-    <button class="btn btn-primary" x-show="status === 'draft'" @click="startLesson" :disabled="tasks.length === 0">▶ Запустить</button>
-    <button class="btn btn-danger" x-show="status === 'live'" @click="endLesson">■ Завершить</button>
-    <button class="btn" @click="openHomework()"
-            title="Аналоги задач урока или примеры из банка «Скиллы»">📚 Домашка</button>
-    <button class="btn" :disabled="creatingNext" @click="createNextLesson"
-            x-text="creatingNext ? 'создаём…' : '📅 Следующий урок'"
-            title="Черновик на то же время через неделю — с заметкой и заданиями заранее"></button>
+  {{-- Нижняя панель: главные действия всегда под пальцем --}}
+  <div class="lp-dock">
+    <div class="lp-dock-in">
+      <button type="button" class="lp-ib" x-show="status !== 'ended'" @click="pickerOpen = true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><small>задача</small></button>
+      <button type="button" class="lp-ib" @click="openHomework()" title="Аналоги задач урока или примеры из банка «Скиллы»"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg><small>домашка</small></button>
+      <button type="button" class="lp-ib" @click="openNotes()" title="Заметка об учениках — они её не видят"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><small>заметка</small></button>
+      <button type="button" class="lp-primary" x-show="status === 'draft'" @click="startLesson" :disabled="!!(tasks.length === 0)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none"/></svg> Запустить</button>
+      <button type="button" class="lp-primary stop" x-show="status === 'live'" @click="endLesson"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/></svg> Завершить</button>
+      <button type="button" class="lp-primary ghost" x-show="status === 'ended'" @click="createNextLesson" :disabled="!!creatingNext"
+              x-text="creatingNext ? 'Создаём…' : 'Следующий урок'"></button>
+    </div>
   </div>
 
   {{-- 📚 Домашка по итогам урока — аналоги разобранных задач --}}
@@ -681,81 +842,6 @@
     </form>
   </div>
 
-  {{-- Live grid + summary (после завершения остаётся как итоги урока) --}}
-  <div class="lesson-card" x-show="(status === 'live' || status === 'ended') && tasks.length">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="font-size: 14px; font-weight: 700;" x-text="status === 'ended' ? 'Итоги урока' : 'Ответы'"></div>
-      <div style="font-size: 11px; color: var(--muted);" x-show="status === 'live'">обновляется каждые 4 сек</div>
-    </div>
-
-    <div style="overflow-x: auto;">
-      <table class="live-grid">
-        <thead>
-          <tr>
-            <th>Ученик</th>
-            <template x-for="t in tasks" :key="t.id">
-              <th>
-                <div style="font-weight: 800;" x-text="t.position + ')'"></div>
-                <div style="font-size: 11px; color: var(--text);" x-html="headerHtml(t.task_payload.expression)"></div>
-                <div style="color: var(--green); font-family: monospace;" x-text="t.correct_answer"></div>
-                <div class="personal-badge" x-show="t.assigned_student_id"
-                     x-text="'для ' + (t.assigned_name || '#' + t.assigned_student_id)"></div>
-                {{-- «не понимает» — только в live: раскрывает выбор ученика под кнопкой --}}
-                <div x-show="status === 'live'" style="position: relative; margin-top: 4px; font-weight: 400;">
-                  <button type="button" class="du-btn" @click="toggleDu(t.id)"
-                          x-text="duFor === t.id ? '✕ отмена' : 'не понимает'"></button>
-                  <div class="du-pick" x-show="duFor === t.id" x-cloak>
-                    <template x-for="p in participants" :key="'du-' + t.id + '-' + p.id">
-                      <button type="button" class="du-pick-item" @click="dontUnderstand(t.id, p.id)"
-                              x-text="p.name || ('#' + p.id)"></button>
-                    </template>
-                    <div x-show="!participants.length" style="color: var(--muted); font-size: 11px; padding: 4px;">нет учеников</div>
-                  </div>
-                  <div class="du-done" x-show="duDone === (t.id + '-done')" x-cloak>записано ✓</div>
-                </div>
-              </th>
-            </template>
-          </tr>
-        </thead>
-        <tbody>
-          <template x-for="p in participants" :key="p.id">
-            <tr>
-              <td>
-                <div><span x-text="activityDot(p)"></span> <span x-text="p.name || ('#' + p.id)"></span></div>
-                <div class="activity-meta" x-show="p.activity" x-text="activityMeta(p)"></div>
-              </td>
-              <template x-for="t in tasks" :key="t.id">
-                <td :class="cellClass(p.id, t.id)" x-text="cellLabel(p.id, t.id)"></td>
-              </template>
-              {{-- см. cellClass/cellLabel: персональная задача не для этого ученика → серый «·» --}}
-            </tr>
-          </template>
-          {{-- Summary row: % правильных по задаче --}}
-          <tr style="background: var(--surface2);">
-            <td style="font-weight: 700; color: var(--muted);">% верно</td>
-            <template x-for="t in tasks" :key="'sum-' + t.id">
-              <td :style="`color: ${taskCorrectPct(t.id) >= 70 ? 'var(--green)' : (taskCorrectPct(t.id) >= 40 ? 'var(--yellow)' : 'var(--red)')}; font-weight: 700;`"
-                  x-text="taskAnsweredCount(t.id) ? `${taskCorrectPct(t.id)}% (${taskCorrectCount(t.id)}/${taskAnsweredCount(t.id)})` : '—'"></td>
-            </template>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    {{-- Легенда сигналов списывания (видна только когда есть флаги) --}}
-    <template x-if="hasBehaviorFlags">
-      <div style="font-size: 11px; color: var(--muted); padding-top: 6px;">
-        📥 — вставил ответ из буфера · ⚡ — ответил в первые секунды после возврата на страницу
-      </div>
-    </template>
-
-    {{-- Кто не ответил вообще ни на одну задачу --}}
-    <template x-if="silentStudents.length">
-      <div style="font-size: 12px; color: var(--muted); padding-top: 8px; border-top: 1px solid var(--border);">
-        Не отвечают: <span style="color: var(--red); font-weight: 700;" x-text="silentStudents.map(p => p.name || '#'+p.id).join(', ')"></span>
-      </div>
-    </template>
-  </div>
 </div>
 
 <script>
@@ -826,6 +912,12 @@
       hwSkillExpanded: {},      // group_key → развёрнута ли группа
       hwChunkSize: 20,          // размер подуровня
       hwChunkKey: {},           // group_key → выбранный подуровень
+      // Компоновка под телефон: вкладки, меню «⋯», код крупно, шторка учеников
+      tab: 'tasks',             // tasks | answers | review
+      menuOpen: false,
+      codeBig: false,
+      peopleOpen: false,
+      peek: null,               // [studentId, taskId] — открытая клетка матрицы
 
       async init() {
         await this.refreshState();
@@ -849,6 +941,7 @@
         this.reviewPlanned = d.planned || [];
         // Погашенные локально карточки не воскрешаем: урок ещё идёт.
         this.reviewPicked = this.reviewPicked.filter(id => this.reviewPending.some(c => c.id === id));
+        if (this.tab === 'review' && !this.reviewPending.length && !this.reviewPlanned.length) this.tab = 'tasks';
         this.typeset();
       },
 
@@ -1549,6 +1642,8 @@
         });
         await this.refreshState();
         if (this.pollTimer) clearInterval(this.pollTimer);
+        // После урока следующий шаг почти всегда — домашка.
+        this.openHomework();
       },
 
       // Персональная задача не для этого ученика — ячейка неприменима.
@@ -1603,6 +1698,107 @@
           }
         }
         return false;
+      },
+
+      // --- компоновка под телефон ---
+      formatCode(code) {
+        const c = String(code || '');
+        return c.length === 6 ? c.slice(0, 3) + ' ' + c.slice(3) : c;
+      },
+
+      async copyCode() {
+        try { await navigator.clipboard.writeText(String(this.joinCode || '')); this.noteToast = 'Код скопирован'; }
+        catch (e) { this.noteToast = 'Не удалось скопировать'; }
+        setTimeout(() => { this.noteToast = ''; }, 1800);
+      },
+
+      dotClass(p) {
+        const s = p.activity?.state;
+        return s === 'present' ? 'present' : (s === 'away' ? 'away' : '');
+      },
+
+      firstName(p) {
+        return String(p.name || ('#' + p.id)).split(' ')[0];
+      },
+
+      /** Из матрицы — к условию задачи на вкладке «Задачи». */
+      goToTask(taskId) {
+        this.tab = 'tasks';
+        this.$nextTick(() => {
+          const el = document.getElementById('lt-' + taskId);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      },
+
+      /** Ученики, которым задача адресована, с их ответом — для строки под условием. */
+      taskResults(task) {
+        return this.participants
+          .filter(p => !this.cellNotForStudent(p.id, task.id))
+          .map(p => {
+            const a = this.grid[p.id]?.[task.id];
+            return {
+              id: p.id,
+              name: this.firstName(p),
+              answer: a ? String(a.answer ?? '') : null,
+              cls: a ? (a.is_correct ? 'ok' : 'bad') : '',
+              flags: a ? (a.pasted ? ' 📥' : '') + (a.quick_after_away ? ' ⚡' : '') : '',
+            };
+          });
+      },
+
+      taskStatLine(task) {
+        const rows = this.taskResults(task);
+        const answered = rows.filter(r => r.answer !== null).length;
+        const ok = rows.filter(r => r.cls === 'ok').length;
+        if (!rows.length) return 'нет учеников';
+        if (!answered) return 'ещё никто не ответил';
+        return `верно ${ok} из ${answered}` + (answered < rows.length ? ` · ждём ${rows.length - answered}` : '');
+      },
+
+      mxCellClass(studentId, taskId) {
+        const base = { 'live-cell-na': 'na', 'live-cell-ok': 'ok', 'live-cell-bad': 'bad' }[this.cellClass(studentId, taskId)] || '';
+        const sel = this.peek && this.peek[0] === studentId && this.peek[1] === taskId ? ' sel' : '';
+        return base + sel;
+      },
+
+      mxCellMark(studentId, taskId) {
+        if (this.cellNotForStudent(studentId, taskId)) return '';
+        const a = this.grid[studentId]?.[taskId];
+        return a ? (a.is_correct ? '✓' : '✗') : '';
+      },
+
+      cellFlagged(studentId, taskId) {
+        const a = this.grid[studentId]?.[taskId];
+        return !!(a && (a.pasted || a.quick_after_away));
+      },
+
+      togglePeek(studentId, taskId) {
+        if (this.cellNotForStudent(studentId, taskId)) return;
+        const same = this.peek && this.peek[0] === studentId && this.peek[1] === taskId;
+        this.peek = same ? null : [studentId, taskId];
+      },
+
+      peekHtml() {
+        if (!this.peek) return '';
+        const [sid, tid] = this.peek;
+        const p = this.participants.find(x => x.id === sid);
+        const t = this.tasks.find(x => x.id === tid);
+        if (!p || !t) return '';
+        const a = this.grid[sid]?.[tid];
+        const e = v => this.escapeHtml(String(v ?? ''));
+        let h = `<b>${e(p.name || '#' + p.id)} · задача ${t.position}</b><br>`;
+        if (!a) return h + 'ещё не ответил';
+        h += `ответил <span class="${a.is_correct ? 'ok' : 'bad'}">${e(a.answer)}</span>`;
+        if (!a.is_correct && t.correct_answer) h += ` · верно <span class="ok">${e(t.correct_answer)}</span>`;
+        if (a.pasted) h += ' · 📥 вставил из буфера';
+        if (a.quick_after_away) h += ' · ⚡ ответил сразу после возврата';
+        return h;
+      },
+
+      pctColor(taskId) {
+        if (!this.taskAnsweredCount(taskId)) return 'var(--muted)';
+        const pct = this.taskCorrectPct(taskId);
+        return pct >= 70 ? 'var(--green)' : (pct >= 40 ? 'var(--yellow)' : 'var(--red)');
       },
 
       get silentStudents() {
