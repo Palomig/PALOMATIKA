@@ -289,6 +289,7 @@ class FriendInviteTest extends TestCase
         // скрытое имя
         $this->actingAs($vanya)->post($this->studentUrl('/friends/board'), ['show' => 0]);
         $this->assertSame('Ученик 9 класса', $this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['name']);
+        $this->assertNull($this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['grade']);
     }
 
     public function test_board_set_command(): void
