@@ -120,12 +120,12 @@ class EgeFipiVariantTest extends TestCase
 
         $page = $this->actingAs($user)->get(route('pwa.student.ege.home'));
 
-        // Те же блоки, что на домашних экранах ОГЭ и ВПР: приветствие,
-        // полоса Premium, плитки разделов. Раньше здесь были заголовок и две
-        // кнопки — ученик попадал будто в другой продукт.
+        // Те же блоки, что на домашних экранах ОГЭ и ВПР: приветствие и
+        // плитки разделов. Раньше здесь были заголовок и две кнопки — ученик
+        // попадал будто в другой продукт. Полосу Premium с главных убрали (30.09).
         $page->assertOk()
             ->assertSee('greeting-badge', false)
-            ->assertSee('premium-strip', false)
+            ->assertDontSee('Нет Premium')
             ->assertSee('tiles-grid', false)
             ->assertSee('База заданий')
             ->assertSee('ЕГЭ (П) · 11 класс');

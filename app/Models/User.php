@@ -197,6 +197,12 @@ class User extends Authenticatable
         return $this->isAdmin();
     }
 
+    /** Супер-админ (config palomatika.super_admin_ids): ведёт доску «Позови друга». */
+    public function isSuperAdmin(): bool
+    {
+        return $this->isAdmin() && in_array($this->id, config('palomatika.super_admin_ids', []), true);
+    }
+
     public function starTransactions(): HasMany
     {
         return $this->hasMany(StarTransaction::class);

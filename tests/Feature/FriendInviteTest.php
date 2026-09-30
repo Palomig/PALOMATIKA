@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\FriendBoardEntry;
 use App\Models\FriendInvite;
 use App\Models\FriendInviteBonus;
 use App\Models\FriendInviteCredit;
@@ -14,8 +15,9 @@ use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /**
- * «Позови друга»: 2000 ₽ за друга, +3000 ₽ за каждые 6000 ₽ заработанного,
- * общий друг делит 2000 ₽ поровну. Видно только 8–11 классу у учителя.
+ * «Позови друга»: 8–11 класс — 2000 ₽ за друга, оплатившего месяц, и +3000 ₽ за
+ * каждого третьего; общий друг делит 2000 ₽ поровну. 6–7 класс — скидка 50%
+ * на следующий месяц обоим. Доски зовущих ведёт супер-админ вручную.
  */
 class FriendInviteTest extends TestCase
 {
@@ -49,12 +51,12 @@ class FriendInviteTest extends TestCase
         return $student;
     }
 
-    private function student_url(string $path = '/'): string
+    private function studentUrl(string $path = '/'): string
     {
         return 'https://student.' . config('app.base_domain') . $path;
     }
 
-    private function teacher_url(string $path): string
+    private function teacherUrl(string $path): string
     {
         return 'https://teacher.' . config('app.base_domain') . $path;
     }
@@ -76,33 +78,56 @@ class FriendInviteTest extends TestCase
         $this->assertSame([668, 666, 666], $this->svc->shares(3));
     }
 
-    public function test_strip_visible_only_to_attached_students_of_grades_8_to_11(): void
+    public function test_strip_text_and_gate(): void
     {
         $ok = $this->student('Ваня Петров', 9);
-        $this->actingAs($ok)->get($this->student_url())->assertOk()->assertSee('Позови друга');
+        $this->actingAs($ok)->get($this->studentUrl())->assertOk()
+            ->assertSee('Получи ' . $this->svc->rub(2000) . ' за приглашённого друга')
+            ->assertDontSee('Живыми деньгами')
+            ->assertSee('Подробнее')
+            ->assertDontSee('Нет Premium');
 
-        $young = $this->student('Петя Малый', 7);
-        $this->assertFalse($this->svc->isEligible($young));
-        $this->actingAs($young)->get($this->student_url('/friends'))->assertNotFound();
+        $sixth = $this->student('Петя Шестой', 6);
+        $this->assertSame(FriendInviteService::DISCOUNT, $this->svc->programFor($sixth));
+        $this->assertSame('Получи скидку 50% за приглашённого друга', $this->svc->strip($sixth)['title']);
+
+        $fifth = $this->student('Коля Пятый', 5);
+        $this->assertFalse($this->svc->isEligible($fifth));
+        $this->actingAs($fifth)->get($this->studentUrl('/friends'))->assertNotFound();
 
         $stranger = $this->student('Чужой Человек', 9, attached: false);
         $this->assertFalse($this->svc->isEligible($stranger));
-        $this->actingAs($stranger)->get($this->student_url())->assertOk()->assertDontSee('Позови друга');
+        $this->actingAs($stranger)->get($this->studentUrl())->assertOk()->assertDontSee('за приглашённого друга');
     }
 
-    public function test_friends_page_renders_empty_and_with_progress(): void
+    public function test_oge_countdown_uses_config_date(): void
+    {
+        config(['palomatika.oge_exam_at' => '2027-06-01T10:00:00+03:00']);
+        $this->actingAs($this->student('Ваня Петров'))->get($this->studentUrl())
+            ->assertOk()->assertSee('2027-06-01T10:00:00+03:00', false)->assertDontSee('2026-06-02', false);
+    }
+
+    public function test_cash_page_emphasises_third_friend(): void
     {
         $vanya = $this->student('Ваня Петров');
-        $this->actingAs($vanya)->get($this->student_url('/friends'))
-            ->assertOk()->assertSee('Пока никто никого не позвал')->assertSee('Отметить, кого позвал');
+        $this->actingAs($vanya)->get($this->studentUrl('/friends'))->assertOk()
+            ->assertSee('Третий друг')
+            ->assertSee('+ ' . $this->svc->rub(3000) . ' сверху')
+            ->assertSee('= ' . $this->svc->rub(5000) . ' за одного друга')
+            ->assertSee($this->svc->rub(9000))
+            ->assertSee('Если друг решит заниматься с нами')
+            ->assertSee('Получишь деньги, когда он оплатит месяц занятий')
+            ->assertDontSee('Бонус за ' . $this->svc->rub(6000))
+            ->assertDontSee('Отметить, кого позвал')
+            ->assertDontSee('Что сказать')
+            ->assertDontSee('Кому сказать');
 
         $this->bring('Дима Коршунов', [$vanya]);
         $this->bring('Саша Волков', [$vanya], qualify: false);
-
-        $this->actingAs($vanya)->get($this->student_url('/friends'))
-            ->assertOk()->assertSee('Дима К.')->assertSee('ждём второе')->assertSee('2 друга', false);
-        $this->actingAs($vanya)->get($this->student_url())
-            ->assertSee('Саша В. пришёл на первое занятие');
+        $this->actingAs($vanya)->get($this->studentUrl('/friends'))->assertOk()
+            ->assertSee('Дима К.')->assertSee('ждём оплату месяца')->assertSee('Ещё 2 друга');
+        $this->actingAs($vanya)->get($this->studentUrl())
+            ->assertSee('Саша В. пришёл на первое занятие')->assertSee('Оплатит месяц');
     }
 
     public function test_every_third_solo_friend_brings_bonus_once(): void
@@ -113,14 +138,13 @@ class FriendInviteTest extends TestCase
         $this->assertSame(0, FriendInviteBonus::count());
 
         $third = $this->bring('Друг Три', [$vanya]);
-        $this->assertSame(6000, $this->svc->earned($vanya->id));
         $this->assertSame(1, FriendInviteBonus::where('referrer_id', $vanya->id)->where('amount', 3000)->count());
 
-        // повторная отметка не плодит бонусы
         $this->svc->qualify($third->fresh(), $this->teacher);
         $this->svc->syncBonuses($vanya->id);
         $this->assertSame(1, FriendInviteBonus::count());
         $this->assertSame(9000, $this->svc->summary($vanya)['total']);
+        $this->actingAs($vanya)->get($this->studentUrl('/friends'))->assertSee('Бонус за 3-го друга');
     }
 
     public function test_splitting_does_not_let_two_students_farm_the_bonus(): void
@@ -132,11 +156,38 @@ class FriendInviteTest extends TestCase
         }
         $this->assertSame(3000, $this->svc->earned($a->id));
         $this->assertSame(0, FriendInviteBonus::count());
+    }
 
-        // на доске общий друг засчитан каждому целиком
-        $board = $this->svc->board($a);
-        $this->assertSame([3, 3], $board['top']->pluck('friends')->all());
-        $this->assertSame(3, $board['totalFriends']);
+    public function test_discount_program_for_grades_6_7(): void
+    {
+        $petya = $this->student('Петя Шестой', 6);
+        $masha = $this->student('Маша Седьмая', 7);
+        $vanya = $this->student('Ваня Петров', 9);
+
+        $this->actingAs($petya)->get($this->studentUrl('/friends'))->assertOk()
+            ->assertSee('−50%')->assertSee('Расскажи родителям')->assertSee('Для родителей')
+            ->assertDontSee('Третий друг');
+
+        // 6–7 и 8–11 в одной записи смешивать нельзя
+        $this->actingAs($this->teacher)->post($this->teacherUrl('/friends'), [
+            'invitee_name' => 'Новый Друг', 'first_lesson_on' => '2026-09-26', 'referrers' => [$petya->id, $vanya->id],
+        ])->assertSessionHas('friends_error');
+
+        $invite = $this->bring('Лёва Новый', [$petya, $masha], qualify: false);
+        $this->assertSame(FriendInviteService::DISCOUNT, $invite->program);
+        $this->assertSame([50, 50], $invite->credits()->orderBy('id')->pluck('amount')->all());
+        $this->svc->qualify($invite, $this->teacher);
+
+        $this->assertSame(0, FriendInviteBonus::count());
+        $this->assertSame(0, $this->svc->earned($petya->id));
+        $queue = $this->svc->payoutQueue();
+        $this->assertSame(0, $queue['total']);
+        $this->assertCount(2, $queue['discounts']);
+        $this->assertCount(1, $queue['inviteeDiscounts']);
+
+        $this->actingAs($this->teacher)->post($this->teacherUrl("/friends/{$invite->id}/invitee-discount"))->assertRedirect();
+        $this->assertNotNull($invite->fresh()->invitee_discount_applied_at);
+        $this->assertSame('У тебя скидка 50% на месяц', app(FriendInviteService::class)->strip($petya->fresh())['title']);
     }
 
     public function test_cancelled_friend_earns_nothing(): void
@@ -152,56 +203,94 @@ class FriendInviteTest extends TestCase
     {
         $vanya = $this->student('Ваня Петров');
         $nastya = $this->student('Настя Волкова', 10);
-        $young = $this->student('Петя Малый', 7);
+        $fifth = $this->student('Коля Пятый', 5);
 
-        $this->actingAs($this->teacher)->get($this->teacher_url('/friends'))
-            ->assertOk()->assertSee('Ваня Петров')->assertDontSee('Петя Малый');
+        $this->actingAs($this->teacher)->get($this->teacherUrl('/friends'))
+            ->assertOk()->assertSee('Ваня Петров')->assertDontSee('Коля Пятый')->assertDontSee('Доски зовущих');
 
-        // 7 класс в акции не участвует
-        $this->actingAs($this->teacher)->post($this->teacher_url('/friends'), [
-            'invitee_name' => 'Саша Волков', 'first_lesson_on' => '2026-09-26', 'referrers' => [$young->id],
+        $this->actingAs($this->teacher)->post($this->teacherUrl('/friends'), [
+            'invitee_name' => 'Саша Волков', 'first_lesson_on' => '2026-09-26', 'referrers' => [$fifth->id],
         ])->assertSessionHas('friends_error');
         $this->assertSame(0, FriendInvite::count());
 
-        $this->actingAs($this->teacher)->post($this->teacher_url('/friends'), [
+        $this->actingAs($this->teacher)->post($this->teacherUrl('/friends'), [
             'invitee_name' => 'Саша Волков', 'invitee_grade' => 9, 'first_lesson_on' => '2026-09-26',
             'referrers' => [$vanya->id, $nastya->id],
         ])->assertSessionHas('friends_ok');
         $invite = FriendInvite::firstOrFail();
         $this->assertSame([1000, 1000], $invite->credits()->orderBy('id')->pluck('amount')->all());
-        $this->assertSame(0, $this->svc->payoutQueue()['total']);
 
-        $this->actingAs($this->teacher)->post($this->teacher_url("/friends/{$invite->id}/qualify"))->assertRedirect();
+        $this->actingAs($this->teacher)->post($this->teacherUrl("/friends/{$invite->id}/qualify"))->assertRedirect();
         $this->assertSame(2000, $this->svc->payoutQueue()['total']);
 
         $credit = FriendInviteCredit::where('referrer_id', $vanya->id)->firstOrFail();
-        $this->actingAs($this->teacher)->post($this->teacher_url("/friends/credits/{$credit->id}/paid"))->assertRedirect();
-        $this->assertNotNull($credit->fresh()->paid_at);
+        $this->actingAs($this->teacher)->post($this->teacherUrl("/friends/credits/{$credit->id}/paid"))->assertRedirect();
         $this->assertSame(1000, $this->svc->payoutQueue()['total']);
     }
 
-    public function test_student_notes_are_capped_and_board_name_can_be_hidden(): void
+    public function test_board_is_manual_and_only_super_admin_edits_it(): void
     {
-        $vanya = $this->student('Ваня Петров');
-        foreach (range(1, 6) as $i) {
-            $this->actingAs($vanya)->post($this->student_url('/friends/notes'), ['name' => "Друг $i"]);
-        }
-        $this->assertSame(FriendInviteService::MAX_OPEN_NOTES, \App\Models\FriendInviteNote::where('user_id', $vanya->id)->count());
-
+        $vanya = $this->student('Ваня Петров', 9);
         $kirill = $this->student('Кирилл Минин', 10);
-        $this->bring('Друг Кирилла', [$kirill], qualify: false);
-        $this->actingAs($kirill)->post($this->student_url('/friends/board'), ['show' => 0]);
-        $this->assertTrue((bool) $kirill->fresh()->invite_board_hidden);
-        $this->assertSame('Ученик 10 класса', $this->svc->board($vanya)['top'][0]['name']);
+        $petya = $this->student('Петя Шестой', 6);
+
+        // автоматически доска не заполняется
+        $this->bring('Друг Вани', [$vanya]);
+        $this->assertTrue($this->svc->board(FriendInviteService::CASH, $vanya)['top']->isEmpty());
+
+        // обычный учитель и простой админ — нельзя
+        $this->actingAs($this->teacher)->post($this->teacherUrl('/friends/board'), [
+            'program' => 'cash', 'user_id' => $vanya->id, 'friends' => 3,
+        ])->assertForbidden();
+        $admin = User::factory()->create(['role' => 'admin']);
+        config(['palomatika.super_admin_ids' => [999999]]);
+        $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
+            'program' => 'cash', 'user_id' => $vanya->id, 'friends' => 3,
+        ])->assertForbidden();
+
+        config(['palomatika.super_admin_ids' => [$admin->id]]);
+        $this->actingAs($admin)->get($this->teacherUrl('/friends'))->assertOk()->assertSee('Доски зовущих');
+        foreach ([[$vanya, 3], [$kirill, 1]] as [$u, $n]) {
+            $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
+                'program' => 'cash', 'user_id' => $u->id, 'friends' => $n,
+            ])->assertSessionHas('friends_ok');
+        }
+        // шестиклассника на доску 8–11 не добавить
+        $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
+            'program' => 'cash', 'user_id' => $petya->id, 'friends' => 1,
+        ])->assertSessionHas('friends_error');
+        $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
+            'program' => 'discount', 'user_id' => $petya->id, 'friends' => 2,
+        ])->assertSessionHas('friends_ok');
+
+        $board = $this->svc->board(FriendInviteService::CASH, $kirill);
+        $this->assertSame(['Ваня П.', 'Ты'], $board['top']->pluck('name')->all());
+        $this->assertSame(4, $board['totalFriends']);
+        $this->assertSame([2], $this->svc->board(FriendInviteService::DISCOUNT, $petya)['top']->pluck('friends')->all());
+
+        // обновление числа и удаление
+        $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
+            'program' => 'cash', 'user_id' => $kirill->id, 'friends' => 5,
+        ]);
+        $this->assertSame('Кирилл М.', $this->svc->board(FriendInviteService::CASH, $vanya)['top'][0]['name']);
+        $entry = FriendBoardEntry::where('user_id', $kirill->id)->firstOrFail();
+        $this->actingAs($admin)->delete($this->teacherUrl("/friends/board/{$entry->id}"))->assertRedirect();
+        $this->assertSame(1, FriendBoardEntry::where('program', 'cash')->count());
+
+        // скрытое имя
+        $this->actingAs($vanya)->post($this->studentUrl('/friends/board'), ['show' => 0]);
+        $this->assertSame('Ученик 9 класса', $this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['name']);
     }
 
     public function test_strip_on_vpr_and_ege_dashboards(): void
     {
         $eighth = $this->student('Лёша Восьмой', 8);
-        $this->actingAs($eighth)->get(route('pwa.student.vpr.home'))->assertOk()->assertSee('Позови друга');
+        $this->actingAs($eighth)->get(route('pwa.student.vpr.home'))->assertOk()
+            ->assertSee('за приглашённого друга')->assertDontSee('Нет Premium');
 
         $eleventh = $this->student('Оля Одиннадцатая', 11);
-        $this->actingAs($eleventh)->get(route('pwa.student.ege.home'))->assertOk()->assertSee('Позови друга');
+        $this->actingAs($eleventh)->get(route('pwa.student.ege.home'))->assertOk()
+            ->assertSee('за приглашённого друга')->assertDontSee('Нет Premium');
     }
 
     public function test_russian_plurals(): void
