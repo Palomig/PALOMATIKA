@@ -253,18 +253,24 @@ class FriendInviteTest extends TestCase
 
         config(['palomatika.super_admin_ids' => [$admin->id]]);
         $this->actingAs($admin)->get($this->teacherUrl('/friends'))->assertOk()->assertSee('Доски зовущих');
+        // без выбранного ученика — понятная ошибка прямо в блоке доски, а не тишина
+        $this->actingAs($admin)->from($this->teacherUrl('/friends'))->post($this->teacherUrl('/friends/board'), [
+            'program' => 'cash', 'user_id' => '', 'friends' => 1,
+        ])->assertRedirect($this->teacherUrl('/friends') . '#board')->assertSessionHas('board_error', 'Выбери ученика');
+        $this->actingAs($admin)->withSession(['board_error' => 'Выбери ученика'])->get($this->teacherUrl('/friends'))
+            ->assertSee('Выбери ученика');
         foreach ([[$vanya, 3], [$kirill, 1]] as [$u, $n]) {
             $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
                 'program' => 'cash', 'user_id' => $u->id, 'friends' => $n,
-            ])->assertSessionHas('friends_ok');
+            ])->assertSessionHas('board_ok');
         }
         // шестиклассника на доску 8–11 не добавить
         $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
             'program' => 'cash', 'user_id' => $petya->id, 'friends' => 1,
-        ])->assertSessionHas('friends_error');
+        ])->assertSessionHas('board_error', fn ($m) => str_contains($m, 'не участвует в акции 8–11 класса'));
         $this->actingAs($admin)->post($this->teacherUrl('/friends/board'), [
             'program' => 'discount', 'user_id' => $petya->id, 'friends' => 2,
-        ])->assertSessionHas('friends_ok');
+        ])->assertSessionHas('board_ok');
 
         $board = $this->svc->board(FriendInviteService::CASH, $kirill);
         $this->assertSame(['Ваня П.', 'Ты'], $board['top']->pluck('name')->all());
@@ -283,6 +289,19 @@ class FriendInviteTest extends TestCase
         // скрытое имя
         $this->actingAs($vanya)->post($this->studentUrl('/friends/board'), ['show' => 0]);
         $this->assertSame('Ученик 9 класса', $this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['name']);
+    }
+
+    public function test_board_set_command(): void
+    {
+        $vanya = $this->student('Иван Шестов', 8);
+        $dup = $this->student('Иван Шестов', 9, attached: false);
+
+        $this->artisan('friends:board-set', ['program' => 'cash', 'user' => $vanya->id, 'friends' => 1])->assertSuccessful();
+        $this->assertSame(1, FriendBoardEntry::where('program', 'cash')->where('user_id', $vanya->id)->value('friends'));
+
+        // дубль без учителя на доску не попадёт — и скажет почему
+        $this->artisan('friends:board-set', ['program' => 'cash', 'user' => $dup->id, 'friends' => 1])
+            ->expectsOutputToContain('не прикреплён к учителю')->assertFailed();
     }
 
     public function test_strip_on_vpr_and_ege_dashboards(): void
