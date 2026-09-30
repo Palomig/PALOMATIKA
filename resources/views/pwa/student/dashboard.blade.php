@@ -96,24 +96,6 @@
   .weak-pct.mid { color: var(--yellow); }
   .weak-pct.high { color: var(--green); }
 
-  .premium-strip {
-    display: flex; align-items: center; gap: 6px;
-    padding: 8px 14px; border-radius: 10px;
-    font-size: 12px; font-weight: 700;
-    opacity: 0; animation: fadeUp 0.3s ease 0.03s forwards;
-    text-decoration: none;
-  }
-  .premium-strip.active {
-    background: var(--purple-bg); border: 1px solid var(--purple-bd); color: var(--purple);
-  }
-  .premium-strip.inactive {
-    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-  }
-  .premium-strip-dot {
-    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-  }
-  .premium-strip.active .premium-strip-dot { background: var(--green); }
-  .premium-strip.inactive .premium-strip-dot { background: var(--muted); }
 
   .pulse-dot-sm {
     display: inline-block; width: 6px; height: 6px;
@@ -225,18 +207,6 @@
     </div>
   </div>
 
-  {{-- PREMIUM STATUS --}}
-  @if(Auth::user()->hasTgPremium())
-    <a href="/profile" class="premium-strip active">
-      <span class="premium-strip-dot"></span>
-      Premium · {{ now()->diffInDays(Auth::user()->tg_premium_until) }} дн
-    </a>
-  @else
-    <a href="/profile" class="premium-strip inactive">
-      <span class="premium-strip-dot"></span>
-      Нет Premium
-    </a>
-  @endif
 
   {{-- RESUME BANNER --}}
   @if(count($activeAttemptsList) === 1)
@@ -508,7 +478,7 @@
 @push('scripts')
 <script>
 function dashboardPage() {
-  const examDate = new Date('2026-06-02T10:00:00+03:00');
+  const examDate = new Date(@js(config('palomatika.oge_exam_at')));
   return {
     daysLeft: Math.max(0, Math.floor((examDate - new Date()) / 86400000)),
     showFullChoice: false,

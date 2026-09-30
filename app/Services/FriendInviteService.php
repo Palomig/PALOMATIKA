@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\FriendBoardEntry;
 use App\Models\FriendInvite;
 use App\Models\FriendInviteBonus;
 use App\Models\FriendInviteCredit;
-use App\Models\FriendInviteNote;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use Carbon\CarbonInterface;
@@ -14,45 +14,82 @@ use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 /**
- * «Позови друга»: 2000 ₽ наличными за каждого друга, который оплатил занятия
- * и пришёл на второе; +3000 ₽ за каждые 6000 ₽ заработанного (каждый третий).
+ * «Позови друга» — две акции, у каждой своя страница и своя доска.
  *
- * Общий друг делит 2000 ₽ поровну, поэтому порог бонуса считается в рублях,
- * а не в друзьях: сговор «записываем друг друга на всех» до бонуса не доводит.
+ * cash (8–11 класс): 2000 ₽ наличными за друга, который оплатил месяц занятий;
+ * за каждого третьего друга ещё +3000 ₽ сверху. Общий друг делит 2000 ₽ поровну,
+ * поэтому порог бонуса в коде считается в рублях (каждые 6000 ₽): иначе сплит
+ * превращается в сговор «записываем друг друга на всех». На экране — «третий друг».
+ *
+ * discount (6–7 класс): рассказать родителям; друг оплатил месяц — скидка 50%
+ * на следующий месяц и пригласившему, и приглашённому.
  */
 class FriendInviteService
 {
+    public const CASH = 'cash';
+    public const DISCOUNT = 'discount';
+
     public const REWARD = 2000;
     public const BONUS = 3000;
-    public const BONUS_STEP = 6000;
+    public const BONUS_EVERY = 3;
+    public const BONUS_STEP = self::REWARD * self::BONUS_EVERY;
+    public const DISCOUNT_PERCENT = 50;
     public const MAX_REFERRERS = 3;
-    public const MAX_OPEN_NOTES = 5;
-    public const GRADES = [8, 9, 10, 11];
+
+    public const GRADES = [
+        self::CASH => [8, 9, 10, 11],
+        self::DISCOUNT => [6, 7],
+    ];
+
+    /** @var array<int, array> полоска считается и для дашборда, и для самой строки */
+    private array $stripCache = [];
 
     /**
-     * Акция видна только прикреплённым к учителю ученикам 8–11 классов
-     * (и админу — превью). Паломатикой пользуются посторонние через открытые
-     * банки: показать им 2000 ₽ — значит раздавать деньги интернету.
+     * Акция ученика по классу. Видна только прикреплённым к учителю: Паломатикой
+     * пользуются посторонние через открытые банки, им её показывать нельзя.
+     * Админ видит акцию 8–11 как превью.
      */
-    public function isEligible(?User $user): bool
+    public function programFor(?User $user): ?string
     {
         if ($user === null) {
-            return false;
+            return null;
         }
         if ($user->isAdmin()) {
-            return true;
+            return self::CASH;
+        }
+        if ($user->role !== 'student') {
+            return null;
+        }
+        $program = $this->programForGrade((int) $user->grade_num);
+        if ($program === null || ! TeacherStudent::where('student_id', $user->id)->exists()) {
+            return null;
         }
 
-        return $user->role === 'student'
-            && in_array((int) $user->grade_num, self::GRADES, true)
-            && TeacherStudent::where('student_id', $user->id)->exists();
+        return $program;
     }
 
-    /** Ученики, которых преподаватель может отметить как пригласивших. */
-    public function eligibleReferrers(?int $teacherId = null): Collection
+    public function isEligible(?User $user): bool
     {
+        return $this->programFor($user) !== null;
+    }
+
+    public function programForGrade(int $grade): ?string
+    {
+        foreach (self::GRADES as $program => $grades) {
+            if (in_array($grade, $grades, true)) {
+                return $program;
+            }
+        }
+
+        return null;
+    }
+
+    /** Ученики, которых преподаватель может отметить как пригласивших (6–11 класс). */
+    public function eligibleReferrers(?int $teacherId = null, ?string $program = null): Collection
+    {
+        $grades = $program ? self::GRADES[$program] : array_merge(...array_values(self::GRADES));
         $links = TeacherStudent::query()
-            ->whereHas('student', fn ($q) => $q->where('role', 'student')->whereIn('grade_num', self::GRADES))
+            ->whereHas('student', fn ($q) => $q->where('role', 'student')->whereIn('grade_num', $grades))
             ->with('student:id,name,grade_num')
             ->get(['teacher_id', 'student_id']);
 
@@ -78,36 +115,51 @@ class FriendInviteService
 
     /**
      * Преподаватель на первом занятии записывает новичка и тех, кого он назвал.
+     * Акция определяется по классу пригласивших; смешивать 6–7 и 8–11 нельзя.
      *
      * @param  int[]  $referrerIds
      */
     public function register(User $teacher, string $name, ?int $grade, CarbonInterface $firstLessonOn, array $referrerIds): FriendInvite
     {
         $referrerIds = array_values(array_unique(array_map('intval', $referrerIds)));
-        $allowed = $this->eligibleReferrers()->pluck('id')->all();
+        if (count($referrerIds) < 1 || count($referrerIds) > self::MAX_REFERRERS) {
+            throw new InvalidArgumentException('Пригласивших должно быть от 1 до ' . self::MAX_REFERRERS);
+        }
+        $allowed = $this->eligibleReferrers()->keyBy('id');
+        $programs = [];
         foreach ($referrerIds as $id) {
-            if (! in_array($id, $allowed, true)) {
+            if (! $allowed->has($id)) {
                 throw new InvalidArgumentException('Пригласивший не участвует в акции');
             }
+            $programs[] = $this->programForGrade((int) $allowed[$id]->grade_num);
         }
-        $shares = $this->shares(count($referrerIds));
+        $programs = array_unique($programs);
+        if (count($programs) > 1) {
+            throw new InvalidArgumentException('У 6–7 и 8–11 классов разные акции — отметь пригласивших из одной группы');
+        }
+        $program = $programs[0];
+        // Скидка не делится: каждому пригласившему — свои 50% на следующий месяц.
+        $amounts = $program === self::CASH
+            ? $this->shares(count($referrerIds))
+            : array_fill(0, count($referrerIds), self::DISCOUNT_PERCENT);
 
-        return DB::transaction(function () use ($teacher, $name, $grade, $firstLessonOn, $referrerIds, $shares) {
+        return DB::transaction(function () use ($teacher, $name, $grade, $firstLessonOn, $referrerIds, $amounts, $program) {
             $invite = FriendInvite::create([
+                'program' => $program,
                 'invitee_name' => trim($name),
                 'invitee_grade' => $grade,
                 'first_lesson_on' => $firstLessonOn->toDateString(),
                 'registered_by' => $teacher->id,
             ]);
             foreach ($referrerIds as $i => $referrerId) {
-                $invite->credits()->create(['referrer_id' => $referrerId, 'amount' => $shares[$i]]);
+                $invite->credits()->create(['referrer_id' => $referrerId, 'amount' => $amounts[$i]]);
             }
 
             return $invite;
         });
     }
 
-    /** Друг оплатил занятия и пришёл на второе — доли начислены, бонусы досчитаны. */
+    /** Друг оплатил месяц занятий — начислено, бонусы досчитаны. */
     public function qualify(FriendInvite $invite, User $teacher): void
     {
         if (! $invite->isPending()) {
@@ -115,8 +167,10 @@ class FriendInviteService
         }
         DB::transaction(function () use ($invite, $teacher) {
             $invite->update(['qualified_at' => now(), 'qualified_by' => $teacher->id]);
-            foreach ($invite->credits()->pluck('referrer_id') as $referrerId) {
-                $this->syncBonuses((int) $referrerId);
+            if ($invite->program === self::CASH) {
+                foreach ($invite->credits()->pluck('referrer_id') as $referrerId) {
+                    $this->syncBonuses((int) $referrerId);
+                }
             }
         });
     }
@@ -128,15 +182,16 @@ class FriendInviteService
         }
     }
 
-    /** Заработано: доли по друзьям, дошедшим до второго оплаченного занятия. */
+    /** Заработано (акция cash): доли по друзьям, оплатившим месяц. */
     public function earned(int $referrerId): int
     {
         return (int) FriendInviteCredit::where('referrer_id', $referrerId)
-            ->whereHas('invite', fn ($q) => $q->whereNotNull('qualified_at')->whereNull('cancelled_at'))
+            ->whereHas('invite', fn ($q) => $q->where('program', self::CASH)
+                ->whereNotNull('qualified_at')->whereNull('cancelled_at'))
             ->sum('amount');
     }
 
-    /** Создаёт недостающие бонусы за каждые 6000 ₽. Уже созданные не трогает. */
+    /** Создаёт недостающие бонусы за каждого третьего друга. Созданные не трогает. */
     public function syncBonuses(int $referrerId): void
     {
         $due = intdiv($this->earned($referrerId), self::BONUS_STEP);
@@ -165,6 +220,7 @@ class FriendInviteService
                 ->filter()->values()->all();
 
             return [
+                'program' => $c->invite->program,
                 'name' => $this->shortName($c->invite->invitee_name),
                 'amount' => $c->amount,
                 'others' => $others,
@@ -176,25 +232,24 @@ class FriendInviteService
 
         $bonuses = FriendInviteBonus::where('referrer_id', $user->id)->orderBy('threshold')->get();
         $earned = $this->earned($user->id);
-        $bonusTotal = (int) $bonuses->sum('amount');
+        $inCycle = $earned % self::BONUS_STEP;
+        // Прогресс до бонуса в «друзьях»: общий друг — половина или треть.
+        $friendsInCycle = $inCycle / self::REWARD;
 
         return [
             'earned' => $earned,
-            'bonusTotal' => $bonusTotal,
-            'total' => $earned + $bonusTotal,
-            'toBonus' => self::BONUS_STEP - ($earned % self::BONUS_STEP),
-            'progressPct' => (int) round(($earned % self::BONUS_STEP) / self::BONUS_STEP * 100),
+            'bonusTotal' => (int) $bonuses->sum('amount'),
+            'total' => $earned + (int) $bonuses->sum('amount'),
+            'friendsInCycle' => $friendsInCycle,
+            'friendsToBonus' => (int) ceil((self::BONUS_STEP - $inCycle) / self::REWARD),
             'friends' => $friends,
             'pending' => $friends->where('qualified', false)->values(),
+            'discounts' => $friends->where('program', self::DISCOUNT)->where('qualified', true)->values(),
             'bonuses' => $bonuses,
-            'notes' => FriendInviteNote::where('user_id', $user->id)->latest('id')->get(),
         ];
     }
 
-    /** @var array<int, array> полоска считается и для дашборда, и для самой строки */
-    private array $stripCache = [];
-
-    /** Текст полоски под кнопкой УРОК: новость важнее суммы, сумма важнее оффера. */
+    /** Полоска под кнопкой УРОК: новость важнее суммы, сумма важнее оффера. */
     public function strip(User $user): array
     {
         return $this->stripCache[$user->id] ??= $this->buildStrip($user);
@@ -202,88 +257,94 @@ class FriendInviteService
 
     private function buildStrip(User $user): array
     {
+        $program = $this->programFor($user);
         $s = $this->summary($user);
         $pending = $s['pending']->first();
-        if ($pending) {
-            return [
-                'tone' => 'warm',
-                'icon' => '🔥',
-                'title' => $pending['name'] . ' пришёл на первое занятие',
-                'sub' => 'Оплатит и придёт на второе — ' . $this->rub($pending['amount']) . ' твои',
-            ];
-        }
-        if ($s['earned'] > 0) {
-            return [
-                'tone' => 'gold',
-                'icon' => '🏆',
-                'title' => 'Заработано ' . $this->rub($s['total']),
-                'sub' => 'Ещё ' . $this->rub($s['toBonus']) . ' — и бонус +' . $this->rub(self::BONUS),
-            ];
+
+        if ($program === self::DISCOUNT) {
+            if ($pending) {
+                return $this->stripData('warm', '🔥', $pending['name'] . ' пришёл на первое занятие', 'Оплатит месяц — вам обоим скидка ' . self::DISCOUNT_PERCENT . '%');
+            }
+            if ($s['discounts']->isNotEmpty()) {
+                return $this->stripData('gold', '🏆', 'У тебя скидка ' . self::DISCOUNT_PERCENT . '% на месяц', 'Приведи ещё друга — будет ещё месяц со скидкой');
+            }
+
+            return $this->stripData('', '🎁', 'Получи скидку ' . self::DISCOUNT_PERCENT . '% за приглашённого друга', '');
         }
 
-        return [
-            'tone' => '',
-            'icon' => '🎁',
-            'title' => 'Позови друга — ' . $this->rub(self::REWARD),
-            'sub' => 'Живыми деньгами, за каждого',
-        ];
+        if ($pending) {
+            return $this->stripData('warm', '🔥', $pending['name'] . ' пришёл на первое занятие', 'Оплатит месяц — ' . $this->rub($pending['amount']) . ' твои');
+        }
+        if ($s['earned'] > 0) {
+            $left = $s['friendsToBonus'];
+
+            return $this->stripData('gold', '🏆', 'Заработано ' . $this->rub($s['total']),
+                'Ещё ' . $this->friendsWord($left) . ' — и +' . $this->rub(self::BONUS) . ' сверху');
+        }
+
+        return $this->stripData('', '🎁', 'Получи ' . $this->rub(self::REWARD) . ' за приглашённого друга', '');
+    }
+
+    private function stripData(string $tone, string $icon, string $title, string $sub): array
+    {
+        return compact('tone', 'icon', 'title', 'sub');
     }
 
     /**
-     * Доска зовущих за учебный год: сколько друзей дошли до первого занятия.
-     * Денег на доске нет, поэтому общий друг засчитывается каждому целиком.
+     * Доска зовущих: ведёт супер-админ вручную, своя у каждой акции.
+     * Показываем количество друзей, денег на доске нет.
      */
-    public function board(User $viewer, ?CarbonInterface $now = null): array
+    public function board(string $program, User $viewer): array
     {
-        $now ??= now();
-        $yearStart = $now->copy()->month(9)->day(1)->startOfDay();
-        if ($now->month < 9) {
-            $yearStart->subYear();
-        }
-
-        $rows = FriendInviteCredit::query()
-            ->join('friend_invites', 'friend_invites.id', '=', 'friend_invite_credits.invite_id')
-            ->whereNull('friend_invites.cancelled_at')
-            ->where('friend_invites.first_lesson_on', '>=', $yearStart->toDateString())
-            ->groupBy('friend_invite_credits.referrer_id')
-            ->selectRaw('friend_invite_credits.referrer_id, COUNT(DISTINCT friend_invite_credits.invite_id) AS friends')
-            ->orderByDesc('friends')
+        $entries = FriendBoardEntry::where('program', $program)
+            ->where('friends', '>', 0)
+            ->with('user:id,name,grade_num,invite_board_hidden')
+            ->orderByDesc('friends')->orderBy('id')
             ->get();
 
-        $users = User::whereIn('id', $rows->pluck('referrer_id'))->get(['id', 'name', 'grade_num', 'invite_board_hidden'])->keyBy('id');
-
-        $list = $rows->values()->map(fn ($r, $i) => [
+        $list = $entries->values()->map(fn (FriendBoardEntry $e, $i) => [
             'pos' => $i + 1,
-            'you' => (int) $r->referrer_id === $viewer->id,
-            'name' => $this->boardName($users[$r->referrer_id] ?? null, (int) $r->referrer_id === $viewer->id),
-            'grade' => $users[$r->referrer_id]->grade_num ?? null,
-            'friends' => (int) $r->friends,
+            'you' => $e->user_id === $viewer->id,
+            'name' => $this->boardName($e->user, $e->user_id === $viewer->id),
+            'grade' => $e->user?->grade_num,
+            'friends' => (int) $e->friends,
         ]);
-
-        $top = $list->take(10)->values();
         $me = $list->firstWhere('you', true);
 
         return [
-            'top' => $top,
+            'top' => $list->take(10)->values(),
             'me' => ($me && $me['pos'] > 10) ? $me : null,
-            'totalFriends' => FriendInvite::whereNull('cancelled_at')
-                ->where('first_lesson_on', '>=', $yearStart->toDateString())->count(),
+            'totalFriends' => (int) $entries->sum('friends'),
         ];
     }
 
-    /** Очередь выплат для преподавателя: доли и бонусы, которые ещё не выданы. */
+    /** Очередь для преподавателя: деньги к выдаче и скидки к применению. */
     public function payoutQueue(): array
     {
+        $qualified = fn ($program) => fn ($q) => $q->where('program', $program)
+            ->whereNotNull('qualified_at')->whereNull('cancelled_at');
+
         $credits = FriendInviteCredit::whereNull('paid_at')
-            ->whereHas('invite', fn ($q) => $q->whereNotNull('qualified_at')->whereNull('cancelled_at'))
+            ->whereHas('invite', $qualified(self::CASH))
             ->with(['referrer:id,name,grade_num', 'invite.credits.referrer:id,name'])
             ->orderBy('id')->get();
         $bonuses = FriendInviteBonus::whereNull('paid_at')->with('referrer:id,name,grade_num')->orderBy('id')->get();
+
+        $discounts = FriendInviteCredit::whereNull('paid_at')
+            ->whereHas('invite', $qualified(self::DISCOUNT))
+            ->with(['referrer:id,name,grade_num', 'invite:id,invitee_name'])
+            ->orderBy('id')->get();
+        $inviteeDiscounts = FriendInvite::where('program', self::DISCOUNT)
+            ->whereNotNull('qualified_at')->whereNull('cancelled_at')
+            ->whereNull('invitee_discount_applied_at')
+            ->orderBy('id')->get();
 
         return [
             'credits' => $credits,
             'bonuses' => $bonuses,
             'total' => (int) $credits->sum('amount') + (int) $bonuses->sum('amount'),
+            'discounts' => $discounts,
+            'inviteeDiscounts' => $inviteeDiscounts,
         ];
     }
 
@@ -307,7 +368,7 @@ class FriendInviteService
         return $n . ' ' . $word;
     }
 
-    /** «пополам с Кириллом» / «на троих с Кириллом и Настей» — без склонения имён. */
+    /** «пополам с: Кирилл М.» / «на троих с: …» — без склонения имён. */
     public function splitText(array $others): string
     {
         if (count($others) === 0) {

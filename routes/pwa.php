@@ -63,10 +63,8 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     // Protected student routes
     Route::middleware(['auth', 'pwa.telegram-link', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
-        // «Позови друга» — 8–11 класс, прикреплённые к учителю (гейт в FriendInviteService)
+        // «Позови друга» — 8–11 класс (деньги) и 6–7 (скидка), прикреплённые к учителю
         Route::get('/friends', [FriendInviteController::class, 'show'])->name('pwa.student.friends');
-        Route::post('/friends/notes', [FriendInviteController::class, 'storeNote'])->name('pwa.student.friends.notes.store');
-        Route::delete('/friends/notes/{id}', [FriendInviteController::class, 'destroyNote'])->whereNumber('id')->name('pwa.student.friends.notes.destroy');
         Route::post('/friends/board', [FriendInviteController::class, 'boardVisibility'])->name('pwa.student.friends.board');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
@@ -231,5 +229,8 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::post('/friends/{invite}/cancel', [TeacherFriendInviteController::class, 'cancel'])->whereNumber('invite')->name('pwa.teacher.friends.cancel');
         Route::post('/friends/credits/{credit}/paid', [TeacherFriendInviteController::class, 'payCredit'])->whereNumber('credit')->name('pwa.teacher.friends.credit.paid');
         Route::post('/friends/bonuses/{bonus}/paid', [TeacherFriendInviteController::class, 'payBonus'])->whereNumber('bonus')->name('pwa.teacher.friends.bonus.paid');
+        Route::post('/friends/{invite}/invitee-discount', [TeacherFriendInviteController::class, 'applyInviteeDiscount'])->whereNumber('invite')->name('pwa.teacher.friends.invitee-discount');
+        Route::post('/friends/board', [TeacherFriendInviteController::class, 'boardStore'])->name('pwa.teacher.friends.board.store');
+        Route::delete('/friends/board/{entry}', [TeacherFriendInviteController::class, 'boardDestroy'])->whereNumber('entry')->name('pwa.teacher.friends.board.destroy');
     });
 });

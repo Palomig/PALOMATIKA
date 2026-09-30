@@ -274,7 +274,7 @@
 @push('scripts')
 <script>
 function homePage() {
-  const examDate = new Date('2026-06-02T10:00:00+03:00');
+  const examDate = new Date(@js(config('palomatika.oge_exam_at')));
   return {
     days: 0, hours: 0, mins: 0, secs: 0,
     loginInProgress: false,
