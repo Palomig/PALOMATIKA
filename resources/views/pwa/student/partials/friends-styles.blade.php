@@ -42,10 +42,6 @@
     font-weight: 700; text-align: center; line-height: 1.5; }
   .fr-empty { text-align: center; padding: 8px 10px; }
   .fr-empty-i { font-size: 30px; margin-bottom: 8px; }
-  .fr-toggle { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 13px;
-    background: var(--surface2); border-radius: 11px; margin-top: 12px; font-size: 12px; font-weight: 700; color: var(--muted); }
-  .fr-toggle button { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px;
-    padding: 6px 12px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: var(--body); }
   .fr-rules summary { font-size: 12.5px; font-weight: 800; color: var(--muted); cursor: pointer; list-style: none;
     display: flex; justify-content: space-between; }
   .fr-rules summary::-webkit-details-marker { display: none; }

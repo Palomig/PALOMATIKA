@@ -25,7 +25,7 @@
 - `App\Services\FriendInviteService` — вся логика и константы
 - Полоска под плиткой «УРОК» — `partials/friend-strip`, данные через view composer в `AppServiceProvider` (обёрнут в try/catch: промо не должно ронять главный экран)
 - Кабинет учителя `teacher.palomatika.ru/friends`: запись новичка → «Остался: оплатил месяц» / «Не остался» → «Выдал» (деньги) или «Применил» (скидки)
-- **Доски зовущих ведутся вручную** супер-админом (`User::isSuperAdmin()`, `config/palomatika.php` → `SUPER_ADMIN_IDS`, по умолчанию id 1), своя у каждой акции; ученик может скрыть имя
+- **Доски зовущих ведутся вручную** супер-админом (`User::isSuperAdmin()`, `config/palomatika.php` → `SUPER_ADMIN_IDS`, по умолчанию id 1), своя у каждой акции; имя на доске видно всегда (скрытие убрали 30.09)
 
 ## Таблицы
 
