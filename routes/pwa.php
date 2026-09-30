@@ -65,7 +65,6 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
         // «Позови друга» — 8–11 класс (деньги) и 6–7 (скидка), прикреплённые к учителю
         Route::get('/friends', [FriendInviteController::class, 'show'])->name('pwa.student.friends');
-        Route::post('/friends/board', [FriendInviteController::class, 'boardVisibility'])->name('pwa.student.friends.board');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
         Route::get('/part2', [StudentController::class, 'part2'])->name('pwa.student.part2');

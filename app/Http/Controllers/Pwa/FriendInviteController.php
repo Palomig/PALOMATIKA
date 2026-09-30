@@ -32,13 +32,4 @@ class FriendInviteController extends Controller
         ]);
     }
 
-    public function boardVisibility(Request $request)
-    {
-        $user = Auth::user();
-        abort_unless($this->friends->isEligible($user), 404);
-        $user->invite_board_hidden = ! $request->boolean('show');
-        $user->save();
-
-        return back();
-    }
 }

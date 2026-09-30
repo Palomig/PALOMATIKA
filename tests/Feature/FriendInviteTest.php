@@ -286,10 +286,10 @@ class FriendInviteTest extends TestCase
         $this->actingAs($admin)->delete($this->teacherUrl("/friends/board/{$entry->id}"))->assertRedirect();
         $this->assertSame(1, FriendBoardEntry::where('program', 'cash')->count());
 
-        // скрытое имя
-        $this->actingAs($vanya)->post($this->studentUrl('/friends/board'), ['show' => 0]);
-        $this->assertSame('Ученик 9 класса', $this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['name']);
-        $this->assertNull($this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['grade']);
+        // скрывать имя нельзя: даже со старым флагом из базы имя на доске видно
+        $vanya->forceFill(['invite_board_hidden' => true])->save();
+        $this->assertSame('Ваня П.', $this->svc->board(FriendInviteService::CASH, $kirill)['top'][0]['name']);
+        $this->actingAs($vanya)->get($this->studentUrl('/friends'))->assertDontSee('Скрыть имя');
     }
 
     public function test_board_set_command(): void

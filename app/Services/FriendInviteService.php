@@ -298,7 +298,7 @@ class FriendInviteService
     {
         $entries = FriendBoardEntry::where('program', $program)
             ->where('friends', '>', 0)
-            ->with('user:id,name,grade_num,invite_board_hidden')
+            ->with('user:id,name,grade_num')
             ->orderByDesc('friends')->orderBy('id')
             ->get();
 
@@ -306,8 +306,7 @@ class FriendInviteService
             'pos' => $i + 1,
             'you' => $e->user_id === $viewer->id,
             'name' => $this->boardName($e->user, $e->user_id === $viewer->id),
-            // У скрытого класс уже в имени («Ученик 8 класса») — второй строкой не повторяем.
-            'grade' => ($e->user?->invite_board_hidden && $e->user_id !== $viewer->id) ? null : $e->user?->grade_num,
+            'grade' => $e->user?->grade_num,
             'friends' => (int) $e->friends,
         ]);
         $me = $list->firstWhere('you', true);
@@ -428,9 +427,6 @@ class FriendInviteService
         }
         if ($user === null) {
             return 'Ученик';
-        }
-        if ($user->invite_board_hidden) {
-            return $user->grade_num ? 'Ученик ' . $user->grade_num . ' класса' : 'Ученик';
         }
 
         return $this->shortName($user->name);
