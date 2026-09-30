@@ -40,7 +40,6 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
-            'role' => 'in:student,teacher',
             'grade' => 'nullable|integer|in:8,9',
             'referral_code' => 'nullable|string|exists:users,referral_code',
         ]);
@@ -54,7 +53,8 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'student',
+            // Роль при регистрации всегда ученик; учителя назначаются вручную.
+            'role' => 'student',
             'grade' => $request->grade,
             'referred_by_user_id' => $referrer?->id,
             'trial_ends_at' => now()->addDays(3),
