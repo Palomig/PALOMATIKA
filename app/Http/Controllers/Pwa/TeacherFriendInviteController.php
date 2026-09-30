@@ -108,33 +108,36 @@ class TeacherFriendInviteController extends Controller
         return back();
     }
 
-    /** Доска зовущих ведётся вручную: добавить ученика или поменять число друзей. */
+    /**
+     * Доска зовущих ведётся вручную: добавить ученика или поменять число друзей.
+     * Ответ показываем в самом блоке доски (#board) — он в низу страницы, и
+     * сообщение наверху раньше просто не было видно: «ничего не изменилось».
+     */
     public function boardStore(Request $request)
     {
         abort_unless(Auth::user()->isSuperAdmin(), 403);
-        $data = $request->validate([
-            'program' => 'required|in:' . FriendInviteService::CASH . ',' . FriendInviteService::DISCOUNT,
-            'user_id' => 'required|integer',
-            'friends' => 'required|integer|between:0,99',
-        ]);
-        $allowed = $this->friends->eligibleReferrers(null, $data['program'])->pluck('id')->all();
-        if (! in_array((int) $data['user_id'], $allowed, true)) {
-            return back()->with('friends_error', 'Этот ученик не участвует в этой акции');
+        $program = (string) $request->input('program');
+        try {
+            if (! $request->filled('user_id')) {
+                throw new InvalidArgumentException('Выбери ученика');
+            }
+            $entry = $this->friends->setBoardEntry($program, (int) $request->input('user_id'), (int) $request->input('friends', 1));
+        } catch (InvalidArgumentException $e) {
+            return back()->withFragment('board')->with('board_error', $e->getMessage())->with('board_program', $program);
         }
-        FriendBoardEntry::updateOrCreate(
-            ['program' => $data['program'], 'user_id' => (int) $data['user_id']],
-            ['friends' => (int) $data['friends']]
-        );
 
-        return back()->with('friends_ok', 'Доска обновлена');
+        return back()->withFragment('board')
+            ->with('board_ok', ($entry->user?->name ?? 'Ученик') . ': ' . $this->friends->friendsWord($entry->friends))
+            ->with('board_program', $program);
     }
 
     public function boardDestroy(FriendBoardEntry $entry)
     {
         abort_unless(Auth::user()->isSuperAdmin(), 403);
+        $program = $entry->program;
         $entry->delete();
 
-        return back();
+        return back()->withFragment('board')->with('board_ok', 'Убрано с доски')->with('board_program', $program);
     }
 
     public function payBonus(FriendInviteBonus $bonus)

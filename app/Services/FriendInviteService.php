@@ -318,6 +318,37 @@ class FriendInviteService
         ];
     }
 
+    /**
+     * Строка доски зовущих: добавить ученика или поменять число друзей.
+     * Общая точка для кабинета супер-админа и команды friends:board-set.
+     */
+    public function setBoardEntry(string $program, int $userId, int $friends): FriendBoardEntry
+    {
+        if (! array_key_exists($program, self::GRADES)) {
+            throw new InvalidArgumentException('Неизвестная акция: ' . $program);
+        }
+        if ($friends < 0 || $friends > 99) {
+            throw new InvalidArgumentException('Число друзей — от 0 до 99');
+        }
+        $user = User::find($userId);
+        if ($user === null) {
+            throw new InvalidArgumentException('Ученик не найден');
+        }
+        if (! $this->eligibleReferrers(null, $program)->contains('id', $userId)) {
+            $grades = self::GRADES[$program];
+            throw new InvalidArgumentException(sprintf(
+                '%s не участвует в акции %d–%d класса: %s',
+                $user->name, min($grades), max($grades),
+                $user->grade_num ? $user->grade_num . ' класс' . (TeacherStudent::where('student_id', $userId)->exists() ? '' : ', не прикреплён к учителю') : 'не указан класс'
+            ));
+        }
+
+        return FriendBoardEntry::updateOrCreate(
+            ['program' => $program, 'user_id' => $userId],
+            ['friends' => $friends]
+        );
+    }
+
     /** Очередь для преподавателя: деньги к выдаче и скидки к применению. */
     public function payoutQueue(): array
     {
