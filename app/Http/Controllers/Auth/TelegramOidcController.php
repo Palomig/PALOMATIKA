@@ -73,6 +73,11 @@ class TelegramOidcController extends Controller
             'ip' => $request->ip(), 'user_agent' => $request->userAgent(),
         ]);
 
+        // Вход с общей (ученической) страницы: учителя сразу в свой кабинет.
+        if ($origin === 'student' && in_array($user->role, ['teacher', 'admin'], true)) {
+            $origin = 'teacher';
+        }
+
         return redirect()->to($this->originUrl($origin));
     }
 
