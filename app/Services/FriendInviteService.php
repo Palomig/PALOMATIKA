@@ -306,7 +306,8 @@ class FriendInviteService
             'pos' => $i + 1,
             'you' => $e->user_id === $viewer->id,
             'name' => $this->boardName($e->user, $e->user_id === $viewer->id),
-            'grade' => $e->user?->grade_num,
+            // У скрытого класс уже в имени («Ученик 8 класса») — второй строкой не повторяем.
+            'grade' => ($e->user?->invite_board_hidden && $e->user_id !== $viewer->id) ? null : $e->user?->grade_num,
             'friends' => (int) $e->friends,
         ]);
         $me = $list->firstWhere('you', true);
