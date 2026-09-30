@@ -1,5 +1,5 @@
 {{-- Доска зовущих: строки ведёт супер-админ вручную (teacher.palomatika.ru/friends),
-     своя у каждой акции. Ученик может скрыть своё имя. --}}
+     своя у каждой акции. --}}
 <div class="fr-blk">
   <div class="fr-h">Доска зовущих</div>
   @if($board['top']->isEmpty())
@@ -25,10 +25,4 @@
     @endif
     <div class="fr-foot">Всего ребята привели {{ $svc->friendsWord($board['totalFriends']) }}</div>
   @endif
-  <form method="POST" action="{{ route('pwa.student.friends.board') }}" class="fr-toggle">
-    @csrf
-    <span>{{ $user->invite_board_hidden ? 'На доске ты без имени' : 'На доске видно твоё имя' }}</span>
-    <input type="hidden" name="show" value="{{ $user->invite_board_hidden ? 1 : 0 }}">
-    <button type="submit">{{ $user->invite_board_hidden ? 'Показать имя' : 'Скрыть имя' }}</button>
-  </form>
 </div>
