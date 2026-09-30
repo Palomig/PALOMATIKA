@@ -26,7 +26,7 @@ class AuthController extends Controller
     public function showLogin(Request $request)
     {
         if (Auth::check()) {
-            return redirect('https://student.' . config('app.base_domain') . '/');
+            return redirect($this->homeUrlFor(Auth::user()));
         }
         return view('pwa.shared.login', ['context' => 'student']);
     }
@@ -98,10 +98,24 @@ class AuthController extends Controller
             return redirect($intended);
         }
 
+        if ($user->role !== 'student') {
+            return redirect($this->homeUrlFor($user));
+        }
+
         $base = 'https://student.' . config('app.base_domain');
         return $user->onboarding_completed_at
             ? redirect($base . '/')
             : redirect($base . '/onboarding');
+    }
+
+    /**
+     * Вход один на всех: ученик попадает к себе, учитель и админ — в кабинет репетитора.
+     */
+    private function homeUrlFor(User $user): string
+    {
+        return in_array($user->role, ['teacher', 'admin'], true)
+            ? 'https://teacher.' . config('app.base_domain') . '/dashboard'
+            : 'https://student.' . config('app.base_domain') . '/';
     }
 
     /**

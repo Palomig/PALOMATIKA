@@ -32,9 +32,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Landing (browser only — Telegram Mini App uses /tg/)
+// Landing (browser only — Telegram Mini App uses /tg/).
+// Выбора «ученик/репетитор» больше нет: все входят через одну страницу,
+// кабинет определяется ролью (учителя назначает Стас вручную).
 Route::get('/', function () {
-    return view('landing');
+    return redirect('https://student.' . config('app.base_domain') . '/login');
 })->name('landing');
 
 // QA Reports (admin only)
