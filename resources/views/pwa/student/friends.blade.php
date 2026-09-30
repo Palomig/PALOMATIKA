@@ -29,6 +29,17 @@
   .fr-slot-l { font-size: 10.5px; font-weight: 800; color: var(--muted); line-height: 1.35; }
   .fr-slot.gift .fr-slot-l { color: var(--yellow); }
   .fr-arm { flex: 0 0 12px; height: 2px; border-radius: 2px; background: var(--muted2); margin-top: 25px; }
+  .fr-split { border-color: var(--accent-bd); }
+  .fr-split-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .fr-split-row:last-of-type { border-bottom: none; }
+  .fr-split-who { display: flex; flex: 0 0 auto; }
+  .fr-split-who span { width: 26px; height: 26px; border-radius: 999px; background: var(--accent-bg); border: 1px solid var(--accent-bd);
+    color: var(--accent); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-left: -6px; }
+  .fr-split-who span:first-child { margin-left: 0; }
+  .fr-split-t { flex: 1; font-size: 13px; font-weight: 700; color: var(--text); }
+  .fr-split-v { font-family: var(--display); font-size: 15px; color: var(--text); white-space: nowrap; }
+  .fr-split-note { margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--muted); line-height: 1.55; }
+  .fr-split-note b { color: var(--text); }
 @endpush
 
 @section('body')
@@ -92,6 +103,31 @@
     <div class="fr-step"><div class="fr-sn">1</div><div class="fr-st">Предупреди преподавателя<span>Скажи, что придёшь с другом, — чтобы для него нашлось место</span></div></div>
     <div class="fr-step"><div class="fr-sn">2</div><div class="fr-st">Приведи друга на своё занятие<span>Первое — бесплатно: он просто посидит и позанимается с вами в группе</span></div></div>
     <div class="fr-step"><div class="fr-sn">3</div><div class="fr-st">Если друг решит заниматься с нами — забираешь {{ $svc->rub($svc::REWARD) }}<span>Получишь деньги, когда он оплатит месяц занятий</span></div></div>
+  </div>
+
+  <div class="fr-blk fr-split">
+    <div class="fr-h">Позвали вместе — делите приз</div>
+    <div class="fr-sub">Если друга звали несколько человек, деньги делятся поровну между всеми, кого он назовёт</div>
+    <div class="fr-split-row">
+      <div class="fr-split-who"><span>1</span></div>
+      <div class="fr-split-t">Позвал один</div>
+      <div class="fr-split-v">{{ $svc->rub($svc::REWARD) }}</div>
+    </div>
+    <div class="fr-split-row">
+      <div class="fr-split-who"><span>1</span><span>2</span></div>
+      <div class="fr-split-t">Позвали вдвоём</div>
+      <div class="fr-split-v">по {{ $svc->rub($svc->shares(2)[1]) }}</div>
+    </div>
+    <div class="fr-split-row">
+      <div class="fr-split-who"><span>1</span><span>2</span><span>3</span></div>
+      <div class="fr-split-t">Позвали втроём</div>
+      <div class="fr-split-v">по ~{{ $svc->rub((int) round($svc::REWARD / 3)) }}</div>
+    </div>
+    <div class="fr-split-note">
+      На первом занятии новичок сам называет всех, кто его позвал, — <b>договариваться заранее не нужно</b>.
+      Общий друг засчитывается к бонусу за третьего друга каждому наполовину (или на треть).
+      Если заспорите — решает сам друг, а не договорились — <b>делим поровну</b>.
+    </div>
   </div>
 
   @if($s['friends']->isNotEmpty())
