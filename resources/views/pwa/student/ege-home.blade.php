@@ -58,17 +58,6 @@
     <div class="greeting-badge">ЕГЭ ({{ $levelMark }}) · {{ $gradeLabel }} класс</div>
   </div>
 
-  @if($user->hasTgPremium())
-    <a href="{{ route('pwa.student.profile') }}" class="premium-strip active">
-      <span class="premium-strip-dot"></span>
-      Premium · {{ now()->diffInDays($user->tg_premium_until) }} дн
-    </a>
-  @else
-    <a href="{{ route('pwa.student.profile') }}" class="premium-strip inactive">
-      <span class="premium-strip-dot"></span>
-      Нет Premium
-    </a>
-  @endif
 
   @if(count($activeList) === 1)
   <a href="{{ route('pwa.student.ege.test', $activeList[0]['id']) }}" class="resume-banner">

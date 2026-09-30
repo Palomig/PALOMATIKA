@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class FriendInvite extends Model
 {
     protected $fillable = [
+        'program',
         'invitee_name',
         'invitee_grade',
         'first_lesson_on',
@@ -16,12 +17,14 @@ class FriendInvite extends Model
         'qualified_at',
         'qualified_by',
         'cancelled_at',
+        'invitee_discount_applied_at',
     ];
 
     protected $casts = [
         'first_lesson_on' => 'date',
         'qualified_at' => 'datetime',
         'cancelled_at' => 'datetime',
+        'invitee_discount_applied_at' => 'datetime',
     ];
 
     public function credits(): HasMany

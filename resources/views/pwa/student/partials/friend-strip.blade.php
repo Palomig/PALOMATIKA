@@ -1,11 +1,11 @@
 {{-- «Позови друга» — узкая строка под плиткой УРОК. Данные — view composer
-     в AppServiceProvider: только 8–11 класс, прикреплённые к учителю. --}}
+     в AppServiceProvider: 8–11 класс (деньги) и 6–7 (скидка), прикреплённые к учителю. --}}
 @if(!empty($friendStrip))
 <a href="{{ route('pwa.student.friends') }}" class="fs-strip {{ $friendStrip['tone'] }}">
   <span class="fs-ico">{{ $friendStrip['icon'] }}</span>
   <span class="fs-mid">
     <span class="fs-t">{{ $friendStrip['title'] }}</span>
-    <span class="fs-s">{{ $friendStrip['sub'] }}</span>
+    @if($friendStrip['sub'] !== '')<span class="fs-s">{{ $friendStrip['sub'] }}</span>@endif
   </span>
   <span class="fs-more">Подробнее →</span>
 </a>

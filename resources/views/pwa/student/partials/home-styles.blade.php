@@ -22,24 +22,6 @@
     font-size: 11px; font-weight: 800; white-space: nowrap;
   }
 
-  .premium-strip {
-    display: flex; align-items: center; gap: 6px;
-    padding: 8px 14px; border-radius: 10px;
-    font-size: 12px; font-weight: 700;
-    opacity: 0; animation: fadeUp 0.3s ease 0.03s forwards;
-    text-decoration: none;
-  }
-  .premium-strip.active {
-    background: var(--purple-bg); border: 1px solid var(--purple-bd); color: var(--purple);
-  }
-  .premium-strip.inactive {
-    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-  }
-  .premium-strip-dot {
-    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-  }
-  .premium-strip.active .premium-strip-dot { background: var(--green); }
-  .premium-strip.inactive .premium-strip-dot { background: var(--muted); }
 
   .resume-banner {
     display: flex; align-items: center; justify-content: space-between;

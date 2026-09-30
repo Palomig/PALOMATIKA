@@ -35,6 +35,16 @@
   .tf-flash.ok { color: var(--green); background: var(--green-bg); border: 1px solid var(--green-bd); }
   .tf-flash.err { color: var(--red); background: var(--red-bg); border: 1px solid var(--red-bd); }
   .tf-empty { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .tf-tag { display: inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+    border-radius: 6px; padding: 2px 6px; margin-left: 6px; vertical-align: 1px; }
+  .tf-tag.cash { color: var(--green); background: var(--green-bg); }
+  .tf-tag.discount { color: var(--accent); background: var(--accent-bg); }
+  .tf-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .tf-tab { flex: 1; padding: 8px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted);
+    font-size: 12px; font-weight: 800; cursor: pointer; font-family: var(--body); }
+  .tf-tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tf-num { width: 64px; padding: 8px; background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 9px; font-size: 14px; text-align: center; font-family: var(--body); }
 @endpush
 
 @section('body')
@@ -50,10 +60,12 @@
 
   {{-- Новый друг --}}
   <form class="tf-blk" method="POST" action="{{ route('pwa.teacher.friends.store') }}"
-        x-data="{ q: '', selected: @js(array_map('strval', (array) old('referrers', []))) }">
+        x-data="{ q: '', selected: @js(array_map('strval', (array) old('referrers', []))),
+                  programs: @js($referrers->mapWithKeys(fn ($r) => [(string) $r->id => $svc->programForGrade((int) $r->grade_num)])),
+                  get program() { return this.selected.length ? this.programs[this.selected[0]] : null } }">
     @csrf
     <div class="tf-h">Новичок на первом занятии — кто привёл?</div>
-    <div class="tf-sub">Спроси у него самого и запиши сразу. Задним числом не меняем — иначе потом придут двое с разными версиями.</div>
+    <div class="tf-sub">Спроси у него самого и запиши сразу. Задним числом не меняем — иначе потом придут двое с разными версиями. У 8–11 класса акция — 2000 ₽ наличными, у 6–7 — скидка 50% на месяц обоим.</div>
 
     <div class="tf-lbl">Новичок</div>
     <input class="tf-input" name="invitee_name" required maxlength="100" placeholder="Имя и фамилия" value="{{ old('invitee_name') }}">
@@ -71,16 +83,14 @@
     <input class="tf-input" type="search" x-model="q" placeholder="Поиск по имени">
     <div class="tf-pick">
       @forelse($referrers as $r)
-        @php $rNotes = $notes->get($r->id, collect())->take(3); @endphp
+        @php $rp = $svc->programForGrade((int) $r->grade_num); @endphp
         <label class="tf-opt" x-show="q === '' || @js(mb_strtolower($r->name)).includes(q.toLowerCase())">
           <input type="checkbox" name="referrers[]" value="{{ $r->id }}" x-model="selected"
-                 :disabled="!!(selected.length >= {{ $svc::MAX_REFERRERS }} && !selected.includes('{{ $r->id }}'))">
+                 :disabled="!!(!selected.includes('{{ $r->id }}') && (selected.length >= {{ $svc::MAX_REFERRERS }} || (program && program !== '{{ $rp }}')))">
           <span>
             <span class="tf-opt-n">{{ $r->name }}</span>
             <span class="tf-opt-s">{{ $r->grade_num }} класс</span>
-            @if($rNotes->isNotEmpty())
-              <span class="tf-opt-note" style="display:block">Отмечал(а): {{ $rNotes->map(fn ($n) => $n->name . ', ' . $n->created_at?->format('d.m'))->implode('; ') }}</span>
-            @endif
+            <span class="tf-tag {{ $rp }}">{{ $rp === $svc::DISCOUNT ? '−50%' : '2000 ₽' }}</span>
           </span>
         </label>
       @empty
@@ -89,7 +99,9 @@
     </div>
 
     <div class="tf-split" x-show="selected.length > 0" x-cloak
-         x-text="selected.length === 1 ? 'Выплата: {{ $svc::REWARD }} ₽ одному' : 'Выплата разделится: по ' + Math.floor({{ $svc::REWARD }} / selected.length) + ' ₽ каждому'"></div>
+         x-text="program === '{{ $svc::DISCOUNT }}'
+           ? 'Скидка 50% на следующий месяц — ' + (selected.length === 1 ? 'пригласившему' : 'каждому пригласившему') + ' и новичку'
+           : (selected.length === 1 ? 'Выплата: {{ $svc::REWARD }} ₽ одному' : 'Выплата разделится: по ' + Math.floor({{ $svc::REWARD }} / selected.length) + ' ₽ каждому')"></div>
 
     <button class="btn btn-accent" type="submit" style="width:100%;margin-top:12px" :disabled="!!(selected.length === 0)">Записать</button>
     <div class="tf-fine">Пришёл сам, никого не назвал — записывать не нужно</div>
@@ -97,21 +109,21 @@
 
   {{-- Ждут второго занятия --}}
   <div class="tf-blk">
-    <div class="tf-h">Ждут второго занятия · {{ $pending->count() }}</div>
-    <div class="tf-sub">Когда новичок оплатит занятия и придёт на второе — нажми «Остался», и деньги встанут в очередь на выдачу.</div>
+    <div class="tf-h">Ждут оплаты месяца · {{ $pending->count() }}</div>
+    <div class="tf-sub">Когда новичок оплатит месяц занятий — нажми «Остался»: деньги или скидки встанут в очередь.</div>
     @forelse($pending as $inv)
       <div class="tf-row" style="display:block">
-        <div class="tf-n">{{ $inv->invitee_name }}@if($inv->invitee_grade), {{ $inv->invitee_grade }} класс @endif</div>
+        <div class="tf-n">{{ $inv->invitee_name }}@if($inv->invitee_grade), {{ $inv->invitee_grade }} класс @endif<span class="tf-tag {{ $inv->program }}">{{ $inv->program === $svc::DISCOUNT ? '−50%' : '2000 ₽' }}</span></div>
         <div class="tf-s">
           Первое занятие {{ $inv->first_lesson_on->format('d.m') }} ·
-          {{ $inv->credits->map(fn ($c) => $svc->shortName($c->referrer?->name) . ' ' . $svc->rub($c->amount))->implode(', ') }}
+          {{ $inv->credits->map(fn ($c) => $svc->shortName($c->referrer?->name) . ($inv->program === $svc::DISCOUNT ? '' : ' ' . $svc->rub($c->amount)))->implode(', ') }}
         </div>
         <div class="tf-acts">
           <form method="POST" action="{{ route('pwa.teacher.friends.qualify', $inv) }}">@csrf
-            <button class="tf-btn ok" type="submit">Остался: оплатил и пришёл на второе</button>
+            <button class="tf-btn ok" type="submit">Остался: оплатил месяц</button>
           </form>
           <form method="POST" action="{{ route('pwa.teacher.friends.cancel', $inv) }}"
-                onsubmit="return confirm('{{ $inv->invitee_name }} не остался? Выплаты по нему не будет.')">@csrf
+                onsubmit="return confirm(@js($inv->invitee_name . ' не остался? Выплаты и скидки по нему не будет.'))">@csrf
             <button class="tf-btn ghost" type="submit">Не остался</button>
           </form>
         </div>
@@ -145,7 +157,7 @@
       <div class="tf-row">
         <div class="tf-m">
           <div class="tf-n">{{ $b->referrer?->name }}</div>
-          <div class="tf-s">Бонус за {{ $svc->rub($b->threshold) }} заработанного</div>
+          <div class="tf-s">Бонус за {{ intdiv($b->threshold, $svc::REWARD) }}-го друга</div>
         </div>
         <div class="tf-amt">+{{ $svc->rub($b->amount) }}</div>
         <form method="POST" action="{{ route('pwa.teacher.friends.bonus.paid', $b) }}">@csrf
@@ -154,6 +166,85 @@
       </div>
     @endforeach
   </div>
+
+  {{-- Скидки 6–7 класса --}}
+  <div class="tf-blk">
+    <div class="tf-h">Скидки 50% к применению · {{ $queue['discounts']->count() + $queue['inviteeDiscounts']->count() }}</div>
+    <div class="tf-sub">6–7 класс: примени скидку к следующему месяцу и отметь.</div>
+    @if($queue['discounts']->isEmpty() && $queue['inviteeDiscounts']->isEmpty())
+      <div class="tf-empty">Применять нечего</div>
+    @endif
+    @foreach($queue['discounts'] as $c)
+      <div class="tf-row">
+        <div class="tf-m">
+          <div class="tf-n">{{ $c->referrer?->name }}</div>
+          <div class="tf-s">Пригласил: {{ $c->invite->invitee_name }}</div>
+        </div>
+        <div class="tf-amt">−{{ $c->amount }}%</div>
+        <form method="POST" action="{{ route('pwa.teacher.friends.credit.paid', $c) }}">@csrf
+          <button class="tf-btn pay" type="submit">Применил</button>
+        </form>
+      </div>
+    @endforeach
+    @foreach($queue['inviteeDiscounts'] as $inv)
+      <div class="tf-row">
+        <div class="tf-m">
+          <div class="tf-n">{{ $inv->invitee_name }}</div>
+          <div class="tf-s">Новичок · скидка на второй месяц</div>
+        </div>
+        <div class="tf-amt">−{{ $svc::DISCOUNT_PERCENT }}%</div>
+        <form method="POST" action="{{ route('pwa.teacher.friends.invitee-discount', $inv) }}">@csrf
+          <button class="tf-btn pay" type="submit">Применил</button>
+        </form>
+      </div>
+    @endforeach
+  </div>
+
+  @if($superAdmin)
+  {{-- Доски зовущих — вручную, только супер-админ --}}
+  <div class="tf-blk" x-data="{ tab: '{{ old('program', $svc::CASH) }}' }">
+    <div class="tf-h">Доски зовущих</div>
+    <div class="tf-sub">Ученики видят ровно то, что здесь записано. Поставь 0 или удали, чтобы убрать с доски.</div>
+    <div class="tf-tabs">
+      <button type="button" class="tf-tab" :class="tab === '{{ $svc::CASH }}' && 'on'" @click="tab = '{{ $svc::CASH }}'">8–11 класс</button>
+      <button type="button" class="tf-tab" :class="tab === '{{ $svc::DISCOUNT }}' && 'on'" @click="tab = '{{ $svc::DISCOUNT }}'">6–7 класс</button>
+    </div>
+    @foreach([$svc::CASH, $svc::DISCOUNT] as $prog)
+      <div x-show="tab === '{{ $prog }}'" @if($prog !== $svc::CASH) x-cloak @endif>
+        @forelse($boards[$prog] as $e)
+          <div class="tf-row">
+            <div class="tf-m">
+              <div class="tf-n">{{ $e->user?->name }}</div>
+              <div class="tf-s">{{ $e->user?->grade_num }} класс</div>
+            </div>
+            <form method="POST" action="{{ route('pwa.teacher.friends.board.store') }}" style="display:flex;gap:6px;align-items:center">@csrf
+              <input type="hidden" name="program" value="{{ $prog }}">
+              <input type="hidden" name="user_id" value="{{ $e->user_id }}">
+              <input class="tf-num" type="number" name="friends" min="0" max="99" value="{{ $e->friends }}" aria-label="Друзей">
+              <button class="tf-btn pay" type="submit">OK</button>
+            </form>
+            <form method="POST" action="{{ route('pwa.teacher.friends.board.destroy', $e) }}">@csrf @method('DELETE')
+              <button class="tf-btn ghost" type="submit" aria-label="Убрать с доски">×</button>
+            </form>
+          </div>
+        @empty
+          <div class="tf-empty" style="margin-bottom:10px">Доска пустая</div>
+        @endforelse
+        <form method="POST" action="{{ route('pwa.teacher.friends.board.store') }}" style="display:flex;gap:6px;margin-top:12px">@csrf
+          <input type="hidden" name="program" value="{{ $prog }}">
+          <select class="tf-input" name="user_id" required style="flex:1">
+            <option value="">Добавить ученика</option>
+            @foreach($referrers->filter(fn ($r) => $svc->programForGrade((int) $r->grade_num) === $prog) as $r)
+              <option value="{{ $r->id }}">{{ $r->name }}, {{ $r->grade_num }} кл.</option>
+            @endforeach
+          </select>
+          <input class="tf-num" type="number" name="friends" min="0" max="99" value="1" aria-label="Друзей">
+          <button class="tf-btn pay" type="submit">+</button>
+        </form>
+      </div>
+    @endforeach
+  </div>
+  @endif
 
   @if($paidCredits->isNotEmpty())
   <div class="tf-blk">
