@@ -40,6 +40,54 @@ class PwaAuthTest extends TestCase
         $response->assertRedirect();
     }
 
+    public function test_teacher_is_sent_to_teacher_cabinet_from_single_login(): void
+    {
+        $user = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+
+        $this->actingAs($user)->get('http://student.palomatika.ru/login')
+            ->assertRedirect('https://teacher.' . config('app.base_domain') . '/dashboard');
+    }
+
+    public function test_teacher_oauth_callback_on_single_login_lands_in_teacher_cabinet(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'teacher',
+            'oauth_provider' => 'google',
+            'oauth_id' => 'oauth-teacher',
+        ]);
+
+        $socialUser = new class
+        {
+            public function getId(): string { return 'oauth-teacher'; }
+            public function getName(): string { return 'Teacher'; }
+            public function getNickname(): string { return 'teacher'; }
+            public function getEmail(): string { return 'teacher@example.test'; }
+            public function getAvatar(): string { return ''; }
+        };
+
+        $provider = Mockery::mock(Provider::class);
+        $provider->shouldReceive('redirectUrl')->once()->andReturnSelf();
+        $provider->shouldReceive('user')->once()->andReturn($socialUser);
+        Socialite::shouldReceive('driver')->once()->with('google')->andReturn($provider);
+
+        $this->get('http://student.palomatika.ru/auth/google/callback')
+            ->assertRedirect('https://teacher.' . config('app.base_domain') . '/dashboard');
+        $this->assertAuthenticatedAs($user->fresh());
+    }
+
+    public function test_api_register_ignores_requested_teacher_role(): void
+    {
+        $this->postJson('/api/auth/register', [
+            'name' => 'Хитрец',
+            'email' => 'sly@example.test',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'role' => 'teacher',
+        ])->assertCreated();
+
+        $this->assertSame('student', User::where('email', 'sly@example.test')->value('role'));
+    }
+
     public function test_student_oauth_redirect_persists_migration_token_in_session(): void
     {
         $provider = Mockery::mock(Provider::class);
