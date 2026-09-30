@@ -202,9 +202,11 @@
 
   @if($superAdmin)
   {{-- Доски зовущих — вручную, только супер-админ --}}
-  <div class="tf-blk" x-data="{ tab: '{{ old('program', $svc::CASH) }}' }">
+  <div class="tf-blk" id="board" x-data="{ tab: @js(session('board_program', $svc::CASH)) }">
     <div class="tf-h">Доски зовущих</div>
     <div class="tf-sub">Ученики видят ровно то, что здесь записано. Поставь 0 или удали, чтобы убрать с доски.</div>
+    @if(session('board_ok'))<div class="tf-flash ok" style="margin-bottom:12px">✓ {{ session('board_ok') }}</div>@endif
+    @if(session('board_error'))<div class="tf-flash err" style="margin-bottom:12px">{{ session('board_error') }}</div>@endif
     <div class="tf-tabs">
       <button type="button" class="tf-tab" :class="tab === '{{ $svc::CASH }}' && 'on'" @click="tab = '{{ $svc::CASH }}'">8–11 класс</button>
       <button type="button" class="tf-tab" :class="tab === '{{ $svc::DISCOUNT }}' && 'on'" @click="tab = '{{ $svc::DISCOUNT }}'">6–7 класс</button>

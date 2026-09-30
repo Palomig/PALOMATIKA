@@ -73,6 +73,8 @@ class DeployController extends Controller
         // Разовый переезд профиля ЕГЭ на нумерацию КИМ 2027: переимпорт
         // ради него не годится — стёр бы ручные переносы и подтипы.
         'ege:renumber-2027',
+        // «Позови друга»: строка доски зовущих, если через кабинет не вышло.
+        'friends:board-set',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
