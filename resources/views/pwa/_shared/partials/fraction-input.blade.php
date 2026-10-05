@@ -9,7 +9,9 @@
      иначе вид поля подсказывал бы, что ответ — дробь.
 
      Ждёт $target — CSS-селектор поля ответа внутри ближайшего $scope.
-     $scope — селектор общего предка поля и виджета (форма, строка урока). --}}
+     $scope — селектор общего предка поля и виджета (форма, строка урока).
+     $letters — Alpine-выражение «ответ буквенный» (банк «Скиллы»: «(a+5)/(a-5)»):
+     тогда числитель и знаменатель открывают обычную клавиатуру, а не цифровую. --}}
 @once
 @push('styles')
   .frac-toggle {
@@ -44,6 +46,7 @@
   function mixedFraction(config) {
     return {
       fracOpen: false,
+      letters: false,
       whole: '', num: '', den: '',
 
       target() {
@@ -54,13 +57,22 @@
         this.fracOpen = !this.fracOpen;
         if (this.fracOpen) {
           this.readFromTarget();
-          this.$nextTick(() => this.$refs.fracWhole?.focus());
+          // У буквенной дроби целой части нет — сразу в числитель.
+          this.$nextTick(() => (this.letters ? this.$refs.fracNum : this.$refs.fracWhole)?.focus());
         }
       },
 
       // Уже введённое разбираем обратно: «2 7/11» → 2 и 7/11.
       readFromTarget() {
         const raw = (this.target()?.value || '').trim();
+        // Буквенная дробь: «(a+5)/(a-5)», «2x/3y» — целой части у неё нет.
+        const alg = raw.match(/^(\([^()]+\)|[^\s/()]+)\s*\/\s*(\([^()]+\)|[^\s/()]+)$/);
+        if (alg && /[a-z]/i.test(raw)) {
+          this.whole = '';
+          this.num = this.unwrap(alg[1]);
+          this.den = this.unwrap(alg[2]);
+          return;
+        }
         const m = raw.match(/^(-?\d+)?\s*(?:(\d+)\s*\/\s*(\d+))?$/);
         if (!m) return;
         this.whole = m[1] || '';
@@ -68,11 +80,21 @@
         this.den = m[3] || '';
       },
 
+      // «a+5» над «a-5» — это (a+5)/(a-5), а не a+5/a-5: сумму и разность
+      // берём в скобки, одночлен вроде «2x» или «-3» оставляем как есть.
+      wrap(part) {
+        return /^-?[^\s+\-*/()]+$/.test(part) ? part : `(${part})`;
+      },
+
+      unwrap(part) {
+        return part.replace(/^\((.*)\)$/, '$1');
+      },
+
       compose() {
         const whole = String(this.whole).trim();
         const num = String(this.num).trim();
         const den = String(this.den).trim();
-        const frac = num !== '' && den !== '' ? `${num}/${den}` : '';
+        const frac = num !== '' && den !== '' ? `${this.wrap(num)}/${this.wrap(den)}` : '';
         return [whole, frac].filter(Boolean).join(' ');
       },
 
@@ -90,18 +112,21 @@
 @endonce
 
 <div x-data="mixedFraction({ scope: '{{ $scope }}', target: '{{ $target }}' })"
+     x-effect="letters = {{ $letters ?? 'false' }}"
      style="display:flex; flex-direction:column; width:100%;">
   <button type="button" class="frac-toggle" @click="toggleFraction()"
           x-text="fracOpen ? 'обычный ввод' : 'записать дробью'"></button>
 
   <div class="frac-box" x-show="fracOpen" x-cloak>
-    <input class="frac-whole" type="text" inputmode="numeric" placeholder="целая"
+    <input class="frac-whole" type="text" inputmode="numeric" placeholder="целая" x-show="!letters"
            x-ref="fracWhole" x-model="whole" @input="push()" aria-label="Целая часть">
     <div class="frac-stack">
-      <input type="text" inputmode="numeric" placeholder="числ." x-model="num" @input="push()"
+      <input type="text" :inputmode="letters ? 'text' : 'numeric'" placeholder="числ." x-ref="fracNum"
+             autocapitalize="off" autocorrect="off" spellcheck="false" x-model="num" @input="push()"
              aria-label="Числитель">
       <span class="frac-line"></span>
-      <input type="text" inputmode="numeric" placeholder="знам." x-model="den" @input="push()"
+      <input type="text" :inputmode="letters ? 'text' : 'numeric'" placeholder="знам."
+             autocapitalize="off" autocorrect="off" spellcheck="false" x-model="den" @input="push()"
              aria-label="Знаменатель">
     </div>
     <span class="frac-preview" x-text="compose() || 'ответ'"></span>

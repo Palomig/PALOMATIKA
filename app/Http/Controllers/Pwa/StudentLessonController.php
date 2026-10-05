@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Services\AlgebraicAnswerComparator;
 use App\Services\HomeworkReviewService;
 use App\Services\LessonSessionService;
 use DomainException;
@@ -217,6 +218,9 @@ class StudentLessonController extends Controller
             'position'    => $displayNo,
             'personal'    => $t->assigned_student_id !== null,
             'payload'     => $payload,
+            // Только признак, не сам ответ: виджету дроби нужна буквенная
+            // клавиатура для «(a+5)/(a-5)» из банка «Скиллы».
+            'letters'     => app(AlgebraicAnswerComparator::class)->looksAlgebraic($t->correct_answer),
             'my_answer'   => $myAttempt?->answer_raw,
             'answered_at' => $myAttempt?->answered_at?->toIso8601String(),
         ];
