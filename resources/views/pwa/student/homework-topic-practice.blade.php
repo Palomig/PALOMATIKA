@@ -216,6 +216,7 @@
           @include('pwa._shared.partials.fraction-input', [
               'scope' => 'form',
               'target' => 'input[name=answer]',
+              'letters' => app(\App\Services\AlgebraicAnswerComparator::class)->looksAlgebraic($task->correct_answer) ? 'true' : 'false',
           ])
 
           <template x-if="pages.length">

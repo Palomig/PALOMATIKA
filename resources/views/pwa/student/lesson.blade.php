@@ -238,6 +238,7 @@
           @include('pwa._shared.partials.fraction-input', [
               'scope' => '.lesson-answer-row',
               'target' => '.lesson-answer-input',
+              'letters' => '!!task.letters',
           ])
         </div>
       </template>
