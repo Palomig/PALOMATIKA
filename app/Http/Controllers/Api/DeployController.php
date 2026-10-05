@@ -85,6 +85,8 @@ class DeployController extends Controller
         'user:promote-teacher',
         'user:promote-admin',
         'user:set-referrer',
+        // Перевод учеников в другой класс: у учителя кнопки нет.
+        'user:set-grade',
         'user:delete-telegram',
         'qa:setup-users',
         'variants:normalize-miniapp',
