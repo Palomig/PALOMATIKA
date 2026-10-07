@@ -87,6 +87,8 @@ class DeployController extends Controller
         'user:set-referrer',
         // Перевод учеников в другой класс: у учителя кнопки нет.
         'user:set-grade',
+        // Ник из телеграма → настоящее имя: правки имени в интерфейсе нет.
+        'user:rename',
         'user:delete-telegram',
         'qa:setup-users',
         'variants:normalize-miniapp',
