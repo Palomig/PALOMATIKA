@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title', 'Банк навыков · Алгебра')</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$',right:'$',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false})"></script>
+  <link rel="stylesheet" href="/vendor/katex/0.16.21/katex.min.css">
+  <script defer src="/vendor/katex/0.16.21/katex.min.js"></script>
+  <script defer src="/vendor/katex/0.16.21/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$',right:'$',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false})"></script>
   <style>
     :root{color-scheme:dark;--bg:#101122;--panel:#172033;--line:#304158;--text:#edf2f7;--muted:#94a3b8;--blue:#60a5fa;--green:#34d399;--yellow:#facc15;--red:#fb7185}
     *{box-sizing:border-box}

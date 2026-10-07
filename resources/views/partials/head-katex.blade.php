@@ -1,7 +1,7 @@
 {{-- KaTeX math rendering — include after head-config in topic/ege layouts --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+<link rel="stylesheet" href="/vendor/katex/0.16.9/katex.min.css">
+<script defer src="/vendor/katex/0.16.9/katex.min.js"></script>
+<script defer src="/vendor/katex/0.16.9/contrib/auto-render.min.js"
         onload="renderMathWithDisplayStyle()"></script>
 <script>
     function renderMathWithDisplayStyle() {
