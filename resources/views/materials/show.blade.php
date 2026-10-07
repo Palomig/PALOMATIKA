@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     @include('partials.head-config')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/vendor/katex/0.16.9/katex.min.css">
+    <script defer src="/vendor/katex/0.16.9/katex.min.js"></script>
+    <script defer src="/vendor/katex/0.16.9/contrib/auto-render.min.js"></script>
     <title>{{ $material->title }} | JARVIS</title>
     <style>
         .material-shell {

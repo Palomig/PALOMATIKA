@@ -3,9 +3,9 @@
 <head>
     <title>Вынести минус за скобку — PALOMATIKA</title>
     @include('partials.head-config')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    <link rel="stylesheet" href="/vendor/katex/0.16.9/katex.min.css">
+    <script defer src="/vendor/katex/0.16.9/katex.min.js"></script>
+    <script defer src="/vendor/katex/0.16.9/contrib/auto-render.min.js"
             onload="renderMathInElement(document.body, {
                 delimiters: [
                     {left: '$$', right: '$$', display: true},

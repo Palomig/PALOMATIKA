@@ -2,9 +2,9 @@
 @section('title', 'Домашка — palomatika')
 
 @push('katex')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="/vendor/katex/0.16.21/katex.min.css">
+<script defer src="/vendor/katex/0.16.21/katex.min.js"></script>
+<script defer src="/vendor/katex/0.16.21/contrib/auto-render.min.js"></script>
 @endpush
 
 @push('styles')
