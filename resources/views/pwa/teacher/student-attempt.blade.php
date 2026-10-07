@@ -6,7 +6,7 @@
 @endpush
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<link rel="stylesheet" href="/vendor/katex/0.16.9/katex.min.css">
 <style>
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -112,8 +112,8 @@
 @endpush
 
 @push('scripts')
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script defer src="/vendor/katex/0.16.9/katex.min.js"></script>
+<script defer src="/vendor/katex/0.16.9/contrib/auto-render.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     if (typeof renderMathInElement === 'function') {
