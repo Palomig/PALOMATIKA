@@ -134,8 +134,9 @@ class TaskBankResolver
         }
         $label = "Алгебра · Навык {$skill['id']}. {$skill['title']} · {$level['title']} · №{$refs['task_id']}";
         // alg-skill: task_type ('signed_add'/'decimal_add'/...) — это доменная метка,
-        // I/O всегда expression. Принудительно нормализуем.
-        return $this->normalize($task, ['type' => 'expression'], $label, forceType: 'expression');
+        // I/O всегда expression. Принудительно нормализуем. Задачи уровня — серия,
+        // по ней выбирается поле ответа.
+        return $this->normalize($task, ['type' => 'expression', 'tasks' => $level['tasks'] ?? []], $label, forceType: 'expression');
     }
 
     /**
@@ -252,6 +253,30 @@ class TaskBankResolver
             'raw'          => $task,
         ];
 
+        // Текст задания над голой формулой («$\\sqrt{64}$» без слов). У банков ФИПИ
+        // `instruction` — учительское название подтипа («Тарифы»), не текст для
+        // ученика, а условие у них и так полное: их не трогаем.
+        $instruction = self::studentInstruction($rawType, $expression, $zadanieContext);
+        if ($instruction !== '') {
+            $result['instruction'] = $instruction;
+        }
+
+        // Поле ответа ученика на уроке выбирается по серии, а не по ответу
+        // этой задачи: иначе вид поля подсказывал бы ответ («2» в серии дробей).
+        if ($type === 'expression') {
+            [$field, $letters, $signed] = self::answerField(
+                array_map(
+                    static fn ($t) => is_array($t) && is_scalar($t['answer'] ?? null) ? (string) $t['answer'] : '',
+                    $zadanieContext['tasks'] ?? [$task]
+                )
+            );
+            if ($field !== 'text') {
+                $result['answer_field'] = $field;
+                $result['answer_letters'] = $letters;
+                $result['answer_signed'] = $signed;
+            }
+        }
+
         if ($type === 'choice') {
             $result['options'] = array_values(array_map(
                 static function (array $option): array {
@@ -322,6 +347,78 @@ class TaskBankResolver
             str_contains($rawType, 'choice')             => 'choice',
             default                                       => $rawType,
         };
+    }
+
+    /**
+     * Текст задания для ученика — только над чистой формулой и только у наших
+     * банков. «Сократите дробь:» → «Сократите дробь».
+     */
+    private static function studentInstruction(string $rawType, string $expression, array $zadanie): string
+    {
+        if ($rawType === 'fipi') {
+            return '';
+        }
+        $instruction = trim((string) ($zadanie['instruction'] ?? ''));
+        if ($instruction === '' || $instruction === trim($expression)) {
+            return '';
+        }
+        // Слова вне формул — значит, условие уже сформулировано текстом.
+        $outside = preg_replace('/\$[^$]*\$/u', '', $expression) ?? $expression;
+        if (preg_match('/\p{Cyrillic}/u', $outside)) {
+            return '';
+        }
+
+        return rtrim($instruction, " :\t");
+    }
+
+    private const RE_INT = '/^-?\d+$/';
+    private const RE_FRACTION = '/^-?\d+\/\d+$/';
+    private const RE_MIXED = '/^-?\d+\s+\d+\/\d+$/';
+    /** Множества, корни, десятичные и функции: такой ответ дробью не набрать. */
+    private const RE_NOT_FRACTION = '/[;√π|]|\d[.,]\d|sin|cos|tg|ln|log|sqrt|cbrt|\be\b|e\^/u';
+
+    /**
+     * Какое поле ответа нужно серии: смешанная дробь, дробь или обычное.
+     *
+     * Дробь — только если вся серия из целых и дробей (хоть одна дробь);
+     * смешанная — если есть ответ вида «2 7/11». Буквенная дробь — серия из
+     * целых, дробей и буквенных выражений, где хоть одно — дробь
+     * («Сократите дробь»). Десятичные, множества, корни — обычное поле.
+     *
+     * @param  list<string>  $answers
+     * @return array{0:string,1:bool,2:bool} [field, letters, signed]
+     */
+    public static function answerField(array $answers): array
+    {
+        $answers = array_values(array_filter(array_map('trim', $answers), static fn ($a) => $a !== ''));
+        if ($answers === []) {
+            return ['text', false, false];
+        }
+        $algebra = new AlgebraicAnswerComparator();
+        $mixed = $fraction = $letters = $signed = false;
+        foreach ($answers as $a) {
+            $signed = $signed || str_starts_with($a, '-');
+            if (preg_match(self::RE_MIXED, $a)) {
+                $mixed = true;
+            } elseif (preg_match(self::RE_FRACTION, $a)) {
+                $fraction = true;
+            } elseif (preg_match(self::RE_INT, $a)) {
+                // целые подходят любому полю
+            } elseif (!preg_match(self::RE_NOT_FRACTION, $a) && $algebra->looksAlgebraic($a)) {
+                $letters = true;
+                $fraction = $fraction || str_contains($a, '/');
+            } else {
+                return ['text', false, false];
+            }
+        }
+        if ($mixed && !$letters) {
+            return ['mixed', false, $signed];
+        }
+        if ($fraction) {
+            return ['fraction', $letters, $signed];
+        }
+
+        return ['text', false, false];
     }
 
     /** Текст условия или варианта из доверенной HTML-разметки импорта ФИПИ. */

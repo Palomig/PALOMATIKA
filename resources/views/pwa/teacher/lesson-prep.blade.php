@@ -178,8 +178,31 @@
   .hw-card-svg { display: block; max-width: 160px; }
   .hw-card-svg :is(svg, img) { max-width: 100%; height: auto; }
   .hw-card-text { font-size: 14px; color: var(--text); word-break: break-word; }
-  .hw-deadline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 700; margin-top: 10px; }
-  .hw-deadline input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+  /* Ученики урока — над задачами; при прокрутке прилипают вместе с шапкой
+     и сворачиваются в строку «Открыть список учеников». */
+  .hw-top { position: sticky; top: calc(-16px - var(--safe-top, 0px)); z-index: 5; background: var(--bg); margin-top: -4px; border-bottom: 1px solid var(--border); }
+  .hw-top .ns-head { position: static; margin-top: 0; border-bottom: none; }
+  .hw-who { padding: 2px 0 12px; }
+  .hw-who-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .hw-st { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; color: var(--muted); }
+  .hw-st.active { border-color: var(--accent-bd); background: var(--accent-bg); color: var(--text); }
+  .hw-st .ck { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--muted2); display: grid; place-items: center; font-size: 10px; line-height: 1; }
+  .hw-st.active .ck { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .hw-who-open { display: flex; align-items: center; gap: 6px; width: 100%; padding: 2px 0 0; background: none; border: none; cursor: pointer; color: var(--text); font-size: 14px; font-weight: 800; text-align: left; }
+  .hw-who-open svg, .hw-who-fold svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .hw-who-fold { display: flex; align-items: center; justify-content: center; gap: 5px; width: calc(100% + 36px); margin: 10px -18px -12px; padding: 9px 0; background: none; border: none; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 800; cursor: pointer; }
+  .hw-who-fold:hover { background: var(--surface); color: var(--text); }
+  .hw-who-fold svg { width: 14px; height: 14px; }
+  .hw-all { margin-left: auto; padding: 5px 10px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .hw-all:hover { color: var(--text); }
+  .hw-all.active { border-color: var(--accent-bd); background: var(--accent-bg); color: var(--accent); }
+  .hw-group-head .hw-muted { white-space: nowrap; }
+  /* Панель прижата к самому низу: у листа нижний отступ, и без минуса под
+     ней просвечивали задачи. */
+  .hw-dock { flex-direction: row; align-items: center; gap: 10px; border-top: 1px solid var(--border); bottom: calc(-24px - var(--safe-bottom, 0px)); margin-bottom: calc(-24px - var(--safe-bottom, 0px)); padding: 10px 0 calc(14px + var(--safe-bottom, 0px)); }
+  .hw-dock-sum { flex: 1; font-size: 15px; font-weight: 800; color: var(--text); }
+  .hw-dock-sum.none { color: var(--muted); font-size: 13px; font-weight: 700; }
+  .hw-dock .ns-btn { width: auto; padding: 14px 24px; }
   /* Переключатель источника домашки: аналоги задач урока или банк «Скиллы» */
   .hw-mode { display: flex; gap: 4px; padding: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; }
   .hw-mode button { flex: 1; padding: 9px 10px; border: none; border-radius: 9px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 800; cursor: pointer; }
@@ -687,7 +710,7 @@
 
   {{-- 📚 Домашка по итогам урока — аналоги разобранных задач --}}
   <div class="ns-overlay" x-show="hwOpen" x-cloak>
-    <form method="POST" action="{{ route('pwa.teacher.homework.assign') }}" class="ns-sheet" @submit="hwSubmitting = true">
+    <form method="POST" action="{{ route('pwa.teacher.homework.assign') }}" class="ns-sheet" @submit="hwSubmitting = true" @scroll.passive="hwOnScroll($event)">
       @csrf
       <input type="hidden" name="type" value="topic_photo_practice">
       <input type="hidden" name="lesson_session_id" :value="sessionId">
@@ -697,9 +720,31 @@
         <input type="hidden" name="student_ids[]" :value="sid">
       </template>
 
-      <div class="ns-head">
-        <span class="ns-title" x-text="hwMode === 'skills' ? '📚 Домашка по скиллам' : '📚 Домашка по уроку'"></span>
-        <button type="button" class="ns-close" @click="hwOpen = false" aria-label="Закрыть">✕</button>
+      <div class="hw-top">
+        <div class="ns-head">
+          <span class="ns-title" x-text="hwMode === 'skills' ? '📚 Домашка по скиллам' : '📚 Домашка по уроку'"></span>
+          <button type="button" class="ns-close" @click="hwOpen = false" aria-label="Закрыть">✕</button>
+        </div>
+        {{-- Ученики урока: все отмечены сразу, тап снимает --}}
+        <div class="hw-who" x-show="hwStudents.length">
+          <div class="hw-who-chips" x-show="!hwWhoCompact || hwWhoExpanded">
+            <template x-for="p in hwStudents" :key="'hw-st-' + p.id">
+              <button type="button" class="hw-st" :class="hwSelectedStudents.includes(p.id) ? 'active' : ''" @click="hwToggleStudent(p.id)">
+                <span class="ck" x-text="hwSelectedStudents.includes(p.id) ? '✓' : ''"></span>
+                <span x-text="p.name || ('#' + p.id)"></span>
+              </button>
+            </template>
+          </div>
+          <button type="button" class="hw-who-open" x-show="hwWhoCompact && !hwWhoExpanded" @click="hwWhoExpanded = true">
+            Открыть список учеников
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+          </button>
+          <button type="button" class="hw-who-fold" x-show="hwWhoCompact && hwWhoExpanded" @click="hwWhoExpanded = false">
+            Свернуть
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg>
+          </button>
+        </div>
+        <div class="hw-muted" x-show="!hwLoading && !hwStudents.length" style="padding: 0 0 12px;">На уроке не было учеников — выдавать некому.</div>
       </div>
 
       {{-- Источник задач: аналоги разобранного на уроке или сквозные навыки --}}
@@ -720,14 +765,6 @@
         <div>
           {{-- По уроку: аналоги разобранных задач --}}
           <div x-show="hwMode === 'lesson'">
-          <div class="ns-sub">
-            <span x-text="'Выбрано задач: ' + hwSelectedCount()"></span>
-            <span style="display: flex; gap: 8px;">
-              <button type="button" class="ns-toggle-all" @click="hwPickTwoEach()">По 2 в каждой</button>
-              <button type="button" class="ns-toggle-all" @click="hwClear()">Снять всё</button>
-            </span>
-          </div>
-
           <div x-show="!hwGroups.length" class="hw-muted" style="padding: 12px 0;">
             <span x-show="tasks.length">Для задач этого урока аналогов не нашлось.</span>
             <span x-show="!tasks.length">На уроке ещё нет задач — аналоги подбирать не из чего. Загляни в «По скиллам».</span>
@@ -738,6 +775,9 @@
               <div class="hw-group-head">
                 <span class="hw-group-label" x-text="g.label"></span>
                 <span class="hw-muted" x-text="'на уроке: ' + g.lesson_stats.task_count + ', решено ' + g.lesson_stats.solved"></span>
+                <button type="button" class="hw-all" x-show="!g.no_analogs && (g.suggestions || []).length"
+                        :class="hwAllSelected(g.suggestions) ? 'active' : ''"
+                        @click="hwToggleAll(g.suggestions)" x-text="hwAllSelected(g.suggestions) ? 'снять' : 'все'"></button>
               </div>
               <div x-show="g.no_analogs" class="hw-muted">аналогов нет</div>
               <div class="hw-cards" x-show="!g.no_analogs">
@@ -767,21 +807,15 @@
                         @click="hwChooseSkillTopic(t.id)" x-text="t.title"></button>
               </template>
             </div>
-            <div class="ns-sub" x-show="hwSkillTopicId">
-              <span x-text="hwSkillTopicTitle() + ' · выбрано: ' + hwSelectedCount()"></span>
-              <span style="display: flex; gap: 8px;">
-                <button type="button" class="ns-toggle-all" @click="hwSkillPickEach(3)">По 3 из каждой</button>
-                <button type="button" class="ns-toggle-all" @click="hwSkillPickRandom(10)">Случайные 10</button>
-                <button type="button" class="ns-toggle-all" @click="hwClear()">Снять всё</button>
-              </span>
-            </div>
             <div x-show="hwSkillTasksLoading" class="hw-muted" style="padding: 12px 0;">Загружаю примеры…</div>
             <template x-for="g in hwSkillGroups" :key="'hw-sg-' + g.key">
               <div class="hw-group" style="margin-top: 10px;">
                 <div class="hw-group-head">
                   <span class="hw-group-label" x-text="g.label"></span>
                   <span class="hw-muted" x-text="g.suggestions.length + ' примеров · выбрано ' + hwGroupSelectedCount(g)"></span>
-
+                  {{-- «все» — в пределах открытого подуровня (по двадцать), не сотня разом --}}
+                  <button type="button" class="hw-all" :class="hwAllSelected(hwVisiblePool(g)) ? 'active' : ''"
+                          @click="hwToggleAll(hwVisiblePool(g))" x-text="hwAllSelected(hwVisiblePool(g)) ? 'снять' : 'все'"></button>
                 </div>
                 {{-- Сотня примеров уровня разложена на подуровни по двадцать:
                      внутри уровня они идут от простых к сложным. --}}
@@ -813,31 +847,15 @@
             </template>
           </div>
 
-          <div class="ns-sub" style="margin-top: 8px;">
-            <span x-text="'Кому: ' + hwSelectedStudents.length"></span>
-          </div>
-          <div class="ns-students">
-            <template x-for="p in hwStudents" :key="'hw-st-' + p.id">
-              <label class="ns-student" :class="hwSelectedStudents.includes(p.id) ? 'active' : ''">
-                <input type="checkbox" :checked="hwSelectedStudents.includes(p.id)" @change="hwToggleStudent(p.id)">
-                <span class="ns-student-name" x-text="(p.name || ('#' + p.id)) + (p.participant ? '' : ' · вне урока')"></span>
-              </label>
-            </template>
-          </div>
-          <div class="hw-muted" x-show="!hwStudents.length" style="padding: 8px 0;">Нет учеников для назначения.</div>
-
-          <label class="hw-deadline">
-            Срок (необязательно):
-            <input type="date" name="deadline" x-model="hwDeadline">
-          </label>
         </div>
       </template>
 
-      <div class="ns-actions">
+      <div class="ns-actions hw-dock">
+        <span class="hw-dock-sum" :class="hwSelectedCount() ? '' : 'none'"
+              x-text="hwSelectedCount() ? hwSelectedCount() + ' ' + hwTaskWord(hwSelectedCount()) : 'Отметьте задачи'"></span>
         <button type="submit" class="ns-btn"
                 :disabled="hwSubmitting || hwSelectedCount() === 0 || hwSelectedStudents.length === 0"
-                x-text="hwSubmitting ? 'Отправляю…' : 'Отправить домашку'"></button>
-        <button type="button" class="ns-cancel" @click="hwOpen = false">Отмена</button>
+                x-text="hwSubmitting ? 'Отправляю…' : 'Выдать'"></button>
       </div>
     </form>
   </div>
@@ -900,7 +918,8 @@
       hwPrior: [],
       hwSelectedKeys: [],       // ключи выбранных задач (аналоги и скиллы вместе)
       hwSelectedStudents: [],   // id выбранных учеников
-      hwDeadline: '',
+      hwWhoCompact: false,      // ученики свёрнуты в строку при прокрутке
+      hwWhoExpanded: false,     // …и раскрыты обратно по тапу
       // 📚 По скиллам: банк «Скиллы» без привязки к задачам урока
       hwMode: 'lesson',         // lesson | skills
       hwSkillsLoading: false,
@@ -1201,15 +1220,30 @@
       hwSelectedCount() {
         return this.hwSelectedKeys.length;
       },
-      hwClear() {
-        this.hwSelectedKeys = [];
+      hwAllSelected(list) {
+        return (list || []).length > 0 && list.every(s => this.hwIsSelected(s));
       },
-      hwPickTwoEach() {
-        const keys = [];
-        for (const g of this.hwGroups) {
-          for (const s of (g.suggestions || []).slice(0, 2)) keys.push(this.hwKey(s));
+      // «все» в заголовке группы: отметить всю группу, повторно — снять.
+      hwToggleAll(list) {
+        const keys = (list || []).map(s => this.hwKey(s));
+        if (this.hwAllSelected(list)) {
+          this.hwSelectedKeys = this.hwSelectedKeys.filter(k => !keys.includes(k));
+        } else {
+          for (const k of keys) if (!this.hwSelectedKeys.includes(k)) this.hwSelectedKeys.push(k);
         }
-        this.hwSelectedKeys = keys;
+      },
+      hwTaskWord(n) {
+        const m10 = n % 10, m100 = n % 100;
+        if (m10 === 1 && m100 !== 11) return 'задача';
+        if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return 'задачи';
+        return 'задач';
+      },
+      // Прокрутили — ученики сворачиваются в строку; вернулись наверх — раскрыты.
+      hwOnScroll(e) {
+        const compact = e.target.scrollTop > 60;
+        if (compact === this.hwWhoCompact) return;
+        this.hwWhoCompact = compact;
+        if (!compact) this.hwWhoExpanded = false;
       },
       hwToggleStudent(id) {
         const i = this.hwSelectedStudents.indexOf(id);
@@ -1344,36 +1378,14 @@
       hwGroupSelectedCount(g) {
         return (g.suggestions || []).filter(s => this.hwIsSelected(s)).length;
       },
-      // Быстрый набор: из каждой группы первые N ещё не выбранных — они идут
-      // от простых к сложным, так что «по 3» даёт ровную домашку.
-      hwSkillPickEach(n) {
-        // Берём из каждого подуровня: иначе «по 3 из каждой» собирало бы
-        // домашку из одних только самых простых примеров уровня.
-        for (const g of this.hwSkillGroups) {
-          for (const part of (this.hwChunks(g).length ? this.hwChunks(g) : [g])) {
-            let added = 0;
-            for (const s of part.suggestions) {
-              if (added >= n) break;
-              if (!this.hwIsSelected(s)) { this.hwSelectedKeys.push(this.hwKey(s)); added++; }
-            }
-          }
-        }
-      },
-      hwSkillPickRandom(n) {
-        const pool = this.hwSkillGroups.flatMap(g => g.suggestions).filter(s => !this.hwIsSelected(s));
-        for (let i = pool.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [pool[i], pool[j]] = [pool[j], pool[i]];
-        }
-        for (const s of pool.slice(0, n)) this.hwSelectedKeys.push(this.hwKey(s));
-      },
-
       async openHomework() {
         this.hwOpen = true;
         this.hwLoading = true;
         this.hwGroups = [];
         this.hwSelectedKeys = [];
         this.hwSubmitting = false;
+        this.hwWhoCompact = false;
+        this.hwWhoExpanded = false;
         // Без задач на уроке аналогов не будет — открываем сразу скиллы.
         this.hwMode = this.tasks.length ? 'lesson' : 'skills';
         if (this.hwMode === 'skills' && !this.hwSkillTopics.length) this.hwLoadSkillTopics();
@@ -1384,10 +1396,9 @@
           const data = await r.json();
           this.hwGroups = data.groups || [];
           this.hwPrior = data.prior_homeworks || [];
+          // Только ученики урока — все предотмечены.
           const parts = (data.participants || []).map(p => ({ id: p.id, name: p.name, participant: true }));
-          const others = (data.other_students || []).map(p => ({ id: p.id, name: p.name, participant: false }));
-          this.hwStudents = [...parts, ...others];
-          // Предотмечены участники урока.
+          this.hwStudents = parts;
           this.hwSelectedStudents = parts.map(p => p.id);
         } catch (e) {
           alert('Не удалось загрузить предложения для домашки');

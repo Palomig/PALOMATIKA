@@ -42,8 +42,40 @@
      правило «одной строкой» — для плоского условия. */
   .lesson-task-expr.fipi-condition .katex { white-space: normal; display: inline; overflow: visible; }
   .lesson-task-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-  .lesson-task-card.is-answered { border-color: var(--accent); background: var(--accent-bg); }
-  .lesson-task-num { font-family: var(--display); font-size: 18px; color: var(--accent); }
+  /* Отправленный ответ — синим, как выбранный вариант в задаче с выбором.
+     Ни зелёного, ни галочки: верен ли ответ, ученик на уроке не видит. */
+  .lesson-task-card.is-answered { border-color: var(--accent-bd); }
+  .lesson-task-card.is-new { border-color: var(--yellow-bd); }
+  /* Номер — в начале текста условия, а не отдельной строкой. */
+  .lesson-task-num { font-family: var(--display); font-size: 17px; color: var(--accent); float: left; margin-right: 6px; line-height: 1.35; }
+  .lesson-task-tags { display: flex; gap: 6px; }
+  .lesson-new-badge { font-size: 10px; font-weight: 800; padding: 1px 8px; border-radius: 6px; background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bd); }
+  .lesson-task-lead { font-size: 16px; color: var(--text); line-height: 1.45; }
+  /* Пример — отдельной строкой под текстом задания, крупно. */
+  .lesson-task-formula { font-size: 20px; min-height: 0; padding: 2px 0; }
+  .lesson-sent-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; min-height: 48px; border-radius: 10px; background: var(--accent-bg); border: 1px solid var(--accent); font-size: 14px; color: var(--muted); }
+  .lesson-sent-value { color: var(--text); font-family: ui-monospace, monospace; font-weight: 800; font-size: 15px; word-break: break-word; }
+  .lesson-sent-value .katex { font-size: 1.1em; }
+  .lesson-sent-edit { margin-left: auto; background: none; border: none; color: var(--accent); font-size: 13px; font-weight: 800; cursor: pointer; text-decoration: underline dotted; flex-shrink: 0; }
+  .lesson-choice-note { font-size: 12px; color: var(--muted); }
+  /* Дробный ответ: поле ответа само устроено как дробь — у серий, где ответ
+     дробь (см. TaskBankResolver::answerField). Переключателя нет. */
+  .lesson-frac { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); }
+  .lesson-frac:focus-within { border-color: var(--accent); }
+  .lesson-frac input { text-align: center; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: ui-monospace, monospace; }
+  .lesson-frac input:focus { outline: none; border-color: var(--accent); }
+  .lesson-frac input::placeholder { font-family: var(--body); font-size: 11px; color: var(--muted); }
+  .lesson-frac-whole { width: 56px; height: 64px; font-size: 22px; padding: 4px; }
+  .lesson-frac-stack { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; max-width: 180px; }
+  .lesson-frac-stack input { width: 100%; padding: 6px; font-size: 16px; }
+  .lesson-frac-line { height: 2px; background: var(--text); opacity: .75; border-radius: 2px; }
+  .lesson-frac-hint { font-size: 11px; color: var(--muted); width: 100%; }
+  .lesson-answer-row .lesson-submit-btn { align-self: stretch; }
+  .topbar-titles { display: flex; flex-direction: column; min-width: 0; }
+  .topbar-sub { font-size: 12px; color: var(--muted); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lesson-live-pill { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: .03em; background: var(--accent-bg); color: var(--accent); flex-shrink: 0; }
+  .lesson-new-toast { position: fixed; left: 12px; right: 12px; top: calc(10px + var(--safe-top, 0px)); z-index: 150; max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--yellow-bd); box-shadow: 0 10px 30px rgba(0,0,0,.35); color: var(--text); font-size: 14px; font-weight: 700; cursor: pointer; }
+  .lesson-new-toast .go { margin-left: auto; color: var(--yellow); font-weight: 800; }
   .lesson-task-expr { font-size: 18px; color: var(--text); word-break: break-word; min-height: 24px; }
   /* Формула — неделимая коробка: у задач ЕГЭ строка рвалась посреди неё
      («Решите неравенство log₁₆(x +» / «5) + …»). Ученик на уроке видит
@@ -78,15 +110,13 @@
   .lesson-answer-input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
   .lesson-submit-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 12px 18px; font-weight: 800; cursor: pointer; font-size: 14px; }
   .lesson-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .lesson-status-line { font-size: 12px; color: var(--muted); }
-  .lesson-status-line.is-sent { color: var(--accent); font-weight: 700; }
   .lesson-choice-options { display: grid; gap: 8px; }
   .lesson-choice-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
   .lesson-choice-option.is-selected { background: var(--accent-bg); border-color: var(--accent); }
   .lesson-choice-option input[type="radio"] { accent-color: var(--accent); }
   .lesson-end-banner { background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 14px; padding: 16px; color: var(--red); font-weight: 700; text-align: center; }
   .lesson-released-banner { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 14px; padding: 16px; color: var(--green); font-weight: 700; text-align: center; }
-  .lock-timer { margin-left: auto; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--muted); }
+  .lock-timer { margin-left: auto; flex-shrink: 0; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--muted); }
   .resume-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center; padding: 24px; }
   .resume-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; max-width: 320px; width: 100%; text-align: center; display: flex; flex-direction: column; gap: 14px; }
   .resume-title { font-family: var(--display); font-size: 18px; color: var(--text); }
@@ -96,7 +126,8 @@
 
   /* Разбор домашки: только чтение, поля ответа нет — это не задача урока */
   .review-block { border: 1px solid var(--purple-bd); background: var(--purple-bg); border-radius: var(--r); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
-  .review-block-head { font-family: var(--display); font-size: 15px; color: var(--text); }
+  .review-block-head { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 15px; color: var(--text); background: none; border: none; padding: 0; text-align: left; cursor: pointer; width: 100%; }
+  .review-block-head .chev { margin-left: auto; font-family: var(--body); font-size: 13px; font-weight: 800; color: var(--muted); white-space: nowrap; }
   .review-card-s { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 13px; }
   .review-card-num { font-size: 11px; font-weight: 800; color: var(--purple); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
   .review-visual-s { margin: 6px 0; display: flex; justify-content: center; }
@@ -104,7 +135,6 @@
   .review-text-s { font-size: 14px; line-height: 1.45; color: var(--text); word-break: break-word; }
   .review-answers-s { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   .review-chip-s { font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
-  .review-chip-s.is-mine { color: var(--yellow); border-color: var(--yellow-bd); background: var(--yellow-bg); }
   .review-chip-label-s { color: var(--muted); font-weight: 600; }
   .review-photos-s { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   .review-photo-s { padding: 0; border: none; background: none; cursor: zoom-in; width: 92px; }
@@ -119,8 +149,12 @@
      @keydown.arrow-right.window="viewer && step(1)">
   <div class="topbar">
     <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
-    <div class="topbar-title">Урок</div>
+    <div class="topbar-titles">
+      <div class="topbar-title">Урок</div>
+      @if($session->teacher)<div class="topbar-sub">{{ $session->teacher->name }}</div>@endif
+    </div>
     <span class="lock-timer" x-show="lockActive" x-cloak>🔒 <span x-text="lockLeft"></span></span>
+    <span class="lesson-live-pill" x-show="status === 'live'" :style="lockActive ? '' : 'margin-left:auto'" x-cloak>идёт</span>
   </div>
 
   <template x-if="status === 'ended'">
@@ -136,6 +170,13 @@
     </div>
   </div>
 
+  {{-- Учитель добавил задачу по ходу урока: она встаёт в конец ленты, а
+       ученик может быть где угодно — зовём к ней, а не молча. --}}
+  <div class="lesson-new-toast" x-show="newToast" x-cloak x-transition.opacity @click="goToNew()">
+    <span x-text="newIds.length > 1 ? 'Учитель добавил задачи' : 'Учитель добавил задачу'"></span>
+    <span class="go">открыть ›</span>
+  </div>
+
   <template x-if="released">
     <div class="lesson-released-banner">Учитель отпустил тебя — можно выходить 👋</div>
   </template>
@@ -147,8 +188,11 @@
   --}}
   <template x-if="review.length">
     <div class="review-block">
-      <div class="review-block-head">🔍 Разбор с учителем</div>
-      <template x-for="card in review" :key="'rev-' + card.id">
+      <button type="button" class="review-block-head" @click="reviewOpen = !reviewOpen; typesetSoon()">
+        🔍 Разбор домашки с учителем
+        <span class="chev" x-text="reviewOpen ? 'свернуть' : (review.length + ' ' + taskWord(review.length) + ' ›')"></span>
+      </button>
+      <template x-for="card in (reviewOpen ? review : [])" :key="'rev-' + card.id">
         <div class="review-card-s">
           <div class="review-card-num" x-text="'Задача ' + card.task_order"></div>
           <div class="review-visual-s" x-show="card.svg" x-html="card.svg"></div>
@@ -177,26 +221,40 @@
   @include('pwa._shared.partials.fipi-condition-js')
 
   <template x-for="task in tasks" :key="task.id">
-    <div class="lesson-task-card" :class="task.my_answer ? 'is-answered' : ''" :data-task-id="task.id">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div class="lesson-task-num" x-text="task.position + ')'"></div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="personal-badge" x-show="task.personal" x-cloak>персональная</span>
-          <div class="lesson-status-line" :class="task.my_answer ? 'is-sent' : ''"
-               x-text="task.my_answer ? '✓ отправлено' : 'жду ответ'"></div>
+    <div class="lesson-task-card" :class="{ 'is-answered': !!task.my_answer && !editing[task.id], 'is-new': isNew(task) }" :data-task-id="task.id">
+      <template x-if="task.personal || isNew(task)">
+        <div class="lesson-task-tags">
+          <span class="personal-badge" x-show="task.personal">только тебе</span>
+          <span class="lesson-new-badge" x-show="isNew(task)">новая</span>
         </div>
-      </div>
+      </template>
+
+      {{-- Банк ЕГЭ: условие целиком в разметке ФИПИ (таблицы соответствия,
+           графики-варианты, обозначения-растры); формулы $…$ дорисует
+           auto-render, который обходит DOM после загрузки задач. --}}
+      <template x-if="task.payload.condition_html">
+        <div>
+          <span class="lesson-task-num" x-text="task.position + ')'"></span>
+          <div class="lesson-task-expr fipi-condition"
+               x-html="window.paloFipiHtml ? window.paloFipiHtml(task.payload.condition_html) : (task.payload.condition_html || '')"></div>
+        </div>
+      </template>
+      {{-- Текст задания отдельно, пример — крупно строкой ниже (см. splitCondition). --}}
+      <template x-if="!task.payload.condition_html && splitCondition(task)">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="lesson-task-lead"><span class="lesson-task-num" x-text="task.position + ')'"></span><span x-html="renderMath(splitCondition(task).lead)"></span></div>
+          <div class="lesson-task-expr lesson-task-formula" x-html="formulaHtml(splitCondition(task).formula)"></div>
+          <div class="lesson-task-lead" x-show="splitCondition(task).tail" x-html="renderMath(splitCondition(task).tail)"></div>
+        </div>
+      </template>
+      <template x-if="!task.payload.condition_html && !splitCondition(task)">
+        <div class="lesson-task-expr"><span class="lesson-task-num" x-text="task.position + ')'"></span><span x-html="renderMath(task.payload.expression)"></span></div>
+      </template>
 
       <div class="lesson-task-image" x-show="task.payload.image_svg" x-html="task.payload.image_svg"></div>
       <template x-if="!task.payload.image_svg && task.payload.image_url && !task.payload.condition_html">
         <div class="lesson-task-image is-raster"><img :src="task.payload.image_url" alt=""></div>
       </template>
-      {{-- Банк ЕГЭ: условие целиком в разметке ФИПИ (таблицы соответствия,
-           графики-варианты, обозначения-растры); формулы $…$ дорисует
-           auto-render, который обходит DOM после загрузки задач. --}}
-      <div class="lesson-task-expr fipi-condition" x-show="task.payload.condition_html"
-           x-html="window.paloFipiHtml ? window.paloFipiHtml(task.payload.condition_html) : (task.payload.condition_html || '')"></div>
-      <div class="lesson-task-expr" x-show="!task.payload.condition_html" x-html="renderMath(task.payload.expression)"></div>
 
       {{-- Choice type --}}
       <template x-if="task.payload.type === 'choice'">
@@ -210,36 +268,70 @@
               <span x-html="renderMath(opt.label)"></span>
             </label>
           </template>
+          <div class="lesson-choice-note" x-show="task.my_answer && status !== 'ended'">Отправлено учителю — до конца урока можно выбрать другой вариант</div>
         </div>
       </template>
 
-      {{-- Expression type --}}
-      <template x-if="task.payload.type !== 'choice'">
+      {{-- Ответ отправлен: синяя строка, поменять можно до конца урока --}}
+      <template x-if="task.payload.type !== 'choice' && task.my_answer && !editing[task.id]">
+        <div class="lesson-sent-row">
+          <span>Отправлено учителю:</span>
+          <span class="lesson-sent-value" x-html="answerHtml(task.my_answer)"></span>
+          <button type="button" class="lesson-sent-edit" x-show="status !== 'ended'" @click="startEdit(task)">изменить</button>
+        </div>
+      </template>
+
+      {{-- Дробный ответ: поле само устроено как дробь --}}
+      <template x-if="task.payload.type !== 'choice' && isFracField(task) && (!task.my_answer || editing[task.id])">
+        <div class="lesson-answer-row">
+          <div class="lesson-frac">
+            <template x-if="task.payload.answer_field === 'mixed'">
+              <input type="text" class="lesson-answer-input lesson-frac-whole" placeholder="целая"
+                     :inputmode="task.payload.answer_signed ? 'text' : 'numeric'"
+                     x-model="frac(task.id).w" :disabled="!!(status === 'ended' || sending[task.id])"
+                     @keydown.enter.prevent="submitFrac(task)">
+            </template>
+            <div class="lesson-frac-stack">
+              <input type="text" class="lesson-answer-input" placeholder="числитель"
+                     :inputmode="task.payload.answer_letters || task.payload.answer_signed ? 'text' : 'numeric'"
+                     autocapitalize="off" autocorrect="off" spellcheck="false"
+                     x-model="frac(task.id).n" :disabled="!!(status === 'ended' || sending[task.id])"
+                     @paste="onAnswerPaste(task.id, $event)"
+                     @keydown.enter.prevent="submitFrac(task)">
+              <span class="lesson-frac-line"></span>
+              <input type="text" class="lesson-answer-input" placeholder="знаменатель"
+                     :inputmode="task.payload.answer_letters ? 'text' : 'numeric'"
+                     autocapitalize="off" autocorrect="off" spellcheck="false"
+                     x-model="frac(task.id).d" :disabled="!!(status === 'ended' || sending[task.id])"
+                     @keydown.enter.prevent="submitFrac(task)">
+            </div>
+          </div>
+          <button class="lesson-submit-btn" :disabled="!!(status === 'ended' || sending[task.id])" @click="submitFrac(task)">
+            <span x-show="!sending[task.id]">→</span>
+            <span x-show="sending[task.id]" x-cloak>…</span>
+          </button>
+          <div class="lesson-frac-hint" x-show="task.payload.answer_field === 'mixed'">Нет целой части — оставь «целую» пустой</div>
+        </div>
+      </template>
+
+      {{-- Обычный ответ --}}
+      <template x-if="task.payload.type !== 'choice' && !isFracField(task) && (!task.my_answer || editing[task.id])">
         <div class="lesson-answer-row">
           {{-- !!(…): Alpine 3.15 в клонах template при undefined СТАВИТ boolean-атрибут,
                а не снимает — выражение обязано возвращать строго boolean --}}
           <input type="text" inputmode="text" class="lesson-answer-input"
                  :value="task.my_answer || ''"
                  :disabled="!!(status === 'ended' || sending[task.id])"
-                 :placeholder="task.my_answer ? '' : 'Твой ответ'"
+                 placeholder="Твой ответ"
                  @keydown.enter.prevent="submitAnswer(task.id, $event.target.value)"
                  @paste="onAnswerPaste(task.id, $event)"
                  @blur="if($event.target.value && $event.target.value !== (task.my_answer||'')) submitAnswer(task.id, $event.target.value)">
-          {{-- Поле ищем по строке, а не через previousElementSibling: клик
-               попадает во внутренний span кнопки, да и рядом теперь виджет дроби. --}}
           <button class="lesson-submit-btn"
                   :disabled="!!(status === 'ended' || sending[task.id])"
                   @click="submitAnswer(task.id, $el.closest('.lesson-answer-row').querySelector('.lesson-answer-input').value)">
-            <span x-show="!sending[task.id]" x-text="task.my_answer ? '↻' : '→'"></span>
+            <span x-show="!sending[task.id]">→</span>
             <span x-show="sending[task.id]" x-cloak>…</span>
           </button>
-
-          {{-- Дробный ответ: целая часть и числитель над знаменателем. --}}
-          @include('pwa._shared.partials.fraction-input', [
-              'scope' => '.lesson-answer-row',
-              'target' => '.lesson-answer-input',
-              'letters' => '!!task.letters',
-          ])
         </div>
       </template>
     </div>
@@ -306,6 +398,8 @@
   function studentLesson(sessionId, initialStatus) {
     let tasksJson = ''; // вне reactive: снапшот последних серверных tasks
     let reviewJson = ''; // то же для карточек разбора
+    let knownIds = null; // id задач, которые ученик уже видел (null — до первой загрузки)
+    let toastTimer = null;
 
     return {
       sessionId,
@@ -329,6 +423,11 @@
       lastSentVisible: null, // дедуп: visibilitychange и tg-события могут дублироваться
       lastInteraction: Date.now(),
       wakeLock: null,      // Screen Wake Lock: экран не гаснет, пока идёт урок
+      reviewOpen: false,   // разбор домашки свёрнут в строку
+      editing: {},         // task_id → ученик меняет отправленный ответ
+      fracDraft: {},       // task_id → {w, n, d} дробного поля
+      newIds: [],          // задачи, добавленные учителем после открытия страницы
+      newToast: false,
 
       async init() {
         await this.refreshState();
@@ -545,14 +644,13 @@
         if (rj !== reviewJson) {
           reviewJson = rj;
           this.review = d.review || [];
-          this.$nextTick(() => {
-            if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
-          });
+          this.typesetSoon();
         }
         const tj = JSON.stringify(d.tasks);
         if (tj !== tasksJson && !typing) {
           tasksJson = tj;
           this.tasks = d.tasks;
+          this.noticeNewTasks(d.tasks);
           // Re-render KaTeX только когда задачи реально изменились: обход всего
           // body каждые 5 секунд заметно тормозил слабые телефоны.
           this.$nextTick(() => {
@@ -560,6 +658,121 @@
             if (window.lessonFitFormulas) window.lessonFitFormulas();
           });
         }
+      },
+
+      noticeNewTasks(tasks) {
+        const ids = tasks.map(t => t.id);
+        if (knownIds === null) { knownIds = new Set(ids); return; }
+        const fresh = tasks.filter(t => !knownIds.has(t.id) && !t.my_answer).map(t => t.id);
+        ids.forEach(id => knownIds.add(id));
+        if (!fresh.length) return;
+        this.newIds = [...this.newIds, ...fresh];
+        this.newToast = true;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { this.newToast = false; }, 8000);
+      },
+
+      isNew(task) {
+        return this.newIds.includes(task.id) && !task.my_answer;
+      },
+
+      goToNew() {
+        this.newToast = false;
+        const id = this.newIds.find(i => this.tasks.some(t => t.id === i && !t.my_answer));
+        const el = id && document.querySelector(`.lesson-task-card[data-task-id="${id}"]`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      },
+
+      taskWord(n) {
+        const m10 = n % 10, m100 = n % 100;
+        if (m10 === 1 && m100 !== 11) return 'задача';
+        if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return 'задачи';
+        return 'задач';
+      },
+
+      /**
+       * Текст задания отдельно от примера.
+       *  — наши банки: текст серии над голой формулой (payload.instruction);
+       *  — условие одной фразой «Найдите значение выражения $…$.»: фраза,
+       *    формула строкой ниже, хвост («Если уравнение имеет…») — следом.
+       * Делим, только когда формула одна, в ней есть действие, а после неё
+       * конец условия или новое предложение с заглавной: «равно $112$ км»
+       * так не разорвётся.
+       */
+      splitCondition(task) {
+        const p = task.payload || {};
+        const expr = String(p.expression || '').trim();
+        if (p.instruction) {
+          const bare = expr.replace(/^\$+|\$+$/g, '');
+          if (bare && !bare.includes('$')) return { lead: p.instruction, formula: bare, tail: '' };
+        }
+        const m = expr.match(/^([^$]+?)\s*\$([^$]+)\$\s*([.,;:]?)\s*([^$]*)$/s);
+        if (!m) return null;
+        const [, lead, formula, , tail] = m;
+        if (!/[=+\-<>]|\\(?:frac|dfrac|sqrt|cdot|log)|\^/.test(formula)) return null;
+        if (tail && !/^[А-ЯЁA-Z]/.test(tail.trim())) return null;
+        if (!/\p{L}/u.test(lead) || lead.length > 160) return null;
+        return { lead: lead.trim(), formula, tail: tail.trim() };
+      },
+
+      formulaHtml(f) {
+        const d = document.createElement('div');
+        d.textContent = '$\\displaystyle ' + f + '$';
+        return d.innerHTML;
+      },
+
+      isFracField(task) {
+        const f = task.payload && task.payload.answer_field;
+        return f === 'fraction' || f === 'mixed';
+      },
+
+      frac(id) {
+        if (!this.fracDraft[id]) this.fracDraft[id] = { w: '', n: '', d: '' };
+        return this.fracDraft[id];
+      },
+
+      // «a+5» над «a-5» — это (a+5)/(a-5): сумму и разность в скобки.
+      composeFrac(task) {
+        const f = this.frac(task.id);
+        const wrap = (x) => /^-?[^\s+\-*/()]+$/.test(x) ? x : `(${x})`;
+        const w = String(f.w || '').trim(), n = String(f.n || '').trim(), d = String(f.d || '').trim();
+        const fr = n && d ? `${wrap(n)}/${wrap(d)}` : n;
+        return [w, fr].filter(Boolean).join(' ');
+      },
+
+      submitFrac(task) {
+        const answer = this.composeFrac(task);
+        if (answer) this.submitAnswer(task.id, answer);
+      },
+
+      startEdit(task) {
+        if (this.isFracField(task)) {
+          const s = String(task.my_answer || '').trim();
+          const mx = s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+          const m = s.match(/^\(?([^()/]+)\)?\/\(?([^()/]+)\)?$/);
+          this.fracDraft[task.id] = mx ? { w: mx[1], n: mx[2], d: mx[3] }
+            : m ? { w: '', n: m[1], d: m[2] } : { w: '', n: s, d: '' };
+        }
+        this.editing[task.id] = true;
+      },
+
+      // Отправленный дробный ответ показываем дробью.
+      answerHtml(raw) {
+        const s = String(raw || '').trim();
+        const esc = (t) => { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+        const unp = (x) => x.replace(/^\((.*)\)$/, '$1');
+        let m = s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+        if (m) return esc(`$${m[1]}\\dfrac{${m[2]}}{${m[3]}}$`);
+        m = s.match(/^(\([^()$]+\)|[^\s/()$]+)\/(\([^()$]+\)|[^\s/()$]+)$/);
+        if (m) return esc(`$\\dfrac{${unp(m[1])}}{${unp(m[2])}}$`);
+        return esc(s);
+      },
+
+      typesetSoon() {
+        this.$nextTick(() => {
+          if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
+          if (window.lessonFitFormulas) window.lessonFitFormulas();
+        });
       },
 
       /** Тетрадь открывается поверх урока — как у учителя, тем же партиалом. */
@@ -595,6 +808,9 @@
           // Update local copy так чтобы UI сразу обновился, без ожидания polling
           const task = this.tasks.find(t => t.id === taskId);
           if (task) task.my_answer = String(answer);
+          this.editing[taskId] = false;
+          this.newIds = this.newIds.filter(i => i !== taskId);
+          this.typesetSoon();
         } finally {
           this.sending[taskId] = false;
         }

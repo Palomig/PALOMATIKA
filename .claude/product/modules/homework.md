@@ -50,6 +50,7 @@
 - **`GET /lessons/{id}/homework-suggestions`** (`TeacherLessonController::homeworkSuggestions`) → `{groups, participants, other_students, prior_homeworks}`. Владелец урока только (403 чужому).
 - **Отправка** — через существующий `POST /homework/assign` (`assignFromPicker`): `picker_tasks` + `student_ids` + новые `lesson_session_id` (только свой урок) и `title`. Участники своего урока авторизованы как получатели даже без `TeacherStudent` (вошли по коду).
 - Тип ДЗ — `topic_photo_practice`, ученический флоу без изменений.
+- **Шторка с 2026-10-08:** ученики — первым блоком под шапкой, только участники урока (`other_students` сервер ещё отдаёт, клиент не показывает), все предотмечены; при прокрутке прилипают и сворачиваются в «Открыть список учеников ⌄». Срока нет. Кнопка «все»/«снять» — в заголовке группы (у скиллов — в пределах открытого подуровня). Внизу «N задач» + «Выдать».
 - Тесты: `LessonHomeworkSuggestionServiceTest`, `TeacherLessonControllerTest::test_homework_suggestions_*`, `PwaHomeworkPhotoPracticeTest::test_assign_from_*`.
 
 ## Статус
