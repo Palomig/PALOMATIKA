@@ -471,7 +471,7 @@ class LessonTaskPickerService
         ) ?? $html;
 
         $text = preg_replace('/<svg\b.*?<\/svg>/is', '', $prepared) ?? $prepared;
-        $text = strip_tags(str_replace(['</p>', '</td>'], ' ', $text));
+        $text = strip_tags(str_replace(['</p>', '</td>'], ' ', TaskBankResolver::escapeBareLessThan($text)));
         $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $text = trim(preg_replace('/\s+/u', ' ', $text) ?? $text);
 
