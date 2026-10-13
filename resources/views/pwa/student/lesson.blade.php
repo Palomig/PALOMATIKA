@@ -110,6 +110,8 @@
   .lesson-answer-input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
   .lesson-submit-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 12px 18px; font-weight: 800; cursor: pointer; font-size: 14px; }
   .lesson-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  /* Панель символов вставляется сразу за полем, но видна под всей строкой */
+  .lesson-answer-row .mathpad { order: 1; flex-basis: 100%; margin-top: 2px; }
   .lesson-choice-options { display: grid; gap: 8px; }
   .lesson-choice-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
   .lesson-choice-option.is-selected { background: var(--accent-bg); border-color: var(--accent); }
@@ -219,6 +221,7 @@
 
   @include('pwa._shared.photo-viewer')
   @include('pwa._shared.partials.fipi-condition-js')
+  @include('partials.math-answer-pad')
 
   <template x-for="task in tasks" :key="task.id">
     <div class="lesson-task-card" :class="{ 'is-answered': !!task.my_answer && !editing[task.id], 'is-new': isNew(task) }" :data-task-id="task.id">
@@ -323,9 +326,11 @@
                  :value="task.my_answer || ''"
                  :disabled="!!(status === 'ended' || sending[task.id])"
                  placeholder="Твой ответ"
+                 data-mathpad="lesson"
+                 autocapitalize="off" autocorrect="off" spellcheck="false"
                  @keydown.enter.prevent="submitAnswer(task.id, $event.target.value)"
                  @paste="onAnswerPaste(task.id, $event)"
-                 @blur="if($event.target.value && $event.target.value !== (task.my_answer||'')) submitAnswer(task.id, $event.target.value)">
+                 @blur="if($event.target.value && $event.target.value !== (task.my_answer||'') && !($event.relatedTarget && $event.relatedTarget.closest('.mathpad'))) submitAnswer(task.id, $event.target.value)">
           <button class="lesson-submit-btn"
                   :disabled="!!(status === 'ended' || sending[task.id])"
                   @click="submitAnswer(task.id, $el.closest('.lesson-answer-row').querySelector('.lesson-answer-input').value)">
