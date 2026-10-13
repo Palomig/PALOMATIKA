@@ -215,6 +215,20 @@ class TaskBankResolver
      * Нормализует задачу к {expression, type, answer, options?, image_svg?, source_label, raw}.
      * Throws DomainException, если тип не поддержан в v1.
      */
+    /**
+     * Условие и подписи вариантов снимка задачи ФИПИ, заново собранные из
+     * сохранённой в снимке разметки банка (`raw`). Нужно, чтобы догнать уже
+     * розданные снимки после правки разбора разметки.
+     *
+     * @return array{expression: string, options?: list<array{id: string, label: string}>}
+     */
+    public function fipiTextFromSnapshot(array $raw): array
+    {
+        $fresh = $this->normalize($raw, ['type' => 'fipi'], '');
+
+        return array_intersect_key($fresh, array_flip(['expression', 'options']));
+    }
+
     private function normalize(array $task, array $zadanieContext, string $sourceLabel, ?string $forceType = null): array
     {
         $rawType = strtolower(trim((string) ($task['task_type'] ?? $zadanieContext['type'] ?? '')));
@@ -430,12 +444,34 @@ class TaskBankResolver
 
         $html = preg_replace('/<svg\b.*?<\/svg>/is', '', $html) ?? $html;
         $html = preg_replace('/<br\s*\/?>|<\/(?:p|div|td|tr|li)>/i', "\n", $html) ?? $html;
+        $html = self::escapeBareLessThan($html);
         $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $text = preg_replace('/[ \t]+/u', ' ', $text) ?? $text;
         $text = preg_replace('/[ \t]*\n[ \t]*/u', "\n", $text) ?? $text;
         $text = preg_replace('/\n{2,}/u', "\n", $text) ?? $text;
 
         return trim($text);
+    }
+
+    /**
+     * В формулах ФИПИ знак «меньше» не экранирован: «<p>$a-5<0$</p>». strip_tags
+     * принимает «<0$» за начало тега и отрезает всё до конца строки, и вариант
+     * превращается в «$a-5». Внутри $…$ экранируем каждый «<», кроме законченного
+     * тега («$a<b$» — это не <b>), снаружи — «<», после которого не может идти тег.
+     */
+    public static function escapeBareLessThan(string $html): string
+    {
+        $html = preg_replace_callback(
+            '/\$[^$]*\$/',
+            static fn (array $m): string => preg_replace(
+                '/<(?!\/?[a-z][a-z0-9]*(?:\s[^<>$]*)?\/?>)/i',
+                '&lt;',
+                $m[0]
+            ) ?? $m[0],
+            $html
+        ) ?? $html;
+
+        return preg_replace('/<(?![a-z\/!?])/i', '&lt;', $html) ?? $html;
     }
 
     /**

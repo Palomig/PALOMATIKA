@@ -60,6 +60,27 @@ class TaskBankResolverTest extends TestCase
         $this->assertArrayHasKey('label', $r['options'][0]);
     }
 
+    public function test_fipi_choice_keeps_less_than_sign_in_options(): void
+    {
+        // Варианты ФИПИ лежат разметкой «<p>$a-5<0$</p>»: strip_tags принимал
+        // «<0$» за начало тега и обрезал вариант до «$a-5».
+        $normalize = new \ReflectionMethod(TaskBankResolver::class, 'normalize');
+        $normalize->setAccessible(true);
+        $r = $normalize->invoke($this->resolver(), [
+            'task_type' => 'fipi',
+            'html'      => '<p>На координатной прямой отмечено число $a$, причём $a<7$.</p>',
+            'answer'    => '2',
+            'options'   => [
+                ['n' => 1, 'html' => '<p>$7-a>0$</p>'],
+                ['n' => 2, 'html' => '<p>$a-5<0$</p>'],
+                ['n' => 3, 'html' => '<p>$a<b$ и $b < c$</p>'],
+            ],
+        ], [], 'ОГЭ');
+
+        $this->assertSame(['$7-a>0$', '$a-5<0$', '$a<b$ и $b < c$'], array_column($r['options'], 'label'));
+        $this->assertStringContainsString('$a<7$', $r['expression']);
+    }
+
     public function test_alg_skill_resolves_simple_level_task(): void
     {
         $r = $this->resolver()->resolve('alg-skill', [
