@@ -150,6 +150,11 @@ class TaskAnswerResolver
             if (preg_match('/^\d+$/', $trimmedRaw)) {
                 return ltrim($trimmedRaw, '0') === ltrim($correct, '0');
             }
+            // Цепочку цифр («1, 3» = «13», «2 4 1» = «241») склеиваем только
+            // по разделителям: иначе «√12», «-12» и «1.2» превращались в «12».
+            if (!preg_match('/^[\d\s,;]+$/u', $userRaw)) {
+                return false;
+            }
             $digitsOnly = preg_replace('/\D+/', '', $userRaw);
             return $digitsOnly === $correct;
         }

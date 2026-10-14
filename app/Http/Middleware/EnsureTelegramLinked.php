@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Мягкое напоминание ученику привязать телеграм: без chat_id бот не может
- * прислать ни ДЗ, ни напоминание о сроке.
+ * Привязка телеграма перед анкетой у свежего аккаунта: вернувшийся ученик,
+ * которого OIDC не узнал, иначе успевает «зарегистрироваться заново» до того,
+ * как привязка склеит его со старым аккаунтом.
  *
- * Не блокирует: с экрана есть «Напомнить позже» (сутки тишины), а фоновые
- * запросы приложения не трогаем вовсе. Учителей и родителей это не касается.
+ * Ученикам, уже прошедшим анкету, экран больше не всплывает (решение Стаса
+ * 2026-10-14) — привязать телеграм можно и с самой страницы /link-telegram.
+ * Не блокирует: есть «Напомнить позже», фоновые запросы не трогаем.
  */
 class EnsureTelegramLinked
 {
@@ -29,6 +31,10 @@ class EnsureTelegramLinked
     private function shouldRemind(?object $user, Request $request): bool
     {
         if (!$user || $user->role !== 'student' || $user->telegram_chat_id !== null) {
+            return false;
+        }
+
+        if ($user->onboarding_completed_at !== null) {
             return false;
         }
 
