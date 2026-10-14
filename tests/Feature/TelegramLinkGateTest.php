@@ -32,13 +32,25 @@ class TelegramLinkGateTest extends TestCase
         ], $attributes));
     }
 
-    public function test_student_without_chat_id_is_reminded(): void
+    public function test_fresh_student_without_chat_id_is_reminded(): void
     {
-        $student = $this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '977353831']);
+        $student = $this->unlinkedStudent([
+            'oauth_provider' => 'yandex', 'oauth_id' => '977353831',
+            'onboarding_completed_at' => null,
+        ]);
 
         $this->actingAs($student)
             ->get('https://' . $this->studentHost() . '/homework')
             ->assertRedirect('https://' . $this->studentHost() . '/link-telegram');
+    }
+
+    public function test_onboarded_student_without_chat_id_is_not_reminded(): void
+    {
+        $student = $this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '977353832']);
+
+        $this->actingAs($student)
+            ->get('https://' . $this->studentHost() . '/homework')
+            ->assertOk();
     }
 
     public function test_student_with_chat_id_passes(): void
@@ -117,6 +129,7 @@ class TelegramLinkGateTest extends TestCase
     {
         $student = $this->unlinkedStudent([
             'oauth_provider' => 'yandex', 'oauth_id' => '4',
+            'onboarding_completed_at' => null,
             'telegram_link_snoozed_until' => now()->subMinute(),
         ]);
 

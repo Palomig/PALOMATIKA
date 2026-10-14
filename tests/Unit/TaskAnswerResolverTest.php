@@ -56,6 +56,10 @@ class TaskAnswerResolverTest extends TestCase
         $this->assertTrue($resolver->isCorrect('1, 3', '13'));
         $this->assertTrue($resolver->isCorrect('2 4 1', '241'));
         $this->assertFalse($resolver->isCorrect('241', '214'));
+        $this->assertFalse($resolver->isCorrect('√12', '12'));
+        $this->assertFalse($resolver->isCorrect('2√12', '212'));
+        $this->assertFalse($resolver->isCorrect('-12', '12'));
+        $this->assertFalse($resolver->isCorrect('1.2', '12'));
     }
 
     public function test_resolves_latex_with_variable_assignments_in_text_clause(): void
