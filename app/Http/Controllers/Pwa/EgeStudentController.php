@@ -6,7 +6,6 @@ use App\Http\Controllers\Pwa\Concerns\NormalizesTaskImageViewer;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\TeacherStudent;
-use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Services\EgeTaskDataService;
 use App\Services\EgeVariantBuilderService;
@@ -334,12 +333,23 @@ class EgeStudentController extends Controller
         $user    = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
             ->where('student_id', $user->id)
-            ->where('status', 'submitted')
+            // После проверки попытка уходит в «scored» (или «error», если
+            // проверка упала) — только «submitted» давало 404 сразу после сдачи.
+            ->whereIn('status', ['submitted', 'scored', 'error'])
             ->with(['variant', 'scorings'])
             ->firstOrFail();
 
-        $scoring = OgeAttemptScoring::where('attempt_id', $attempt->id)->first();
+        // Шаблон общий по устройству с ВПР: ждёт разбор по заданиям и итоги.
+        $scorings = $attempt->scorings->sortBy('task_number')->values();
+        $answers = $attempt->answers()->get();
+        $totalTasks = count($attempt->variant?->config_json['tasks'] ?? []);
+        $correctCount = $scorings->where('is_correct', true)->count();
+        $totalTime = ($attempt->started_at && $attempt->submitted_at)
+            ? (int) $attempt->submitted_at->diffInSeconds($attempt->started_at, true)
+            : 0;
 
-        return view('pwa.student.ege-results', compact('user', 'attempt', 'scoring'));
+        return view('pwa.student.ege-results', compact(
+            'user', 'attempt', 'scorings', 'answers', 'totalTasks', 'correctCount', 'totalTime'
+        ));
     }
 }
