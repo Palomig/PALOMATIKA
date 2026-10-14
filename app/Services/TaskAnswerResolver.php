@@ -146,17 +146,16 @@ class TaskAnswerResolver
         }
 
         if (preg_match('/^\d+$/', $correct)) {
-            $trimmedRaw = preg_replace('/\s+/', '', $userRaw) ?? '';
+            // Ответ должен быть ровно этим числом: «1, 3» не «13», «√12» не «12».
+            // Допускаем только ведущие нули и пробелы между разрядами («1 500»).
+            $trimmedRaw = trim($userRaw);
+            if (preg_match('/^\d{1,3}(?: \d{3})+$/', $trimmedRaw)) {
+                $trimmedRaw = str_replace(' ', '', $trimmedRaw);
+            }
             if (preg_match('/^\d+$/', $trimmedRaw)) {
                 return ltrim($trimmedRaw, '0') === ltrim($correct, '0');
             }
-            // Цепочку цифр («1, 3» = «13», «2 4 1» = «241») склеиваем только
-            // по разделителям: иначе «√12», «-12» и «1.2» превращались в «12».
-            if (!preg_match('/^[\d\s,;]+$/u', $userRaw)) {
-                return false;
-            }
-            $digitsOnly = preg_replace('/\D+/', '', $userRaw);
-            return $digitsOnly === $correct;
+            return false;
         }
 
         // Fraction / mixed-number answers: "12/7" == "1 5/7", "-3/4" == "-0.75"

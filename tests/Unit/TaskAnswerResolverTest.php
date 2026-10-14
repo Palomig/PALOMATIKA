@@ -49,12 +49,14 @@ class TaskAnswerResolverTest extends TestCase
         $this->assertFalse($resolver->isCorrect('2', '3'));
     }
 
-    public function test_digit_sequence_comparison_strips_separators(): void
+    public function test_integer_answer_must_be_exact(): void
     {
         $resolver = new TaskAnswerResolver();
 
-        $this->assertTrue($resolver->isCorrect('1, 3', '13'));
-        $this->assertTrue($resolver->isCorrect('2 4 1', '241'));
+        $this->assertTrue($resolver->isCorrect('241', '241'));
+        $this->assertTrue($resolver->isCorrect('1 500', '1500'));
+        $this->assertFalse($resolver->isCorrect('1, 3', '13'));
+        $this->assertFalse($resolver->isCorrect('2 4 1', '241'));
         $this->assertFalse($resolver->isCorrect('241', '214'));
         $this->assertFalse($resolver->isCorrect('√12', '12'));
         $this->assertFalse($resolver->isCorrect('2√12', '212'));

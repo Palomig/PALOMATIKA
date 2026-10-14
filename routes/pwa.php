@@ -33,7 +33,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.student.bug-report');
 
     // ОГЭ-дашборд для 8-классников (без редиректа на VPR)
-    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.telegram-link', 'pwa.onboarding', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
+    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
 
     // Auth
     Route::get('/login', [AuthController::class, 'showLogin'])->name('pwa.student.login');
@@ -57,11 +57,10 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/link-telegram', [TelegramLinkController::class, 'show'])->name('pwa.student.link-telegram');
         Route::post('/link-telegram/start', [TelegramLinkController::class, 'start'])->name('pwa.student.link-telegram.start');
         Route::get('/link-telegram/status', [TelegramLinkController::class, 'status'])->name('pwa.student.link-telegram.status');
-        Route::post('/link-telegram/snooze', [TelegramLinkController::class, 'snooze'])->name('pwa.student.link-telegram.snooze');
     });
 
     // Protected student routes
-    Route::middleware(['auth', 'pwa.telegram-link', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
+    Route::middleware(['auth', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
         // «Позови друга» — 8–11 класс (деньги) и 6–7 (скидка), прикреплённые к учителю
         Route::get('/friends', [FriendInviteController::class, 'show'])->name('pwa.student.friends');
