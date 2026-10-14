@@ -125,6 +125,17 @@
   </div>
   @endif
 
+  {{-- Уведомления о ДЗ: привязка чата с ботом, только по желанию ученика. --}}
+  <div class="ref-box">
+    <div class="sec-label">Уведомления о домашке в Telegram</div>
+    @if($user->telegram_chat_id)
+      <div style="margin-top:10px; font-size:14px; font-weight:700; color:var(--green);">✓ Подключены</div>
+    @else
+      <div style="margin-top:6px; font-size:13px; color:var(--muted);">Придёт сообщение, когда учитель задаст домашку.</div>
+      <a href="/link-telegram" class="btn" style="margin-top:10px; width:100%; padding:13px; font-size:14px; font-weight:700; background:#229ED9; border-color:#229ED9; color:#fff; display:flex; align-items:center; justify-content:center;">Подключить</a>
+    @endif
+  </div>
+
   {{-- Установка PWA. Без обёртки с animation: transform на предке ломает
        position:fixed у шторки с инструкцией. --}}
   @include('pwa.shared.install-app')
