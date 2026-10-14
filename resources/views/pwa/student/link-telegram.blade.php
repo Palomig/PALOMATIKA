@@ -31,16 +31,8 @@
     </p>
     <p x-show="error" x-text="error" x-cloak style="font-size:12px;color:var(--red);text-align:center;margin:12px 0 0;"></p>
 
-    <form method="POST" action="/link-telegram/snooze" style="margin-top:12px;">
-      @csrf
-      <button type="submit" class="btn btn-surface" style="width:100%;">Напомнить позже</button>
-    </form>
+    <a href="/profile" class="btn btn-surface" style="width:100%;margin-top:12px;">Назад в профиль</a>
   </div>
-
-  <form method="POST" action="/logout" style="margin-top:16px;text-align:center;">
-    @csrf
-    <button type="submit" class="btn btn-surface" style="font-size:12px;">Выйти</button>
-  </form>
 </div>
 
 <script>
@@ -125,7 +117,7 @@ function telegramLink() {
             clearInterval(this.poller);
             this.poller = null;
             try { sessionStorage.removeItem('tg_link_code'); } catch (e) {}
-            window.location.href = '/';
+            window.location.href = '/profile';
           }
         } catch (e) {
           // Сеть моргнула — просто ждём следующего тика.

@@ -32,25 +32,40 @@ class TelegramLinkGateTest extends TestCase
         ], $attributes));
     }
 
-    public function test_fresh_student_without_chat_id_is_reminded(): void
-    {
-        $student = $this->unlinkedStudent([
-            'oauth_provider' => 'yandex', 'oauth_id' => '977353831',
-            'onboarding_completed_at' => null,
-        ]);
-
-        $this->actingAs($student)
-            ->get('https://' . $this->studentHost() . '/homework')
-            ->assertRedirect('https://' . $this->studentHost() . '/link-telegram');
-    }
-
-    public function test_onboarded_student_without_chat_id_is_not_reminded(): void
+    public function test_student_without_chat_id_is_not_redirected(): void
     {
         $student = $this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '977353832']);
 
         $this->actingAs($student)
             ->get('https://' . $this->studentHost() . '/homework')
             ->assertOk();
+    }
+
+    public function test_fresh_student_without_chat_id_goes_straight_to_onboarding(): void
+    {
+        $student = $this->unlinkedStudent([
+            'oauth_provider' => 'telegram', 'oauth_id' => '14889590223453232713',
+            'onboarding_completed_at' => null,
+            'first_name' => null,
+        ]);
+
+        $this->actingAs($student)
+            ->get('https://' . $this->studentHost() . '/')
+            ->assertRedirect('https://' . $this->studentHost() . '/onboarding');
+    }
+
+    public function test_profile_offers_telegram_link_only_when_unlinked(): void
+    {
+        $this->actingAs($this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '6']))
+            ->get('https://' . $this->studentHost() . '/profile')
+            ->assertOk()
+            ->assertSee('href="/link-telegram"', false);
+
+        $this->actingAs($this->student(['telegram_chat_id' => 6490457131]))
+            ->get('https://' . $this->studentHost() . '/profile')
+            ->assertOk()
+            ->assertSee('✓ Подключены')
+            ->assertDontSee('href="/link-telegram"', false);
     }
 
     public function test_student_with_chat_id_passes(): void
@@ -71,13 +86,13 @@ class TelegramLinkGateTest extends TestCase
             ->assertOk();
     }
 
-    public function test_link_page_redirects_home_when_already_linked(): void
+    public function test_link_page_redirects_to_profile_when_already_linked(): void
     {
         $student = $this->student(['telegram_chat_id' => 6490457130]);
 
         $this->actingAs($student)
             ->get('https://' . $this->studentHost() . '/link-telegram')
-            ->assertRedirect('https://' . $this->studentHost() . '/');
+            ->assertRedirect('https://' . $this->studentHost() . '/profile');
     }
 
     public function test_start_returns_deep_link(): void
@@ -107,35 +122,6 @@ class TelegramLinkGateTest extends TestCase
             ->getJson('https://' . $this->studentHost() . '/link-telegram/status?code=' . $code)
             ->assertOk()
             ->assertJson(['linked' => false]);
-    }
-
-    public function test_snooze_stops_reminder_for_a_day(): void
-    {
-        $student = $this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '3']);
-
-        $this->actingAs($student)
-            ->post('https://' . $this->studentHost() . '/link-telegram/snooze')
-            ->assertRedirect('https://' . $this->studentHost() . '/');
-
-        $this->assertNotNull($student->fresh()->telegram_link_snoozed_until);
-
-        // Сутки экран не всплывает — привязка остаётся просьбой, а не блоком.
-        $this->actingAs($student)
-            ->get('https://' . $this->studentHost() . '/homework')
-            ->assertOk();
-    }
-
-    public function test_reminder_returns_after_snooze_expires(): void
-    {
-        $student = $this->unlinkedStudent([
-            'oauth_provider' => 'yandex', 'oauth_id' => '4',
-            'onboarding_completed_at' => null,
-            'telegram_link_snoozed_until' => now()->subMinute(),
-        ]);
-
-        $this->actingAs($student)
-            ->get('https://' . $this->studentHost() . '/homework')
-            ->assertRedirect('https://' . $this->studentHost() . '/link-telegram');
     }
 
     public function test_json_requests_are_never_redirected(): void

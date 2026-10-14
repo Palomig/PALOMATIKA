@@ -25,7 +25,7 @@ class TelegramLinkController extends Controller
         $user = $request->user();
 
         if ($user->telegram_chat_id) {
-            return redirect('https://' . $request->getHost() . '/');
+            return redirect('https://' . $request->getHost() . '/profile');
         }
 
         return view('pwa.student.link-telegram', [
@@ -37,14 +37,6 @@ class TelegramLinkController extends Controller
     public function start(Request $request): JsonResponse
     {
         return response()->json($this->links->issueCode($request->user()));
-    }
-
-    /** «Напомнить позже» — сутки не показываем экран. */
-    public function snooze(Request $request)
-    {
-        $request->user()->update(['telegram_link_snoozed_until' => now()->addDay()]);
-
-        return redirect('https://' . $request->getHost() . '/');
     }
 
     /**
