@@ -141,6 +141,9 @@ def check_file(path: Path) -> tuple[int, list[str]]:
         for task in zadanie.get('tasks', []):
             total += 1
             head, values = split_substitution(task['expression'])
+            # «Раскройте скобки: $(x+3)^{2}$» — действие словами перед формулой.
+            if not values and ':' in head.split('$', 1)[0]:
+                head = '$' + head.split('$', 1)[1]
             expr = latex_to_plain(head)
             try:
                 left = parse(expr)
