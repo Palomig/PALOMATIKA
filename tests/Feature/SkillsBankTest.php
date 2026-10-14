@@ -99,6 +99,7 @@ class SkillsBankTest extends TestCase
             ['01', 'Десятичные дроби'],
             ['02', 'Сокращение дробей'],
             ['03', 'Арифметический корень'],
+            ['04', 'Формулы сокращённого умножения'],
         ], array_map(fn ($t) => [$t['id'], $t['title']], $topics));
         $this->assertStringContainsString('$', $topics[0]['preview'], 'превью темы — первый пример');
 

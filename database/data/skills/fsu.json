@@ -1,0 +1,3230 @@
+{
+  "bank": "skills",
+  "topic": "04",
+  "meta": {
+    "title": "Формулы сокращённого умножения",
+    "description": "Квадрат суммы и разности, разность квадратов, сумма и разность кубов: раскрыть скобки, разложить на множители, упростить и вычислить. 7 класс, четыре уровня по 100 примеров."
+  },
+  "generator": {
+    "script": "scripts/generate-skills-fsu.py",
+    "seed": 20261014
+  },
+  "zadaniya": [
+    {
+      "number": 7,
+      "title": "7 класс",
+      "grade": 7,
+      "instruction": "Формулы сокращённого умножения",
+      "type": "expression",
+      "status": "production",
+      "subtypes": [
+        "Уровень 1 — квадрат суммы и разности",
+        "Уровень 2 — разность квадратов, сумма и разность кубов",
+        "Уровень 3 — разложение на множители",
+        "Уровень 4 — упростить и вычислить"
+      ],
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "Раскройте скобки: $(k+3)^{2}$",
+          "answer": "k^2+6k+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 2,
+          "expression": "Раскройте скобки: $(y-10)^{2}$",
+          "answer": "y^2-20y+100",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 3,
+          "expression": "Раскройте скобки: $(p-6)^{2}$",
+          "answer": "p^2-12p+36",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 4,
+          "expression": "Раскройте скобки: $(c-9)^{2}$",
+          "answer": "c^2-18c+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 5,
+          "expression": "Раскройте скобки: $(n-8)^{2}$",
+          "answer": "n^2-16n+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 6,
+          "expression": "Раскройте скобки: $(n+4)^{2}$",
+          "answer": "n^2+8n+16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 7,
+          "expression": "Раскройте скобки: $(y-12)^{2}$",
+          "answer": "y^2-24y+144",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 8,
+          "expression": "Раскройте скобки: $(k-11)^{2}$",
+          "answer": "k^2-22k+121",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 9,
+          "expression": "Раскройте скобки: $(p-5)^{2}$",
+          "answer": "p^2-10p+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 10,
+          "expression": "Раскройте скобки: $(x+2)^{2}$",
+          "answer": "x^2+4x+4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 11,
+          "expression": "Раскройте скобки: $(x-2)^{2}$",
+          "answer": "x^2-4x+4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 12,
+          "expression": "Раскройте скобки: $(p-1)^{2}$",
+          "answer": "p^2-2p+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 13,
+          "expression": "Раскройте скобки: $(c+1)^{2}$",
+          "answer": "c^2+2c+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 14,
+          "expression": "Раскройте скобки: $(a+5)^{2}$",
+          "answer": "a^2+10a+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 15,
+          "expression": "Раскройте скобки: $(b+6)^{2}$",
+          "answer": "b^2+12b+36",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 16,
+          "expression": "Раскройте скобки: $(t+8)^{2}$",
+          "answer": "t^2+16t+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 17,
+          "expression": "Раскройте скобки: $(b+12)^{2}$",
+          "answer": "b^2+24b+144",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 18,
+          "expression": "Раскройте скобки: $(t-3)^{2}$",
+          "answer": "t^2-6t+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 19,
+          "expression": "Раскройте скобки: $(t-4)^{2}$",
+          "answer": "t^2-8t+16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 20,
+          "expression": "Раскройте скобки: $(y+10)^{2}$",
+          "answer": "y^2+20y+100",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 21,
+          "expression": "Раскройте скобки: $(8+m)^{2}$",
+          "answer": "m^2+16m+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 22,
+          "expression": "Раскройте скобки: $(7-c)^{2}$",
+          "answer": "c^2-14c+49",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 23,
+          "expression": "Раскройте скобки: $(9+n)^{2}$",
+          "answer": "n^2+18n+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 24,
+          "expression": "Раскройте скобки: $(10+p)^{2}$",
+          "answer": "p^2+20p+100",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 25,
+          "expression": "Раскройте скобки: $(4+a)^{2}$",
+          "answer": "a^2+8a+16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 26,
+          "expression": "Раскройте скобки: $(6-x)^{2}$",
+          "answer": "x^2-12x+36",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 27,
+          "expression": "Раскройте скобки: $(12-m)^{2}$",
+          "answer": "m^2-24m+144",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 28,
+          "expression": "Раскройте скобки: $(3-y)^{2}$",
+          "answer": "y^2-6y+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 29,
+          "expression": "Раскройте скобки: $(9-m)^{2}$",
+          "answer": "m^2-18m+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 30,
+          "expression": "Раскройте скобки: $(3+c)^{2}$",
+          "answer": "c^2+6c+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 31,
+          "expression": "Раскройте скобки: $(9p+4)^{2}$",
+          "answer": "81p^2+72p+16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 32,
+          "expression": "Раскройте скобки: $(7p-3)^{2}$",
+          "answer": "49p^2-42p+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 33,
+          "expression": "Раскройте скобки: $(2m-3)^{2}$",
+          "answer": "4m^2-12m+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 34,
+          "expression": "Раскройте скобки: $(3p-7)^{2}$",
+          "answer": "9p^2-42p+49",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 35,
+          "expression": "Раскройте скобки: $(8a+1)^{2}$",
+          "answer": "64a^2+16a+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 36,
+          "expression": "Раскройте скобки: $(2y+9)^{2}$",
+          "answer": "4y^2+36y+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 37,
+          "expression": "Раскройте скобки: $(5b-6)^{2}$",
+          "answer": "25b^2-60b+36",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 38,
+          "expression": "Раскройте скобки: $(9y+1)^{2}$",
+          "answer": "81y^2+18y+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 39,
+          "expression": "Раскройте скобки: $(8y+9)^{2}$",
+          "answer": "64y^2+144y+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 40,
+          "expression": "Раскройте скобки: $(5c+1)^{2}$",
+          "answer": "25c^2+10c+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 41,
+          "expression": "Раскройте скобки: $(9x-8)^{2}$",
+          "answer": "81x^2-144x+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 42,
+          "expression": "Раскройте скобки: $(5c-9)^{2}$",
+          "answer": "25c^2-90c+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 43,
+          "expression": "Раскройте скобки: $(5c-3)^{2}$",
+          "answer": "25c^2-30c+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 44,
+          "expression": "Раскройте скобки: $(5b+3)^{2}$",
+          "answer": "25b^2+30b+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 45,
+          "expression": "Раскройте скобки: $(3c-1)^{2}$",
+          "answer": "9c^2-6c+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 46,
+          "expression": "Раскройте скобки: $(8c-3)^{2}$",
+          "answer": "64c^2-48c+9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 47,
+          "expression": "Раскройте скобки: $(9b-5)^{2}$",
+          "answer": "81b^2-90b+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 48,
+          "expression": "Раскройте скобки: $(2p-5)^{2}$",
+          "answer": "4p^2-20p+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 49,
+          "expression": "Раскройте скобки: $(8a-1)^{2}$",
+          "answer": "64a^2-16a+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 50,
+          "expression": "Раскройте скобки: $(2n-7)^{2}$",
+          "answer": "4n^2-28n+49",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 51,
+          "expression": "Раскройте скобки: $(4k+5)^{2}$",
+          "answer": "16k^2+40k+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 52,
+          "expression": "Раскройте скобки: $(4t+1)^{2}$",
+          "answer": "16t^2+8t+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 53,
+          "expression": "Раскройте скобки: $(8p-5)^{2}$",
+          "answer": "64p^2-80p+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 54,
+          "expression": "Раскройте скобки: $(7k-2)^{2}$",
+          "answer": "49k^2-28k+4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 55,
+          "expression": "Раскройте скобки: $(3p-2)^{2}$",
+          "answer": "9p^2-12p+4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 56,
+          "expression": "Раскройте скобки: $(5c-7)^{2}$",
+          "answer": "25c^2-70c+49",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 57,
+          "expression": "Раскройте скобки: $(8m-7)^{2}$",
+          "answer": "64m^2-112m+49",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 58,
+          "expression": "Раскройте скобки: $(2p-1)^{2}$",
+          "answer": "4p^2-4p+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 59,
+          "expression": "Раскройте скобки: $(5c+8)^{2}$",
+          "answer": "25c^2+80c+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 60,
+          "expression": "Раскройте скобки: $(5b-4)^{2}$",
+          "answer": "25b^2-40b+16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 61,
+          "expression": "Раскройте скобки: $(k-2b)^{2}$",
+          "answer": "k^2-4kb+4b^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 62,
+          "expression": "Раскройте скобки: $(2k-7m)^{2}$",
+          "answer": "4k^2-28km+49m^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 63,
+          "expression": "Раскройте скобки: $(7a-p)^{2}$",
+          "answer": "49a^2-14ap+p^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 64,
+          "expression": "Раскройте скобки: $(6k+7n)^{2}$",
+          "answer": "36k^2+84kn+49n^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 65,
+          "expression": "Раскройте скобки: $(4a+5t)^{2}$",
+          "answer": "16a^2+40at+25t^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 66,
+          "expression": "Раскройте скобки: $(3n+7t)^{2}$",
+          "answer": "9n^2+42nt+49t^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 67,
+          "expression": "Раскройте скобки: $(a-4k)^{2}$",
+          "answer": "a^2-8ak+16k^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 68,
+          "expression": "Раскройте скобки: $(t+2x)^{2}$",
+          "answer": "t^2+4tx+4x^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 69,
+          "expression": "Раскройте скобки: $(3x-7n)^{2}$",
+          "answer": "9x^2-42xn+49n^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 70,
+          "expression": "Раскройте скобки: $(7x+k)^{2}$",
+          "answer": "49x^2+14xk+k^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 71,
+          "expression": "Раскройте скобки: $(7y+2t)^{2}$",
+          "answer": "49y^2+28yt+4t^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 72,
+          "expression": "Раскройте скобки: $(7a+3n)^{2}$",
+          "answer": "49a^2+42an+9n^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 73,
+          "expression": "Раскройте скобки: $(5c+3y)^{2}$",
+          "answer": "25c^2+30cy+9y^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 74,
+          "expression": "Раскройте скобки: $(7x+4k)^{2}$",
+          "answer": "49x^2+56xk+16k^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 75,
+          "expression": "Раскройте скобки: $(5m-3y)^{2}$",
+          "answer": "25m^2-30my+9y^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 76,
+          "expression": "Раскройте скобки: $(k+3t)^{2}$",
+          "answer": "k^2+6kt+9t^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 77,
+          "expression": "Раскройте скобки: $(b+4t)^{2}$",
+          "answer": "b^2+8bt+16t^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 78,
+          "expression": "Раскройте скобки: $(4m-3t)^{2}$",
+          "answer": "16m^2-24mt+9t^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 79,
+          "expression": "Раскройте скобки: $(5b+4a)^{2}$",
+          "answer": "25b^2+40ba+16a^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 80,
+          "expression": "Раскройте скобки: $(4p+3y)^{2}$",
+          "answer": "16p^2+24py+9y^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 81,
+          "expression": "Раскройте скобки: $(-t-9)^{2}$",
+          "answer": "t^2+18t+81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 82,
+          "expression": "Раскройте скобки: $(-3a+1)^{2}$",
+          "answer": "9a^2-6a+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 83,
+          "expression": "Раскройте скобки: $(-3m+2)^{2}$",
+          "answer": "9m^2-12m+4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 84,
+          "expression": "Раскройте скобки: $(-5p-2n)^{2}$",
+          "answer": "25p^2+20pn+4n^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 85,
+          "expression": "Раскройте скобки: $(-6n+x)^{2}$",
+          "answer": "36n^2-12nx+x^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 86,
+          "expression": "Раскройте скобки: $(-3c+7x)^{2}$",
+          "answer": "9c^2-42cx+49x^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 87,
+          "expression": "Раскройте скобки: $(-4a+b)^{2}$",
+          "answer": "16a^2-8ab+b^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 88,
+          "expression": "Раскройте скобки: $(-m-9y)^{2}$",
+          "answer": "m^2+18my+81y^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 89,
+          "expression": "Раскройте скобки: $(-3a+8)^{2}$",
+          "answer": "9a^2-48a+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 90,
+          "expression": "Раскройте скобки: $(-2k+y)^{2}$",
+          "answer": "4k^2-4ky+y^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 91,
+          "expression": "Раскройте скобки: $(5x^{2}+8n)^{2}$",
+          "answer": "25x^4+80x^2n+64n^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 92,
+          "expression": "Раскройте скобки: $(3a^{2}-1)^{2}$",
+          "answer": "9a^4-6a^2+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 93,
+          "expression": "Раскройте скобки: $(m^{2}-5n)^{2}$",
+          "answer": "m^4-10m^2n+25n^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 94,
+          "expression": "Раскройте скобки: $(5b^{2}-2c)^{2}$",
+          "answer": "25b^4-20b^2c+4c^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 95,
+          "expression": "Раскройте скобки: $(c^{2}-5)^{2}$",
+          "answer": "c^4-10c^2+25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 96,
+          "expression": "Раскройте скобки: $(5a^{2}-8)^{2}$",
+          "answer": "25a^4-80a^2+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 97,
+          "expression": "Раскройте скобки: $(5a^{2}+2m)^{2}$",
+          "answer": "25a^4+20a^2m+4m^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 98,
+          "expression": "Раскройте скобки: $(t^{2}-4m)^{2}$",
+          "answer": "t^4-8t^2m+16m^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 99,
+          "expression": "Раскройте скобки: $(n^{2}+1)^{2}$",
+          "answer": "n^4+2n^2+1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 100,
+          "expression": "Раскройте скобки: $(x^{2}-8)^{2}$",
+          "answer": "x^4-16x^2+64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 101,
+          "expression": "Раскройте скобки: $(m-6)(m+6)$",
+          "answer": "m^2-36",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 102,
+          "expression": "Раскройте скобки: $(b+9)(b-9)$",
+          "answer": "b^2-81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 103,
+          "expression": "Раскройте скобки: $(c+4)(c-4)$",
+          "answer": "c^2-16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 104,
+          "expression": "Раскройте скобки: $(a+7)(a-7)$",
+          "answer": "a^2-49",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 105,
+          "expression": "Раскройте скобки: $(m-10)(m+10)$",
+          "answer": "m^2-100",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 106,
+          "expression": "Раскройте скобки: $(a-3)(a+3)$",
+          "answer": "a^2-9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 107,
+          "expression": "Раскройте скобки: $(c-5)(c+5)$",
+          "answer": "c^2-25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 108,
+          "expression": "Раскройте скобки: $(m+12)(m-12)$",
+          "answer": "m^2-144",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 109,
+          "expression": "Раскройте скобки: $(n-1)(n+1)$",
+          "answer": "n^2-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 110,
+          "expression": "Раскройте скобки: $(y-9)(y+9)$",
+          "answer": "y^2-81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 111,
+          "expression": "Раскройте скобки: $(a-12)(a+12)$",
+          "answer": "a^2-144",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 112,
+          "expression": "Раскройте скобки: $(c-11)(c+11)$",
+          "answer": "c^2-121",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 113,
+          "expression": "Раскройте скобки: $(b-7)(b+7)$",
+          "answer": "b^2-49",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 114,
+          "expression": "Раскройте скобки: $(x+11)(x-11)$",
+          "answer": "x^2-121",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 115,
+          "expression": "Раскройте скобки: $(y+5)(y-5)$",
+          "answer": "y^2-25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 116,
+          "expression": "Раскройте скобки: $(y+1)(y-1)$",
+          "answer": "y^2-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 117,
+          "expression": "Раскройте скобки: $(a+10)(a-10)$",
+          "answer": "a^2-100",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 118,
+          "expression": "Раскройте скобки: $(y+2)(y-2)$",
+          "answer": "y^2-4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 119,
+          "expression": "Раскройте скобки: $(x+3)(x-3)$",
+          "answer": "x^2-9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 120,
+          "expression": "Раскройте скобки: $(c-8)(c+8)$",
+          "answer": "c^2-64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 121,
+          "expression": "Раскройте скобки: $(k+11)(11-k)$",
+          "answer": "121-k^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 122,
+          "expression": "Раскройте скобки: $(6-a)(a+6)$",
+          "answer": "36-a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 123,
+          "expression": "Раскройте скобки: $(4-x)(x+4)$",
+          "answer": "16-x^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 124,
+          "expression": "Раскройте скобки: $(y+6)(6-y)$",
+          "answer": "36-y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 125,
+          "expression": "Раскройте скобки: $(12-n)(n+12)$",
+          "answer": "144-n^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 126,
+          "expression": "Раскройте скобки: $(k+12)(12-k)$",
+          "answer": "144-k^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 127,
+          "expression": "Раскройте скобки: $(11-a)(a+11)$",
+          "answer": "121-a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 128,
+          "expression": "Раскройте скобки: $(10-b)(b+10)$",
+          "answer": "100-b^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 129,
+          "expression": "Раскройте скобки: $(6t+5)(6t-5)$",
+          "answer": "36t^2-25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 130,
+          "expression": "Раскройте скобки: $(2a+9)(2a-9)$",
+          "answer": "4a^2-81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 131,
+          "expression": "Раскройте скобки: $(9m+1)(9m-1)$",
+          "answer": "81m^2-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 132,
+          "expression": "Раскройте скобки: $(5x+9)(5x-9)$",
+          "answer": "25x^2-81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 133,
+          "expression": "Раскройте скобки: $(7y+3)(7y-3)$",
+          "answer": "49y^2-9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 134,
+          "expression": "Раскройте скобки: $(9k+4)(9k-4)$",
+          "answer": "81k^2-16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 135,
+          "expression": "Раскройте скобки: $(7x+9)(7x-9)$",
+          "answer": "49x^2-81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 136,
+          "expression": "Раскройте скобки: $(5p+2)(5p-2)$",
+          "answer": "25p^2-4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 137,
+          "expression": "Раскройте скобки: $(8x+1)(8x-1)$",
+          "answer": "64x^2-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 138,
+          "expression": "Раскройте скобки: $(3k+1)(3k-1)$",
+          "answer": "9k^2-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 139,
+          "expression": "Раскройте скобки: $(7n+6)(7n-6)$",
+          "answer": "49n^2-36",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 140,
+          "expression": "Раскройте скобки: $(7y+2)(7y-2)$",
+          "answer": "49y^2-4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 141,
+          "expression": "Раскройте скобки: $(3c+7)(3c-7)$",
+          "answer": "9c^2-49",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 142,
+          "expression": "Раскройте скобки: $(8k+5)(8k-5)$",
+          "answer": "64k^2-25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 143,
+          "expression": "Раскройте скобки: $(2x+1)(2x-1)$",
+          "answer": "4x^2-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 144,
+          "expression": "Раскройте скобки: $(8y+3)(8y-3)$",
+          "answer": "64y^2-9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 145,
+          "expression": "Раскройте скобки: $(4k+9)(4k-9)$",
+          "answer": "16k^2-81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 146,
+          "expression": "Раскройте скобки: $(3m+2y)(3m-2y)$",
+          "answer": "9m^2-4y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 147,
+          "expression": "Раскройте скобки: $(t+6b)(t-6b)$",
+          "answer": "t^2-36b^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 148,
+          "expression": "Раскройте скобки: $(7c+8n)(7c-8n)$",
+          "answer": "49c^2-64n^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 149,
+          "expression": "Раскройте скобки: $(6a+n)(6a-n)$",
+          "answer": "36a^2-n^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 150,
+          "expression": "Раскройте скобки: $(a+2x)(a-2x)$",
+          "answer": "a^2-4x^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 151,
+          "expression": "Раскройте скобки: $(8y+5x)(8y-5x)$",
+          "answer": "64y^2-25x^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 152,
+          "expression": "Раскройте скобки: $(5y+8a)(5y-8a)$",
+          "answer": "25y^2-64a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 153,
+          "expression": "Раскройте скобки: $(7b+2c)(7b-2c)$",
+          "answer": "49b^2-4c^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 154,
+          "expression": "Раскройте скобки: $(2x+a)(2x-a)$",
+          "answer": "4x^2-a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 155,
+          "expression": "Раскройте скобки: $(8c+3y)(8c-3y)$",
+          "answer": "64c^2-9y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 156,
+          "expression": "Раскройте скобки: $(2n+7t)(2n-7t)$",
+          "answer": "4n^2-49t^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 157,
+          "expression": "Раскройте скобки: $(3m+x)(3m-x)$",
+          "answer": "9m^2-x^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 158,
+          "expression": "Раскройте скобки: $(5p+4c)(5p-4c)$",
+          "answer": "25p^2-16c^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 159,
+          "expression": "Раскройте скобки: $(2t+3c)(2t-3c)$",
+          "answer": "4t^2-9c^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 160,
+          "expression": "Раскройте скобки: $(m+3t)(m-3t)$",
+          "answer": "m^2-9t^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 161,
+          "expression": "Раскройте скобки: $(y^{2}+5)(y^{2}-5)$",
+          "answer": "y^4-25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 162,
+          "expression": "Раскройте скобки: $(3m^{2}+8)(3m^{2}-8)$",
+          "answer": "9m^4-64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 163,
+          "expression": "Раскройте скобки: $(4x^{2}+3)(4x^{2}-3)$",
+          "answer": "16x^4-9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 164,
+          "expression": "Раскройте скобки: $(2c^{2}+3)(2c^{2}-3)$",
+          "answer": "4c^4-9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 165,
+          "expression": "Раскройте скобки: $(2p^{2}-y)(2p^{2}+y)$",
+          "answer": "4p^4-y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 166,
+          "expression": "Раскройте скобки: $(y^{2}-4p)(y^{2}+4p)$",
+          "answer": "y^4-16p^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 167,
+          "expression": "Раскройте скобки: $(2b^{2}-9y)(2b^{2}+9y)$",
+          "answer": "4b^4-81y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 168,
+          "expression": "Раскройте скобки: $(2p^{2}-3b)(2p^{2}+3b)$",
+          "answer": "4p^4-9b^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 169,
+          "expression": "Раскройте скобки: $(4k^{2}-3y)(4k^{2}+3y)$",
+          "answer": "16k^4-9y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 170,
+          "expression": "Раскройте скобки: $(b^{2}-8n)(b^{2}+8n)$",
+          "answer": "b^4-64n^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 171,
+          "expression": "Раскройте скобки: $(n+6)(n^{2}-6n+36)$",
+          "answer": "n^3+216",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 172,
+          "expression": "Раскройте скобки: $(m+3)(m^{2}-3m+9)$",
+          "answer": "m^3+27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 173,
+          "expression": "Раскройте скобки: $(c-4)(c^{2}+4c+16)$",
+          "answer": "c^3-64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 174,
+          "expression": "Раскройте скобки: $(m-2)(m^{2}+2m+4)$",
+          "answer": "m^3-8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 175,
+          "expression": "Раскройте скобки: $(b-3)(b^{2}+3b+9)$",
+          "answer": "b^3-27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 176,
+          "expression": "Раскройте скобки: $(y+2)(y^{2}-2y+4)$",
+          "answer": "y^3+8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 177,
+          "expression": "Раскройте скобки: $(y-1)(y^{2}+y+1)$",
+          "answer": "y^3-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 178,
+          "expression": "Раскройте скобки: $(k+4)(k^{2}-4k+16)$",
+          "answer": "k^3+64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 179,
+          "expression": "Раскройте скобки: $(k-5)(k^{2}+5k+25)$",
+          "answer": "k^3-125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 180,
+          "expression": "Раскройте скобки: $(m+5)(m^{2}-5m+25)$",
+          "answer": "m^3+125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 181,
+          "expression": "Раскройте скобки: $(x-6)(x^{2}+6x+36)$",
+          "answer": "x^3-216",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 182,
+          "expression": "Раскройте скобки: $(2y+3)(4y^{2}-6y+9)$",
+          "answer": "8y^3+27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 183,
+          "expression": "Раскройте скобки: $(3x-5)(9x^{2}+15x+25)$",
+          "answer": "27x^3-125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 184,
+          "expression": "Раскройте скобки: $(2y-1)(4y^{2}+2y+1)$",
+          "answer": "8y^3-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 185,
+          "expression": "Раскройте скобки: $(2k+1)(4k^{2}-2k+1)$",
+          "answer": "8k^3+1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 186,
+          "expression": "Раскройте скобки: $(3m+1)(9m^{2}-3m+1)$",
+          "answer": "27m^3+1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 187,
+          "expression": "Раскройте скобки: $(3b-1)(9b^{2}+3b+1)$",
+          "answer": "27b^3-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 188,
+          "expression": "Раскройте скобки: $(4c-3)(16c^{2}+12c+9)$",
+          "answer": "64c^3-27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 189,
+          "expression": "Раскройте скобки: $(3a+2)(9a^{2}-6a+4)$",
+          "answer": "27a^3+8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 190,
+          "expression": "Раскройте скобки: $(4b+1)(16b^{2}-4b+1)$",
+          "answer": "64b^3+1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 191,
+          "expression": "Раскройте скобки: $(3k+4)(9k^{2}-12k+16)$",
+          "answer": "27k^3+64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 192,
+          "expression": "Раскройте скобки: $(4x+5)(16x^{2}-20x+25)$",
+          "answer": "64x^3+125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 193,
+          "expression": "Раскройте скобки: $(4x-1)(16x^{2}+4x+1)$",
+          "answer": "64x^3-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 194,
+          "expression": "Раскройте скобки: $(b-4)^{3}$",
+          "answer": "b^3-12b^2+48b-64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 195,
+          "expression": "Раскройте скобки: $(m+5)^{3}$",
+          "answer": "m^3+15m^2+75m+125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 196,
+          "expression": "Раскройте скобки: $(m-5)^{3}$",
+          "answer": "m^3-15m^2+75m-125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 197,
+          "expression": "Раскройте скобки: $(t+4)^{3}$",
+          "answer": "t^3+12t^2+48t+64",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 198,
+          "expression": "Раскройте скобки: $(m-2)^{3}$",
+          "answer": "m^3-6m^2+12m-8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 199,
+          "expression": "Раскройте скобки: $(x-1)^{3}$",
+          "answer": "x^3-3x^2+3x-1",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 200,
+          "expression": "Раскройте скобки: $(y+3)^{3}$",
+          "answer": "y^3+9y^2+27y+27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 201,
+          "expression": "Разложите на множители: $64-a^{2}$",
+          "answer": "(8-a)(8+a)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 202,
+          "expression": "Разложите на множители: $t^{2}-4$",
+          "answer": "(t-2)(t+2)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 203,
+          "expression": "Разложите на множители: $m^{2}-25$",
+          "answer": "(m-5)(m+5)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 204,
+          "expression": "Разложите на множители: $m^{2}-121$",
+          "answer": "(m-11)(m+11)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 205,
+          "expression": "Разложите на множители: $49-m^{2}$",
+          "answer": "(7-m)(7+m)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 206,
+          "expression": "Разложите на множители: $81-p^{2}$",
+          "answer": "(9-p)(9+p)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 207,
+          "expression": "Разложите на множители: $a^{2}-81$",
+          "answer": "(a-9)(a+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 208,
+          "expression": "Разложите на множители: $p^{2}-100$",
+          "answer": "(p-10)(p+10)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 209,
+          "expression": "Разложите на множители: $144-t^{2}$",
+          "answer": "(12-t)(12+t)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 210,
+          "expression": "Разложите на множители: $x^{2}-64$",
+          "answer": "(x-8)(x+8)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 211,
+          "expression": "Разложите на множители: $y^{2}-49$",
+          "answer": "(y-7)(y+7)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 212,
+          "expression": "Разложите на множители: $196-c^{2}$",
+          "answer": "(14-c)(14+c)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 213,
+          "expression": "Разложите на множители: $p^{2}-1$",
+          "answer": "(p-1)(p+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 214,
+          "expression": "Разложите на множители: $b^{2}-169$",
+          "answer": "(b-13)(b+13)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 215,
+          "expression": "Разложите на множители: $121-b^{2}$",
+          "answer": "(11-b)(11+b)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 216,
+          "expression": "Разложите на множители: $1-a^{2}$",
+          "answer": "(1-a)(1+a)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 217,
+          "expression": "Разложите на множители: $169-n^{2}$",
+          "answer": "(13-n)(13+n)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 218,
+          "expression": "Разложите на множители: $p^{2}-16$",
+          "answer": "(p-4)(p+4)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 219,
+          "expression": "Разложите на множители: $n^{2}-36$",
+          "answer": "(n-6)(n+6)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 220,
+          "expression": "Разложите на множители: $b^{2}-196$",
+          "answer": "(b-14)(b+14)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 221,
+          "expression": "Разложите на множители: $a^{2}+2a+1$",
+          "answer": "(a+1)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 222,
+          "expression": "Разложите на множители: $k^{2}+16k+64$",
+          "answer": "(k+8)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 223,
+          "expression": "Разложите на множители: $n^{2}+12n+36$",
+          "answer": "(n+6)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 224,
+          "expression": "Разложите на множители: $m^{2}-6m+9$",
+          "answer": "(m-3)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 225,
+          "expression": "Разложите на множители: $y^{2}-12y+36$",
+          "answer": "(y-6)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 226,
+          "expression": "Разложите на множители: $c^{2}+18c+81$",
+          "answer": "(c+9)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 227,
+          "expression": "Разложите на множители: $t^{2}-14t+49$",
+          "answer": "(t-7)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 228,
+          "expression": "Разложите на множители: $t^{2}-16t+64$",
+          "answer": "(t-8)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 229,
+          "expression": "Разложите на множители: $y^{2}+20y+100$",
+          "answer": "(y+10)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 230,
+          "expression": "Разложите на множители: $x^{2}+8x+16$",
+          "answer": "(x+4)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 231,
+          "expression": "Разложите на множители: $b^{2}+14b+49$",
+          "answer": "(b+7)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 232,
+          "expression": "Разложите на множители: $c^{2}-2c+1$",
+          "answer": "(c-1)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 233,
+          "expression": "Разложите на множители: $t^{2}+4t+4$",
+          "answer": "(t+2)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 234,
+          "expression": "Разложите на множители: $k^{2}-4k+4$",
+          "answer": "(k-2)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 235,
+          "expression": "Разложите на множители: $t^{2}-8t+16$",
+          "answer": "(t-4)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 236,
+          "expression": "Разложите на множители: $k^{2}-10k+25$",
+          "answer": "(k-5)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 237,
+          "expression": "Разложите на множители: $p^{2}+10p+25$",
+          "answer": "(p+5)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 238,
+          "expression": "Разложите на множители: $k^{2}-20k+100$",
+          "answer": "(k-10)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 239,
+          "expression": "Разложите на множители: $49x^{2}-4b^{2}$",
+          "answer": "(7x-2b)(7x+2b)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 240,
+          "expression": "Разложите на множители: $9x^{2}-49$",
+          "answer": "(3x-7)(3x+7)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 241,
+          "expression": "Разложите на множители: $16n^{2}-9$",
+          "answer": "(4n-3)(4n+3)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 242,
+          "expression": "Разложите на множители: $81y^{2}-25k^{2}$",
+          "answer": "(9y-5k)(9y+5k)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 243,
+          "expression": "Разложите на множители: $4c^{2}-81$",
+          "answer": "(2c-9)(2c+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 244,
+          "expression": "Разложите на множители: $4a^{2}-9$",
+          "answer": "(2a-3)(2a+3)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 245,
+          "expression": "Разложите на множители: $81x^{2}-16p^{2}$",
+          "answer": "(9x-4p)(9x+4p)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 246,
+          "expression": "Разложите на множители: $16b^{2}-25$",
+          "answer": "(4b-5)(4b+5)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 247,
+          "expression": "Разложите на множители: $25x^{2}-1$",
+          "answer": "(5x-1)(5x+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 248,
+          "expression": "Разложите на множители: $64k^{2}-81$",
+          "answer": "(8k-9)(8k+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 249,
+          "expression": "Разложите на множители: $49n^{2}-36b^{2}$",
+          "answer": "(7n-6b)(7n+6b)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 250,
+          "expression": "Разложите на множители: $49m^{2}-64x^{2}$",
+          "answer": "(7m-8x)(7m+8x)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 251,
+          "expression": "Разложите на множители: $49x^{2}-16$",
+          "answer": "(7x-4)(7x+4)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 252,
+          "expression": "Разложите на множители: $9b^{2}-4$",
+          "answer": "(3b-2)(3b+2)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 253,
+          "expression": "Разложите на множители: $25x^{2}-36$",
+          "answer": "(5x-6)(5x+6)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 254,
+          "expression": "Разложите на множители: $4x^{2}-4x+1$",
+          "answer": "(2x-1)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 255,
+          "expression": "Разложите на множители: $16k^{2}-24kx+9x^{2}$",
+          "answer": "(4k-3x)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 256,
+          "expression": "Разложите на множители: $25x^{2}-10x+1$",
+          "answer": "(5x-1)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 257,
+          "expression": "Разложите на множители: $16a^{2}-8at+t^{2}$",
+          "answer": "(4a-t)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 258,
+          "expression": "Разложите на множители: $k^{2}-8kx+16x^{2}$",
+          "answer": "(k-4x)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 259,
+          "expression": "Разложите на множители: $4x^{2}-12x+9$",
+          "answer": "(2x-3)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 260,
+          "expression": "Разложите на множители: $4c^{2}+28cy+49y^{2}$",
+          "answer": "(2c+7y)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 261,
+          "expression": "Разложите на множители: $49p^{2}+84px+36x^{2}$",
+          "answer": "(7p+6x)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 262,
+          "expression": "Разложите на множители: $9x^{2}+24x+16$",
+          "answer": "(3x+4)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 263,
+          "expression": "Разложите на множители: $25b^{2}+60bk+36k^{2}$",
+          "answer": "(5b+6k)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 264,
+          "expression": "Разложите на множители: $25t^{2}+20t+4$",
+          "answer": "(5t+2)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 265,
+          "expression": "Разложите на множители: $16p^{2}+24p+9$",
+          "answer": "(4p+3)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 266,
+          "expression": "Разложите на множители: $a^{3}-64$",
+          "answer": "(a-4)(a^2+4a+16)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 267,
+          "expression": "Разложите на множители: $m^{3}-125$",
+          "answer": "(m-5)(m^2+5m+25)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 268,
+          "expression": "Разложите на множители: $t^{3}+27$",
+          "answer": "(t+3)(t^2-3t+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 269,
+          "expression": "Разложите на множители: $p^{3}-1$",
+          "answer": "(p-1)(p^2+p+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 270,
+          "expression": "Разложите на множители: $k^{3}-216$",
+          "answer": "(k-6)(k^2+6k+36)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 271,
+          "expression": "Разложите на множители: $y^{3}-27$",
+          "answer": "(y-3)(y^2+3y+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 272,
+          "expression": "Разложите на множители: $a^{3}+8$",
+          "answer": "(a+2)(a^2-2a+4)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 273,
+          "expression": "Разложите на множители: $c^{3}+125$",
+          "answer": "(c+5)(c^2-5c+25)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 274,
+          "expression": "Разложите на множители: $a^{3}-8$",
+          "answer": "(a-2)(a^2+2a+4)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 275,
+          "expression": "Разложите на множители: $c^{3}+1$",
+          "answer": "(c+1)(c^2-c+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 276,
+          "expression": "Разложите на множители: $27b^{3}+64$",
+          "answer": "(3b+4)(9b^2-12b+16)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 277,
+          "expression": "Разложите на множители: $8m^{3}-1$",
+          "answer": "(2m-1)(4m^2+2m+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 278,
+          "expression": "Разложите на множители: $64c^{3}-125$",
+          "answer": "(4c-5)(16c^2+20c+25)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 279,
+          "expression": "Разложите на множители: $8c^{3}+125$",
+          "answer": "(2c+5)(4c^2-10c+25)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 280,
+          "expression": "Разложите на множители: $64b^{3}-27$",
+          "answer": "(4b-3)(16b^2+12b+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 281,
+          "expression": "Разложите на множители: $8m^{3}+1$",
+          "answer": "(2m+1)(4m^2-2m+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 282,
+          "expression": "Разложите на множители: $8k^{3}-27$",
+          "answer": "(2k-3)(4k^2+6k+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 283,
+          "expression": "Разложите на множители: $4x^{2}-144$",
+          "answer": "4(x-6)(x+6)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 284,
+          "expression": "Разложите на множители: $6b^{2}-24$",
+          "answer": "6(b-2)(b+2)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 285,
+          "expression": "Разложите на множители: $7c^{2}-343$",
+          "answer": "7(c-7)(c+7)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 286,
+          "expression": "Разложите на множители: $3t^{2}-3$",
+          "answer": "3(t-1)(t+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 287,
+          "expression": "Разложите на множители: $2p^{2}-98$",
+          "answer": "2(p-7)(p+7)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 288,
+          "expression": "Разложите на множители: $4y^{2}-36$",
+          "answer": "4(y-3)(y+3)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 289,
+          "expression": "Разложите на множители: $2b^{2}-50$",
+          "answer": "2(b-5)(b+5)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 290,
+          "expression": "Разложите на множители: $7a^{2}-448$",
+          "answer": "7(a-8)(a+8)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 291,
+          "expression": "Разложите на множители: $5c^{2}-10c+5$",
+          "answer": "5(c-1)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 292,
+          "expression": "Разложите на множители: $3y^{2}+36y+108$",
+          "answer": "3(y+6)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 293,
+          "expression": "Разложите на множители: $5y^{2}+50y+125$",
+          "answer": "5(y+5)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 294,
+          "expression": "Разложите на множители: $5t^{2}-50t+125$",
+          "answer": "5(t-5)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 295,
+          "expression": "Разложите на множители: $4t^{2}-48t+144$",
+          "answer": "4(t-6)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 296,
+          "expression": "Разложите на множители: $5c^{2}-20c+20$",
+          "answer": "5(c-2)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 297,
+          "expression": "Разложите на множители: $4n^{2}+8n+4$",
+          "answer": "4(n+1)^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 298,
+          "expression": "Разложите на множители: $a^{4}-16$",
+          "answer": "(a-2)(a+2)(a^2+4)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 299,
+          "expression": "Разложите на множители: $x^{4}-81$",
+          "answer": "(x-3)(x+3)(x^2+9)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 300,
+          "expression": "Разложите на множители: $c^{4}-1$",
+          "answer": "(c-1)(c+1)(c^2+1)",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 301,
+          "expression": "Вычислите удобным способом: $89^{2}$",
+          "answer": "7921",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 302,
+          "expression": "Вычислите удобным способом: $38^{2}$",
+          "answer": "1444",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 303,
+          "expression": "Вычислите удобным способом: $52^{2}$",
+          "answer": "2704",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 304,
+          "expression": "Вычислите удобным способом: $39^{2}$",
+          "answer": "1521",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 305,
+          "expression": "Вычислите удобным способом: $72^{2}$",
+          "answer": "5184",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 306,
+          "expression": "Вычислите удобным способом: $202^{2}$",
+          "answer": "40804",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 307,
+          "expression": "Вычислите удобным способом: $48^{2}$",
+          "answer": "2304",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 308,
+          "expression": "Вычислите удобным способом: $82^{2}$",
+          "answer": "6724",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 309,
+          "expression": "Вычислите удобным способом: $42^{2}$",
+          "answer": "1764",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 310,
+          "expression": "Вычислите удобным способом: $18^{2}$",
+          "answer": "324",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 311,
+          "expression": "Вычислите удобным способом: $22^{2}$",
+          "answer": "484",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 312,
+          "expression": "Вычислите удобным способом: $98^{2}$",
+          "answer": "9604",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 313,
+          "expression": "Вычислите удобным способом: $29^{2}$",
+          "answer": "841",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 314,
+          "expression": "Вычислите удобным способом: $71^{2}$",
+          "answer": "5041",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 315,
+          "expression": "Вычислите удобным способом: $32^{2}$",
+          "answer": "1024",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 316,
+          "expression": "Вычислите удобным способом: $196\\cdot 204$",
+          "answer": "39984",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 317,
+          "expression": "Вычислите удобным способом: $199\\cdot 201$",
+          "answer": "39999",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 318,
+          "expression": "Вычислите удобным способом: $46\\cdot 54$",
+          "answer": "2484",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 319,
+          "expression": "Вычислите удобным способом: $37\\cdot 43$",
+          "answer": "1591",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 320,
+          "expression": "Вычислите удобным способом: $16\\cdot 24$",
+          "answer": "384",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 321,
+          "expression": "Вычислите удобным способом: $76\\cdot 84$",
+          "answer": "6384",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 322,
+          "expression": "Вычислите удобным способом: $26\\cdot 34$",
+          "answer": "884",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 323,
+          "expression": "Вычислите удобным способом: $19\\cdot 21$",
+          "answer": "399",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 324,
+          "expression": "Вычислите удобным способом: $69\\cdot 71$",
+          "answer": "4899",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 325,
+          "expression": "Вычислите удобным способом: $18\\cdot 22$",
+          "answer": "396",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 326,
+          "expression": "Вычислите удобным способом: $29\\cdot 31$",
+          "answer": "899",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 327,
+          "expression": "Вычислите удобным способом: $59\\cdot 61$",
+          "answer": "3599",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 328,
+          "expression": "Вычислите удобным способом: $91^{2}-61^{2}$",
+          "answer": "4560",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 329,
+          "expression": "Вычислите удобным способом: $64^{2}-54^{2}$",
+          "answer": "1180",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 330,
+          "expression": "Вычислите удобным способом: $78^{2}-68^{2}$",
+          "answer": "1460",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 331,
+          "expression": "Вычислите удобным способом: $36^{2}-26^{2}$",
+          "answer": "620",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 332,
+          "expression": "Вычислите удобным способом: $32^{2}-12^{2}$",
+          "answer": "880",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 333,
+          "expression": "Вычислите удобным способом: $79^{2}-49^{2}$",
+          "answer": "3840",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 334,
+          "expression": "Вычислите удобным способом: $74^{2}-54^{2}$",
+          "answer": "2560",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 335,
+          "expression": "Вычислите удобным способом: $74^{2}-64^{2}$",
+          "answer": "1380",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 336,
+          "expression": "Вычислите удобным способом: $49^{2}-19^{2}$",
+          "answer": "2040",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 337,
+          "expression": "Вычислите удобным способом: $68^{2}-32^{2}$",
+          "answer": "3600",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 338,
+          "expression": "Вычислите удобным способом: $69^{2}-39^{2}$",
+          "answer": "3240",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 339,
+          "expression": "Вычислите удобным способом: $99^{2}-69^{2}$",
+          "answer": "5040",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 340,
+          "expression": "Вычислите удобным способом: $90^{2}-70^{2}$",
+          "answer": "3200",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 341,
+          "expression": "Упростите выражение: $(p+8)^{2}+(p-8)^{2}$",
+          "answer": "2p^2+128",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 342,
+          "expression": "Упростите выражение: $(k+5)^{2}+(k-5)^{2}$",
+          "answer": "2k^2+50",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 343,
+          "expression": "Упростите выражение: $(x+3)^{2}-(x-3)^{2}$",
+          "answer": "12x",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 344,
+          "expression": "Упростите выражение: $(x+3)^{2}+(x-3)^{2}$",
+          "answer": "2x^2+18",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 345,
+          "expression": "Упростите выражение: $(t+9)^{2}-(t-9)^{2}$",
+          "answer": "36t",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 346,
+          "expression": "Упростите выражение: $(m+2)^{2}-(m-2)^{2}$",
+          "answer": "8m",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 347,
+          "expression": "Упростите выражение: $(c+1)^{2}+(c-1)^{2}$",
+          "answer": "2c^2+2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 348,
+          "expression": "Упростите выражение: $(p+4)^{2}-(p-4)^{2}$",
+          "answer": "16p",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 349,
+          "expression": "Упростите выражение: $(x+8)^{2}-(x-8)^{2}$",
+          "answer": "32x",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 350,
+          "expression": "Упростите выражение: $(t+2)^{2}+(t-2)^{2}$",
+          "answer": "2t^2+8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 351,
+          "expression": "Упростите выражение: $(b+4)^{2}+(b-4)^{2}$",
+          "answer": "2b^2+32",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 352,
+          "expression": "Упростите выражение: $(x+9)^{2}+(x-9)^{2}$",
+          "answer": "2x^2+162",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 353,
+          "expression": "Упростите выражение: $(p+6)^{2}+(p-6)^{2}$",
+          "answer": "2p^2+72",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 354,
+          "expression": "Упростите выражение: $(p+7)^{2}-(p-7)^{2}$",
+          "answer": "28p",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 355,
+          "expression": "Упростите выражение: $(y+7)^{2}+(y-7)^{2}$",
+          "answer": "2y^2+98",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 356,
+          "expression": "Упростите выражение: $(t+5)^{2}-(t-5)^{2}$",
+          "answer": "20t",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 357,
+          "expression": "Упростите выражение: $(m+1)^{2}-(m-1)^{2}$",
+          "answer": "4m",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 358,
+          "expression": "Упростите выражение: $(c+6)^{2}-(c-6)^{2}$",
+          "answer": "24c",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 359,
+          "expression": "Упростите выражение: $(b+1)^{2}-b(b+2)$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 360,
+          "expression": "Упростите выражение: $(p-6)(p+6)-p^{2}$",
+          "answer": "-36",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 361,
+          "expression": "Упростите выражение: $(p-7)(p+7)-p^{2}$",
+          "answer": "-49",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 362,
+          "expression": "Упростите выражение: $(x+3)^{2}-x(x+6)$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 363,
+          "expression": "Упростите выражение: $(b-1)(b+1)-b^{2}$",
+          "answer": "-1",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 364,
+          "expression": "Упростите выражение: $(c+2)^{2}-c(c+4)$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 365,
+          "expression": "Упростите выражение: $(p+6)^{2}-p(p+12)$",
+          "answer": "36",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 366,
+          "expression": "Упростите выражение: $(t-3)(t+3)-t^{2}$",
+          "answer": "-9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 367,
+          "expression": "Упростите выражение: $(x-5)(x+5)-x^{2}$",
+          "answer": "-25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 368,
+          "expression": "Упростите выражение: $(x+5)^{2}-x(x+10)$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 369,
+          "expression": "Упростите выражение: $(t-4)(t+4)-t^{2}$",
+          "answer": "-16",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 370,
+          "expression": "Упростите выражение: $(n+7)^{2}-n(n+14)$",
+          "answer": "49",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 371,
+          "expression": "Упростите выражение: $(x+9)^{2}-x(x+18)$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 372,
+          "expression": "Упростите выражение: $(a-9)(a+9)-a^{2}$",
+          "answer": "-81",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 373,
+          "expression": "Упростите выражение: $(b+4)^{2}-b(b+8)$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 374,
+          "expression": "Упростите выражение: $(p+8)^{2}-p(p+16)$",
+          "answer": "64",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 375,
+          "expression": "Упростите выражение: $(5t-1)^{2}-(5t+1)(5t-1)$",
+          "answer": "2-10t",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 376,
+          "expression": "Упростите выражение: $(5m-6)^{2}-(5m+6)(5m-6)$",
+          "answer": "72-60m",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 377,
+          "expression": "Упростите выражение: $(4m-1)^{2}-(4m+1)(4m-1)$",
+          "answer": "2-8m",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 378,
+          "expression": "Упростите выражение: $(2c-3)^{2}-(2c+3)(2c-3)$",
+          "answer": "18-12c",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 379,
+          "expression": "Упростите выражение: $(3b-5)^{2}-(3b+5)(3b-5)$",
+          "answer": "50-30b",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 380,
+          "expression": "Упростите выражение: $(3m-4)^{2}-(3m+4)(3m-4)$",
+          "answer": "32-24m",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 381,
+          "expression": "Упростите выражение: $(5n-4)^{2}-(5n+4)(5n-4)$",
+          "answer": "32-40n",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 382,
+          "expression": "Упростите выражение: $(3y-1)^{2}-(3y+1)(3y-1)$",
+          "answer": "2-6y",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 383,
+          "expression": "Упростите выражение: $(3a-2)^{2}-(3a+2)(3a-2)$",
+          "answer": "8-12a",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 384,
+          "expression": "Упростите выражение: $(4x-3)^{2}-(4x+3)(4x-3)$",
+          "answer": "18-24x",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 385,
+          "expression": "Упростите выражение: $(2n-1)^{2}-(2n+1)(2n-1)$",
+          "answer": "2-4n",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 386,
+          "expression": "Упростите выражение: $(5c-3)^{2}-(5c+3)(5c-3)$",
+          "answer": "18-30c",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 387,
+          "expression": "Упростите выражение: $(2a-5)^{2}-(2a+5)(2a-5)$",
+          "answer": "50-20a",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 388,
+          "expression": "Упростите выражение: $(4k-5)^{2}-(4k+5)(4k-5)$",
+          "answer": "50-40k",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 389,
+          "expression": "Упростите выражение: $(4x+3m)^{2}-(4x-3m)^{2}$",
+          "answer": "48xm",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 390,
+          "expression": "Упростите выражение: $(3k+4m)^{2}-(3k-4m)^{2}$",
+          "answer": "48km",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 391,
+          "expression": "Упростите выражение: $(4t+y)^{2}-(4t-y)^{2}$",
+          "answer": "16ty",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 392,
+          "expression": "Упростите выражение: $(y+2a)^{2}+(y-2a)^{2}$",
+          "answer": "2y^2+8a^2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 393,
+          "expression": "Упростите выражение: $(4a+3b)^{2}+(4a-3b)^{2}$",
+          "answer": "32a^2+18b^2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 394,
+          "expression": "Упростите выражение: $(2p+3k)^{2}-(2p-3k)^{2}$",
+          "answer": "24pk",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 395,
+          "expression": "Упростите выражение: $(3x+4b)^{2}+(3x-4b)^{2}$",
+          "answer": "18x^2+32b^2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 396,
+          "expression": "Упростите выражение: $(3x+n)^{2}-(3x-n)^{2}$",
+          "answer": "12xn",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 397,
+          "expression": "Упростите выражение: $(3m+2n)^{2}-(3m-2n)^{2}$",
+          "answer": "24mn",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 398,
+          "expression": "Упростите выражение: $(a+y)^{2}+(a-y)^{2}$",
+          "answer": "2a^2+2y^2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 399,
+          "expression": "Упростите выражение: $(x+4n)^{2}+(x-4n)^{2}$",
+          "answer": "2x^2+32n^2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 400,
+          "expression": "Упростите выражение: $(x+4y)^{2}-(x-4y)^{2}$",
+          "answer": "16xy",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        }
+      ]
+    }
+  ]
+}

@@ -17,16 +17,16 @@ class EgeResultsPageTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function attempt(User $student, string $status): OgeAttempt
+    private function attempt(User $student, string $status, string $level = 'prof'): OgeAttempt
     {
         $variant = OgeVariant::create([
-            'hash' => 'ege' . substr(md5($status), 0, 3),
+            'hash' => 'ege' . substr(md5($status . $level), 0, 3),
             'exam_type' => 'ege',
-            'level' => 'prof',
-            'title' => 'Вариант ЕГЭ (П)',
+            'level' => $level,
+            'title' => 'Вариант ЕГЭ',
             'source' => OgeVariant::SOURCE_MINIAPP,
             'mode' => OgeVariant::MODE_FULL,
-            'config_json' => ['level' => 'prof', 'tasks' => [['task_number' => 1, 'topic_id' => '01']]],
+            'config_json' => ['level' => $level, 'tasks' => [['task_number' => 1, 'topic_id' => '01']]],
         ]);
 
         return OgeAttempt::create([
@@ -67,5 +67,16 @@ class EgeResultsPageTest extends TestCase
         $this->actingAs($student)
             ->get('https://student.' . config('app.base_domain') . "/ege-app/results/{$attempt->id}")
             ->assertNotFound();
+    }
+
+    public function test_variant_header_names_its_level(): void
+    {
+        $student = User::factory()->create(['role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now()]);
+        $host = 'https://student.' . config('app.base_domain');
+
+        $this->actingAs($student)->get($host . '/ege-app/test/' . $this->attempt($student, 'active', 'base')->id)
+            ->assertOk()->assertSee('ЕГЭ (Б)')->assertDontSee('ЕГЭ (П)');
+        $this->actingAs($student)->get($host . '/ege-app/test/' . $this->attempt($student, 'active', 'prof')->id)
+            ->assertOk()->assertSee('ЕГЭ (П)');
     }
 }
