@@ -677,7 +677,7 @@
     <button class="test-back-btn" @click="confirmExit()">&#8249;</button>
     <div class="test-topbar-center">
       <div class="test-variant-title">{{ $title }}</div>
-      <div class="test-variant-sub">ЕГЭ (П) &middot; Математика &middot; 2026</div>
+      <div class="test-variant-sub">ЕГЭ ({{ ($attempt->variant->level ?? $attempt->variant->config_json['level'] ?? 'prof') === 'base' ? 'Б' : 'П' }}) &middot; Математика &middot; 2026</div>
     </div>
     <div class="test-timer" :class="{ warn: elapsed >= 3600 }" x-text="timerText"></div>
   </div>

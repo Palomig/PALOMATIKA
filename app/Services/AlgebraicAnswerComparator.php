@@ -93,6 +93,11 @@ class AlgebraicAnswerComparator
         if ($refVars !== $this->variables($usr)) {
             return false;
         }
+        // Значение то же, а записано не в том виде, о котором спрашивали:
+        // переписанное условие вместо раскрытых скобок и наоборот.
+        if (!$this->formMatches($ref, $usr)) {
+            return false;
+        }
 
         $matched = 0;
         for ($attempt = 0; $attempt < self::ATTEMPTS; $attempt++) {
@@ -111,6 +116,108 @@ class AlgebraicAnswerComparator
         }
 
         return $matched >= self::REQUIRED_POINTS ? true : null;
+    }
+
+    /**
+     * Форма ответа берётся из записи эталона — больше до проверки ничего не доходит.
+     *
+     *  - эталон без скобок («x^2+6x+9», «12x», «x-3»): скобок нет и у ученика,
+     *    а слагаемых столько же — иначе засчитался бы ответ без раскрытых скобок
+     *    или без приведения подобных («(x+3)^2», «x^2+3x+3x+9»);
+     *  - эталон-произведение («(x-3)(x+3)», «3(a+1)^2»): у ученика тоже
+     *    произведение, и скобочных множителей не меньше — «x^2-9» или
+     *    «3(x^2-4)» за разложение на множители не считаются.
+     *
+     * Дроби («2x/3y», «(a+5)/(a-5)») не трогаем: там равны любые записи.
+     */
+    private function formMatches(string $ref, string $usr): bool
+    {
+        $ref = $this->collapseExponents($ref);
+        $usr = $this->collapseExponents($usr);
+        if (str_contains($ref, '/')) {
+            return true;
+        }
+
+        if (!str_contains($ref, '(')) {
+            return !str_contains($usr, '(') && $this->termCount($usr) === $this->termCount($ref);
+        }
+
+        if ($this->termCount($ref) === 1) {
+            $usr = $this->stripOuterParens($usr);
+            return $this->termCount($usr) === 1 && $this->bracketFactors($usr) >= $this->bracketFactors($ref);
+        }
+
+        return true;
+    }
+
+    /** «x^(2)» из «x^{2}» — показатель, а не скобочный множитель. */
+    private function collapseExponents(string $s): string
+    {
+        return preg_replace('/\^\((\d+)\)/', '^$1', $s) ?? $s;
+    }
+
+    /** Слагаемых на верхнем уровне: знак в начале, в показателе или после «*» не считаем. */
+    private function termCount(string $s): int
+    {
+        $terms = 1;
+        $depth = 0;
+        for ($i = 0, $n = strlen($s); $i < $n; $i++) {
+            $ch = $s[$i];
+            if ($ch === '(') {
+                $depth++;
+            } elseif ($ch === ')') {
+                $depth--;
+            } elseif (($ch === '+' || $ch === '-') && $depth === 0 && $i > 0
+                && !in_array($s[$i - 1], ['^', '*', '/', '(', '+', '-'], true)) {
+                $terms++;
+            }
+        }
+
+        return $terms;
+    }
+
+    /** Скобочных множителей верхнего уровня; «(a+1)^2» — это два. */
+    private function bracketFactors(string $s): int
+    {
+        $count = 0;
+        $depth = 0;
+        for ($i = 0, $n = strlen($s); $i < $n; $i++) {
+            if ($s[$i] === '(') {
+                $depth++;
+            } elseif ($s[$i] === ')') {
+                $depth--;
+                if ($depth === 0) {
+                    $power = preg_match('/^\^(\d+)/', substr($s, $i + 1), $m) ? (int) $m[1] : 1;
+                    $count += max(1, $power);
+                }
+            }
+        }
+
+        return $count;
+    }
+
+    /** «((x-3)(x+3))» → «(x-3)(x+3)»: лишняя внешняя пара скобок формы не меняет. */
+    private function stripOuterParens(string $s): string
+    {
+        while (strlen($s) > 1 && $s[0] === '(' && $this->closingParen($s, 0) === strlen($s) - 1) {
+            $s = substr($s, 1, -1);
+        }
+
+        return $s;
+    }
+
+    private function closingParen(string $s, int $open): ?int
+    {
+        $depth = 0;
+        for ($i = $open, $n = strlen($s); $i < $n; $i++) {
+            if ($s[$i] === '(') {
+                $depth++;
+            } elseif ($s[$i] === ')' && --$depth === 0) {
+                return $i;
+            }
+        }
+
+        return null;
     }
 
     private function applyHomoglyphs(string $s): string
