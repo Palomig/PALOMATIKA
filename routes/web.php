@@ -377,7 +377,7 @@ Route::prefix('api/oge')->middleware(['auth', 'role:teacher,admin'])->group(func
     Route::get('/attempts/{attempt}/telegram-summary', [OgeAttemptController::class, 'telegramSummary'])->name('api.oge.attempt.telegram-summary');
 });
 
-Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(function () {
+Route::prefix('api/oge')->middleware(['auth', 'role:student,teacher,admin'])->group(function () {
     Route::post('/variants/{hash}/attempt/start', [OgeAttemptController::class, 'start'])->name('api.oge.attempt.start');
     Route::get('/attempts/{attempt}/status', [OgeAttemptController::class, 'status'])->name('api.oge.attempt.status');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/focus', [OgeAttemptController::class, 'focus'])->name('api.oge.attempt.focus');
