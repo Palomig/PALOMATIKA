@@ -244,14 +244,20 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('pwa.student.dashboard');
     })->name('view-as.student.vpr-grade');
 
+    // Старая главная первой версии (view('dashboard')) больше не показывается:
+    // сюда ведут все входы на основном домене (Telegram, Яндекс, Google, HOME),
+    // поэтому отправляем в кабинет по роли.
     Route::get('/dashboard', function () {
         $user = auth()->user();
-        $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;
-        if ($viewAsRole === 'teacher') {
-            return redirect()->to('/teacher');
+        $base = config('app.base_domain');
+
+        if ($user->role === 'parent') {
+            return redirect()->route('parent.dashboard');
         }
 
-        return view('dashboard');
+        return redirect()->away(in_array($user->role, ['teacher', 'admin'], true)
+            ? 'https://teacher.' . $base . '/dashboard'
+            : 'https://student.' . $base . '/');
     })->name('dashboard');
 
     // Teacher utility pages (audit, materials, OGE review)
