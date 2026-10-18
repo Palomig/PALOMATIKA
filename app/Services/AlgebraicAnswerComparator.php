@@ -126,16 +126,22 @@ class AlgebraicAnswerComparator
      *    или без приведения подобных («(x+3)^2», «x^2+3x+3x+9»);
      *  - эталон-произведение («(x-3)(x+3)», «3(a+1)^2»): у ученика тоже
      *    произведение, и скобочных множителей не меньше — «x^2-9» или
-     *    «3(x^2-4)» за разложение на множители не считаются.
-     *
-     * Дроби («2x/3y», «(a+5)/(a-5)») не трогаем: там равны любые записи.
+     *    «3(x^2-4)» за разложение на множители не считаются;
+     *  - эталон-дробь («2x/3y», «(a+5)/(a-5)»): у ученика тоже одна дробь, и
+     *    сокращённая до конца (см. {@see fractionReduced()});
+     *  - эталон без дроби: у ученика дроби нет — «12q/4» за «3q» не ответ.
      */
     private function formMatches(string $ref, string $usr): bool
     {
         $ref = $this->collapseExponents($ref);
         $usr = $this->collapseExponents($usr);
         if (str_contains($ref, '/')) {
-            return true;
+            return $this->fractionReduced($ref, $usr);
+        }
+        // «6c» над «1» в поле дроби — это просто «6c».
+        $usr = preg_replace('/\/\(?1\)?$/', '', $usr) ?? $usr;
+        if (str_contains($usr, '/')) {
+            return false;
         }
 
         if (!str_contains($ref, '(')) {
@@ -148,6 +154,81 @@ class AlgebraicAnswerComparator
         }
 
         return true;
+    }
+
+    /**
+     * Дробь ученика сокращена до конца. Эталон несократим, поэтому любая
+     * равная ему дробь — это эталон, у которого числитель и знаменатель
+     * умножены на один и тот же множитель. Делим числитель ученика на
+     * числитель эталона: допустим только ±1 — знак можно перенести
+     * («11p/-9n^3» за «-11p/(9n^3)»), а «4z/12p» за «z/(3p)» даёт 4.
+     */
+    private function fractionReduced(string $ref, string $usr): bool
+    {
+        $refParts = $this->fractionParts($ref);
+        if ($refParts === null) {
+            return true;    // эталон не простая дробь — форму не проверяем
+        }
+        $usrParts = $this->fractionParts($usr);
+        if ($usrParts === null) {
+            return false;   // сумма дробей, дробь дробей и прочее — не сокращённая дробь
+        }
+
+        $vars = $this->variables($ref);
+        $ratio = null;
+        for ($attempt = 0; $attempt < self::ATTEMPTS; $attempt++) {
+            $point = $this->point($vars, $attempt);
+            $a = $this->evaluate($refParts[0], $point);
+            $b = $this->evaluate($usrParts[0], $point);
+            if ($a === null || $b === null || abs($a) < 1e-9) {
+                continue;
+            }
+            $r = $b / $a;
+            if (abs(abs($r) - 1.0) > 1e-7 || ($ratio !== null && abs($r - $ratio) > 1e-7)) {
+                return false;
+            }
+            $ratio = $r;
+        }
+
+        return true;
+    }
+
+    /**
+     * Числитель и знаменатель единственной дроби: «-11p/(9n^3)» → «-11p», «(9n^3)».
+     * null — если запись не одна дробь: сумма, вторая черта или «*» после черты
+     * («2/3*x» по правилам разборщика — (2/3)·x, а не 2/(3x)).
+     *
+     * @return array{0: string, 1: string}|null
+     */
+    private function fractionParts(string $s): ?array
+    {
+        $s = $this->stripOuterParens($s);
+        if ($this->termCount($s) !== 1) {
+            return null;
+        }
+
+        $slash = null;
+        $depth = 0;
+        for ($i = 0, $n = strlen($s); $i < $n; $i++) {
+            $ch = $s[$i];
+            if ($ch === '(') {
+                $depth++;
+            } elseif ($ch === ')') {
+                $depth--;
+            } elseif ($depth === 0 && $ch === '/') {
+                if ($slash !== null) {
+                    return null;
+                }
+                $slash = $i;
+            } elseif ($depth === 0 && $ch === '*' && $slash !== null) {
+                return null;
+            }
+        }
+        if ($slash === null || $slash === 0 || $slash === strlen($s) - 1) {
+            return null;
+        }
+
+        return [substr($s, 0, $slash), substr($s, $slash + 1)];
     }
 
     /** «x^(2)» из «x^{2}» — показатель, а не скобочный множитель. */
@@ -366,7 +447,14 @@ class AlgebraicAnswerComparator
         $value = $sign * $this->juxt();
         while ($this->pos < strlen($this->src) && ($this->src[$this->pos] === '*' || $this->src[$this->pos] === '/')) {
             $op = $this->src[$this->pos++];
-            $rhs = $this->juxt();
+            // Знак сразу после черты: поле дроби отдаёт «11p/-9n^3» без скобок.
+            $rhsSign = 1.0;
+            while ($this->pos < strlen($this->src) && ($this->src[$this->pos] === '-' || $this->src[$this->pos] === '+')) {
+                if ($this->src[$this->pos++] === '-') {
+                    $rhsSign = -$rhsSign;
+                }
+            }
+            $rhs = $rhsSign * $this->juxt();
             if ($op === '/') {
                 if (abs($rhs) < 1e-9) {
                     throw new \DomainException('division by zero');

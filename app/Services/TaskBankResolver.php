@@ -395,9 +395,11 @@ class TaskBankResolver
      * Какое поле ответа нужно серии: смешанная дробь, дробь или обычное.
      *
      * Дробь — только если вся серия из целых и дробей (хоть одна дробь);
-     * смешанная — если есть ответ вида «2 7/11». Буквенная дробь — серия из
-     * целых, дробей и буквенных выражений, где хоть одно — дробь
-     * («Сократите дробь»). Десятичные, множества, корни — обычное поле.
+     * смешанная — если есть ответ вида «2 7/11» или неправильная дробь
+     * («7/3» можно записать как «2 1/3», и полю нужна целая часть). Буквенная
+     * дробь — серия из целых, дробей и буквенных выражений, где хоть одно —
+     * дробь («Сократите дробь»); целая часть у неё тоже по неправильным дробям.
+     * Десятичные, множества, корни — обычное поле.
      *
      * @param  list<string>  $answers
      * @return array{0:string,1:bool,2:bool} [field, letters, signed]
@@ -416,6 +418,8 @@ class TaskBankResolver
                 $mixed = true;
             } elseif (preg_match(self::RE_FRACTION, $a)) {
                 $fraction = true;
+                [$num, $den] = explode('/', ltrim($a, '-'));
+                $mixed = $mixed || (int) $num > (int) $den;
             } elseif (preg_match(self::RE_INT, $a)) {
                 // целые подходят любому полю
             } elseif (!preg_match(self::RE_NOT_FRACTION, $a) && $algebra->looksAlgebraic($a)) {
@@ -425,8 +429,8 @@ class TaskBankResolver
                 return ['text', false, false];
             }
         }
-        if ($mixed && !$letters) {
-            return ['mixed', false, $signed];
+        if ($mixed) {
+            return ['mixed', $letters, $signed];
         }
         if ($fraction) {
             return ['fraction', $letters, $signed];
