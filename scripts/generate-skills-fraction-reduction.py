@@ -292,7 +292,11 @@ def l2_factor_out_num(rng):
     num = f'{mono(a, [(u, 1)], True)}{sign}{mono(b, [(v, 1)], True)}'
     den = mono(c, [(u, 1), (v, 1)], True)
     g2 = gcd(gcd(a, b), c)
-    ans_num = f'({mono(a // g2, [(u, 1)], False)}{sign}{mono(b // g2, [(v, 1)], False)})'
+    # «(2p-2q)/(5pq)» — множитель числителя, не сократившийся со знаменателем, выносим: 2(p-q)/(5pq)
+    h = gcd(a // g2, b // g2)
+    ans_num = f'({mono(a // g2 // h, [(u, 1)], False)}{sign}{mono(b // g2 // h, [(v, 1)], False)})'
+    if h > 1:
+        ans_num = f'{h}{ans_num}'
     ans_den = mono(c // g2, [(u, 1), (v, 1)], False)
     return {'tex': rf'\dfrac{{{num}}}{{{den}}}',
             'check': f'({mono(a, [(u, 1)], False)}{sign}{mono(b, [(v, 1)], False)})/({den})',
@@ -309,7 +313,10 @@ def l2_factor_out_den(rng):
     g2 = gcd(gcd(a, b), c)
     if g2 == 1:
         return None
-    ans_num = f'({mono(a // g2, [(u, 1)], False)}{sign}{mono(b // g2, [(v, 1)], False)})'
+    h = gcd(a // g2, b // g2)
+    ans_num = f'({mono(a // g2 // h, [(u, 1)], False)}{sign}{mono(b // g2 // h, [(v, 1)], False)})'
+    if h > 1:
+        ans_num = f'{h}{ans_num}'
     ans_den = mono(c // g2, [(u, 1)], False)
     return {'tex': rf'\dfrac{{{mono(a, [(u, 1)], True)}{sign}{mono(b, [(v, 1)], True)}}}{{{mono(c, [(u, 1)], True)}}}',
             'check': f'({mono(a, [(u, 1)], False)}{sign}{mono(b, [(v, 1)], False)})/({mono(c, [(u, 1)], False)})',
