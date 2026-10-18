@@ -20,6 +20,13 @@ class TaskAnswerFieldTest extends TestCase
         $this->assertSame(['mixed', false, false], TaskBankResolver::answerField(['2 7/11', '3/4', '5']));
     }
 
+    /** «7/3» записывают и как «2 1/3» — полю нужна целая часть. */
+    public function test_improper_fractions_get_mixed_field(): void
+    {
+        $this->assertSame(['mixed', false, false], TaskBankResolver::answerField(['2/3', '7/3', '1']));
+        $this->assertSame(['mixed', true, false], TaskBankResolver::answerField(['5/11', '7/3', '3q/d', '6c']));
+    }
+
     public function test_reducing_algebraic_fractions_gets_letters(): void
     {
         $this->assertSame(['fraction', true, true],

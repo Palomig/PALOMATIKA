@@ -152,6 +152,8 @@ class TaskAnswerResolver
             if (preg_match('/^\d{1,3}(?: \d{3})+$/', $trimmedRaw)) {
                 $trimmedRaw = str_replace(' ', '', $trimmedRaw);
             }
+            // Поле дроби: «5» над «1» — это просто «5».
+            $trimmedRaw = preg_replace('/^(\d+)\s*\/\s*1$/', '$1', $trimmedRaw) ?? $trimmedRaw;
             if (preg_match('/^\d+$/', $trimmedRaw)) {
                 return ltrim($trimmedRaw, '0') === ltrim($correct, '0');
             }
@@ -163,7 +165,8 @@ class TaskAnswerResolver
         if ($correctFrac !== null) {
             $userFrac = $this->parseFractionValue($userRaw);
             if ($userFrac !== null) {
-                return abs($correctFrac - $userFrac) < 1e-9;
+                // «14/6» за «7/3» не ответ: дробь в ответе сокращают до конца.
+                return $this->isReducedFraction($userRaw) && abs($correctFrac - $userFrac) < 1e-9;
             }
         }
 
@@ -763,6 +766,43 @@ class TaskAnswerResolver
         return max(0, $end - $start + 1);
     }
 
+    /** «(-2)/(3)» → «-2/3»: скобки вокруг чисел от поля дроби, пробелы у черты. */
+    private function fractionText(string $value): string
+    {
+        $value = trim(mb_strtolower($value));
+        $value = str_replace(['−', '–', ','], ['-', '-', '.'], $value);
+        $value = preg_replace('/\s+/', ' ', $value) ?? $value;
+        $value = preg_replace('/\((-?\d+)\)/', '$1', $value) ?? $value;
+
+        return preg_replace('/\s*\/\s*/', '/', $value) ?? $value;
+    }
+
+    /**
+     * Дробь в ответе записана несократимой, а у смешанного числа дробная
+     * часть правильная. Не дробь (целое, десятичная) — проверять нечего.
+     */
+    private function isReducedFraction(string $value): bool
+    {
+        $value = $this->fractionText($value);
+        if (preg_match('/^-?\d+ (\d+)\/(\d+)$/', $value, $m)) {
+            return (int) $m[1] < (int) $m[2] && $this->gcd((int) $m[1], (int) $m[2]) === 1;
+        }
+        if (preg_match('/^-?(\d+)\/-?(\d+)$/', $value, $m)) {
+            return $this->gcd((int) $m[1], (int) $m[2]) === 1;
+        }
+
+        return true;
+    }
+
+    private function gcd(int $a, int $b): int
+    {
+        while ($b !== 0) {
+            [$a, $b] = [$b, $a % $b];
+        }
+
+        return abs($a);
+    }
+
     /**
      * Parse a string containing coordinate pairs like "(1; -3); (5/2; 0)" or "(2.5;0)(1;-3)".
      * Returns a sorted array of [x, y] string pairs, or null if parsing fails.
@@ -776,9 +816,7 @@ class TaskAnswerResolver
      */
     private function parseFractionValue(string $value): ?float
     {
-        $value = trim(mb_strtolower($value));
-        $value = str_replace(['−', '–', ','], ['-', '-', '.'], $value);
-        $value = preg_replace('/\s+/', ' ', $value) ?? $value;
+        $value = $this->fractionText($value);
 
         // Mixed number: "1 5/7" or "-1 5/7"
         if (preg_match('/^(-?\d+)\s+(\d+)\/(\d+)$/', $value, $m)) {
@@ -790,8 +828,8 @@ class TaskAnswerResolver
             return $whole + $sign * ($num / $den);
         }
 
-        // Improper fraction: "12/7" or "-12/7"
-        if (preg_match('/^(-?\d+)\/(\d+)$/', $value, $m)) {
+        // Improper fraction: "12/7", "-12/7", "12/-7"
+        if (preg_match('/^(-?\d+)\/(-?\d+)$/', $value, $m)) {
             $num = (int) $m[1];
             $den = (int) $m[2];
             if ($den === 0) return null;

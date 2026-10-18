@@ -283,7 +283,7 @@ def l2_var_coefficient(rng):
     power = rng.choice([3, 5])
     a = rng.choice([x for x in range(2, 15) if square_free(x)])
     out = a ** (power // 2)
-    return {'tex': f'${root(f"{v}^{power}")}${subs_clause([(v, a)], tex=True)}',
+    return {'tex': f'${root(f"{v}^{{{power}}}")}${subs_clause([(v, a)], tex=True)}',
             'check': f'sqrt({a}**{power})', 'answer': radical(out, a, tex=False), 'rank': (9, a * power)}
 
 
@@ -296,7 +296,7 @@ def l2_var_quotient(rng):
     value = a ** ((high - low) // 2)
     if value > 5000:
         return None
-    return {'tex': rf'$\dfrac{{{root(f"{v}^{high}")}}}{{{root(f"{v}^{low}")}}}${subs_clause([(v, a)], tex=True)}',
+    return {'tex': rf'$\dfrac{{{root(f"{v}^{{{high}}}")}}}{{{root(f"{v}^{{{low}}}")}}}${subs_clause([(v, a)], tex=True)}',
             'check': f'sqrt({a}**{high})/sqrt({a}**{low})', 'answer': str(value), 'rank': (10, high * 10)}
 
 
@@ -571,8 +571,8 @@ def p1_root_of_fraction(rng):
     """⁴√(16/81) — корень из дроби: отдельно числитель, отдельно знаменатель."""
     n = rng.choice([3, 4, 5])
     a, b = rng.choice([2, 3, 4]), rng.choice([2, 3, 5])
-    if a == b:
-        return None
+    if gcd(a, b) != 1:
+        return None     # «4/2» — несокращённый ответ, а не дробь
     inner = rf'\dfrac{{{a ** n}}}{{{b ** n}}}'
     return {'tex': f'${nth_root(n, inner)}$',
             'check': f'real_root(Rational({a ** n},{b ** n}),{n})',

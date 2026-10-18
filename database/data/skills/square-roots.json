@@ -1546,7 +1546,7 @@
         },
         {
           "id": 191,
-          "expression": "$\\dfrac{\\sqrt{y^11}}{\\sqrt{y^9}}$ при $y=6$",
+          "expression": "$\\dfrac{\\sqrt{y^{11}}}{\\sqrt{y^9}}$ при $y=6$",
           "answer": "6",
           "status": "production",
           "subtype": 1,
@@ -3529,8 +3529,8 @@
         },
         {
           "id": 37,
-          "expression": "$\\sqrt[5]{\\dfrac{1024}{32}}$",
-          "answer": "4/2",
+          "expression": "$\\sqrt[5]{\\dfrac{32}{243}}$",
+          "answer": "2/3",
           "status": "production",
           "subtype": 0,
           "level": 1

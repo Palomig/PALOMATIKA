@@ -970,7 +970,7 @@
         {
           "id": 119,
           "expression": "$\\dfrac{6p-6q}{15pq}$",
-          "answer": "(2p-2q)/(5pq)",
+          "answer": "2(p-q)/(5pq)",
           "status": "production",
           "subtype": 1,
           "level": 2
@@ -1002,7 +1002,7 @@
         {
           "id": 123,
           "expression": "$\\dfrac{10m+30c}{5cm}$",
-          "answer": "(2m+6c)/(cm)",
+          "answer": "2(m+3c)/(cm)",
           "status": "production",
           "subtype": 1,
           "level": 2
@@ -1010,7 +1010,7 @@
         {
           "id": 124,
           "expression": "$\\dfrac{10q+10x}{2q}$",
-          "answer": "(5q+5x)/q",
+          "answer": "5(q+x)/q",
           "status": "production",
           "subtype": 1,
           "level": 2
@@ -1058,7 +1058,7 @@
         {
           "id": 130,
           "expression": "$\\dfrac{25b+25z}{20b}$",
-          "answer": "(5b+5z)/(4b)",
+          "answer": "5(b+z)/(4b)",
           "status": "production",
           "subtype": 1,
           "level": 2
