@@ -2,5 +2,56 @@
     "topic_id": "18",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Решите задачу",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "В прямоугольной трапеции $ABCD$ с основаниями $AD$ и $BC$ диагональ $BD$ равна 22, а угол $A$ равен $45^\\circ$. Найдите бо́льшую боковую сторону, если меньшее основание трапеции равно $11\\sqrt{3}$.",
+                            "manual": true,
+                            "answer_display": "$11\\sqrt{2}$",
+                            "solution": "Угол $A$ острый, значит прямая боковая сторона — $CD$, а бо́льшая — $AB$.\nИз треугольника $BCD$: $CD=\\sqrt{22^2-(11\\sqrt3)^2}=\\sqrt{484-363}=11$.\nВысота $BH=CD=11$, треугольник $ABH$ прямоугольный и равнобедренный, $AB=11\\sqrt2$.",
+                            "max_points": 2,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Решите задачу",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "В прямоугольном треугольнике $ABC$ с гипотенузой $AB$ провели высоту $CD$ и биссектрису $CL$. Найдите угол $DCL$, если угол $CAB$ равен $25^\\circ$. Запишите решение и ответ.",
+                            "manual": true,
+                            "answer_display": "$20^\\circ$",
+                            "solution": "В треугольнике $CDB$: $\\angle DCB=90^\\circ-\\angle B=\\angle A=25^\\circ$.\n$CL$ — биссектриса прямого угла: $\\angle LCB=45^\\circ$.\n$\\angle DCL=\\angle LCB-\\angle DCB=45^\\circ-25^\\circ=20^\\circ$.",
+                            "max_points": 2,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

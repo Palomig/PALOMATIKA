@@ -75,9 +75,11 @@ class VprVariantBuilderService
                 'instruction'    => $item['instruction'],
                 'block_number'   => $item['block_number'],
                 'zadanie_number' => $item['zadanie_number'],
-                'correct_answer' => is_array($item['task']['answer'] ?? null)
+                // Задание с развёрнутым решением (ВПР 8, №13–18) проверяется
+                // вручную: без эталона оно не попадает в автопроверку.
+                'correct_answer' => !empty($item['task']['manual']) ? null : (is_array($item['task']['answer'] ?? null)
                     ? implode('; ', $item['task']['answer'])
-                    : ($item['task']['answer'] ?? null),
+                    : ($item['task']['answer'] ?? null)),
             ]);
         }
 

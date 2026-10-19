@@ -287,7 +287,7 @@ class VprController extends Controller
                         'image'      => $t['image'] ?? null,
                         'options'    => $t['options'] ?? null,
                         'question'   => $question !== '' ? $question : null,
-                        'answer'     => $t['answer'] ?? null,
+                        'answer'     => $t['answer'] ?? $t['answer_display'] ?? null,
                     ];
                 }
                 if (!empty($tasks)) {

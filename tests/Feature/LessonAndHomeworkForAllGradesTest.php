@@ -144,14 +144,12 @@ class LessonAndHomeworkForAllGradesTest extends TestCase
             ->getContent();
 
         // Список классов уезжает в страницу как JSON, поэтому кириллица в \uXXXX.
-        foreach (['5 \u043a\u043b\u0430\u0441\u0441', '6 \u043a\u043b\u0430\u0441\u0441', '7 \u043a\u043b\u0430\u0441\u0441', '9 \u041e\u0413\u042d'] as $label) {
+        foreach (['5 \u043a\u043b\u0430\u0441\u0441', '6 \u043a\u043b\u0430\u0441\u0441', '7 \u043a\u043b\u0430\u0441\u0441', '8 \u043a\u043b\u0430\u0441\u0441', '9 \u041e\u0413\u042d'] as $label) {
             $this->assertStringContainsString($label, $html, "В picker'е нет класса «{$label}»");
         }
         // Банки ВПР и ЕГЭ доехали до интерфейса.
         $this->assertStringContainsString('"bank":"vpr"', $html);
         $this->assertStringContainsString('"bank":"ege"', $html);
-        // 8 класс не предлагаем: в его банках нет ни одной задачи.
-        $this->assertStringNotContainsString('"label":"8 \u043a\u043b\u0430\u0441\u0441"', $html);
     }
 
     /** Бэкенд picker'а должен отдавать темы для каждого банка. */
@@ -185,9 +183,13 @@ class LessonAndHomeworkForAllGradesTest extends TestCase
         $this->assertNotEmpty($picker->tasks('ege', ['topic_id' => $picker->topics('ege')[0]['id']]));
         $this->assertNotEmpty($picker->skills(7), 'Навыки 7 класса пусты');
 
-        // Классы приходят из данных: 5, 6, 7, 9 ОГЭ и ЕГЭ есть, пустого 8-го нет.
+        // ВПР 8: в урок идут только задачи с эталоном (№13–18 проверяются вручную).
+        $this->assertNotEmpty($picker->tasks('vpr', ['grade' => 8, 'topic_id' => '01']));
+        $this->assertSame([], $picker->tasks('vpr', ['grade' => 8, 'topic_id' => '13']));
+
+        // Классы приходят из данных.
         $labels = array_column($picker->availableClasses(), 'label');
-        $this->assertSame(['5 класс', '6 класс', '7 класс', '9 ОГЭ', '10–11 ЕГЭ (П)'], $labels);
+        $this->assertSame(['5 класс', '6 класс', '7 класс', '8 класс', '9 ОГЭ', '10–11 ЕГЭ (П)'], $labels);
     }
 
     public function test_senior_student_gets_ege_variant_not_oge(): void

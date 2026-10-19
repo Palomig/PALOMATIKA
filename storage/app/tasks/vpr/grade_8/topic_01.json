@@ -2,5 +2,64 @@
     "topic_id": "01",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "Найдите значение выражения $\\dfrac{13}{5}\\cdot\\dfrac{7}{8}-\\dfrac{11}{40}$.",
+                            "answer": "2",
+                            "solution": "$\\dfrac{13}{5}\\cdot\\dfrac{7}{8}=\\dfrac{91}{40}$, затем $\\dfrac{91}{40}-\\dfrac{11}{40}=\\dfrac{80}{40}=2$.",
+                            "max_points": 1,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "Найдите значение выражения $3:\\left(\\dfrac{6}{7}-\\dfrac{3}{4}\\right)$.",
+                            "answer": "28",
+                            "solution": "$\\dfrac{6}{7}-\\dfrac{3}{4}=\\dfrac{24-21}{28}=\\dfrac{3}{28}$, $3:\\dfrac{3}{28}=28$.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        },
+                        {
+                            "id": 3,
+                            "text": "Найдите значение выражения $4{,}5\\cdot5{,}4-6{,}1$.",
+                            "answer": "18,2",
+                            "solution": "$4{,}5\\cdot5{,}4=24{,}3$, $24{,}3-6{,}1=18{,}2$.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

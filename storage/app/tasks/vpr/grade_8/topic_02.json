@@ -2,5 +2,54 @@
     "topic_id": "02",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Решите уравнение",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "Решите уравнение $x^2+5x+6=0$.\nЕсли корней несколько, запишите их в ответ без пробелов в порядке возрастания.",
+                            "answer": "-3-2",
+                            "solution": "По теореме Виета сумма корней равна $-5$, произведение $6$: корни $-3$ и $-2$. В порядке возрастания: $-3-2$.",
+                            "max_points": 1,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Решите уравнение",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "Решите уравнение $(5x-2)(3-x)=0$.\nЕсли корней несколько, запишите их в ответ без пробелов в порядке возрастания.",
+                            "answer": "0,43",
+                            "solution": "Произведение равно нулю, когда один из множителей равен нулю: $5x-2=0$, $x=0{,}4$, или $3-x=0$, $x=3$. В порядке возрастания: $0{,}43$.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

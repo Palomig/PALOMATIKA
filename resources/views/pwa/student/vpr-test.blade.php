@@ -372,6 +372,15 @@
     letter-spacing: 0;
     font-weight: 600;
   }
+  .answer-manual {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
   .answer-hint {
     font-size: 11px;
     color: var(--muted);
@@ -1049,7 +1058,12 @@
             </div>
           </template>
 
-          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && !isTwoAnswerTask(currentTask) && !isTaskTenMatrix(currentTask)">
+          {{-- Развёрнутое решение (ВПР 8, №13–18) — в тетради, без автопроверки --}}
+          <template x-if="currentTask.manual">
+            <div class="answer-manual">✍️ Реши в тетради и запиши решение — это задание проверяется вручную. Ответ и решение будут в результатах.</div>
+          </template>
+
+          <template x-if="!currentTask.manual && normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && !isTwoAnswerTask(currentTask) && !isTaskTenMatrix(currentTask)">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
@@ -1110,13 +1124,13 @@
       <div class="test-modal-handle"></div>
       <div class="test-modal-title">Завершить тест?</div>
       <div class="test-modal-sub">
-        <template x-if="answeredCount < total">
+        <template x-if="answeredCount < scorableTotal">
           <span>
-            Ты ответил на <b x-text="answeredCount"></b> из <span x-text="total"></span> заданий.<br>
+            Ты ответил на <b x-text="answeredCount"></b> из <span x-text="scorableTotal"></span> заданий.<br>
             Пропущенные будут засчитаны как без ответа.
           </span>
         </template>
-        <template x-if="answeredCount >= total">
+        <template x-if="answeredCount >= scorableTotal">
           <span>Все задания отвечены. Отправить на проверку?</span>
         </template>
       </div>
@@ -1126,7 +1140,7 @@
           <div class="test-modal-stat-lbl">отвечено</div>
         </div>
         <div class="test-modal-stat">
-          <div class="test-modal-stat-val" x-text="total - answeredCount"></div>
+          <div class="test-modal-stat-val" x-text="scorableTotal - answeredCount"></div>
           <div class="test-modal-stat-lbl">пропущено</div>
         </div>
       </div>
@@ -1177,12 +1191,14 @@
 
       // Computed
       get total() { return this.tasks.length; },
+      // Задания с ручной проверкой ответа не ждут — счётчики только по остальным.
+      get scorableTotal() { return this.tasks.filter(t => !t.manual).length; },
       get currentTask() { return this.tasks[this.current] || null; },
       get answeredCount() {
         return Object.values(this.answers).filter(v => v !== undefined && v !== '' && v !== null).length;
       },
       get progressPct() {
-        return this.total > 0 ? Math.round((this.answeredCount / this.total) * 100) : 0;
+        return this.scorableTotal > 0 ? Math.round((this.answeredCount / this.scorableTotal) * 100) : 0;
       },
       get timerText() {
         const m = Math.floor(this.elapsed / 60);
