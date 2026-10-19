@@ -2,5 +2,56 @@
     "topic_id": "16",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите вероятность",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "Правильный игральный кубик бросают два раза. Найдите вероятность того, что числа выпавших очков отличаются на 3 или 4.",
+                            "manual": true,
+                            "answer_display": "$\\dfrac{5}{18}$",
+                            "solution": "Всего исходов $6\\cdot6=36$. Разность 3: $(1;4),(2;5),(3;6)$ и обратные — 6 исходов. Разность 4: $(1;5),(2;6)$ и обратные — 4 исхода. Итого 10, вероятность $\\dfrac{10}{36}=\\dfrac{5}{18}$.",
+                            "max_points": 2,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите вероятность",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "Правильный игральный кубик бросают два раза. Найдите вероятность того, что сумма выпавших очков окажется не меньше 9.",
+                            "manual": true,
+                            "answer_display": "$\\dfrac{5}{18}$",
+                            "solution": "Всего исходов 36. Сумма 9: 4 исхода, 10: 3 исхода, 11: 2 исхода, 12: 1 исход — всего 10. Вероятность $\\dfrac{10}{36}=\\dfrac{5}{18}$.",
+                            "max_points": 2,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

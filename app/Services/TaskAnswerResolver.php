@@ -8,6 +8,12 @@ class TaskAnswerResolver
 {
     public const UNKNOWN_ANSWER = 'нет в базе';
 
+    /** Кириллические двойники латинских букв (после mb_strtolower). */
+    private const CYRILLIC_LOOKALIKES = [
+        'а' => 'a', 'в' => 'b', 'е' => 'e', 'к' => 'k', 'м' => 'm', 'н' => 'h',
+        'о' => 'o', 'р' => 'p', 'с' => 'c', 'т' => 't', 'х' => 'x', 'у' => 'y',
+    ];
+
     private MathAnswerParser $mathParser;
     private AlgebraicAnswerComparator $algebra;
 
@@ -120,6 +126,25 @@ class TaskAnswerResolver
         $userRaw = (string) ($userAnswer ?? '');
         $user = $this->normalize($userRaw);
 
+        // Несколько верных ответов: «H или L», «-1012 или -1210» (ВПР 8).
+        // Делим только перечень коротких записей — в ответах с параметром
+        // («$a = 0$ или $a = -1$») « или » входит в саму запись ответа.
+        $alternatives = $this->simpleAlternatives((string) $correctAnswer);
+        if ($alternatives !== null) {
+            foreach ($alternatives as $alternative) {
+                if ($this->isCorrect($userAnswer, $alternative)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Ответ — одна латинская буква (вершина графа), а с телефона её
+        // набирают кириллицей: «А» вместо «A», «Н» вместо «H».
+        if (preg_match('/^[a-z]$/', $correct)) {
+            return $user !== '' && strtr($user, self::CYRILLIC_LOOKALIKES) === $correct;
+        }
+
         // Буквенный эталон (банк «Скиллы»: сокращение дробей) — сверяем
         // значением, а не записью: «2x/3y», «(2x)/(3y)» и «\frac{2x}{3y}» это
         // один ответ, а дословное сравнение завалило бы их все.
@@ -206,6 +231,28 @@ class TaskAnswerResolver
 
         // √4 = 2: рационален, десятичная запись законна.
         return abs($correctValue - round($correctValue)) > 1e-9;
+    }
+
+    /**
+     * Варианты эталона «A или B», если каждый — короткая запись без пробелов,
+     * долларов и знаков сравнения. Иначе null: эталон не перечень.
+     *
+     * @return array<int, string>|null
+     */
+    private function simpleAlternatives(string $correctAnswer): ?array
+    {
+        if (!str_contains($correctAnswer, ' или ')) {
+            return null;
+        }
+
+        $parts = array_map('trim', explode(' или ', $correctAnswer));
+        foreach ($parts as $part) {
+            if (!preg_match('/^[^\s$\\\\<>=|]+$/u', $part)) {
+                return null;
+            }
+        }
+
+        return $parts;
     }
 
     public function normalize(string $value): string

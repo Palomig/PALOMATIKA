@@ -2,5 +2,67 @@
     "topic_id": "10",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите длину медианы",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "На клетчатой бумаге с размером клетки $1\\times1$ изображён треугольник $ABC$. Найдите длину его медианы, выходящей из вершины $B$.",
+                            "image": "<svg viewBox=\"0 0 394 178\" class=\"w-full max-w-[560px] h-auto mx-auto\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/><line x1=\"26.0\" y1=\"26.0\" x2=\"26.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"44.0\" y1=\"26.0\" x2=\"44.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"62.0\" y1=\"26.0\" x2=\"62.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"80.0\" y1=\"26.0\" x2=\"80.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"98.0\" y1=\"26.0\" x2=\"98.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"116.0\" y1=\"26.0\" x2=\"116.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"134.0\" y1=\"26.0\" x2=\"134.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"152.0\" y1=\"26.0\" x2=\"152.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"170.0\" y1=\"26.0\" x2=\"170.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"188.0\" y1=\"26.0\" x2=\"188.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"206.0\" y1=\"26.0\" x2=\"206.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"224.0\" y1=\"26.0\" x2=\"224.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"242.0\" y1=\"26.0\" x2=\"242.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"260.0\" y1=\"26.0\" x2=\"260.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"278.0\" y1=\"26.0\" x2=\"278.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"296.0\" y1=\"26.0\" x2=\"296.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"314.0\" y1=\"26.0\" x2=\"314.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"332.0\" y1=\"26.0\" x2=\"332.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"350.0\" y1=\"26.0\" x2=\"350.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"368.0\" y1=\"26.0\" x2=\"368.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"26.0\" x2=\"368.0\" y2=\"26.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"44.0\" x2=\"368.0\" y2=\"44.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"62.0\" x2=\"368.0\" y2=\"62.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"80.0\" x2=\"368.0\" y2=\"80.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"98.0\" x2=\"368.0\" y2=\"98.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"116.0\" x2=\"368.0\" y2=\"116.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"134.0\" x2=\"368.0\" y2=\"134.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"152.0\" x2=\"368.0\" y2=\"152.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"44.0\" y1=\"134.0\" x2=\"224.0\" y2=\"134.0\" stroke=\"#5a9fcf\" stroke-width=\"2.2\"/><line x1=\"224.0\" y1=\"134.0\" x2=\"350.0\" y2=\"44.0\" stroke=\"#5a9fcf\" stroke-width=\"2.2\"/><line x1=\"350.0\" y1=\"44.0\" x2=\"44.0\" y2=\"134.0\" stroke=\"#5a9fcf\" stroke-width=\"2.2\"/><circle cx=\"44.0\" cy=\"134.0\" r=\"4.5\" fill=\"#d4a855\"/><text x=\"34.0\" y=\"126.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"15\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">A</text><circle cx=\"224.0\" cy=\"134.0\" r=\"4.5\" fill=\"#d4a855\"/><text x=\"214.0\" y=\"126.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"15\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">C</text><circle cx=\"350.0\" cy=\"44.0\" r=\"4.5\" fill=\"#d4a855\"/><text x=\"340.0\" y=\"36.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"15\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">B</text></svg>",
+                            "answer": "13",
+                            "solution": "Середина $AC$ — точка $K$, от неё до $B$ по горизонтали 12 клеток, по вертикали 5. $BK=\\sqrt{12^2+5^2}=13$.",
+                            "max_points": 1,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите расстояние",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "На клетчатой бумаге с размером клетки $1\\times1$ отмечены точки $A$ и $B$. Найдите расстояние между этими точками. В ответе укажите квадрат получившегося числа.",
+                            "image": "<svg viewBox=\"0 0 272 184\" class=\"w-full max-w-[560px] h-auto mx-auto\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/><line x1=\"26.0\" y1=\"26.0\" x2=\"26.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"70.0\" y1=\"26.0\" x2=\"70.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"114.0\" y1=\"26.0\" x2=\"114.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"158.0\" y1=\"26.0\" x2=\"158.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"202.0\" y1=\"26.0\" x2=\"202.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"246.0\" y1=\"26.0\" x2=\"246.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"26.0\" x2=\"246.0\" y2=\"26.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"70.0\" x2=\"246.0\" y2=\"70.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"114.0\" x2=\"246.0\" y2=\"114.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><line x1=\"26.0\" y1=\"158.0\" x2=\"246.0\" y2=\"158.0\" stroke=\"#1e4a6e\" stroke-width=\"1\"/><circle cx=\"70.0\" cy=\"114.0\" r=\"4.5\" fill=\"#d4a855\"/><text x=\"60.0\" y=\"106.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"15\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">A</text><circle cx=\"202.0\" cy=\"70.0\" r=\"4.5\" fill=\"#d4a855\"/><text x=\"192.0\" y=\"62.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"15\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">B</text></svg>",
+                            "answer": "10",
+                            "solution": "Между точками 3 клетки по горизонтали и 1 по вертикали: $AB^2=3^2+1^2=10$.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        },
+                        {
+                            "id": 3,
+                            "text": "В треугольнике $ABC$ известны стороны: $AB=25$, $AC=40$, $BC=25$. Найдите площадь треугольника $ABC$.",
+                            "image": "<svg viewBox=\"0 0 360 225\" class=\"w-full max-w-[520px] h-auto mx-auto\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/><path d=\"M40,190 L180,40 L320,190 Z\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/><text x=\"23.0\" y=\"201.1\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"16\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">A</text><text x=\"180.0\" y=\"27.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"16\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">B</text><text x=\"337.0\" y=\"201.1\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"16\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">C</text></svg>",
+                            "answer": "300",
+                            "solution": "Треугольник равнобедренный, высота $BH$ — медиана: $AH=20$. $BH=\\sqrt{25^2-20^2}=15$, $S=\\dfrac12\\cdot40\\cdot15=300$.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

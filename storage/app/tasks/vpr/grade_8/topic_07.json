@@ -2,5 +2,54 @@
     "topic_id": "07",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "Найдите значение выражения $\\dfrac{36\\left(x^{7}y^{5}\\right)^{3}}{x^{22}y^{15}}$ при $x=-12$ и $y=0{,}8$.",
+                            "answer": "-3",
+                            "solution": "$\\dfrac{36x^{21}y^{15}}{x^{22}y^{15}}=\\dfrac{36}{x}$; при $x=-12$ получаем $\\dfrac{36}{-12}=-3$.",
+                            "max_points": 1,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "Найдите значение выражения $\\dfrac{xy+y^2}{8x}\\cdot\\dfrac{4x}{x+y}$ при $x=\\sqrt{3}$, $y=-5{,}2$.",
+                            "answer": "-2,6",
+                            "solution": "$\\dfrac{y(x+y)}{8x}\\cdot\\dfrac{4x}{x+y}=\\dfrac{y}{2}$; при $y=-5{,}2$ получаем $-2{,}6$. Значение $x$ не нужно.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
