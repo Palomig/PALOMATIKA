@@ -2,5 +2,56 @@
     "topic_id": "09",
     "exam_type": "vpr",
     "grade": 8,
-    "blocks": []
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ВПР 2026, вариант 4",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите длину стороны",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "text": "В треугольнике $ABC$ угол $C$ равен $90^\\circ$, $AB=18$, $\\sin A=\\dfrac{\\sqrt{35}}{6}$. Найдите длину стороны $AC$.",
+                            "image": "<svg viewBox=\"0 0 360 220\" class=\"w-full max-w-[520px] h-auto mx-auto\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/><path d=\"M30,185 L255,55.1 L330,185 Z\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/><path d=\"M244.6,61.1 L250.6,71.5 L261.0,65.5\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.4\"/><text x=\"18.0\" y=\"193.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"16\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">A</text><text x=\"259.0\" y=\"43.1\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"16\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">C</text><text x=\"344.0\" y=\"193.0\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"16\" font-family='Georgia,\"Times New Roman\",serif' font-style=\"italic\" font-weight=\"bold\">B</text></svg>",
+                            "answer": "3",
+                            "solution": "$\\cos A=\\sqrt{1-\\dfrac{35}{36}}=\\dfrac{1}{6}$, $AC=AB\\cdot\\cos A=18\\cdot\\dfrac{1}{6}=3$.",
+                            "max_points": 1,
+                            "source": "ВПР 2026, вариант 4",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=4259271",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Демоверсия ВПР 2025",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите угол",
+                    "type": "word_problem",
+                    "status": "production",
+                    "tasks": [
+                        {
+                            "id": 2,
+                            "text": "Один из углов параллелограмма равен $70^\\circ$. Найдите тупой угол данного параллелограмма. Ответ дайте в градусах.",
+                            "image": "<svg viewBox=\"0 0 370 220\" class=\"w-full max-w-[520px] h-auto mx-auto\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/><path d=\"M40,180 L110,40 L330,40 L260,180 Z\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/></svg>",
+                            "answer": "110",
+                            "solution": "Углы, прилежащие к одной стороне, в сумме дают $180^\\circ$: тупой угол $180^\\circ-70^\\circ=110^\\circ$.",
+                            "max_points": 1,
+                            "source": "Демоверсия ВПР 2025",
+                            "source_url": "https://math8-vpr.sdamgia.ru/test?id=2285091",
+                            "status": "production"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

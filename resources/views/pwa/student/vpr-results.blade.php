@@ -2,6 +2,12 @@
 
 @section('title', 'Результаты — palomatika')
 
+@push('head')
+<link rel="stylesheet" href="/vendor/katex/0.16.9/katex.min.css">
+<script defer src="/vendor/katex/0.16.9/katex.min.js"></script>
+<script defer src="/vendor/katex/0.16.9/contrib/auto-render.min.js"></script>
+@endpush
+
 @push('styles')
   /* ── SCORE HERO ── */
   .score-hero {
@@ -122,6 +128,12 @@
   .ans-status.correct { background: var(--green); }
   .ans-status.wrong   { background: var(--red); }
   .ans-status.skip    { background: var(--muted2); }
+  .ans-num.manual     { background: var(--surface2);  color: var(--accent); }
+  .ans-status.manual  { background: var(--accent); }
+  .manual-badge { color: var(--accent); }
+  .manual-ans   { color: var(--text); }
+  .sol-toggle { background: none; border: none; padding: 0; margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--accent); cursor: pointer; }
+  .sol-text { margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--text); white-space: pre-line; }
 
   /* ── DIVIDER ── */
   .res-divider { height: 1px; background: var(--border); }
@@ -287,6 +299,11 @@
 
 @section('body')
 @php
+    // Задания с ручной проверкой (ВПР 8, №13–18) в счёт верно/ошибок не идут.
+    $variantTasksForCount = is_array($attempt->variant?->config_json['tasks'] ?? null)
+        ? $attempt->variant->config_json['tasks'] : [];
+    $manualCount = count(array_filter($variantTasksForCount, fn ($t) => is_array($t) && !empty($t['manual'])));
+    $totalTasks = max(0, $totalTasks - $manualCount);
     $pct = $totalTasks > 0 ? round(($correctCount / $totalTasks) * 100) : 0;
     $errorCount = $totalTasks - $correctCount;
 
@@ -348,7 +365,12 @@
             $taskOptions = array_values($taskInner['options']);
         }
 
+        $isManual = !empty($taskDef['manual']);
+
         $rows[] = [
+            'manual' => $isManual,
+            'referenceAnswer' => $isManual ? (string) ($taskDef['answer_display'] ?? '') : '',
+            'solution' => $isManual ? (string) ($taskDef['solution'] ?? '') : '',
             'num' => $examNum,
             'topicKey' => $tn,
             'topicName' => $topicNames[$tn] ?? "Задание {$examNum}",
@@ -362,7 +384,7 @@
     usort($rows, fn($a, $b) => $a['num'] <=> $b['num']);
 
     // Collect wrong topic names for tutor CTA
-    $wrongTopics = collect($rows)->where('isCorrect', false)->pluck('topicName')->unique()->values()->all();
+    $wrongTopics = collect($rows)->where('isCorrect', false)->where('manual', false)->pluck('topicName')->unique()->values()->all();
 
     $submittedDate = $attempt->submitted_at
         ? \Carbon\Carbon::parse($attempt->submitted_at)->format('d.m.Y')
@@ -390,6 +412,12 @@
       <span class="stat-val bad">{{ $errorCount }}</span>
       <span class="stat-lbl">ошибок</span>
     </div>
+    @if($manualCount > 0)
+    <div class="stat-card">
+      <span class="stat-val neu">{{ $manualCount }}</span>
+      <span class="stat-lbl">вручную</span>
+    </div>
+    @endif
     <div class="stat-card">
       <span class="stat-val neu">{{ $timeFormatted }}</span>
       <span class="stat-lbl">время</span>
@@ -421,13 +449,13 @@
   </div>
 
   {{-- ANSWERS LIST --}}
-  <div class="answers-list anim-up" style="animation-delay:0.2s">
+  <div class="answers-list anim-up" style="animation-delay:0.2s" x-ref="list">
     <template x-for="row in filteredRows" :key="row.num">
       <div class="answer-row">
         <div class="answer-row-main">
           {{-- Number badge --}}
           <div class="ans-num"
-               :class="row.isCorrect ? 'correct' : (row.yourAnswer === '' ? 'skip' : 'wrong')"
+               :class="statusClass(row)"
                x-text="row.num"></div>
 
           {{-- Body --}}
@@ -438,7 +466,22 @@
                 <span style="font-size:10px;color:var(--muted);margin-left:6px;font-weight:600;opacity:.7" x-text="row.locator"></span>
               </template>
             </div>
-            <div class="ans-answers">
+            <template x-if="row.manual">
+              <div class="ans-answers">
+                <span class="manual-badge">проверка вручную</span>
+                <template x-if="row.referenceAnswer">
+                  <span class="manual-ans" x-html="'ответ: ' + row.referenceAnswer"></span>
+                </template>
+                <template x-if="row.solution">
+                  <div>
+                    <button type="button" class="sol-toggle" @click="toggleSolution(row.num)"
+                            x-text="openSolutions[row.num] ? 'Скрыть решение' : 'Показать решение'"></button>
+                    <div class="sol-text" x-show="openSolutions[row.num]" x-html="row.solution"></div>
+                  </div>
+                </template>
+              </div>
+            </template>
+            <div class="ans-answers" x-show="!row.manual">
               <template x-if="row.yourAnswer === '' && !row.isCorrect">
                 <span class="skip-ans">без ответа</span>
               </template>
@@ -456,7 +499,7 @@
 
           {{-- Status dot --}}
           <div class="ans-status"
-               :class="row.isCorrect ? 'correct' : (row.yourAnswer === '' ? 'skip' : 'wrong')"></div>
+               :class="statusClass(row)"></div>
         </div>
       </div>
     </template>
@@ -516,12 +559,43 @@
     return {
       tab: 'all',
       rows: @json($rows),
+      openSolutions: {},
+
+      init() {
+        this.$watch('tab', () => this.renderMath());
+        this.renderMath();
+      },
 
       get filteredRows() {
         if (this.tab === 'errors') {
-          return this.rows.filter(r => !r.isCorrect);
+          return this.rows.filter(r => !r.isCorrect && !r.manual);
         }
         return this.rows;
+      },
+
+      statusClass(row) {
+        if (row.manual) return 'manual';
+        return row.isCorrect ? 'correct' : (row.yourAnswer === '' ? 'skip' : 'wrong');
+      },
+
+      toggleSolution(num) {
+        this.openSolutions[num] = !this.openSolutions[num];
+        this.renderMath();
+      },
+
+      // Ответы и решения ручных заданий содержат формулы ($…$).
+      renderMath() {
+        this.$nextTick(() => {
+          const run = () => {
+            if (typeof renderMathInElement !== 'function') return false;
+            try {
+              renderMathInElement(this.$refs.list, { delimiters: [
+                {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });
+            } catch (e) {}
+            return true;
+          };
+          if (!run()) window.addEventListener('load', run, { once: true });
+        });
       }
     };
   }

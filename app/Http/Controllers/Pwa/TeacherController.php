@@ -375,7 +375,9 @@ class TeacherController extends Controller
         $configTasks = (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) ? $cfg['tasks'] : [];
 
         $correct = $attempt->scorings->where('is_correct', true)->count();
-        $total = count($configTasks) ?: $attempt->scorings->count();
+        // Задания с ручной проверкой (ВПР 8, №13–18) в «из N» не входят.
+        $autoTasks = array_filter($configTasks, fn ($t) => !is_array($t) || empty($t['manual']));
+        $total = count($autoTasks) ?: $attempt->scorings->count();
         $time = ($attempt->started_at && $attempt->submitted_at) ? $attempt->submitted_at->diffInSeconds($attempt->started_at) : null;
 
         $taskMap = [];
