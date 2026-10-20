@@ -901,7 +901,7 @@
         <template x-if="!taskHasHtmlTable(currentTask) && currentTask.svg">
           <div class="q-svg-wrap q-anim"
                :class="{
-                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11',
+                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' && !currentTask.svg_fit,
                  'is-clickable': canOpenImageViewer(currentTask)
                }"
                :style="'animation-delay: 0.08s; margin-top: 16px'"
@@ -913,7 +913,7 @@
         <template x-if="!taskHasHtmlTable(currentTask) && !currentTask.svg && currentTask.image && String(currentTask.image).trim().startsWith('<svg')">
           <div class="q-svg-wrap q-anim"
                :class="{
-                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11',
+                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' && !currentTask.svg_fit,
                  'is-clickable': canOpenImageViewer(currentTask)
                }"
                :style="'animation-delay: 0.08s; margin-top: 16px'"
@@ -923,7 +923,7 @@
         <template x-if="!taskHasHtmlTable(currentTask) && !currentTask.svg && currentTask.image && !String(currentTask.image).trim().startsWith('<svg')">
           <div class="q-svg-wrap q-anim"
                :class="{
-                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11',
+                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' && !currentTask.svg_fit,
                  'is-clickable': canOpenImageViewer(currentTask)
                }"
                :style="'animation-delay: 0.08s; margin-top: 16px'"
