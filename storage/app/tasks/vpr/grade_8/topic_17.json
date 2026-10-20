@@ -10,14 +10,19 @@
                 {
                     "number": 1,
                     "instruction": "Найдите значение выражения",
-                    "type": "word_problem",
+                    "type": "choice",
                     "status": "production",
                     "tasks": [
                         {
                             "id": 1,
                             "text": "Найдите значение выражения $\\sqrt{\\dfrac{30-5\\sqrt{6}}{4-\\sqrt{6}}-\\sqrt{6}}$.",
-                            "manual": true,
-                            "answer_display": "3",
+                            "options": [
+                                "9",
+                                "3",
+                                "√3",
+                                "6"
+                            ],
+                            "answer": "2",
                             "solution": "Приведём к общему знаменателю: $\\dfrac{30-5\\sqrt6-\\sqrt6\\,(4-\\sqrt6)}{4-\\sqrt6}=\\dfrac{36-9\\sqrt6}{4-\\sqrt6}=\\dfrac{9(4-\\sqrt6)}{4-\\sqrt6}=9$.\nЗначит, выражение равно $\\sqrt9=3$.",
                             "max_points": 2,
                             "source": "ВПР 2026, вариант 4",
@@ -35,14 +40,19 @@
                 {
                     "number": 1,
                     "instruction": "Найдите значение выражения",
-                    "type": "word_problem",
+                    "type": "choice",
                     "status": "production",
                     "tasks": [
                         {
                             "id": 2,
                             "text": "Найдите значение выражения $\\sqrt{7-4\\sqrt{3}}+\\sqrt{3}$.",
-                            "manual": true,
-                            "answer_display": "2",
+                            "options": [
+                                "2 + 2√3",
+                                "4",
+                                "2",
+                                "√3"
+                            ],
+                            "answer": "3",
                             "solution": "$7-4\\sqrt3=4-4\\sqrt3+3=(2-\\sqrt3)^2$. Так как $2\\gt \\sqrt3$, $\\sqrt{(2-\\sqrt3)^2}=2-\\sqrt3$, и всё выражение равно $2-\\sqrt3+\\sqrt3=2$.",
                             "max_points": 2,
                             "source": "Демоверсия ВПР 2025",

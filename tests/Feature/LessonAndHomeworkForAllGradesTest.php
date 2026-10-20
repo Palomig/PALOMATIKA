@@ -183,7 +183,8 @@ class LessonAndHomeworkForAllGradesTest extends TestCase
         $this->assertNotEmpty($picker->tasks('ege', ['topic_id' => $picker->topics('ege')[0]['id']]));
         $this->assertNotEmpty($picker->skills(7), 'Навыки 7 класса пусты');
 
-        // ВПР 8: в урок идут только задачи с эталоном (№13–18 проверяются вручную).
+        // ВПР 8: в урок идут задачи с вводом ответа; выбор из четырёх (№13–18)
+        // карточка урока показать не умеет — такие задачи в урок не попадают.
         $this->assertNotEmpty($picker->tasks('vpr', ['grade' => 8, 'topic_id' => '01']));
         $this->assertSame([], $picker->tasks('vpr', ['grade' => 8, 'topic_id' => '13']));
 

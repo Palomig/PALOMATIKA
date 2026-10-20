@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 /**
- * ВПР 8 класса: вариант 4 2026 года и демоверсия 2025. Задания с развёрнутым
- * решением (№13–18) и отметкой на прямой (№4, №6) проверяются вручную.
+ * ВПР 8 класса: вариант 4 2026 года и демоверсия 2025. Задания, которые на
+ * ВПР проверяются вручную (№4, №6, №13–18), у нас — выбор из четырёх.
  */
 class PwaVpr8BankTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const MANUAL_TOPICS = ['04', '06', '13', '14', '15', '16', '17', '18'];
+    private const CHOICE_TOPICS = ['04', '06', '13', '14', '15', '16', '17', '18'];
 
     protected function setUp(): void
     {
@@ -35,16 +35,15 @@ class PwaVpr8BankTest extends TestCase
             $sources = [];
             foreach ($data->getBlocks($topic) as $block) {
                 foreach ($block['zadaniya'] as $zadanie) {
+                    $choice = in_array($topic, self::CHOICE_TOPICS, true);
+                    $this->assertSame($choice ? 'choice' : 'word_problem', $zadanie['type'], "№{$n}");
                     foreach ($zadanie['tasks'] as $task) {
                         $sources[] = $task['source'];
-                        $manual = in_array($topic, self::MANUAL_TOPICS, true);
-                        $this->assertSame($manual, !empty($task['manual']), "№{$n}");
-                        if ($manual) {
-                            $this->assertArrayNotHasKey('answer', $task, "№{$n}: эталон у ручного задания");
-                            $this->assertNotEmpty($task['answer_display'], "№{$n}");
-                            $this->assertNotEmpty($task['solution'], "№{$n}");
-                        } else {
-                            $this->assertNotSame('', (string) ($task['answer'] ?? ''), "№{$n}");
+                        $this->assertArrayNotHasKey('manual', $task, "№{$n}");
+                        $this->assertNotSame('', (string) ($task['answer'] ?? ''), "№{$n}");
+                        if ($choice) {
+                            $this->assertCount(4, $task['options'], "№{$n}");
+                            $this->assertContains($task['answer'], ['1', '2', '3', '4'], "№{$n}");
                         }
                     }
                 }
@@ -54,7 +53,20 @@ class PwaVpr8BankTest extends TestCase
         }
     }
 
-    public function test_full_variant_scores_only_auto_checked_tasks(): void
+    /** Ответ так, как его отправит экран: id варианта или его номер. */
+    private function uiAnswer(array $servedTask, string $bankAnswer): string
+    {
+        if (empty($servedTask['options'])) {
+            return $bankAnswer;
+        }
+        $index = (int) $bankAnswer - 1;
+        $option = $servedTask['options'][$index];
+        $id = is_array($option) ? trim((string) ($option['id'] ?? '')) : '';
+
+        return $id !== '' ? $id : (string) ($index + 1);
+    }
+
+    public function test_full_variant_scores_every_task_including_choices(): void
     {
         $student = User::factory()->create([
             'role' => 'student',
@@ -69,23 +81,24 @@ class PwaVpr8BankTest extends TestCase
         $attempt = OgeAttempt::with('variant')->findOrFail((int) $m[1]);
 
         $this->assertSame('vpr_8', $attempt->variant->exam_type);
-        $tasks = $attempt->variant->config_json['tasks'];
-        $this->assertCount(18, $tasks);
+        $bankTasks = $attempt->variant->config_json['tasks'];
+        $this->assertCount(18, $bankTasks);
 
-        // Ответы: №11 — кириллическая «Н»/«А», остальное — эталон или пусто.
+        $page = $this->actingAs($student)->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+        $page->assertOk();
+        preg_match('/tasks:\s*(\[[\s\S]*?\])\s*,\s*attemptId:/', $page->getContent(), $tm);
+        $served = json_decode($tm[1], true);
+        $this->assertCount(18, $served);
+
+        // №11 — кириллическая «Н»/«А», выбор — как нажмёт ученик.
         $answers = [];
-        foreach ($tasks as $i => $task) {
-            $slot = $i + 1;
-            if (!empty($task['manual'])) {
-                $this->assertNull($task['correct_answer'], 'ручное задание без эталона');
-                continue;
-            }
-            $correct = (string) $task['correct_answer'];
-            $answers[$slot] = match ($correct) {
+        foreach ($bankTasks as $i => $task) {
+            $raw = (string) $task['answer'];
+            $answers[$i + 1] = match ($raw) {
                 'H или L' => 'Н',
                 'A' => 'А',
                 '-1012 или -1210' => '-1210',
-                default => $correct,
+                default => $this->uiAnswer($served[$i], $raw),
             };
         }
 
@@ -94,36 +107,23 @@ class PwaVpr8BankTest extends TestCase
             ->assertOk();
 
         $scorings = OgeAttemptScoring::where('attempt_id', $attempt->id)->get()->keyBy('task_number');
-        foreach ($tasks as $i => $task) {
-            $scoring = $scorings->get($i + 1);
-            if (!empty($task['manual'])) {
-                $this->assertTrue($scoring === null || $scoring->is_correct === null, "№{$task['task_number']} не проверяется");
-            } else {
-                $this->assertTrue((bool) $scoring?->is_correct, "№{$task['task_number']}: ответ «{$answers[$i + 1]}»");
-            }
+        foreach ($bankTasks as $i => $task) {
+            $this->assertTrue((bool) $scorings->get($i + 1)?->is_correct, "№{$task['task_number']}: ответ «{$answers[$i + 1]}»");
         }
 
         $results = $this->actingAs($student)
             ->get("http://student.palomatika.ru/vpr/results/{$attempt->id}");
         $results->assertOk();
-        $results->assertSee('вручную');
-        $results->assertSee('>10<', false); // все 10 автопроверяемых — верно
+        $results->assertDontSee('"manual":true', false);
+        $results->assertSee('>18<', false); // все 18 — верно
     }
 
-    public function test_manual_task_shows_paper_note_instead_of_input(): void
+    public function test_graph_task_fits_the_screen(): void
     {
-        $student = User::factory()->create([
-            'role' => 'student',
-            'grade_num' => 8,
-            'onboarding_completed_at' => now(),
-        ]);
-
-        $start = $this->actingAs($student)->postJson('http://student.palomatika.ru/vpr/full/start');
-        preg_match('~/vpr/test/(\d+)~', (string) $start->json('redirect'), $m);
-
-        $page = $this->actingAs($student)->get("http://student.palomatika.ru/vpr/test/{$m[1]}");
-        $page->assertOk();
-        $page->assertSee('Реши в тетради');
-        $page->assertSee('"manual":true', false);
+        foreach ((new VprTaskDataService(8))->getBlocks('11') as $block) {
+            foreach ($block['zadaniya'][0]['tasks'] as $task) {
+                $this->assertTrue($task['svg_fit'] ?? false, 'граф №11 без svg_fit растянется на 880px');
+            }
+        }
     }
 }
