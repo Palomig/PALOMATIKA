@@ -421,7 +421,7 @@ class LessonTaskPickerService
             EgeTaskDataService::BANK_BASE => (new EgeTaskDataService(EgeTaskDataService::LEVEL_BASE))
                 ->getTopicData($topicId)['blocks'] ?? [],
             'vpr'       => isset($refs['grade'])
-                ? ((new VprTaskDataService((int) $refs['grade']))->getTopicData($topicId)['blocks'] ?? [])
+                ? self::withoutChoiceTasks((new VprTaskDataService((int) $refs['grade']))->getTopicData($topicId)['blocks'] ?? [])
                 : [],
             'alg-topic' => isset($refs['grade'])
                 ? ((new AlgTaskDataService((int) $refs['grade']))->getBlocks($topicId))
@@ -429,6 +429,24 @@ class LessonTaskPickerService
             SkillsTaskDataService::BANK => (new SkillsTaskDataService())->getBlocks($topicId),
             default     => [],
         };
+    }
+
+    /**
+     * Задачи ВПР с вариантами ответа (ВПР 8, №4, №6, №13–18) в урок не идут:
+     * карточка урока вариантов не показывает, а эталон у них — номер варианта.
+     */
+    private static function withoutChoiceTasks(array $blocks): array
+    {
+        foreach ($blocks as $b => $block) {
+            foreach ($block['zadaniya'] ?? [] as $z => $zadanie) {
+                $blocks[$b]['zadaniya'][$z]['tasks'] = array_values(array_filter(
+                    $zadanie['tasks'] ?? [],
+                    static fn ($task) => !is_array($task) || empty($task['options']),
+                ));
+            }
+        }
+
+        return $blocks;
     }
 
     private const IMAGE_LIKE_TYPES = [
