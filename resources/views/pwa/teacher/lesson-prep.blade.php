@@ -260,6 +260,15 @@
   .lp-menu { position: absolute; right: 0; top: 44px; z-index: 60; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 6px; min-width: 230px; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
   .lp-menu button { display: block; width: 100%; text-align: left; padding: 11px 12px; border: none; background: none; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; }
   .lp-menu button:hover { background: var(--surface); }
+  .lp-switch { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 10px; padding-bottom: 2px; scrollbar-width: none; }
+  .lp-switch::-webkit-scrollbar { display: none; }
+  .lp-sw { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; max-width: 70vw; padding: 7px 11px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 13px; font-weight: 600; text-decoration: none; }
+  .lp-sw.cur { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+  .lp-sw.ended { opacity: .6; }
+  .lp-sw-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lp-sw-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--muted); }
+  .lp-sw-dot.live { background: var(--green, #16a34a); }
+  .lp-sw-new { padding: 1px 6px; border-radius: 8px; background: var(--red, #dc2626); color: #fff; font-size: 11px; font-weight: 700; }
   .lp-codebar { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
   .lp-codebar-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
   .lp-code { background: none; border: none; padding: 0; font-family: ui-monospace, 'SF Mono', monospace; font-size: 22px; font-weight: 800; letter-spacing: 3px; color: var(--text); cursor: pointer; }
@@ -354,6 +363,19 @@
       <button type="button" x-show="joinCode && status !== 'ended'" @click="menuOpen = false; copyCode()">Скопировать код урока</button>
     </div>
   </div>
+
+  {{-- Параллельные уроки: переход в один тап, «+N» — новые ответы там,
+       пока ты здесь. Видна, только когда незавершённых уроков больше одного. --}}
+  <nav class="lp-switch" x-show="parallel.length > 1" x-cloak aria-label="Параллельные уроки">
+    <template x-for="l in parallel" :key="'par-' + l.id">
+      <a :href="'/lessons/' + l.id" class="lp-sw" :class="{ cur: l.id === sessionId, ended: l.status === 'ended' }"
+         :aria-current="l.id === sessionId ? 'page' : null">
+        <span class="lp-sw-dot" :class="l.status"></span>
+        <span class="lp-sw-name" x-text="l.title"></span>
+        <span class="lp-sw-new" x-show="l.id !== sessionId && parallelNew(l) > 0" x-text="'+' + parallelNew(l)"></span>
+      </a>
+    </template>
+  </nav>
 
   {{-- Код входа одной строкой; тап — крупно, чтобы продиктовать --}}
   <template x-if="status !== 'ended' && joinCode">
@@ -688,7 +710,11 @@
       </div>
       <div x-data="taskPicker({
             onAdd: (items) => $dispatch('picker-add', { items }),
-            existingUids: () => tasks.map(t => t.uid).filter(Boolean),
+            // Добавленные всем — заняты для любого получателя; персональные —
+            // только для того же ученика (другому ту же задачу дать можно).
+            existingUids: () => tasks
+              .filter(t => !t.assigned_student_id || !assignTo || String(t.assigned_student_id) === String(assignTo))
+              .map(t => window.paloTaskKey(t.bank, t.task_ref)),
           })">
         @include('pwa._shared.task-picker')
       </div>
@@ -877,6 +903,7 @@
       participants: [],
       grid: {},
       pickerOpen: false,
+      parallel: [],
       assignTo: '',        // '' = всем; id участника = персональная задача
       pollTimer: null,
       katexReady: false,
@@ -1422,6 +1449,26 @@
         if (tj !== tasksJson) { tasksJson = tj; this.tasks = d.tasks; }
         this.participants = d.participants;
         this.grid = d.grid || {};
+        this.parallel = d.parallel || [];
+        this.rememberSeen();
+      },
+
+      // «+N» на чипе соседнего урока: ответов там больше, чем было, когда
+      // учитель последний раз на нём был. Первая встреча — точка отсчёта.
+      seenAnswers(id) {
+        try { const v = localStorage.getItem('lp-seen-' + id); return v === null ? null : Number(v); } catch (e) { return null; }
+      },
+      setSeen(id, n) {
+        try { localStorage.setItem('lp-seen-' + id, String(n)); } catch (e) {}
+      },
+      rememberSeen() {
+        for (const l of this.parallel) {
+          if (l.id === this.sessionId || this.seenAnswers(l.id) === null) this.setSeen(l.id, l.answers);
+        }
+      },
+      parallelNew(l) {
+        const seen = this.seenAnswers(l.id);
+        return seen === null ? 0 : Math.max(0, l.answers - seen);
       },
 
       // Поллим и в draft (видно, кто вошёл по коду до старта), и в live.

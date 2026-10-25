@@ -481,7 +481,7 @@
             </label>
             <div x-data="taskPicker({
                   onAdd: (items) => draftTasks.push(...items),
-                  existingUids: () => draftTasks.map(t => t.refs.task_id),
+                  existingUids: () => draftTasks.map(t => window.paloTaskKey(t.bank, t.refs)),
                 })">
               @include('pwa._shared.task-picker')
             </div>
