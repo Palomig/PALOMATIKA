@@ -47,7 +47,7 @@
 предлагает аналоги разобранных задач; учитель отмечает нужные и отправляет участникам.
 
 - **`homeworks.lesson_session_id`** (nullable FK на `lesson_sessions`, миграция `2026_07_23_000001`) — связь ДЗ с уроком, для плашки «уже отправлялось».
-- **`LessonHomeworkSuggestionService::suggestionsFor()`** — группирует задачи урока по заданию (`oge/ege/vpr/alg-topic`: тема+номер; `alg-skill`: навык+уровень), подбирает неиспользованные аналоги из JSON-банка, превью через `TaskBankResolver`. Флаг `no_analogs`, счётчик `solved`.
+- **`LessonHomeworkSuggestionService::suggestionsFor()`** — группирует задачи урока по заданию (`oge/ege/vpr/alg-topic`: тема+номер; `alg-skill`: навык+уровень), подбирает неиспользованные аналоги из JSON-банка, превью через `TaskBankResolver`. Флаг `no_analogs`, счётчик `solved`. Группы с `no_analogs` идут в конце и в окне сворачиваются в одну строку «Аналогов нет: …». У ЕГЭ в карточке `preview_html` — условие ФИПИ с рисунками (без него векторы и графики неотличимы).
 - **`GET /lessons/{id}/homework-suggestions`** (`TeacherLessonController::homeworkSuggestions`) → `{groups, participants, other_students, prior_homeworks}`. Владелец урока только (403 чужому).
 - **Отправка** — через существующий `POST /homework/assign` (`assignFromPicker`): `picker_tasks` + `student_ids` + новые `lesson_session_id` (только свой урок) и `title`. Участники своего урока авторизованы как получатели даже без `TeacherStudent` (вошли по коду).
 - Тип ДЗ — `topic_photo_practice`, ученический флоу без изменений.

@@ -69,6 +69,10 @@ class LessonHomeworkSuggestionService
                     'refs'         => $refs,
                     'preview_text' => (string) ($r['expression'] ?? ''),
                     'preview_svg'  => $r['image_svg'] ?? null,
+                    // У ЕГЭ чертёж — растр внутри условия ФИПИ, а не SVG. Без
+                    // разметки карточки векторов и графиков выглядели одинаково:
+                    // числа, по которым их различают, есть только на рисунке.
+                    'preview_html' => $r['condition_html'] ?? null,
                 ];
             }
 
@@ -83,6 +87,11 @@ class LessonHomeworkSuggestionService
                 'suggestions'  => $suggestions,
             ];
         }
+
+        // Группы без аналогов — в конец: первой в окне стояла пустая группа
+        // «аналогов нет», и окно выглядело так, будто выдавать нечего.
+        // usort стабилен, порядок урока внутри обеих частей сохраняется.
+        usort($out, fn ($a, $b) => $a['no_analogs'] <=> $b['no_analogs']);
 
         return $out;
     }
