@@ -327,7 +327,47 @@ class TeacherLessonController extends Controller
                 'notes_count' => $noteCounts[$p->student_id] ?? 0,
             ])->all(),
             'grid'         => $grid,
+            'parallel'     => $this->parallelLessons($session),
         ]);
+    }
+
+    /**
+     * Незавершённые уроки учителя за последние 12 часов — для переключателя,
+     * когда параллельно идут несколько индивидуальных. Окно по времени отсекает
+     * уроки, которые забыли завершить днём раньше: иначе они висели бы в
+     * полоске вечно. Текущий урок в списке всегда, даже если уже завершён.
+     */
+    private function parallelLessons(LessonSession $current): array
+    {
+        $since = now()->subHours(12);
+
+        return LessonSession::where('teacher_id', $current->teacher_id)
+            ->where(fn ($q) => $q
+                ->where('id', $current->id)
+                ->orWhere(fn ($q) => $q
+                    ->whereIn('status', [LessonSession::STATUS_LIVE, LessonSession::STATUS_DRAFT])
+                    ->where(fn ($q) => $q->where('created_at', '>=', $since)->orWhere('starts_at', '>=', $since))))
+            ->with('participants.student:id,name')
+            ->withCount('attempts')
+            ->orderBy('id')
+            ->get()
+            ->map(function (LessonSession $s) {
+                $names = $s->participants
+                    ->map(fn ($p) => trim(explode(' ', trim((string) $p->student?->name))[0] ?? ''))
+                    ->filter()->values();
+                $title = $names->take(2)->implode(', ');
+                if ($names->count() > 2) {
+                    $title .= ' +' . ($names->count() - 2);
+                }
+
+                return [
+                    'id'      => $s->id,
+                    'status'  => $s->status,
+                    'title'   => $title !== '' ? $title : "Урок #{$s->id}",
+                    'answers' => (int) $s->attempts_count,
+                ];
+            })
+            ->all();
     }
 
     /**
@@ -589,6 +629,8 @@ class TeacherLessonController extends Controller
             'grade'               => $t->grade,
             'topic_id'            => $t->topic_id,
             'skill_slug'          => $t->skill_slug,
+            // Ссылка на задачу банка — по ней выбор задач отмечает уже добавленные.
+            'task_ref'            => json_decode((string) $t->task_ref, true) ?: null,
             'task_payload'        => $t->task_payload,
             'correct_answer'      => $t->correct_answer,
             'assigned_student_id' => $t->assigned_student_id,

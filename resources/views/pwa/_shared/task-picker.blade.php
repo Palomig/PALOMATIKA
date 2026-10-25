@@ -36,7 +36,7 @@
          У ОГЭ и ЕГЭ темы появляются после выбора части, у ВПР — сразу. --}}
     <div class="topics-row" x-show="topics.length && (sections.length === 0 || sectionId)" style="margin-top:10px">
       <template x-for="t in topics" :key="t.id">
-        <button type="button" class="topic-pill" :class="{ active: topicId === String(t.id) }"
+        <button type="button" class="topic-pill" :class="{ active: topicId === String(t.id), 'has-added': topicHasExisting(t.id) }"
                 @click="chooseTopic(t.id)" :title="t.title" x-text="Number(t.id)"></button>
       </template>
     </div>
@@ -52,6 +52,7 @@
             <span class="tp-summary-label">
               <span x-text="g.label"></span>
               <span class="tp-count" x-text="'(' + g.tasks.length + ')'"></span>
+              <span class="tp-added" x-show="existingCount(g)" x-text="'добавлено ' + existingCount(g)"></span>
             </span>
             {{-- Toggle всего блока: все выбраны — снять, иначе добрать недостающие --}}
             <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(g)"
@@ -189,6 +190,8 @@
     color:var(--text); cursor:pointer;
     font-family:var(--display); font-size:14px; white-space:nowrap; flex-shrink:0;
   }
+  .task-picker .topic-pill.has-added { position:relative; }
+  .task-picker .topic-pill.has-added::after { content:''; position:absolute; top:4px; right:4px; width:6px; height:6px; border-radius:50%; background:var(--green, #16a34a); }
   .task-picker .topic-pill.active {
     border-color:var(--purple-bd); background:var(--purple-bg); color:var(--purple);
   }
@@ -284,6 +287,7 @@
     background:var(--surface2); border:1px solid var(--border); color:var(--muted);
   }
   .task-picker .tp-existing-note { font-size:11px; color:var(--muted); margin-left:auto; }
+  .task-picker .tp-added { margin-left:6px; padding:1px 6px; border-radius:6px; font-size:11px; color:var(--green, #16a34a); background:var(--green-bg, rgba(22,163,74,.12)); white-space:nowrap; }
 
   /* Прежний флоу 7/8 (навыки/уровни) */
   .task-picker .crumbs { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px; }
@@ -328,6 +332,15 @@
 // того, где реально есть задачи: пустых вкладок быть не должно.
 window.PICKER_CLASSES = window.PICKER_CLASSES
   || @json(app(App\Services\LessonTaskPickerService::class)->availableClasses());
+
+// Ключ задачи банка для сравнения «уже добавлено». Класс у ОГЭ/ЕГЭ не
+// входит: в одних ссылках он есть (11), в других пуст, а задача та же.
+window.paloTaskKey = window.paloTaskKey || function (bank, refs) {
+  refs = refs || {};
+  const grade = ['oge', 'ege', 'ege_b'].includes(bank) ? '' : (refs.grade ?? '');
+  return [bank, grade, refs.topic_id ?? '', refs.zadanie_number ?? '', refs.skill_slug ?? '', refs.level_id ?? '', refs.task_id ?? '']
+    .map(v => String(v)).join('|');
+};
 
 function taskPicker(config) {
   // Не в reactive-состоянии: запись из renderLatex во время рендера не должна
@@ -532,7 +545,19 @@ function taskPicker(config) {
       return `${this.bank}:${this.refs.grade || ''}:${scope}:${t.uid}`;
     },
     isSelected(t) { return this.selected.some(s => s.key === this.cartKey(t)); },
-    isExisting(t) { return this.existingUids().includes(t.uid); },
+    // Уже в уроке/домашке: сверяем по банку и ссылке на задачу, а не по uid
+    // карточки — снаружи uid нет, и отметка «уже добавлено» не загоралась никогда.
+    isExisting(t) {
+      const r = this.taskRefs(t);
+      return this.existingUids().includes(window.paloTaskKey(r.bank, r.refs));
+    },
+    // Точка на номере темы: в ней уже есть задачи урока, не раскрывая её.
+    topicHasExisting(topicId) {
+      const r = this.taskRefs({ id: '' }).refs;
+      const prefix = window.paloTaskKey(this.bank, { ...r, topic_id: topicId, zadanie_number: '', task_id: '' }).split('|').slice(0, 3).join('|') + '|';
+      return this.existingUids().some(k => k.startsWith(prefix));
+    },
+    existingCount(g) { return g.tasks.filter(t => this.isExisting(t)).length; },
     toggle(t) {
       if (this.isExisting(t)) return;
       if (this.isSelected(t)) this.removeFromCart(t); else this.addToCart(t);

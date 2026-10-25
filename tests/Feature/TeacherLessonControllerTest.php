@@ -808,4 +808,62 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertStringContainsString('ЕГЭ (Б)', (string) $resp->json('task.task_payload.source_label'));
         $this->assertDatabaseHas('lesson_session_tasks', ['bank' => EgeTaskDataService::BANK_BASE]);
     }
+
+    // --- переключатель параллельных уроков ---
+
+    public function test_state_lists_parallel_lessons_with_names_and_answers(): void
+    {
+        $teacher = $this->teacher();
+        $svc = app(\App\Services\LessonSessionService::class);
+
+        $a = $svc->createAdhoc($teacher);
+        $masha = $this->student();
+        $masha->update(['name' => 'Маша Ловцова']);
+        $svc->joinByCode($a->join_code, $masha);
+        $svc->addTask($a, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($a);
+
+        $b = $svc->createAdhoc($teacher);
+        $ivan = $this->student();
+        $ivan->update(['name' => 'Иван Вечерский']);
+        $svc->joinByCode($b->join_code, $ivan);
+        $task = $svc->addTask($b, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($b);
+        \App\Models\LessonSessionAttempt::create([
+            'lesson_session_id' => $b->id, 'lesson_session_task_id' => $task->id,
+            'student_id' => $ivan->id, 'answer_raw' => '1', 'is_correct' => true, 'answered_at' => now(),
+        ]);
+
+        // Забытый вчерашний — в полоске не нужен; чужой урок — тем более.
+        $stale = $svc->createAdhoc($teacher);
+        $stale->forceFill(['status' => 'live', 'created_at' => now()->subDay(), 'starts_at' => now()->subDay()])->save();
+        $svc->createAdhoc($this->teacher());
+
+        $parallel = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$a->id}/state")
+            ->assertOk()
+            ->json('parallel');
+
+        $this->assertSame([$a->id, $b->id], array_column($parallel, 'id'));
+        $this->assertSame('Маша', $parallel[0]['title']);
+        $this->assertSame('Иван', $parallel[1]['title']);
+        $this->assertSame(1, $parallel[1]['answers']);
+    }
+
+    public function test_parallel_keeps_current_lesson_even_when_ended(): void
+    {
+        $teacher = $this->teacher();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $a = $svc->createAdhoc($teacher);
+        $svc->addTask($a, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($a);
+        $svc->end($a);
+
+        $parallel = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$a->id}/state")
+            ->json('parallel');
+
+        $this->assertSame([$a->id], array_column($parallel, 'id'));
+        $this->assertSame("Урок #{$a->id}", $parallel[0]['title']);
+    }
 }
