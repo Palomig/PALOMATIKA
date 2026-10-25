@@ -3,7 +3,8 @@
      Контракт: onAdd(payload: Array<{bank, refs}>), existingUids: () => string[] --}}
 <div class="task-picker">
   {{-- Класс — всегда видимые пилюли, «9 ОГЭ» выбран по умолчанию --}}
-  <div class="tp-pills">
+  {{-- На экране темы класс не нужен — назад к карте ведёт «‹ Темы». --}}
+  <div class="tp-pills tp-classes" x-show="screen === 'map' || !isTopicBank">
     <template x-for="c in PICKER_CLASSES" :key="c.id">
       <button type="button" class="topic-pill" :class="{ active: cls && cls.id === c.id }"
               @click="chooseClass(c)" x-text="c.label"></button>
@@ -11,7 +12,7 @@
   </div>
 
   {{-- У 5–8 классов два банка: навыки алгебры и задания ВПР. --}}
-  <div class="tp-pills" x-show="cls && cls.banks" x-cloak style="margin-top:6px">
+  <div class="tp-pills" x-show="cls && cls.banks && (screen === 'map' || !isTopicBank)" x-cloak style="margin-top:6px">
     <template x-for="b in (cls?.banks || [])" :key="b.bank">
       <button type="button" class="topic-pill" :class="{ active: bank === b.bank }"
               @click="chooseBank(b.bank)" x-text="b.label"></button>
@@ -21,100 +22,83 @@
   <div x-show="loading" class="picker-group-label">загружаем…</div>
   <div x-show="error" style="color:var(--red);font-size:12px" x-text="error"></div>
 
-  {{-- ====== Банки по темам (ОГЭ / ВПР / ЕГЭ): раздел → тема → задания ======
-       Разделы есть у ОГЭ и ЕГЭ (части экзамена), у ВПР сразу темы. ====== --}}
+  {{-- ====== Банки по темам (ОГЭ / ВПР / ЕГЭ / Скиллы) — два экрана ======
+       1) карта: все темы экзамена списком с названиями, по частям, и сколько
+          из каждой уже в уроке; 2) тема: задания вкладками, подтипы и
+          подуровни — пилюлями, задачи карточками. Вложенных спойлеров нет:
+          на телефоне три уровня раскрытия съедали экран до первой задачи. --}}
   <div x-show="isTopicBank">
-    {{-- Разделы (1я часть / 2я часть / Новые задания) --}}
-    <div class="tp-pills" x-show="sections.length" style="margin-top:10px">
-      <template x-for="s in sections" :key="s.id">
-        <button type="button" class="topic-pill" :class="{ active: sectionId === s.id }"
-                @click="chooseSection(s.id)" x-text="s.title"></button>
+    {{-- Экран 1. Карта тем --}}
+    <div x-show="screen === 'map'" class="tp-map">
+      <template x-for="sec in mapSections" :key="'sec-' + (sec.id || 'all')">
+        <div>
+          <div class="tp-map-sec" x-show="sec.title" x-text="sec.title"></div>
+          <template x-for="t in sec.topics" :key="'tile-' + (sec.id || '') + '-' + t.id">
+            <button type="button" class="tp-tile" @click="chooseTopic(t.id, sec.id)">
+              <span class="tp-tile-no" x-text="topicNumber(t.id)"></span>
+              <span class="tp-tile-name" x-text="t.title || ('Тема ' + topicNumber(t.id))"></span>
+              <span class="tp-added" x-show="topicExistingCount(t.id)" x-text="'в уроке ' + topicExistingCount(t.id)"></span>
+              <span class="tp-tile-chev">›</span>
+            </button>
+          </template>
+        </div>
       </template>
+      <div x-show="!loading && !mapSections.some(s => s.topics.length)" class="picker-group-label">Нет тем</div>
     </div>
 
-    {{-- Темы — номера, горизонтальная прокрутка как в базе.
-         У ОГЭ и ЕГЭ темы появляются после выбора части, у ВПР — сразу. --}}
-    <div class="topics-row" x-show="topics.length && (sections.length === 0 || sectionId)" style="margin-top:10px">
-      <template x-for="t in topics" :key="t.id">
-        <button type="button" class="topic-pill" :class="{ active: topicId === String(t.id), 'has-added': topicHasExisting(t.id) }"
-                @click="chooseTopic(t.id)" :title="t.title" x-text="Number(t.id)"></button>
-      </template>
-    </div>
+    {{-- Экран 2. Задачи темы --}}
+    <div x-show="screen === 'topic'" x-cloak>
+      <div class="tp-topic-head">
+        <button type="button" class="tp-back" @click="backToMap()">‹ Темы</button>
+        <span class="tp-topic-title" x-text="topicNumber(topicId) + ' · ' + currentTopicTitle"></span>
+      </div>
 
-    {{-- Название выбранной темы: у ВПР и ЕГЭ по одному номеру не догадаться. --}}
-    <div class="picker-group-label" x-show="topicId && currentTopicTitle" x-text="currentTopicTitle" style="margin-top:6px"></div>
+      {{-- Задания темы — вкладки; точка: из задания уже есть задачи в уроке --}}
+      <div class="tp-tabs" x-show="groups.length > 1">
+        <template x-for="g in groups" :key="'tab-' + g.key">
+          <button type="button" class="topic-pill tp-tab" :class="{ active: currentGroup && currentGroup.key === g.key, 'has-added': existingCount(g) }"
+                  @click="chooseGroup(g.key)" x-text="g.label" :title="g.label"></button>
+        </template>
+      </div>
 
-    {{-- Спойлеры-задания с карточками задач --}}
-    <div class="task-list" x-show="topicId && !loading">
-      <template x-for="g in groups" :key="g.key">
-        <details class="spoiler">
-          <summary>
-            <span class="tp-summary-label">
-              <span x-text="g.label"></span>
-              <span class="tp-count" x-text="'(' + g.tasks.length + ')'"></span>
-              <span class="tp-added" x-show="existingCount(g)" x-text="'добавлено ' + existingCount(g)"></span>
-            </span>
-            {{-- Toggle всего блока: все выбраны — снять, иначе добрать недостающие --}}
-            <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(g)"
-                    x-text="groupAllSelected(g) ? 'Снять блок' : 'Выбрать блок'"></button>
-          </summary>
-          <div class="spoiler-body">
-            {{-- Есть подтипы — раскрываем задание ещё на уровень --}}
-            <template x-for="sub in g.subs" :key="sub.key">
-              <details class="tp-sub">
-                <summary>
-                  <span class="tp-sub-label" x-text="sub.label"></span>
-                  <span class="tp-count" x-text="'(' + sub.tasks.length + ')'"></span>
-                  <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(sub)"
-                          x-text="groupAllSelected(sub) ? 'Снять' : 'Выбрать'"></button>
-                </summary>
-                <div class="tp-sub-body">
-                  {{-- Сотня задач идёт от простых к сложным, поэтому внутри
-                       уровня режем её на подуровни по двадцать. --}}
-                  <template x-for="chunk in sub.chunks" :key="chunk.key">
-                    <details class="tp-chunk">
-                      <summary>
-                        <span class="tp-chunk-label" x-text="chunk.label"></span>
-                        <span class="tp-count" x-text="'(' + chunk.tasks.length + ')'"></span>
-                        <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(chunk)"
-                                x-text="groupAllSelected(chunk) ? 'Снять' : 'Выбрать'"></button>
-                      </summary>
-                      <div class="tp-chunk-body">
-                        <template x-for="t in chunk.tasks" :key="t.uid">
-                          @include('pwa._shared.partials.task-picker-card')
-                        </template>
-                      </div>
-                    </details>
-                  </template>
-                  <template x-for="t in (sub.chunks.length ? [] : sub.tasks)" :key="t.uid">
-                    @include('pwa._shared.partials.task-picker-card')
-                  </template>
-                </div>
-              </details>
+      <template x-if="currentGroup">
+        <div>
+          <div class="tp-group-title">
+            <span x-text="currentGroup.label"></span>
+            <span class="tp-added" x-show="existingCount(currentGroup)" x-text="'в уроке ' + existingCount(currentGroup)"></span>
+          </div>
+
+          {{-- Подтипы задания --}}
+          <div class="tp-pills tp-subpills" x-show="currentGroup.subs.length">
+            <button type="button" class="topic-pill" :class="{ active: !activeSub }" @click="chooseSub(null)">Все</button>
+            <template x-for="sub in currentGroup.subs" :key="'sub-' + sub.key">
+              <button type="button" class="topic-pill" :class="{ active: activeSub === sub.key }" @click="chooseSub(sub.key)">
+                <span x-text="sub.label"></span> <span class="tp-count" x-text="sub.tasks.length"></span>
+              </button>
             </template>
-            {{-- Задание без подтипов: подуровни те же, если задач много --}}
-            <template x-for="chunk in (g.subs.length ? [] : g.chunks)" :key="chunk.key">
-              <details class="tp-sub">
-                <summary>
-                  <span class="tp-sub-label" x-text="chunk.label"></span>
-                  <span class="tp-count" x-text="'(' + chunk.tasks.length + ')'"></span>
-                  <button type="button" class="tp-block-btn" @click.stop.prevent="toggleGroup(chunk)"
-                          x-text="groupAllSelected(chunk) ? 'Снять' : 'Выбрать'"></button>
-                </summary>
-                <div class="tp-sub-body">
-                  <template x-for="t in chunk.tasks" :key="t.uid">
-                    @include('pwa._shared.partials.task-picker-card')
-                  </template>
-                </div>
-              </details>
+          </div>
+
+          {{-- Подуровни по двадцать: задачи идут от простых к сложным --}}
+          <div class="tp-pills tp-subpills" x-show="currentChunks.length">
+            <template x-for="(chunk, ci) in currentChunks" :key="'chunk-' + chunk.key">
+              <button type="button" class="topic-pill" :class="{ active: activeChunk === ci }" @click="chooseChunk(ci)"
+                      x-text="chunk.short"></button>
             </template>
-            <template x-for="t in ((g.subs.length || g.chunks.length) ? [] : g.tasks)" :key="t.uid">
+          </div>
+
+          <div class="tp-list-head">
+            <span class="tp-count" x-text="visibleTasks.length + ' ' + taskWord(visibleTasks.length)"></span>
+            <button type="button" class="tp-block-btn" @click="toggleGroup({ tasks: visibleTasks })"
+                    x-text="groupAllSelected({ tasks: visibleTasks }) ? 'Снять все' : 'Выбрать все'"></button>
+          </div>
+          <div class="task-list">
+            <template x-for="t in visibleTasks" :key="t.uid">
               @include('pwa._shared.partials.task-picker-card')
             </template>
           </div>
-        </details>
+        </div>
       </template>
-      <div x-show="!groups.length" class="picker-group-label">Нет задач</div>
+      <div x-show="!loading && !groups.length" class="picker-group-label">Нет задач</div>
     </div>
   </div>
 
@@ -289,6 +273,30 @@
   .task-picker .tp-existing-note { font-size:11px; color:var(--muted); margin-left:auto; }
   .task-picker .tp-added { margin-left:6px; padding:1px 6px; border-radius:6px; font-size:11px; color:var(--green, #16a34a); background:var(--green-bg, rgba(22,163,74,.12)); white-space:nowrap; }
 
+  .task-picker .tp-classes { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .task-picker .tp-classes::-webkit-scrollbar { display:none; }
+  /* Карта тем */
+  .task-picker .tp-map { margin-top:12px; }
+  .task-picker .tp-map-sec { font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:12px 2px 6px; }
+  .task-picker .tp-tile { display:flex; align-items:center; gap:10px; width:100%; text-align:left; margin-bottom:6px;
+    background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:9px 12px; cursor:pointer; color:var(--text); }
+  .task-picker .tp-tile:active { border-color:var(--purple-bd); }
+  .task-picker .tp-tile-no { width:32px; height:32px; border-radius:9px; background:var(--surface2); display:grid; place-items:center; font-family:var(--display); font-size:14px; flex-shrink:0; }
+  .task-picker .tp-tile-name { flex:1; min-width:0; font-size:14px; line-height:1.3; }
+  .task-picker .tp-tile-chev { color:var(--muted); font-size:18px; }
+  /* Экран темы */
+  .task-picker .tp-topic-head { display:flex; align-items:center; gap:10px; margin:12px 0 10px; }
+  .task-picker .tp-back { flex-shrink:0; border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:10px; padding:7px 11px; font-size:13px; font-weight:700; cursor:pointer; }
+  .task-picker .tp-topic-title { font-family:var(--display); font-size:15px; min-width:0; }
+  .task-picker .tp-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:8px; scrollbar-width:none; }
+  .task-picker .tp-tabs::-webkit-scrollbar { display:none; }
+  .task-picker .tp-tab { max-width:240px; overflow:hidden; text-overflow:ellipsis; font-size:13px; }
+  .task-picker .tp-group-title { font-size:14px; font-weight:700; line-height:1.35; margin:2px 2px 8px; display:flex; flex-wrap:wrap; align-items:baseline; gap:6px; }
+  .task-picker .tp-subpills { margin-bottom:8px; }
+  .task-picker .tp-subpills .topic-pill { font-size:12px; padding:6px 9px; min-width:0; max-width:100%; flex-shrink:1; white-space:normal; text-align:left; }
+  .task-picker .tp-list-head { display:flex; align-items:center; justify-content:space-between; margin:4px 2px 0; }
+  .task-picker .tp-list-head + .task-list { margin-top:8px; }
+
   /* Прежний флоу 7/8 (навыки/уровни) */
   .task-picker .crumbs { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px; }
   .task-picker .crumb { background:none; border:none; color:var(--muted); font-size:12px; cursor:pointer; padding:2px 4px; }
@@ -352,9 +360,12 @@ function taskPicker(config) {
     existingUids: config.existingUids || (() => []), // дедуп с уже добавленными
     cls: null,                           // выбранный элемент PICKER_CLASSES
     refs: { grade: '', topic_id: '', skill_slug: '' },
-    // ОГЭ: раздел → тема → спойлеры
+    // Банки по темам: карта тем (все части сразу) → экран темы
     sections: [], sectionId: null,
     topics: [], topicId: null,
+    screen: 'map',                       // map | topic
+    mapSections: [],                     // [{ id, title, topics }]
+    activeGroup: null, activeSub: null, activeChunk: 0,
     // 7/8: навык → уровень → задачи
     step: 'strips',                      // strips | buckets | tasks
     strips: [], bucketKey: null,
@@ -414,31 +425,77 @@ function taskPicker(config) {
     },
 
     async loadForBank() {
+      this.screen = 'map';
+      this.mapSections = [];
       const d = await this.fetchOptions();
       if (!d) return;
 
       if (this.isTopicBank) {
-        // У ОГЭ и ЕГЭ сначала разделы (части экзамена), у ВПР их нет.
+        // У ОГЭ и ЕГЭ темы разложены по частям экзамена, у ВПР и Скиллов —
+        // одним списком. Карта показывает все части сразу: тянем темы
+        // каждой части параллельно.
         this.sections = d.sections || [];
-        this.topics = d.topics || [];
+        if (!this.sections.length) {
+          this.mapSections = [{ id: null, title: '', topics: d.topics || [] }];
+          return;
+        }
+        const my = this._reqId;
+        this.loading = true;
+        const parts = await Promise.all(this.sections.map(async sec => {
+          const data = await this.fetchRaw({ section: sec.id });
+          return { id: sec.id, title: sec.title, topics: data?.topics || [] };
+        }));
+        if (my !== this._reqId) return;   // за это время выбрали другой класс
+        this.loading = false;
+        this.mapSections = parts.filter(p => p.topics.length);
       } else {
         this.strips = d.skills || [];
       }
     },
-    async chooseSection(id) {
-      this.sectionId = id;
-      this.topicId = null; this.refs.topic_id = '';
-      this.topics = []; this.tasks = [];
-      const d = await this.fetchOptions();
-      if (d) this.topics = d.topics || [];
-    },
-    async chooseTopic(id) {
+    async chooseTopic(id, sectionId = null) {
+      this.sectionId = sectionId;
       this.topicId = String(id);
       this.refs.topic_id = String(id);
+      this.topics = (this.mapSections.find(s => s.id === sectionId) || {}).topics || [];
       this.tasks = [];
+      this.activeGroup = null; this.activeSub = null; this.activeChunk = 0;
+      this.screen = 'topic';
+      this.$root.closest('.picker-overlay')?.scrollTo({ top: 0 });
       const d = await this.fetchOptions();
       if (d) this.tasks = d.tasks || [];
       this.typeset();
+    },
+    backToMap() {
+      this.screen = 'map';
+      this.topicId = null; this.refs.topic_id = '';
+      this.tasks = [];
+      this.$root.closest('.picker-overlay')?.scrollTo({ top: 0 });
+    },
+    chooseGroup(key) { this.activeGroup = key; this.activeSub = null; this.activeChunk = 0; this.typeset(); },
+    chooseSub(key) { this.activeSub = key; this.activeChunk = 0; this.typeset(); },
+    chooseChunk(i) { this.activeChunk = i; this.typeset(); },
+    get currentGroup() {
+      const gs = this.groups;
+      return gs.find(g => g.key === this.activeGroup) || gs[0] || null;
+    },
+    get currentSet() {
+      const g = this.currentGroup;
+      if (!g) return null;
+      return (this.activeSub && g.subs.find(s => s.key === this.activeSub)) || g;
+    },
+    get currentChunks() { return this.currentSet?.chunks || []; },
+    get visibleTasks() {
+      const set = this.currentSet;
+      if (!set) return [];
+      const chunks = set.chunks || [];
+      return chunks.length ? (chunks[this.activeChunk] || chunks[0]).tasks : set.tasks;
+    },
+    topicNumber(id) { const n = Number(id); return Number.isNaN(n) ? String(id ?? '') : String(n); },
+    taskWord(n) {
+      const m10 = n % 10, m100 = n % 100;
+      if (m10 === 1 && m100 !== 11) return 'задача';
+      if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return 'задачи';
+      return 'задач';
     },
     async chooseStrip(s) {
       this.refs.skill_slug = s.slug;
@@ -451,6 +508,17 @@ function taskPicker(config) {
     goTo(step) { this.step = step; this.error = ''; },
 
     // --- данные ---
+    /** Запрос без отмены устаревших — для параллельной подгрузки частей карты. */
+    async fetchRaw(extra = {}) {
+      try {
+        const params = new URLSearchParams({ bank: this.bank });
+        for (const [k, v] of Object.entries({ ...this.refs, ...extra }))
+          if (v !== '' && v != null) params.set(k, v);
+        const r = await fetch(`/lessons/picker-options?${params}`,
+          { headers: { Accept: 'application/json' }, credentials: 'include' });
+        return r.ok ? await r.json() : null;
+      } catch (e) { return null; }
+    },
     async fetchOptions() {
       const my = ++this._reqId;
       this.loading = true; this.error = '';
@@ -507,6 +575,7 @@ function taskPicker(config) {
         chunks.push({
           key: group.key + '#' + (i / size),
           label: 'Подуровень ' + (i / size + 1) + ' · №' + (i + 1) + '–' + (i + tasks.length),
+          short: '№' + (i + 1) + '–' + (i + tasks.length),
           tasks,
         });
       }
@@ -551,11 +620,11 @@ function taskPicker(config) {
       const r = this.taskRefs(t);
       return this.existingUids().includes(window.paloTaskKey(r.bank, r.refs));
     },
-    // Точка на номере темы: в ней уже есть задачи урока, не раскрывая её.
-    topicHasExisting(topicId) {
+    // «в уроке N» на плитке темы — сколько задач урока из неё, не открывая.
+    topicExistingCount(topicId) {
       const r = this.taskRefs({ id: '' }).refs;
       const prefix = window.paloTaskKey(this.bank, { ...r, topic_id: topicId, zadanie_number: '', task_id: '' }).split('|').slice(0, 3).join('|') + '|';
-      return this.existingUids().some(k => k.startsWith(prefix));
+      return this.existingUids().filter(k => k.startsWith(prefix)).length;
     },
     existingCount(g) { return g.tasks.filter(t => this.isExisting(t)).length; },
     toggle(t) {
@@ -602,10 +671,10 @@ function taskPicker(config) {
       return { bank: this.bank, refs };
     },
 
-    // Возврат в начало мастера: корзина очищена, «9 ОГЭ» снова по умолчанию.
+    // После добавления остаёмся в той же теме: добрать ещё из неё — частый
+    // случай, а карта тем в одном тапе («‹ Темы»). Корзина очищается.
     reset() {
       this.selected = []; this.error = '';
-      this.chooseClass(PICKER_CLASSES.find(c => c.bank === 'oge'));
     },
     async confirmAdd() {
       if (!this.selected.length) return;
