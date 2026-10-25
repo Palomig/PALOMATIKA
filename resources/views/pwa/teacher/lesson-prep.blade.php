@@ -178,6 +178,8 @@
   .hw-card-svg { display: block; max-width: 160px; }
   .hw-card-svg :is(svg, img) { max-width: 100%; height: auto; }
   .hw-card-text { font-size: 14px; color: var(--text); word-break: break-word; }
+  .hw-card-text.fipi-condition img { max-width: 100%; height: auto; }
+  .hw-empty-groups { padding: 4px 2px 12px; font-size: 13px; }
   /* Ученики урока — над задачами; при прокрутке прилипают вместе с шапкой
      и сворачиваются в строку «Открыть список учеников». */
   .hw-top { position: sticky; top: calc(-16px - var(--safe-top, 0px)); z-index: 5; background: var(--bg); margin-top: -4px; border-bottom: 1px solid var(--border); }
@@ -770,7 +772,7 @@
             <span x-show="!tasks.length">На уроке ещё нет задач — аналоги подбирать не из чего. Загляни в «По скиллам».</span>
           </div>
 
-          <template x-for="g in hwGroups" :key="g.key">
+          <template x-for="g in hwGroups.filter(g => !g.no_analogs)" :key="g.key">
             <div class="hw-group">
               <div class="hw-group-head">
                 <span class="hw-group-label" x-text="g.label"></span>
@@ -779,20 +781,26 @@
                         :class="hwAllSelected(g.suggestions) ? 'active' : ''"
                         @click="hwToggleAll(g.suggestions)" x-text="hwAllSelected(g.suggestions) ? 'снять' : 'все'"></button>
               </div>
-              <div x-show="g.no_analogs" class="hw-muted">аналогов нет</div>
-              <div class="hw-cards" x-show="!g.no_analogs">
+              <div class="hw-cards">
                 <template x-for="(s, si) in g.suggestions" :key="g.key + '-' + si">
                   <label class="hw-card" :class="hwIsSelected(s) ? 'active' : ''">
                     <input type="checkbox" :checked="hwIsSelected(s)" @change="hwToggle(s)">
                     <span class="hw-card-body">
                       <span x-show="s.preview_svg" x-html="s.preview_svg" class="hw-card-svg"></span>
-                      <span class="hw-card-text" x-html="renderLatex(s.preview_text)"></span>
+                      <span class="hw-card-text fipi-condition" x-show="s.preview_html" x-html="fipiHtml(s.preview_html)"></span>
+                      <span class="hw-card-text" x-show="!s.preview_html" x-html="renderLatex(s.preview_text)"></span>
                     </span>
                   </label>
                 </template>
               </div>
             </div>
           </template>
+          {{-- Группы, где банк исчерпан уроком, — одной строкой внизу: пустая
+               карточка первой в списке выглядела как «выдавать нечего». --}}
+          <div class="hw-muted hw-empty-groups" x-show="hwGroups.some(g => g.no_analogs)">
+            Аналогов нет — на уроке взяты все задачи банка:
+            <span x-text="hwGroups.filter(g => g.no_analogs).map(g => g.label.replace(/^.*?Тема\s+/, 'тема ')).join('; ')"></span>
+          </div>
           </div>
 
           {{-- По скиллам: навык → группы примеров из банка «Скиллы» --}}
