@@ -145,7 +145,12 @@ class AlgebraicAnswerComparator
         }
 
         if (!str_contains($ref, '(')) {
-            return !str_contains($usr, '(') && $this->termCount($usr) === $this->termCount($ref);
+            if (str_contains($usr, '(') || $this->termCount($usr) !== $this->termCount($ref)) {
+                return false;
+            }
+            // Одночлен — в стандартном виде: «a^8», а не «a^5*a^3»; иначе в
+            // «Упростите» засчитывалось само условие.
+            return $this->termCount($ref) !== 1 || $this->isStandardMonomial($usr);
         }
 
         if ($this->termCount($ref) === 1) {
@@ -232,6 +237,22 @@ class AlgebraicAnswerComparator
     }
 
     /** «x^(2)» из «x^{2}» — показатель, а не скобочный множитель. */
+    /**
+     * Одночлен стандартного вида: не больше одного числового множителя и
+     * каждая буква — один раз («-6a^3b^4», «x^2», «12x»; «x*3» тоже годится).
+     */
+    private function isStandardMonomial(string $s): bool
+    {
+        $body = ltrim($s, '+-');
+        // Числа вне показателей степени: «6a^3» — одно, «2*3a» — два.
+        if (preg_match_all('/(?<![\^\d.])\d+(?:\.\d+)?/', $body) > 1) {
+            return false;
+        }
+        $letters = preg_match_all('/[a-z]/', $body, $m);
+
+        return $letters === count(array_unique($m[0]));
+    }
+
     private function collapseExponents(string $s): string
     {
         return preg_replace('/\^\((\d+)\)/', '^$1', $s) ?? $s;
