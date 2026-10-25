@@ -139,6 +139,17 @@ class TaskAnswerResolver
             return false;
         }
 
+        // Таблица значений функции (банк «Скиллы», графики): «-7 | -5 | -3».
+        // Значения сверяются по порядку столбцов — множеством нельзя: у
+        // параболы «4 | 1 | 0 | 1 | 4» повторы, и переставленные числа это
+        // уже другая таблица.
+        if (str_contains((string) $correctAnswer, '|')) {
+            $verdict = $this->tableMatches((string) $correctAnswer, $userRaw);
+            if ($verdict !== null) {
+                return $verdict;
+            }
+        }
+
         // Ответ — одна латинская буква (вершина графа), а с телефона её
         // набирают кириллицей: «А» вместо «A», «Н» вместо «H».
         if (preg_match('/^[a-z]$/', $correct)) {
@@ -836,6 +847,38 @@ class TaskAnswerResolver
         }
         if (preg_match('/^-?(\d+)\/-?(\d+)$/', $value, $m)) {
             return $this->gcd((int) $m[1], (int) $m[2]) === 1;
+        }
+
+        return true;
+    }
+
+    /**
+     * Строка таблицы: эталон через «|», ученик пишет через «;», «|» или
+     * пробелы (запятая — десятичный знак, не разделитель). Каждая клетка —
+     * число или несократимая дробь. null — эталон не таблица чисел.
+     */
+    private function tableMatches(string $correctAnswer, string $userRaw): ?bool
+    {
+        $expected = array_map('trim', explode('|', $correctAnswer));
+        $expectedValues = array_map(fn ($cell) => $this->parseFractionValue($cell), $expected);
+        if (in_array(null, $expectedValues, true)) {
+            return null;
+        }
+
+        $user = trim($userRaw);
+        $cells = preg_match('/[|;]/', $user)
+            ? preg_split('/\s*[|;]\s*/', trim($user, " \t|;"))
+            : preg_split('/\s+/', $user);
+        $cells = array_values(array_filter($cells ?: [], static fn ($c) => $c !== ''));
+        if (count($cells) !== count($expected)) {
+            return false;
+        }
+
+        foreach ($cells as $i => $cell) {
+            $value = $this->parseFractionValue($cell);
+            if ($value === null || !$this->isReducedFraction($cell) || abs($value - $expectedValues[$i]) > 1e-9) {
+                return false;
+            }
         }
 
         return true;

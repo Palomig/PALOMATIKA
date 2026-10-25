@@ -1,0 +1,4844 @@
+{
+  "bank": "skills",
+  "topic": "06",
+  "meta": {
+    "title": "Степени",
+    "description": "Свойства степеней с натуральным и целым показателем, вычисления удобным способом, одночлены, числа в стандартном виде. 7 и 8 класс, по три уровня из 100 примеров."
+  },
+  "generator": {
+    "script": "scripts/generate-skills-powers.py",
+    "seed": 20261026
+  },
+  "zadaniya": [
+    {
+      "number": 7,
+      "title": "7 класс",
+      "grade": 7,
+      "instruction": "Степени",
+      "type": "expression",
+      "status": "production",
+      "subtypes": [
+        "Уровень 1 — свойства степеней",
+        "Уровень 2 — вычислить удобным способом",
+        "Уровень 3 — одночлены"
+      ],
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "Упростите: $b^{5}\\cdot b^{12}$",
+          "answer": "b^17",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 2,
+          "expression": "Упростите: $c^{9}\\cdot c^{8}$",
+          "answer": "c^17",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 3,
+          "expression": "Упростите: $k^{3}\\cdot k^{2}$",
+          "answer": "k^5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 4,
+          "expression": "Упростите: $n^{11}\\cdot n^{7}$",
+          "answer": "n^18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 5,
+          "expression": "Упростите: $m^{7}\\cdot m^{5}$",
+          "answer": "m^12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 6,
+          "expression": "Упростите: $y^{9}\\cdot y^{7}$",
+          "answer": "y^16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 7,
+          "expression": "Упростите: $m^{2}\\cdot m^{5}$",
+          "answer": "m^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 8,
+          "expression": "Упростите: $m^{9}\\cdot m^{11}$",
+          "answer": "m^20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 9,
+          "expression": "Упростите: $x^{9}\\cdot x^{4}$",
+          "answer": "x^13",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 10,
+          "expression": "Упростите: $n^{8}\\cdot n^{6}$",
+          "answer": "n^14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 11,
+          "expression": "Упростите: $x^{10}\\cdot x^{8}$",
+          "answer": "x^18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 12,
+          "expression": "Упростите: $n^{7}\\cdot n^{6}$",
+          "answer": "n^13",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 13,
+          "expression": "Упростите: $b^{7}\\cdot b^{7}$",
+          "answer": "b^14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 14,
+          "expression": "Упростите: $c^{8}\\cdot c^{7}$",
+          "answer": "c^15",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 15,
+          "expression": "Упростите: $y^{11}\\cdot y^{9}$",
+          "answer": "y^20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 16,
+          "expression": "Упростите: $x^{2}\\cdot x^{4}$",
+          "answer": "x^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 17,
+          "expression": "Упростите: $k^{5}\\cdot k^{11}$",
+          "answer": "k^16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 18,
+          "expression": "Упростите: $c^{5}\\cdot c^{9}$",
+          "answer": "c^14",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 19,
+          "expression": "Упростите: $x^{2}\\cdot x^{8}$",
+          "answer": "x^10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 20,
+          "expression": "Упростите: $n^{3}\\cdot n^{8}$",
+          "answer": "n^11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 21,
+          "expression": "Упростите: $y^{11}:y^{10}$",
+          "answer": "y",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 22,
+          "expression": "Упростите: $k^{7}:k^{5}$",
+          "answer": "k^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 23,
+          "expression": "Упростите: $p^{11}:p^{4}$",
+          "answer": "p^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 24,
+          "expression": "Упростите: $c^{7}:c^{2}$",
+          "answer": "c^5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 25,
+          "expression": "Упростите: $y^{9}:y^{3}$",
+          "answer": "y^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 26,
+          "expression": "Упростите: $b^{11}:b^{6}$",
+          "answer": "b^5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 27,
+          "expression": "Упростите: $p^{10}:p^{3}$",
+          "answer": "p^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 28,
+          "expression": "Упростите: $b^{7}:b^{6}$",
+          "answer": "b",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 29,
+          "expression": "Упростите: $y^{16}:y^{10}$",
+          "answer": "y^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 30,
+          "expression": "Упростите: $b^{16}:b^{6}$",
+          "answer": "b^10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 31,
+          "expression": "Упростите: $a^{11}:a^{2}$",
+          "answer": "a^9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 32,
+          "expression": "Упростите: $c^{15}:c^{9}$",
+          "answer": "c^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 33,
+          "expression": "Упростите: $n^{10}:n^{9}$",
+          "answer": "n",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 34,
+          "expression": "Упростите: $x^{11}:x^{3}$",
+          "answer": "x^8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 35,
+          "expression": "Упростите: $p^{11}:p^{8}$",
+          "answer": "p^3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 36,
+          "expression": "Упростите: $m^{13}:m^{6}$",
+          "answer": "m^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 37,
+          "expression": "Упростите: $p^{15}:p^{8}$",
+          "answer": "p^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 38,
+          "expression": "Упростите: $k^{11}:k^{9}$",
+          "answer": "k^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 39,
+          "expression": "Упростите: $c^{13}:c^{7}$",
+          "answer": "c^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 40,
+          "expression": "Упростите: $b^{10}:b^{2}$",
+          "answer": "b^8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 41,
+          "expression": "Упростите: $(m^{7})^{3}$",
+          "answer": "m^21",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 42,
+          "expression": "Упростите: $(y^{6})^{6}$",
+          "answer": "y^36",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 43,
+          "expression": "Упростите: $(y^{6})^{3}$",
+          "answer": "y^18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 44,
+          "expression": "Упростите: $(m^{7})^{5}$",
+          "answer": "m^35",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 45,
+          "expression": "Упростите: $(k^{8})^{5}$",
+          "answer": "k^40",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 46,
+          "expression": "Упростите: $(m^{4})^{6}$",
+          "answer": "m^24",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 47,
+          "expression": "Упростите: $(y^{9})^{2}$",
+          "answer": "y^18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 48,
+          "expression": "Упростите: $(x^{8})^{6}$",
+          "answer": "x^48",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 49,
+          "expression": "Упростите: $(m^{8})^{3}$",
+          "answer": "m^24",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 50,
+          "expression": "Упростите: $(n^{5})^{3}$",
+          "answer": "n^15",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 51,
+          "expression": "Упростите: $(c^{6})^{4}$",
+          "answer": "c^24",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 52,
+          "expression": "Упростите: $(c^{4})^{4}$",
+          "answer": "c^16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 53,
+          "expression": "Упростите: $(n^{9})^{6}$",
+          "answer": "n^54",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 54,
+          "expression": "Упростите: $(y^{8})^{2}$",
+          "answer": "y^16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 55,
+          "expression": "Упростите: $(k^{3})^{6}$",
+          "answer": "k^18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 56,
+          "expression": "Упростите: $(k^{6})^{2}$",
+          "answer": "k^12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 57,
+          "expression": "Упростите: $(c^{4})^{5}$",
+          "answer": "c^20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 58,
+          "expression": "Упростите: $(a^{3})^{2}$",
+          "answer": "a^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 59,
+          "expression": "Упростите: $(c^{9})^{3}$",
+          "answer": "c^27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 60,
+          "expression": "Упростите: $(m^{2})^{3}$",
+          "answer": "m^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 61,
+          "expression": "Упростите: $m^{5}\\cdot m^{4}\\cdot m^{2}$",
+          "answer": "m^11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 62,
+          "expression": "Упростите: $k\\cdot k^{5}\\cdot k^{5}$",
+          "answer": "k^11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 63,
+          "expression": "Упростите: $a^{2}\\cdot a^{7}\\cdot a^{9}$",
+          "answer": "a^18",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 64,
+          "expression": "Упростите: $c^{2}\\cdot c^{3}\\cdot c^{8}$",
+          "answer": "c^13",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 65,
+          "expression": "Упростите: $n^{6}\\cdot n^{9}\\cdot n^{8}$",
+          "answer": "n^23",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 66,
+          "expression": "Упростите: $b^{6}\\cdot b^{9}\\cdot b^{5}$",
+          "answer": "b^20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 67,
+          "expression": "Упростите: $p^{9}\\cdot p^{8}\\cdot p^{8}$",
+          "answer": "p^25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 68,
+          "expression": "Упростите: $p^{2}\\cdot p^{4}\\cdot p^{2}$",
+          "answer": "p^8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 69,
+          "expression": "Упростите: $x^{2}\\cdot x^{2}\\cdot x^{3}$",
+          "answer": "x^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 70,
+          "expression": "Упростите: $m\\cdot m^{2}\\cdot m^{4}$",
+          "answer": "m^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 71,
+          "expression": "Упростите: $(n^{3})^{3}\\cdot n:n^{3}$",
+          "answer": "n^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 72,
+          "expression": "Упростите: $(m^{4})^{4}\\cdot m^{8}:m^{4}$",
+          "answer": "m^20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 73,
+          "expression": "Упростите: $(p^{4})^{2}\\cdot p^{8}:p^{5}$",
+          "answer": "p^11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 74,
+          "expression": "Упростите: $(b^{3})^{4}\\cdot b^{7}:b^{17}$",
+          "answer": "b^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 75,
+          "expression": "Упростите: $(m^{5})^{4}\\cdot m^{3}:m^{13}$",
+          "answer": "m^10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 76,
+          "expression": "Упростите: $(p^{3})^{2}\\cdot p^{2}:p^{2}$",
+          "answer": "p^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 77,
+          "expression": "Упростите: $(p^{3})^{4}\\cdot p^{4}:p^{5}$",
+          "answer": "p^11",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 78,
+          "expression": "Упростите: $(b^{4})^{4}\\cdot b^{7}:b^{20}$",
+          "answer": "b^3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 79,
+          "expression": "Упростите: $(m^{4})^{2}\\cdot m^{3}:m^{9}$",
+          "answer": "m^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 80,
+          "expression": "Упростите: $(y^{3})^{4}\\cdot y:y$",
+          "answer": "y^12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 81,
+          "expression": "Упростите: $(m^{5})^{2}\\cdot m^{3}:m^{11}$",
+          "answer": "m^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 82,
+          "expression": "Упростите: $(p^{5})^{2}\\cdot p^{8}:p^{6}$",
+          "answer": "p^12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 83,
+          "expression": "Упростите: $(x^{3})^{3}\\cdot x^{7}:x^{13}$",
+          "answer": "x^3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 84,
+          "expression": "Упростите: $(k^{2})^{3}\\cdot k:k^{3}$",
+          "answer": "k^4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 85,
+          "expression": "Упростите: $(p^{5})^{2}\\cdot p^{2}:p^{6}$",
+          "answer": "p^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 86,
+          "expression": "Упростите: $(p^{3})^{3}\\cdot p^{6}:p^{14}$",
+          "answer": "p",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 87,
+          "expression": "Упростите: $(c^{2})^{2}\\cdot c:c^{4}$",
+          "answer": "c",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 88,
+          "expression": "Упростите: $(m^{3})^{3}\\cdot m^{4}:m$",
+          "answer": "m^12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 89,
+          "expression": "Упростите: $(p^{5})^{4}\\cdot p^{8}:p^{7}$",
+          "answer": "p^21",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 90,
+          "expression": "Упростите: $(m^{2})^{4}\\cdot m^{5}:m^{6}$",
+          "answer": "m^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 91,
+          "expression": "Упростите: $\\dfrac{m^{6}\\cdot m^{2}}{m^{4}}$",
+          "answer": "m^4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 92,
+          "expression": "Упростите: $\\dfrac{p^{6}\\cdot p^{3}}{p^{6}}$",
+          "answer": "p^3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 93,
+          "expression": "Упростите: $\\dfrac{k^{6}\\cdot k^{8}}{k^{12}}$",
+          "answer": "k^2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 94,
+          "expression": "Упростите: $\\dfrac{c^{6}\\cdot c^{8}}{c^{4}}$",
+          "answer": "c^10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 95,
+          "expression": "Упростите: $\\dfrac{n^{3}\\cdot n^{4}}{n^{2}}$",
+          "answer": "n^5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 96,
+          "expression": "Упростите: $\\dfrac{y^{4}\\cdot y^{6}}{y^{3}}$",
+          "answer": "y^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 97,
+          "expression": "Упростите: $\\dfrac{c^{7}\\cdot c^{8}}{c^{9}}$",
+          "answer": "c^6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 98,
+          "expression": "Упростите: $\\dfrac{x^{8}\\cdot x^{4}}{x^{2}}$",
+          "answer": "x^10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 99,
+          "expression": "Упростите: $\\dfrac{b^{5}\\cdot b^{4}}{b^{2}}$",
+          "answer": "b^7",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 100,
+          "expression": "Упростите: $\\dfrac{m^{7}\\cdot m^{3}}{m^{9}}$",
+          "answer": "m",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 101,
+          "expression": "Вычислите: $3^{8}:3^{7}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 102,
+          "expression": "Вычислите: $3^{16}:3^{12}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 103,
+          "expression": "Вычислите: $5^{12}:5^{10}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 104,
+          "expression": "Вычислите: $7^{14}:7^{12}$",
+          "answer": "49",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 105,
+          "expression": "Вычислите: $10^{8}:10^{6}$",
+          "answer": "100",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 106,
+          "expression": "Вычислите: $10^{8}:10^{7}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 107,
+          "expression": "Вычислите: $2^{14}:2^{10}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 108,
+          "expression": "Вычислите: $2^{13}:2^{9}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 109,
+          "expression": "Вычислите: $2^{4}:2^{3}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 110,
+          "expression": "Вычислите: $5^{13}:5^{12}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 111,
+          "expression": "Вычислите: $5^{9}:5^{7}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 112,
+          "expression": "Вычислите: $3^{11}:3^{7}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 113,
+          "expression": "Вычислите: $3^{7}:3^{3}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 114,
+          "expression": "Вычислите: $3^{12}:3^{9}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 115,
+          "expression": "Вычислите: $3^{15}:3^{13}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 116,
+          "expression": "Вычислите: $3^{13}:3^{10}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 117,
+          "expression": "Вычислите: $2^{15}:2^{13}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 118,
+          "expression": "Вычислите: $2^{7}:2^{3}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 119,
+          "expression": "Вычислите: $3^{15}:3^{14}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 120,
+          "expression": "Вычислите: $5^{17}:5^{15}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 121,
+          "expression": "Вычислите: $21^{2}:7^{2}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 122,
+          "expression": "Вычислите: $15^{2}:5^{2}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 123,
+          "expression": "Вычислите: $36^{5}:9^{5}$",
+          "answer": "1024",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 124,
+          "expression": "Вычислите: $48^{5}:12^{5}$",
+          "answer": "1024",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 125,
+          "expression": "Вычислите: $12^{2}:4^{2}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 126,
+          "expression": "Вычислите: $21^{4}:7^{4}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 127,
+          "expression": "Вычислите: $15^{4}:5^{4}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 128,
+          "expression": "Вычислите: $45^{5}:9^{5}$",
+          "answer": "3125",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 129,
+          "expression": "Вычислите: $4^{2}\\cdot 25^{2}$",
+          "answer": "10000",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 130,
+          "expression": "Вычислите: $36^{4}:9^{4}$",
+          "answer": "256",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 131,
+          "expression": "Вычислите: $15^{5}:5^{5}$",
+          "answer": "243",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 132,
+          "expression": "Вычислите: $4^{2}\\cdot 5^{2}$",
+          "answer": "400",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 133,
+          "expression": "Вычислите: $5^{4}\\cdot 2^{4}$",
+          "answer": "10000",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 134,
+          "expression": "Вычислите: $60^{2}:12^{2}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 135,
+          "expression": "Вычислите: $24^{3}:8^{3}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 136,
+          "expression": "Вычислите: $(5^{4})^{2}:5^{7}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 137,
+          "expression": "Вычислите: $(2^{4})^{3}:2^{11}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 138,
+          "expression": "Вычислите: $(2^{4})^{2}:2^{6}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 139,
+          "expression": "Вычислите: $(3^{5})^{4}:3^{19}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 140,
+          "expression": "Вычислите: $(3^{4})^{3}:3^{11}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 141,
+          "expression": "Вычислите: $(5^{4})^{3}:5^{10}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 142,
+          "expression": "Вычислите: $(5^{2})^{3}:5^{4}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 143,
+          "expression": "Вычислите: $(5^{3})^{2}:5^{5}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 144,
+          "expression": "Вычислите: $(5^{4})^{4}:5^{15}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 145,
+          "expression": "Вычислите: $(2^{5})^{3}:2^{12}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 146,
+          "expression": "Вычислите: $(2^{4})^{4}:2^{13}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 147,
+          "expression": "Вычислите: $(3^{3})^{2}:3^{5}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 148,
+          "expression": "Вычислите: $(2^{2})^{2}:2^{1}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 149,
+          "expression": "Вычислите: $(3^{5})^{2}:3^{9}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 150,
+          "expression": "Вычислите: $(3^{5})^{4}:3^{18}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 151,
+          "expression": "Вычислите: $(2^{2})^{3}:2^{3}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 152,
+          "expression": "Вычислите: $(5^{2})^{4}:5^{6}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 153,
+          "expression": "Вычислите: $(5^{4})^{4}:5^{14}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 154,
+          "expression": "Вычислите: $(2^{5})^{3}:2^{14}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 155,
+          "expression": "Вычислите: $(3^{2})^{2}:3^{2}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 156,
+          "expression": "Вычислите: $27^{3}:3^{8}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 157,
+          "expression": "Вычислите: $16^{5}:2^{17}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 158,
+          "expression": "Вычислите: $8^{4}:2^{10}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 159,
+          "expression": "Вычислите: $4^{4}:2^{6}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 160,
+          "expression": "Вычислите: $9^{2}:3^{2}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 161,
+          "expression": "Вычислите: $9^{3}:3^{4}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 162,
+          "expression": "Вычислите: $27^{4}:3^{11}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 163,
+          "expression": "Вычислите: $16^{3}:2^{10}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 164,
+          "expression": "Вычислите: $27^{3}:3^{7}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 165,
+          "expression": "Вычислите: $25^{2}:5^{2}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 166,
+          "expression": "Вычислите: $9^{2}:3^{3}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 167,
+          "expression": "Вычислите: $27^{5}:3^{14}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 168,
+          "expression": "Вычислите: $9^{3}:3^{5}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 169,
+          "expression": "Вычислите: $8^{3}:2^{8}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 170,
+          "expression": "Вычислите: $16^{3}:2^{9}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 171,
+          "expression": "Вычислите: $4^{2}:2^{2}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 172,
+          "expression": "Вычислите: $16^{4}:2^{15}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 173,
+          "expression": "Вычислите: $4^{5}:2^{8}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 174,
+          "expression": "Вычислите: $9^{5}:3^{9}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 175,
+          "expression": "Вычислите: $9^{4}:3^{7}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 176,
+          "expression": "Вычислите: $\\dfrac{2^{8}\\cdot 2^{10}}{2^{17}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 177,
+          "expression": "Вычислите: $\\dfrac{2^{10}\\cdot 2^{10}}{2^{17}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 178,
+          "expression": "Вычислите: $\\dfrac{2^{4}\\cdot 2^{8}}{2^{8}}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 179,
+          "expression": "Вычислите: $\\dfrac{2^{9}\\cdot 2^{6}}{2^{13}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 180,
+          "expression": "Вычислите: $\\dfrac{2^{6}\\cdot 2^{9}}{2^{11}}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 181,
+          "expression": "Вычислите: $\\dfrac{3^{4}\\cdot 3^{6}}{3^{9}}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 182,
+          "expression": "Вычислите: $\\dfrac{2^{10}\\cdot 2^{5}}{2^{13}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 183,
+          "expression": "Вычислите: $\\dfrac{2^{5}\\cdot 2^{7}}{2^{11}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 184,
+          "expression": "Вычислите: $\\dfrac{3^{8}\\cdot 3^{5}}{3^{10}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 185,
+          "expression": "Вычислите: $\\dfrac{2^{3}\\cdot 2^{6}}{2^{8}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 186,
+          "expression": "Вычислите: $\\dfrac{2^{9}\\cdot 2^{8}}{2^{14}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 187,
+          "expression": "Вычислите: $\\dfrac{2^{4}\\cdot 2^{8}}{2^{10}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 188,
+          "expression": "Вычислите: $\\dfrac{2^{4}\\cdot 2^{3}}{2^{3}}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 189,
+          "expression": "Вычислите: $\\dfrac{3^{3}\\cdot 3^{5}}{3^{5}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 190,
+          "expression": "Вычислите: $\\dfrac{2^{5}\\cdot 2^{5}}{2^{9}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 191,
+          "expression": "Вычислите: $0{,}1^{3}\\cdot 10^{4}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 192,
+          "expression": "Вычислите: $0{,}5^{4}\\cdot 2^{5}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 193,
+          "expression": "Вычислите: $0{,}5^{8}\\cdot 2^{11}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 194,
+          "expression": "Вычислите: $0{,}2^{10}\\cdot 5^{11}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 195,
+          "expression": "Вычислите: $0{,}25^{7}\\cdot 4^{9}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 196,
+          "expression": "Вычислите: $0{,}2^{3}\\cdot 5^{5}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 197,
+          "expression": "Вычислите: $0{,}25^{6}\\cdot 4^{8}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 198,
+          "expression": "Вычислите: $0{,}1^{9}\\cdot 10^{11}$",
+          "answer": "100",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 199,
+          "expression": "Вычислите: $0{,}25^{3}\\cdot 4^{5}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 200,
+          "expression": "Вычислите: $0{,}25^{6}\\cdot 4^{7}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 201,
+          "expression": "Упростите: $9y^{5}a^{3}\\cdot 7y$",
+          "answer": "63y^6a^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 202,
+          "expression": "Упростите: $-2b^{5}x^{2}\\cdot 2bx$",
+          "answer": "-4b^6x^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 203,
+          "expression": "Упростите: $-2a^{5}b\\cdot (-6a^{4}b^{4})$",
+          "answer": "12a^9b^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 204,
+          "expression": "Упростите: $-2cx^{4}\\cdot (-2c^{4})$",
+          "answer": "4c^5x^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 205,
+          "expression": "Упростите: $5y^{4}x^{5}\\cdot 6yx^{3}$",
+          "answer": "30y^5x^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 206,
+          "expression": "Упростите: $7b^{5}c^{5}\\cdot (-7bc)$",
+          "answer": "-49b^6c^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 207,
+          "expression": "Упростите: $-5m^{5}y^{4}\\cdot (-9m^{2})$",
+          "answer": "45m^7y^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 208,
+          "expression": "Упростите: $-5xa^{4}\\cdot 3x$",
+          "answer": "-15x^2a^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 209,
+          "expression": "Упростите: $6c^{5}x^{2}\\cdot (-5c^{2}x^{2})$",
+          "answer": "-30c^7x^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 210,
+          "expression": "Упростите: $-6y^{5}x^{5}\\cdot 4y^{3}$",
+          "answer": "-24y^8x^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 211,
+          "expression": "Упростите: $-2c^{5}y^{5}\\cdot (-7c^{4}y^{2})$",
+          "answer": "14c^9y^7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 212,
+          "expression": "Упростите: $2m^{5}x^{5}\\cdot 7m^{4}x^{3}$",
+          "answer": "14m^9x^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 213,
+          "expression": "Упростите: $-9bm\\cdot 5bm^{3}$",
+          "answer": "-45b^2m^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 214,
+          "expression": "Упростите: $4y^{2}m^{4}\\cdot 2y^{2}m^{4}$",
+          "answer": "8y^4m^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 215,
+          "expression": "Упростите: $7y^{3}b^{2}\\cdot 9y^{2}b^{4}$",
+          "answer": "63y^5b^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 216,
+          "expression": "Упростите: $-7yb^{3}\\cdot 6y^{3}b^{4}$",
+          "answer": "-42y^4b^7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 217,
+          "expression": "Упростите: $4b^{5}y\\cdot (-2b^{3}y)$",
+          "answer": "-8b^8y^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 218,
+          "expression": "Упростите: $-2bm^{4}\\cdot bm^{2}$",
+          "answer": "-2b^2m^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 219,
+          "expression": "Упростите: $-2b^{4}y\\cdot (-9b^{2}y^{4})$",
+          "answer": "18b^6y^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 220,
+          "expression": "Упростите: $2b^{2}x^{2}\\cdot (-5b^{3})$",
+          "answer": "-10b^5x^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 221,
+          "expression": "Упростите: $2m^{5}c^{4}\\cdot 7m^{4}c^{2}$",
+          "answer": "14m^9c^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 222,
+          "expression": "Упростите: $-3c^{2}y^{4}\\cdot 3c^{4}y$",
+          "answer": "-9c^6y^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 223,
+          "expression": "Упростите: $-8c^{5}m^{5}\\cdot 9c^{3}m^{3}$",
+          "answer": "-72c^8m^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 224,
+          "expression": "Упростите: $-9x^{2}y^{5}\\cdot 5xy^{4}$",
+          "answer": "-45x^3y^9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 225,
+          "expression": "Упростите: $-7b^{4}c^{4}\\cdot 3b^{3}$",
+          "answer": "-21b^7c^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 226,
+          "expression": "Упростите: $-4b^{4}a\\cdot 2b$",
+          "answer": "-8b^5a",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 227,
+          "expression": "Упростите: $5c^{4}b^{5}\\cdot 6c^{2}b^{3}$",
+          "answer": "30c^6b^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 228,
+          "expression": "Упростите: $2b^{4}a^{5}\\cdot 3ba^{3}$",
+          "answer": "6b^5a^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 229,
+          "expression": "Упростите: $-3c^{5}a^{5}\\cdot (-8c^{2}a^{2})$",
+          "answer": "24c^7a^7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 230,
+          "expression": "Упростите: $2b^{4}y^{5}\\cdot (-3b^{3})$",
+          "answer": "-6b^7y^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 231,
+          "expression": "Упростите: $-6m^{4}b^{3}\\cdot (-6m^{3})$",
+          "answer": "36m^7b^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 232,
+          "expression": "Упростите: $-6a^{5}x\\cdot 4a^{2}x^{2}$",
+          "answer": "-24a^7x^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 233,
+          "expression": "Упростите: $7c^{4}b^{2}\\cdot (-9cb^{2})$",
+          "answer": "-63c^5b^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 234,
+          "expression": "Упростите: $-6b^{4}a^{3}\\cdot 5b^{4}$",
+          "answer": "-30b^8a^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 235,
+          "expression": "Упростите: $6c^{3}b\\cdot (-2c^{4}b)$",
+          "answer": "-12c^7b^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 236,
+          "expression": "Упростите: $(-by^{2})^{2}$",
+          "answer": "b^2y^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 237,
+          "expression": "Упростите: $(-2x)^{3}$",
+          "answer": "-8x^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 238,
+          "expression": "Упростите: $(-2by^{3})^{2}$",
+          "answer": "4b^2y^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 239,
+          "expression": "Упростите: $(-4ab^{3})^{2}$",
+          "answer": "16a^2b^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 240,
+          "expression": "Упростите: $(-4y)^{3}$",
+          "answer": "-64y^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 241,
+          "expression": "Упростите: $(3m^{4}a)^{3}$",
+          "answer": "27m^12a^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 242,
+          "expression": "Упростите: $(3b^{4}x^{2})^{3}$",
+          "answer": "27b^12x^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 243,
+          "expression": "Упростите: $(4x^{2}b^{3})^{3}$",
+          "answer": "64x^6b^9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 244,
+          "expression": "Упростите: $(2b^{3}y^{2})^{2}$",
+          "answer": "4b^6y^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 245,
+          "expression": "Упростите: $(4m^{4})^{3}$",
+          "answer": "64m^12",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 246,
+          "expression": "Упростите: $(-3x^{3}y^{3})^{3}$",
+          "answer": "-27x^9y^9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 247,
+          "expression": "Упростите: $(4xa^{3})^{2}$",
+          "answer": "16x^2a^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 248,
+          "expression": "Упростите: $(mc^{2})^{3}$",
+          "answer": "m^3c^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 249,
+          "expression": "Упростите: $(-4y^{2}c^{2})^{2}$",
+          "answer": "16y^4c^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 250,
+          "expression": "Упростите: $(2a^{4}m^{2})^{4}$",
+          "answer": "16a^16m^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 251,
+          "expression": "Упростите: $(4x)^{2}$",
+          "answer": "16x^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 252,
+          "expression": "Упростите: $(3ma^{3})^{3}$",
+          "answer": "27m^3a^9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 253,
+          "expression": "Упростите: $(-2x^{4}c^{2})^{4}$",
+          "answer": "16x^16c^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 254,
+          "expression": "Упростите: $(4m^{4}x^{3})^{3}$",
+          "answer": "64m^12x^9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 255,
+          "expression": "Упростите: $(-a^{2}b)^{3}$",
+          "answer": "-a^6b^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 256,
+          "expression": "Упростите: $(-3c^{3})^{3}$",
+          "answer": "-27c^9",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 257,
+          "expression": "Упростите: $(3x^{3}y^{3})^{2}$",
+          "answer": "9x^6y^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 258,
+          "expression": "Упростите: $(2xa^{3})^{2}$",
+          "answer": "4x^2a^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 259,
+          "expression": "Упростите: $(-2x^{4})^{3}$",
+          "answer": "-8x^12",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 260,
+          "expression": "Упростите: $(3a^{3})^{2}$",
+          "answer": "9a^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 261,
+          "expression": "Упростите: $(-2c^{2}x)^{2}\\cdot (-5c^{2})$",
+          "answer": "-20c^6x^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 262,
+          "expression": "Упростите: $(b^{2}a)^{2}\\cdot 6b^{3}a$",
+          "answer": "6b^7a^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 263,
+          "expression": "Упростите: $(3ay)^{2}\\cdot (-6a^{3}y)$",
+          "answer": "-54a^5y^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 264,
+          "expression": "Упростите: $(ym^{2})^{3}\\cdot 4y^{3}$",
+          "answer": "4y^6m^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 265,
+          "expression": "Упростите: $(3ya^{2})^{3}\\cdot (-2y^{2}a^{2})$",
+          "answer": "-54y^5a^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 266,
+          "expression": "Упростите: $(-3a^{2}y^{2})^{2}\\cdot (-2a^{3}y)$",
+          "answer": "-18a^7y^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 267,
+          "expression": "Упростите: $(-3y^{3}a^{2})^{2}\\cdot 2y^{2}$",
+          "answer": "18y^8a^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 268,
+          "expression": "Упростите: $(-3a^{2}m)^{3}\\cdot 4a^{2}m$",
+          "answer": "-108a^8m^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 269,
+          "expression": "Упростите: $(2b^{3}x)^{3}\\cdot (-4b^{3}x)$",
+          "answer": "-32b^12x^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 270,
+          "expression": "Упростите: $(c^{3}y^{2})^{2}\\cdot (-6c^{3}y^{2})$",
+          "answer": "-6c^9y^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 271,
+          "expression": "Упростите: $(-3m^{2}c^{2})^{2}\\cdot (-6mc^{2})$",
+          "answer": "-54m^5c^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 272,
+          "expression": "Упростите: $(-2cb^{2})^{3}\\cdot 2c^{3}b^{2}$",
+          "answer": "-16c^6b^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 273,
+          "expression": "Упростите: $(-2cb^{2})^{2}\\cdot (-4c^{2})$",
+          "answer": "-16c^4b^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 274,
+          "expression": "Упростите: $(3by^{2})^{3}\\cdot (-5by)$",
+          "answer": "-135b^4y^7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 275,
+          "expression": "Упростите: $(-2mx^{2})^{3}\\cdot (-2m^{2}x)$",
+          "answer": "16m^5x^7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 276,
+          "expression": "Упростите: $(a^{3}c^{2})^{2}\\cdot (-4ac^{2})$",
+          "answer": "-4a^7c^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 277,
+          "expression": "Упростите: $(2y^{3}b^{2})^{2}\\cdot 3y^{3}b$",
+          "answer": "12y^9b^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 278,
+          "expression": "Упростите: $(-b^{2}m^{2})^{3}\\cdot 6bm^{2}$",
+          "answer": "-6b^7m^8",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 279,
+          "expression": "Упростите: $(-3b^{3}m^{2})^{2}\\cdot 6b^{2}$",
+          "answer": "54b^8m^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 280,
+          "expression": "Упростите: $(m^{2}x)^{2}\\cdot 4m$",
+          "answer": "4m^5x^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 281,
+          "expression": "Упростите: $(-b^{2}c)^{3}\\cdot 6b^{3}$",
+          "answer": "-6b^9c^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 282,
+          "expression": "Упростите: $(-ba^{2})^{3}\\cdot (-4b)$",
+          "answer": "4b^4a^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 283,
+          "expression": "Упростите: $(-3a^{3}x)^{2}\\cdot (-4a^{2}x)$",
+          "answer": "-36a^8x^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 284,
+          "expression": "Упростите: $(-y^{2}c)^{3}\\cdot (-6y^{3})$",
+          "answer": "6y^9c^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 285,
+          "expression": "Упростите: $(-3b^{2}a^{2})^{3}\\cdot (-4ba)$",
+          "answer": "108b^7a^7",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 286,
+          "expression": "Упростите: $-4a^{4}c\\cdot (-\\dfrac{5}{2}a^{2}c^{2})$",
+          "answer": "10a^6c^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 287,
+          "expression": "Упростите: $30a^{2}b\\cdot 0{,}2ab$",
+          "answer": "6a^3b^2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 288,
+          "expression": "Упростите: $15x^{4}b^{3}\\cdot (-0{,}2xb^{2})$",
+          "answer": "-3x^5b^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 289,
+          "expression": "Упростите: $-8b^{2}a^{2}\\cdot (-\\dfrac{5}{2}b^{2}a)$",
+          "answer": "20b^4a^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 290,
+          "expression": "Упростите: $-8c^{3}y^{3}\\cdot 0{,}5c^{2}y$",
+          "answer": "-4c^5y^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 291,
+          "expression": "Упростите: $10y^{3}m^{3}\\cdot 0{,}2y^{3}m^{3}$",
+          "answer": "2y^6m^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 292,
+          "expression": "Упростите: $6b^{2}m\\cdot (-\\dfrac{3}{2}b^{3}m^{2})$",
+          "answer": "-9b^5m^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 293,
+          "expression": "Упростите: $-4m^{3}b\\cdot (-\\dfrac{5}{2}m^{3})$",
+          "answer": "10m^6b",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 294,
+          "expression": "Упростите: $-14y^{3}x^{2}\\cdot 0{,}5y^{3}x^{3}$",
+          "answer": "-7y^6x^5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 295,
+          "expression": "Упростите: $-10xa^{2}\\cdot (-\\dfrac{5}{2}x^{3}a^{2})$",
+          "answer": "25x^4a^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 296,
+          "expression": "Упростите: $-2yx\\cdot \\dfrac{5}{2}y^{2}x^{3}$",
+          "answer": "-5y^3x^4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 297,
+          "expression": "Упростите: $-10b^{2}a^{3}\\cdot (-\\dfrac{3}{2}ba^{3})$",
+          "answer": "15b^3a^6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 298,
+          "expression": "Упростите: $-16c^{3}b\\cdot \\dfrac{3}{2}c^{3}b^{2}$",
+          "answer": "-24c^6b^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 299,
+          "expression": "Упростите: $-35a^{4}b^{3}\\cdot 0{,}2a^{2}$",
+          "answer": "-7a^6b^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 300,
+          "expression": "Упростите: $8y^{4}m^{2}\\cdot (-0{,}25ym)$",
+          "answer": "-2y^5m^3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "8 класс",
+      "grade": 8,
+      "instruction": "Степени",
+      "type": "expression",
+      "status": "production",
+      "subtypes": [
+        "Уровень 1 — отрицательный показатель: вычислить",
+        "Уровень 2 — отрицательный показатель: упростить",
+        "Уровень 3 — числа в стандартном виде"
+      ],
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "Вычислите: $4^{-1}$",
+          "answer": "1/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 2,
+          "expression": "Вычислите: $10^{-3}$",
+          "answer": "1/1000",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 3,
+          "expression": "Вычислите: $3^{-1}$",
+          "answer": "1/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 4,
+          "expression": "Вычислите: $4^{-3}$",
+          "answer": "1/64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 5,
+          "expression": "Вычислите: $2^{-2}$",
+          "answer": "1/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 6,
+          "expression": "Вычислите: $2^{-3}$",
+          "answer": "1/8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 7,
+          "expression": "Вычислите: $3^{-3}$",
+          "answer": "1/27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 8,
+          "expression": "Вычислите: $4^{-2}$",
+          "answer": "1/16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 9,
+          "expression": "Вычислите: $2^{-4}$",
+          "answer": "1/16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 10,
+          "expression": "Вычислите: $2^{-1}$",
+          "answer": "1/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 11,
+          "expression": "Вычислите: $3^{-4}$",
+          "answer": "1/81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 12,
+          "expression": "Вычислите: $5^{-2}$",
+          "answer": "1/25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 13,
+          "expression": "Вычислите: $(-2)^{-2}$",
+          "answer": "1/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 14,
+          "expression": "Вычислите: $(-5)^{-1}$",
+          "answer": "-1/5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 15,
+          "expression": "Вычислите: $(-3)^{-3}$",
+          "answer": "-1/27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 16,
+          "expression": "Вычислите: $(-5)^{-3}$",
+          "answer": "-1/125",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 17,
+          "expression": "Вычислите: $(-2)^{-1}$",
+          "answer": "-1/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 18,
+          "expression": "Вычислите: $(-5)^{-2}$",
+          "answer": "1/25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 19,
+          "expression": "Вычислите: $(-3)^{-2}$",
+          "answer": "1/9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 20,
+          "expression": "Вычислите: $(-3)^{-1}$",
+          "answer": "-1/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 21,
+          "expression": "Вычислите: $\\left(\\dfrac{1}{5}\\right)^{-3}$",
+          "answer": "125",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 22,
+          "expression": "Вычислите: $\\left(\\dfrac{4}{3}\\right)^{-1}$",
+          "answer": "3/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 23,
+          "expression": "Вычислите: $\\left(\\dfrac{3}{4}\\right)^{-2}$",
+          "answer": "16/9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 24,
+          "expression": "Вычислите: $\\left(\\dfrac{1}{2}\\right)^{-2}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 25,
+          "expression": "Вычислите: $\\left(\\dfrac{3}{4}\\right)^{-3}$",
+          "answer": "64/27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 26,
+          "expression": "Вычислите: $\\left(\\dfrac{4}{3}\\right)^{-3}$",
+          "answer": "27/64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 27,
+          "expression": "Вычислите: $\\left(\\dfrac{2}{3}\\right)^{-1}$",
+          "answer": "3/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 28,
+          "expression": "Вычислите: $\\left(\\dfrac{2}{3}\\right)^{-2}$",
+          "answer": "9/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 29,
+          "expression": "Вычислите: $\\left(\\dfrac{2}{3}\\right)^{-3}$",
+          "answer": "27/8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 30,
+          "expression": "Вычислите: $\\left(\\dfrac{1}{3}\\right)^{-1}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 31,
+          "expression": "Вычислите: $\\left(\\dfrac{1}{2}\\right)^{-3}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 32,
+          "expression": "Вычислите: $\\left(\\dfrac{3}{4}\\right)^{-1}$",
+          "answer": "4/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 33,
+          "expression": "Вычислите: $\\left(\\dfrac{1}{3}\\right)^{-3}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 34,
+          "expression": "Вычислите: $\\left(\\dfrac{1}{2}\\right)^{-1}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 35,
+          "expression": "Вычислите: $\\left(\\dfrac{5}{2}\\right)^{-2}$",
+          "answer": "4/25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 36,
+          "expression": "Вычислите: $0{,}25^{-1}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 37,
+          "expression": "Вычислите: $0{,}2^{-1}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 38,
+          "expression": "Вычислите: $0{,}25^{-2}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 39,
+          "expression": "Вычислите: $0{,}25^{-3}$",
+          "answer": "64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 40,
+          "expression": "Вычислите: $0{,}1^{-1}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 41,
+          "expression": "Вычислите: $0{,}2^{-3}$",
+          "answer": "125",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 42,
+          "expression": "Вычислите: $0{,}2^{-2}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 43,
+          "expression": "Вычислите: $0{,}5^{-1}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 44,
+          "expression": "Вычислите: $0{,}1^{-3}$",
+          "answer": "1000",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 45,
+          "expression": "Вычислите: $0{,}5^{-2}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 46,
+          "expression": "Вычислите: $2^{-8}\\cdot 2^{6}$",
+          "answer": "1/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 47,
+          "expression": "Вычислите: $5^{-7}\\cdot 5^{5}$",
+          "answer": "1/25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 48,
+          "expression": "Вычислите: $10^{-3}\\cdot 10^{1}$",
+          "answer": "1/100",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 49,
+          "expression": "Вычислите: $5^{-4}\\cdot 5^{3}$",
+          "answer": "1/5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 50,
+          "expression": "Вычислите: $3^{-1}\\cdot 3^{2}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 51,
+          "expression": "Вычислите: $10^{-5}\\cdot 10^{2}$",
+          "answer": "1/1000",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 52,
+          "expression": "Вычислите: $3^{-2}\\cdot 3^{1}$",
+          "answer": "1/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 53,
+          "expression": "Вычислите: $5^{-3}\\cdot 5^{5}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 54,
+          "expression": "Вычислите: $5^{-4}\\cdot 5^{5}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 55,
+          "expression": "Вычислите: $5^{-5}\\cdot 5^{7}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 56,
+          "expression": "Вычислите: $2^{-1}\\cdot 2^{3}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 57,
+          "expression": "Вычислите: $3^{-3}\\cdot 3^{2}$",
+          "answer": "1/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 58,
+          "expression": "Вычислите: $2^{-2}\\cdot 2^{6}$",
+          "answer": "16",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 59,
+          "expression": "Вычислите: $2^{-2}\\cdot 2^{1}$",
+          "answer": "1/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 60,
+          "expression": "Вычислите: $3^{-8}\\cdot 3^{10}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 61,
+          "expression": "Вычислите: $2^{-2}:2^{-4}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 62,
+          "expression": "Вычислите: $2^{-4}:2^{-5}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 63,
+          "expression": "Вычислите: $10^{-6}:10^{-7}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 64,
+          "expression": "Вычислите: $3^{-7}:3^{-5}$",
+          "answer": "1/9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 65,
+          "expression": "Вычислите: $5^{-6}:5^{-8}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 66,
+          "expression": "Вычислите: $10^{-7}:10^{-5}$",
+          "answer": "1/100",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 67,
+          "expression": "Вычислите: $3^{-2}:3^{-6}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 68,
+          "expression": "Вычислите: $3^{-6}:3^{-2}$",
+          "answer": "1/81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 69,
+          "expression": "Вычислите: $10^{-7}:10^{-9}$",
+          "answer": "100",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 70,
+          "expression": "Вычислите: $10^{-2}:10^{-3}$",
+          "answer": "10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 71,
+          "expression": "Вычислите: $2^{-3}:2^{-2}$",
+          "answer": "1/2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 72,
+          "expression": "Вычислите: $5^{-1}:5^{-2}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 73,
+          "expression": "Вычислите: $10^{-2}:10^{-5}$",
+          "answer": "1000",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 74,
+          "expression": "Вычислите: $2^{-3}:2^{-5}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 75,
+          "expression": "Вычислите: $3^{-5}:3^{-7}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 76,
+          "expression": "Вычислите: $(3^{-3})^{-1}\\cdot 3^{1}$",
+          "answer": "81",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 77,
+          "expression": "Вычислите: $(3^{-3})^{-2}\\cdot 3^{3}$",
+          "answer": "19683",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 78,
+          "expression": "Вычислите: $(2^{-1})^{-1}\\cdot 2^{-1}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 79,
+          "expression": "Вычислите: $(2^{-2})^{-1}\\cdot 2^{-2}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 80,
+          "expression": "Вычислите: $(2^{-3})^{-1}\\cdot 2^{-2}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 81,
+          "expression": "Вычислите: $(3^{-2})^{-2}\\cdot 3^{-3}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 82,
+          "expression": "Вычислите: $(5^{-3})^{-1}\\cdot 5^{3}$",
+          "answer": "15625",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 83,
+          "expression": "Вычислите: $(3^{-1})^{-2}\\cdot 3^{-2}$",
+          "answer": "1",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 84,
+          "expression": "Вычислите: $(2^{-3})^{-2}\\cdot 2^{0}$",
+          "answer": "64",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 85,
+          "expression": "Вычислите: $(3^{-2})^{-1}\\cdot 3^{-3}$",
+          "answer": "1/3",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 86,
+          "expression": "Вычислите: $(5^{-2})^{-2}\\cdot 5^{2}$",
+          "answer": "15625",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 87,
+          "expression": "Вычислите: $(3^{-3})^{-1}\\cdot 3^{3}$",
+          "answer": "729",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 88,
+          "expression": "Вычислите: $(5^{-3})^{-1}\\cdot 5^{1}$",
+          "answer": "625",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 89,
+          "expression": "Вычислите: $(2^{-3})^{-1}\\cdot 2^{0}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 90,
+          "expression": "Вычислите: $(3^{-1})^{-1}\\cdot 3^{2}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 91,
+          "expression": "Вычислите: $3^{-1}+2^{-1}$",
+          "answer": "5/6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 92,
+          "expression": "Вычислите: $2^{-1}+3^{-1}$",
+          "answer": "5/6",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 93,
+          "expression": "Вычислите: $2^{-1}+5^{-1}$",
+          "answer": "7/10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 94,
+          "expression": "Вычислите: $4^{-1}+3^{-1}$",
+          "answer": "7/12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 95,
+          "expression": "Вычислите: $4^{-1}+5^{-1}$",
+          "answer": "9/20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 96,
+          "expression": "Вычислите: $5^{-1}+4^{-1}$",
+          "answer": "9/20",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 97,
+          "expression": "Вычислите: $5^{-1}+2^{-1}$",
+          "answer": "7/10",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 98,
+          "expression": "Вычислите: $2^{-1}+4^{-1}$",
+          "answer": "3/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 99,
+          "expression": "Вычислите: $4^{-1}+2^{-1}$",
+          "answer": "3/4",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 100,
+          "expression": "Вычислите: $3^{-1}+4^{-1}$",
+          "answer": "7/12",
+          "status": "production",
+          "subtype": 0,
+          "level": 1
+        },
+        {
+          "id": 101,
+          "expression": "Упростите: $a^{-9}\\cdot a^{10}$",
+          "answer": "a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 102,
+          "expression": "Упростите: $p^{-4}\\cdot p^{6}$",
+          "answer": "p^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 103,
+          "expression": "Упростите: $n^{-1}\\cdot n^{3}$",
+          "answer": "n^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 104,
+          "expression": "Упростите: $a^{-8}\\cdot a^{10}$",
+          "answer": "a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 105,
+          "expression": "Упростите: $y^{-9}\\cdot y^{16}$",
+          "answer": "y^7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 106,
+          "expression": "Упростите: $b^{-3}\\cdot b^{8}$",
+          "answer": "b^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 107,
+          "expression": "Упростите: $x^{-7}\\cdot x^{9}$",
+          "answer": "x^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 108,
+          "expression": "Упростите: $b^{-5}\\cdot b^{7}$",
+          "answer": "b^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 109,
+          "expression": "Упростите: $a^{-5}\\cdot a^{10}$",
+          "answer": "a^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 110,
+          "expression": "Упростите: $p^{-7}\\cdot p^{13}$",
+          "answer": "p^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 111,
+          "expression": "Упростите: $n^{-4}\\cdot n^{12}$",
+          "answer": "n^8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 112,
+          "expression": "Упростите: $p^{-1}\\cdot p^{8}$",
+          "answer": "p^7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 113,
+          "expression": "Упростите: $c^{-9}\\cdot c^{15}$",
+          "answer": "c^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 114,
+          "expression": "Упростите: $x^{-3}\\cdot x^{9}$",
+          "answer": "x^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 115,
+          "expression": "Упростите: $k^{-3}\\cdot k^{11}$",
+          "answer": "k^8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 116,
+          "expression": "Упростите: $b^{-3}\\cdot b^{7}$",
+          "answer": "b^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 117,
+          "expression": "Упростите: $a^{-6}\\cdot a^{7}$",
+          "answer": "a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 118,
+          "expression": "Упростите: $p^{-6}\\cdot p^{9}$",
+          "answer": "p^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 119,
+          "expression": "Упростите: $n^{-6}\\cdot n^{10}$",
+          "answer": "n^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 120,
+          "expression": "Упростите: $c^{-6}\\cdot c^{12}$",
+          "answer": "c^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 121,
+          "expression": "Упростите: $b^{-2}\\cdot b^{10}$",
+          "answer": "b^8",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 122,
+          "expression": "Упростите: $c^{-3}\\cdot c^{10}$",
+          "answer": "c^7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 123,
+          "expression": "Упростите: $c^{-7}\\cdot c^{14}$",
+          "answer": "c^7",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 124,
+          "expression": "Упростите: $x^{-9}\\cdot x^{13}$",
+          "answer": "x^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 125,
+          "expression": "Упростите: $a^{-2}\\cdot a^{7}$",
+          "answer": "a^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 126,
+          "expression": "Упростите: $p^{-5}:p^{-8}$",
+          "answer": "p^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 127,
+          "expression": "Упростите: $n^{-5}:n^{-6}$",
+          "answer": "n",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 128,
+          "expression": "Упростите: $x^{-6}:x^{-11}$",
+          "answer": "x^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 129,
+          "expression": "Упростите: $c^{-2}:c^{-8}$",
+          "answer": "c^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 130,
+          "expression": "Упростите: $k^{-6}:k^{-8}$",
+          "answer": "k^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 131,
+          "expression": "Упростите: $x^{-4}:x^{-9}$",
+          "answer": "x^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 132,
+          "expression": "Упростите: $k^{-3}:k^{-9}$",
+          "answer": "k^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 133,
+          "expression": "Упростите: $x^{-1}:x^{-5}$",
+          "answer": "x^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 134,
+          "expression": "Упростите: $p^{-1}:p^{-2}$",
+          "answer": "p",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 135,
+          "expression": "Упростите: $m^{-4}:m^{-8}$",
+          "answer": "m^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 136,
+          "expression": "Упростите: $p^{-2}:p^{-6}$",
+          "answer": "p^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 137,
+          "expression": "Упростите: $c^{-5}:c^{-9}$",
+          "answer": "c^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 138,
+          "expression": "Упростите: $n^{-1}:n^{-4}$",
+          "answer": "n^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 139,
+          "expression": "Упростите: $b^{-4}:b^{-5}$",
+          "answer": "b",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 140,
+          "expression": "Упростите: $n^{-6}:n^{-7}$",
+          "answer": "n",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 141,
+          "expression": "Упростите: $n^{-5}:n^{-7}$",
+          "answer": "n^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 142,
+          "expression": "Упростите: $y^{-5}:y^{-10}$",
+          "answer": "y^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 143,
+          "expression": "Упростите: $m^{-4}:m^{-10}$",
+          "answer": "m^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 144,
+          "expression": "Упростите: $b^{-1}:b^{-7}$",
+          "answer": "b^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 145,
+          "expression": "Упростите: $p^{-6}:p^{-12}$",
+          "answer": "p^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 146,
+          "expression": "Упростите: $(y^{-1})^{4}\\cdot y^{5}$",
+          "answer": "y",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 147,
+          "expression": "Упростите: $(c^{-2})^{3}\\cdot c^{10}$",
+          "answer": "c^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 148,
+          "expression": "Упростите: $(k^{-3})^{3}\\cdot k^{12}$",
+          "answer": "k^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 149,
+          "expression": "Упростите: $(b^{-2})^{4}\\cdot b^{10}$",
+          "answer": "b^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 150,
+          "expression": "Упростите: $(m^{-4})^{4}\\cdot m^{17}$",
+          "answer": "m",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 151,
+          "expression": "Упростите: $(m^{-2})^{2}\\cdot m^{9}$",
+          "answer": "m^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 152,
+          "expression": "Упростите: $(x^{-3})^{2}\\cdot x^{12}$",
+          "answer": "x^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 153,
+          "expression": "Упростите: $(a^{-3})^{2}\\cdot a^{8}$",
+          "answer": "a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 154,
+          "expression": "Упростите: $(b^{-4})^{2}\\cdot b^{14}$",
+          "answer": "b^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 155,
+          "expression": "Упростите: $(b^{-3})^{3}\\cdot b^{13}$",
+          "answer": "b^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 156,
+          "expression": "Упростите: $(a^{-2})^{3}\\cdot a^{11}$",
+          "answer": "a^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 157,
+          "expression": "Упростите: $(m^{-3})^{4}\\cdot m^{17}$",
+          "answer": "m^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 158,
+          "expression": "Упростите: $(b^{-4})^{3}\\cdot b^{18}$",
+          "answer": "b^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 159,
+          "expression": "Упростите: $(b^{-1})^{2}\\cdot b^{6}$",
+          "answer": "b^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 160,
+          "expression": "Упростите: $(b^{-1})^{2}\\cdot b^{5}$",
+          "answer": "b^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 161,
+          "expression": "Упростите: $(c^{-1})^{4}\\cdot c^{7}$",
+          "answer": "c^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 162,
+          "expression": "Упростите: $(b^{-4})^{3}\\cdot b^{17}$",
+          "answer": "b^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 163,
+          "expression": "Упростите: $(y^{-3})^{4}\\cdot y^{13}$",
+          "answer": "y",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 164,
+          "expression": "Упростите: $(b^{-4})^{4}\\cdot b^{22}$",
+          "answer": "b^6",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 165,
+          "expression": "Упростите: $(b^{-3})^{3}\\cdot b^{11}$",
+          "answer": "b^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 166,
+          "expression": "Упростите: $(a^{-2}c^{2})^{-2}\\cdot a^{-2}c^{7}$",
+          "answer": "a^2c^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 167,
+          "expression": "Упростите: $(x^{-1}y)^{-3}\\cdot x^{-1}y^{5}$",
+          "answer": "x^2y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 168,
+          "expression": "Упростите: $(x^{-1}y^{3})^{-3}\\cdot x^{-2}y^{12}$",
+          "answer": "xy^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 169,
+          "expression": "Упростите: $(y^{-2}b^{4})^{-2}\\cdot y^{-3}b^{9}$",
+          "answer": "yb",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 170,
+          "expression": "Упростите: $(m^{-4}c^{4})^{-3}\\cdot m^{-10}c^{16}$",
+          "answer": "m^2c^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 171,
+          "expression": "Упростите: $(y^{-1}x^{2})^{-3}\\cdot y^{-2}x^{10}$",
+          "answer": "yx^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 172,
+          "expression": "Упростите: $(y^{-4}c^{2})^{-3}\\cdot y^{-10}c^{10}$",
+          "answer": "y^2c^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 173,
+          "expression": "Упростите: $(m^{-1}x)^{-2}\\cdot m^{-1}x^{5}$",
+          "answer": "mx^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 174,
+          "expression": "Упростите: $(b^{-4}m^{3})^{-2}\\cdot b^{-7}m^{9}$",
+          "answer": "bm^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 175,
+          "expression": "Упростите: $(c^{-3}y^{3})^{-2}\\cdot c^{-5}y^{8}$",
+          "answer": "cy^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 176,
+          "expression": "Упростите: $(b^{-2}c)^{-2}\\cdot b^{-1}c^{6}$",
+          "answer": "b^3c^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 177,
+          "expression": "Упростите: $(c^{-4}a^{3})^{-3}\\cdot a^{13}$",
+          "answer": "c^12a^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 178,
+          "expression": "Упростите: $(a^{-2}b^{4})^{-3}\\cdot a^{-2}b^{15}$",
+          "answer": "a^4b^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 179,
+          "expression": "Упростите: $(c^{-2}b^{2})^{-3}\\cdot c^{-4}b^{9}$",
+          "answer": "c^2b^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 180,
+          "expression": "Упростите: $(m^{-4}c)^{-2}\\cdot m^{-6}c^{4}$",
+          "answer": "m^2c^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 181,
+          "expression": "Упростите: $4m^{-3}a^{5}\\cdot 2m^{7}a^{-2}$",
+          "answer": "8m^4a^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 182,
+          "expression": "Упростите: $2m^{-1}c^{5}\\cdot 5m^{4}c^{-3}$",
+          "answer": "10m^3c^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 183,
+          "expression": "Упростите: $5y^{-2}x^{4}\\cdot 4y^{8}x^{-3}$",
+          "answer": "20y^6x",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 184,
+          "expression": "Упростите: $8m^{-4}x^{5}\\cdot 5m^{6}x^{-3}$",
+          "answer": "40m^2x^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 185,
+          "expression": "Упростите: $3m^{-3}a^{5}\\cdot 5m^{6}a^{-2}$",
+          "answer": "15m^3a^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 186,
+          "expression": "Упростите: $6x^{-1}b^{3}\\cdot 4x^{8}$",
+          "answer": "24x^7b^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 187,
+          "expression": "Упростите: $6y^{-1}b^{3}\\cdot 6y^{6}$",
+          "answer": "36y^5b^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 188,
+          "expression": "Упростите: $3m^{-2}a\\cdot 6m^{6}$",
+          "answer": "18m^4a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 189,
+          "expression": "Упростите: $2y^{-3}c^{4}\\cdot 3y^{5}c^{-1}$",
+          "answer": "6y^2c^3",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 190,
+          "expression": "Упростите: $5y^{-2}b^{5}\\cdot 5y^{3}b^{-1}$",
+          "answer": "25yb^4",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 191,
+          "expression": "Упростите: $4a^{-5}c^{4}\\cdot 6a^{8}c^{-3}$",
+          "answer": "24a^3c",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 192,
+          "expression": "Упростите: $8b^{-3}a^{4}\\cdot 4b^{8}a^{-3}$",
+          "answer": "32b^5a",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 193,
+          "expression": "Упростите: $8y^{-2}m\\cdot 3y^{3}m$",
+          "answer": "24ym^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 194,
+          "expression": "Упростите: $4x^{-2}b^{5}\\cdot 3x^{4}$",
+          "answer": "12x^2b^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 195,
+          "expression": "Упростите: $3c^{-5}y^{4}\\cdot 5c^{7}y^{-3}$",
+          "answer": "15c^2y",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 196,
+          "expression": "Упростите: $4c^{-2}a^{3}\\cdot 3c^{4}a^{-1}$",
+          "answer": "12c^2a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 197,
+          "expression": "Упростите: $5b^{-3}a^{2}\\cdot 3b^{5}$",
+          "answer": "15b^2a^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 198,
+          "expression": "Упростите: $8b^{-5}y^{2}\\cdot 3b^{7}$",
+          "answer": "24b^2y^2",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 199,
+          "expression": "Упростите: $5a^{-3}c\\cdot 4a^{7}$",
+          "answer": "20a^4c",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 200,
+          "expression": "Упростите: $5m^{-1}y^{5}\\cdot 6m^{2}$",
+          "answer": "30my^5",
+          "status": "production",
+          "subtype": 1,
+          "level": 2
+        },
+        {
+          "id": 201,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{6})\\cdot (4{,}4\\cdot 10^{-4})$",
+          "answer": "3520",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 202,
+          "expression": "Найдите значение выражения: $(4{,}1\\cdot 10^{3})\\cdot (7\\cdot 10^{-2})$",
+          "answer": "287",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 203,
+          "expression": "Найдите значение выражения: $(6\\cdot 10^{-4}):(5\\cdot 10^{-1})$",
+          "answer": "0,0012",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 204,
+          "expression": "Найдите значение выражения: $(1{,}6\\cdot 10^{-1})\\cdot (6{,}7\\cdot 10^{3})$",
+          "answer": "1072",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 205,
+          "expression": "Найдите значение выражения: $(4{,}1\\cdot 10^{5})\\cdot (9{,}1\\cdot 10^{-2})$",
+          "answer": "37310",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 206,
+          "expression": "Найдите значение выражения: $(5{,}3\\cdot 10^{7})\\cdot (6{,}4\\cdot 10^{-4})$",
+          "answer": "33920",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 207,
+          "expression": "Найдите значение выражения: $(4\\cdot 10^{1})\\cdot (4\\cdot 10^{-5})$",
+          "answer": "0,0016",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 208,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{7})\\cdot (9{,}5\\cdot 10^{-5})$",
+          "answer": "7600",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 209,
+          "expression": "Найдите значение выражения: $(3\\cdot 10^{-1})\\cdot (9\\cdot 10^{3})$",
+          "answer": "2700",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 210,
+          "expression": "Найдите значение выражения: $(9\\cdot 10^{3})\\cdot (1{,}7\\cdot 10^{1})$",
+          "answer": "153000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 211,
+          "expression": "Найдите значение выражения: $(4\\cdot 10^{1})\\cdot (7\\cdot 10^{-6})$",
+          "answer": "0,00028",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 212,
+          "expression": "Найдите значение выражения: $(9{,}4\\cdot 10^{2}):(2\\cdot 10^{-1})$",
+          "answer": "4700",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 213,
+          "expression": "Найдите значение выражения: $(6{,}6\\cdot 10^{7}):(4\\cdot 10^{5})$",
+          "answer": "165",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 214,
+          "expression": "Найдите значение выражения: $(3\\cdot 10^{1})\\cdot (9\\cdot 10^{1})$",
+          "answer": "2700",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 215,
+          "expression": "Найдите значение выражения: $(7\\cdot 10^{2})\\cdot (3\\cdot 10^{-2})$",
+          "answer": "21",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 216,
+          "expression": "Найдите значение выражения: $(4\\cdot 10^{4}):(4\\cdot 10^{6})$",
+          "answer": "0,01",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 217,
+          "expression": "Найдите значение выражения: $(1{,}5\\cdot 10^{7})\\cdot (6{,}4\\cdot 10^{-3})$",
+          "answer": "96000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 218,
+          "expression": "Найдите значение выражения: $(5{,}4\\cdot 10^{-5})\\cdot (1{,}9\\cdot 10^{2})$",
+          "answer": "0,01026",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 219,
+          "expression": "Найдите значение выражения: $(2\\cdot 10^{5})\\cdot (3\\cdot 10^{-4})$",
+          "answer": "60",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 220,
+          "expression": "Найдите значение выражения: $(5{,}2\\cdot 10^{-1}):(2\\cdot 10^{-1})$",
+          "answer": "2,6",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 221,
+          "expression": "Найдите значение выражения: $(3\\cdot 10^{-1})\\cdot (6\\cdot 10^{-3})$",
+          "answer": "0,0018",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 222,
+          "expression": "Найдите значение выражения: $(7{,}5\\cdot 10^{-6})\\cdot (6{,}6\\cdot 10^{6})$",
+          "answer": "49,5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 223,
+          "expression": "Найдите значение выражения: $(5{,}3\\cdot 10^{-5})\\cdot (2\\cdot 10^{2})$",
+          "answer": "0,0106",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 224,
+          "expression": "Найдите значение выражения: $(4{,}3\\cdot 10^{1}):(4\\cdot 10^{2})$",
+          "answer": "0,1075",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 225,
+          "expression": "Найдите значение выражения: $(6\\cdot 10^{5})\\cdot (8{,}2\\cdot 10^{-1})$",
+          "answer": "492000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 226,
+          "expression": "Найдите значение выражения: $(6{,}6\\cdot 10^{-2}):(1{,}5\\cdot 10^{1})$",
+          "answer": "0,0044",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 227,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{-4})\\cdot (5\\cdot 10^{3})$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 228,
+          "expression": "Найдите значение выражения: $(8{,}2\\cdot 10^{3})\\cdot (9{,}6\\cdot 10^{-5})$",
+          "answer": "0,7872",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 229,
+          "expression": "Найдите значение выражения: $(7{,}5\\cdot 10^{2})\\cdot (6{,}7\\cdot 10^{-5})$",
+          "answer": "0,05025",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 230,
+          "expression": "Найдите значение выражения: $(7\\cdot 10^{-4})\\cdot (6{,}2\\cdot 10^{4})$",
+          "answer": "43,4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 231,
+          "expression": "Найдите значение выражения: $(3{,}3\\cdot 10^{5})\\cdot (8\\cdot 10^{-6})$",
+          "answer": "2,64",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 232,
+          "expression": "Найдите значение выражения: $(7\\cdot 10^{-3})\\cdot (5{,}6\\cdot 10^{2})$",
+          "answer": "3,92",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 233,
+          "expression": "Найдите значение выражения: $(4{,}8\\cdot 10^{-6}):(3\\cdot 10^{-5})$",
+          "answer": "0,16",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 234,
+          "expression": "Найдите значение выражения: $(4{,}9\\cdot 10^{1})\\cdot (3{,}9\\cdot 10^{2})$",
+          "answer": "19110",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 235,
+          "expression": "Найдите значение выражения: $(2\\cdot 10^{1})\\cdot (4\\cdot 10^{-3})$",
+          "answer": "0,08",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 236,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{6}):(4\\cdot 10^{7})$",
+          "answer": "0,2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 237,
+          "expression": "Найдите значение выражения: $(3{,}4\\cdot 10^{-5})\\cdot (3{,}9\\cdot 10^{3})$",
+          "answer": "0,1326",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 238,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{-3})\\cdot (6{,}1\\cdot 10^{1})$",
+          "answer": "0,488",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 239,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{6})\\cdot (8\\cdot 10^{-4})$",
+          "answer": "6400",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 240,
+          "expression": "Найдите значение выражения: $(2\\cdot 10^{-2})\\cdot (9\\cdot 10^{5})$",
+          "answer": "18000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 241,
+          "expression": "Найдите значение выражения: $(4\\cdot 10^{-4})\\cdot (9\\cdot 10^{-1})$",
+          "answer": "0,00036",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 242,
+          "expression": "Найдите значение выражения: $(7\\cdot 10^{2})\\cdot (5{,}9\\cdot 10^{-1})$",
+          "answer": "413",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 243,
+          "expression": "Найдите значение выражения: $(6{,}9\\cdot 10^{4})\\cdot (9\\cdot 10^{-4})$",
+          "answer": "62,1",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 244,
+          "expression": "Найдите значение выражения: $(6{,}4\\cdot 10^{3})\\cdot (2{,}2\\cdot 10^{-6})$",
+          "answer": "0,01408",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 245,
+          "expression": "Найдите значение выражения: $(8{,}4\\cdot 10^{-3})\\cdot (6\\cdot 10^{7})$",
+          "answer": "504000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 246,
+          "expression": "Найдите значение выражения: $(9{,}9\\cdot 10^{-2})\\cdot (9\\cdot 10^{3})$",
+          "answer": "891",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 247,
+          "expression": "Найдите значение выражения: $(2{,}3\\cdot 10^{2})\\cdot (8\\cdot 10^{1})$",
+          "answer": "18400",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 248,
+          "expression": "Найдите значение выражения: $(9{,}6\\cdot 10^{-6})\\cdot (4\\cdot 10^{6})$",
+          "answer": "38,4",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 249,
+          "expression": "Найдите значение выражения: $(8{,}9\\cdot 10^{2}):(2\\cdot 10^{-1})$",
+          "answer": "4450",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 250,
+          "expression": "Найдите значение выражения: $(6{,}4\\cdot 10^{-3}):(5\\cdot 10^{-2})$",
+          "answer": "0,128",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 251,
+          "expression": "Найдите значение выражения: $(4{,}8\\cdot 10^{2})\\cdot (3\\cdot 10^{1})$",
+          "answer": "14400",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 252,
+          "expression": "Найдите значение выражения: $(1{,}9\\cdot 10^{-1})\\cdot (1{,}5\\cdot 10^{1})$",
+          "answer": "2,85",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 253,
+          "expression": "Найдите значение выражения: $(5{,}5\\cdot 10^{-2})\\cdot (6\\cdot 10^{4})$",
+          "answer": "3300",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 254,
+          "expression": "Найдите значение выражения: $(4{,}1\\cdot 10^{-5})\\cdot (3\\cdot 10^{7})$",
+          "answer": "1230",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 255,
+          "expression": "Найдите значение выражения: $(4{,}5\\cdot 10^{5}):(6\\cdot 10^{5})$",
+          "answer": "0,75",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 256,
+          "expression": "Найдите значение выражения: $(4{,}3\\cdot 10^{-6})\\cdot (8\\cdot 10^{7})$",
+          "answer": "344",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 257,
+          "expression": "Найдите значение выражения: $(4{,}9\\cdot 10^{7})\\cdot (2\\cdot 10^{-3})$",
+          "answer": "98000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 258,
+          "expression": "Найдите значение выражения: $(5{,}3\\cdot 10^{7})\\cdot (9{,}7\\cdot 10^{-6})$",
+          "answer": "514,1",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 259,
+          "expression": "Найдите значение выражения: $(1{,}9\\cdot 10^{4}):(5\\cdot 10^{2})$",
+          "answer": "38",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 260,
+          "expression": "Найдите значение выражения: $(9{,}2\\cdot 10^{5}):(4\\cdot 10^{6})$",
+          "answer": "0,23",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 261,
+          "expression": "Найдите значение выражения: $(6{,}6\\cdot 10^{-1})\\cdot (8\\cdot 10^{-4})$",
+          "answer": "0,000528",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 262,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{-3})\\cdot (6\\cdot 10^{3})$",
+          "answer": "48",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 263,
+          "expression": "Найдите значение выражения: $(2\\cdot 10^{-6})\\cdot (9\\cdot 10^{3})$",
+          "answer": "0,018",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 264,
+          "expression": "Найдите значение выражения: $(1{,}7\\cdot 10^{-2})\\cdot (9\\cdot 10^{-2})$",
+          "answer": "0,00153",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 265,
+          "expression": "Найдите значение выражения: $(1{,}1\\cdot 10^{-3}):(2\\cdot 10^{-5})$",
+          "answer": "55",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 266,
+          "expression": "Найдите значение выражения: $(5{,}2\\cdot 10^{2})\\cdot (2\\cdot 10^{2})$",
+          "answer": "104000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 267,
+          "expression": "Найдите значение выражения: $(9\\cdot 10^{-1})\\cdot (2\\cdot 10^{3})$",
+          "answer": "1800",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 268,
+          "expression": "Найдите значение выражения: $(8{,}9\\cdot 10^{7}):(5\\cdot 10^{2})$",
+          "answer": "178000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 269,
+          "expression": "Найдите значение выражения: $(7{,}3\\cdot 10^{3})\\cdot (5{,}7\\cdot 10^{-6})$",
+          "answer": "0,04161",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 270,
+          "expression": "Найдите значение выражения: $(6\\cdot 10^{2})\\cdot (9\\cdot 10^{-2})$",
+          "answer": "54",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 271,
+          "expression": "Найдите значение выражения: $(5\\cdot 10^{6})\\cdot (7\\cdot 10^{-4})$",
+          "answer": "3500",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 272,
+          "expression": "Найдите значение выражения: $(4{,}6\\cdot 10^{-4})\\cdot (9{,}1\\cdot 10^{1})$",
+          "answer": "0,04186",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 273,
+          "expression": "Найдите значение выражения: $(2{,}9\\cdot 10^{3}):(2\\cdot 10^{2})$",
+          "answer": "14,5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 274,
+          "expression": "Найдите значение выражения: $(7\\cdot 10^{3})\\cdot (3{,}4\\cdot 10^{-6})$",
+          "answer": "0,0238",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 275,
+          "expression": "Найдите значение выражения: $(4{,}6\\cdot 10^{5})\\cdot (2\\cdot 10^{-5})$",
+          "answer": "9,2",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 276,
+          "expression": "Найдите значение выражения: $(9\\cdot 10^{-4}):(5\\cdot 10^{-6})$",
+          "answer": "180",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 277,
+          "expression": "Найдите значение выражения: $(8{,}9\\cdot 10^{5}):(8\\cdot 10^{4})$",
+          "answer": "11,125",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 278,
+          "expression": "Найдите значение выражения: $(5{,}9\\cdot 10^{6}):(5\\cdot 10^{3})$",
+          "answer": "1180",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 279,
+          "expression": "Найдите значение выражения: $(3{,}9\\cdot 10^{1})\\cdot (4\\cdot 10^{2})$",
+          "answer": "15600",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 280,
+          "expression": "Найдите значение выражения: $(6\\cdot 10^{7})\\cdot (7\\cdot 10^{-3})$",
+          "answer": "420000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 281,
+          "expression": "Найдите значение выражения: $(9{,}2\\cdot 10^{5})\\cdot (6{,}9\\cdot 10^{-5})$",
+          "answer": "63,48",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 282,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{-6}):(5\\cdot 10^{-2})$",
+          "answer": "0,00016",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 283,
+          "expression": "Найдите значение выражения: $(5{,}6\\cdot 10^{-3})\\cdot (5\\cdot 10^{3})$",
+          "answer": "28",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 284,
+          "expression": "Найдите значение выражения: $(5{,}7\\cdot 10^{-1}):(8\\cdot 10^{-4})$",
+          "answer": "712,5",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 285,
+          "expression": "Найдите значение выражения: $(1{,}1\\cdot 10^{-2})\\cdot (5{,}3\\cdot 10^{-2})$",
+          "answer": "0,000583",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 286,
+          "expression": "Найдите значение выражения: $(2\\cdot 10^{-4}):(8\\cdot 10^{-4})$",
+          "answer": "0,25",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 287,
+          "expression": "Найдите значение выражения: $(1{,}9\\cdot 10^{-1})\\cdot (3\\cdot 10^{5})$",
+          "answer": "57000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 288,
+          "expression": "Найдите значение выражения: $(5\\cdot 10^{-2}):(8\\cdot 10^{-5})$",
+          "answer": "625",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 289,
+          "expression": "Найдите значение выражения: $(4\\cdot 10^{7})\\cdot (7\\cdot 10^{-3})$",
+          "answer": "280000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 290,
+          "expression": "Найдите значение выражения: $(4{,}7\\cdot 10^{-2})\\cdot (3\\cdot 10^{2})$",
+          "answer": "14,1",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 291,
+          "expression": "Найдите значение выражения: $(3{,}9\\cdot 10^{-2})\\cdot (8\\cdot 10^{4})$",
+          "answer": "3120",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 292,
+          "expression": "Найдите значение выражения: $(5{,}6\\cdot 10^{2})\\cdot (3{,}7\\cdot 10^{-6})$",
+          "answer": "0,002072",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 293,
+          "expression": "Найдите значение выражения: $(5{,}9\\cdot 10^{3})\\cdot (7\\cdot 10^{-3})$",
+          "answer": "41,3",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 294,
+          "expression": "Найдите значение выражения: $(2{,}7\\cdot 10^{6}):(9\\cdot 10^{7})$",
+          "answer": "0,03",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 295,
+          "expression": "Найдите значение выражения: $(3\\cdot 10^{6}):(2\\cdot 10^{2})$",
+          "answer": "15000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 296,
+          "expression": "Найдите значение выражения: $(3\\cdot 10^{-4}):(8\\cdot 10^{-1})$",
+          "answer": "0,000375",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 297,
+          "expression": "Найдите значение выражения: $(3\\cdot 10^{1}):(4\\cdot 10^{-1})$",
+          "answer": "75",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 298,
+          "expression": "Найдите значение выражения: $(8{,}7\\cdot 10^{-2}):(4\\cdot 10^{-5})$",
+          "answer": "2175",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 299,
+          "expression": "Найдите значение выражения: $(9{,}3\\cdot 10^{-4})\\cdot (4\\cdot 10^{6})$",
+          "answer": "3720",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        },
+        {
+          "id": 300,
+          "expression": "Найдите значение выражения: $(8\\cdot 10^{1})\\cdot (5{,}1\\cdot 10^{3})$",
+          "answer": "408000",
+          "status": "production",
+          "subtype": 2,
+          "level": 3
+        }
+      ]
+    }
+  ]
+}
