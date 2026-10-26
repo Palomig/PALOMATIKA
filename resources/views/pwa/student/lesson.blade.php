@@ -76,6 +76,18 @@
   .lesson-live-pill { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: .03em; background: var(--accent-bg); color: var(--accent); flex-shrink: 0; }
   .lesson-new-toast { position: fixed; left: 12px; right: 12px; top: calc(10px + var(--safe-top, 0px)); z-index: 150; max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--yellow-bd); box-shadow: 0 10px 30px rgba(0,0,0,.35); color: var(--text); font-size: 14px; font-weight: 700; cursor: pointer; }
   .lesson-new-toast .go { margin-left: auto; color: var(--yellow); font-weight: 800; }
+  /* Таблица значений функции: строка y — поля ввода */
+  .lesson-vt { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .lesson-vt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .lesson-vt-table { border-collapse: collapse; font-size: 16px; }
+  .lesson-vt-table th, .lesson-vt-table td { border: 1px solid var(--border); text-align: center; padding: 0; min-width: 52px; height: 42px; }
+  .lesson-vt-table th { background: var(--surface2); font-style: italic; font-weight: 600; min-width: 34px; padding: 0 8px; }
+  .lesson-vt-table tr:first-child td { padding: 0 6px; }
+  .lesson-vt-input { width: 52px; height: 40px; border: 0; background: transparent; text-align: center; font: inherit; color: var(--text); outline: none; }
+  .lesson-vt-input:focus { background: var(--accent-bg, rgba(91,108,255,.12)); }
+  .lesson-vt-val { display: inline-block; padding: 0 6px; font-weight: 600; color: var(--accent, #4f6bff); }
+  .lesson-vt-send { align-self: flex-start; border: 0; border-radius: 12px; padding: 11px 16px; font-weight: 700; font-size: 15px; background: var(--accent, #4f6bff); color: #fff; cursor: pointer; }
+  .lesson-vt-send:disabled { opacity: .45; cursor: default; }
   .lesson-task-expr { font-size: 18px; color: var(--text); word-break: break-word; min-height: 24px; }
   /* Формула — неделимая коробка: у задач ЕГЭ строка рвалась посреди неё
      («Решите неравенство log₁₆(x +» / «5) + …»). Ученик на уроке видит
@@ -243,14 +255,19 @@
         </div>
       </template>
       {{-- Текст задания отдельно, пример — крупно строкой ниже (см. splitCondition). --}}
-      <template x-if="!task.payload.condition_html && splitCondition(task)">
+      {{-- Таблица значений функции: условие без формулы таблицы — сама
+           таблица ниже, с полями ввода в строке y. --}}
+      <template x-if="!task.payload.condition_html && task.payload.value_table">
+        <div class="lesson-task-lead"><span class="lesson-task-num" x-text="task.position + ')'"></span><span x-html="renderMath(task.payload.value_table.lead)"></span></div>
+      </template>
+      <template x-if="!task.payload.condition_html && !task.payload.value_table && splitCondition(task)">
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div class="lesson-task-lead"><span class="lesson-task-num" x-text="task.position + ')'"></span><span x-html="renderMath(splitCondition(task).lead)"></span></div>
           <div class="lesson-task-expr lesson-task-formula" x-html="formulaHtml(splitCondition(task).formula)"></div>
           <div class="lesson-task-lead" x-show="splitCondition(task).tail" x-html="renderMath(splitCondition(task).tail)"></div>
         </div>
       </template>
-      <template x-if="!task.payload.condition_html && !splitCondition(task)">
+      <template x-if="!task.payload.condition_html && !task.payload.value_table && !splitCondition(task)">
         <div class="lesson-task-expr"><span class="lesson-task-num" x-text="task.position + ')'"></span><span x-html="renderMath(task.payload.expression)"></span></div>
       </template>
 
@@ -276,7 +293,43 @@
       </template>
 
       {{-- Ответ отправлен: синяя строка, поменять можно до конца урока --}}
-      <template x-if="task.payload.type !== 'choice' && task.my_answer && !editing[task.id]">
+      {{-- Таблица значений: y вписываются прямо в клетки --}}
+      <template x-if="task.payload.value_table">
+        <div class="lesson-vt">
+          <div class="lesson-vt-scroll">
+            <table class="lesson-vt-table">
+              <tr><th>x</th><template x-for="(xv, i) in task.payload.value_table.xs" :key="'x' + i"><td x-text="xv"></td></template></tr>
+              <tr><th>y</th>
+                <template x-for="(xv, i) in task.payload.value_table.xs" :key="'y' + i">
+                  <td>
+                    <template x-if="task.my_answer && !editing[task.id]">
+                      <span class="lesson-vt-val" x-text="tableCells(task.my_answer)[i] || ''"></span>
+                    </template>
+                    <template x-if="!task.my_answer || editing[task.id]">
+                      <input type="text" class="lesson-vt-input" inputmode="text" autocomplete="off"
+                             autocapitalize="off" autocorrect="off" spellcheck="false"
+                             :aria-label="'y при x = ' + xv"
+                             x-model="tableDraftFor(task)[i]"
+                             :disabled="!!(status === 'ended' || sending[task.id])"
+                             @keydown.enter.prevent="tableNext($event, task)">
+                    </template>
+                  </td>
+                </template>
+              </tr>
+            </table>
+          </div>
+          <div class="lesson-sent-row" x-show="task.my_answer && !editing[task.id]">
+            <span>Отправлено учителю</span>
+            <button type="button" class="lesson-sent-edit" x-show="status !== 'ended'" @click="startEdit(task)">изменить</button>
+          </div>
+          <button class="lesson-vt-send" x-show="!task.my_answer || editing[task.id]"
+                  :disabled="!!(status === 'ended' || sending[task.id] || !tableFilled(task))"
+                  @click="submitTable(task)"
+                  x-text="sending[task.id] ? 'Отправляю…' : 'Отправить таблицу'"></button>
+        </div>
+      </template>
+
+      <template x-if="task.payload.type !== 'choice' && !task.payload.value_table && task.my_answer && !editing[task.id]">
         <div class="lesson-sent-row">
           <span>Отправлено учителю:</span>
           <span class="lesson-sent-value" x-html="answerHtml(task.my_answer)"></span>
@@ -285,7 +338,7 @@
       </template>
 
       {{-- Дробный ответ: поле само устроено как дробь --}}
-      <template x-if="task.payload.type !== 'choice' && isFracField(task) && (!task.my_answer || editing[task.id])">
+      <template x-if="task.payload.type !== 'choice' && !task.payload.value_table && isFracField(task) && (!task.my_answer || editing[task.id])">
         <div class="lesson-answer-row">
           <div class="lesson-frac">
             <template x-if="task.payload.answer_field === 'mixed'">
@@ -318,7 +371,7 @@
       </template>
 
       {{-- Обычный ответ --}}
-      <template x-if="task.payload.type !== 'choice' && !isFracField(task) && (!task.my_answer || editing[task.id])">
+      <template x-if="task.payload.type !== 'choice' && !task.payload.value_table && !isFracField(task) && (!task.my_answer || editing[task.id])">
         <div class="lesson-answer-row">
           {{-- !!(…): Alpine 3.15 в клонах template при undefined СТАВИТ boolean-атрибут,
                а не снимает — выражение обязано возвращать строго boolean --}}
@@ -431,6 +484,7 @@
       reviewOpen: false,   // разбор домашки свёрнут в строку
       editing: {},         // task_id → ученик меняет отправленный ответ
       fracDraft: {},       // task_id → {w, n, d} дробного поля
+      tableDraft: {},      // task_id → [y1, y2, …] таблицы значений
       newIds: [],          // задачи, добавленные учителем после открытия страницы
       newToast: false,
 
@@ -750,7 +804,34 @@
         if (answer) this.submitAnswer(task.id, answer);
       },
 
+      // --- таблица значений: клетки → ответ «v1; v2; …» (сверка по порядку) ---
+      tableCells(raw) {
+        return String(raw || '').split(/\s*[;|]\s*/).map(v => v.trim());
+      },
+      tableDraftFor(task) {
+        if (!this.tableDraft[task.id]) this.tableDraft[task.id] = task.payload.value_table.xs.map(() => '');
+        return this.tableDraft[task.id];
+      },
+      tableFilled(task) {
+        return this.tableDraftFor(task).every(v => String(v).trim() !== '');
+      },
+      // Enter в клетке — к следующей, в последней — отправить.
+      tableNext(e, task) {
+        const inputs = [...e.target.closest('tr').querySelectorAll('input')];
+        const i = inputs.indexOf(e.target);
+        if (i < inputs.length - 1) inputs[i + 1].focus();
+        else if (this.tableFilled(task)) this.submitTable(task);
+      },
+      submitTable(task) {
+        if (!this.tableFilled(task)) return;
+        this.submitAnswer(task.id, this.tableDraftFor(task).map(v => String(v).trim()).join('; '));
+      },
+
       startEdit(task) {
+        if (task.payload.value_table) {
+          const cells = this.tableCells(task.my_answer);
+          this.tableDraft[task.id] = task.payload.value_table.xs.map((_, i) => cells[i] || '');
+        }
         if (this.isFracField(task)) {
           const s = String(task.my_answer || '').trim();
           const mx = s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
