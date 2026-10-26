@@ -41,6 +41,21 @@ def take_group(src: str, i: int) -> tuple[str, int]:
     raise ValueError(f'незакрытая скобка в {src!r}')
 
 
+def bare_argument(src: str, i: int) -> str:
+    """«\\lg x», «\\cos x»: аргумент без скобок — одна буква — берём в скобки."""
+    j = i
+    while j < len(src) and src[j] == ' ':
+        j += 1
+    return f'({src[j]})' if j < len(src) and src[j].isalpha() else ''
+
+
+def skip_bare(src: str, i: int) -> int:
+    j = i
+    while j < len(src) and src[j] == ' ':
+        j += 1
+    return j + 1 if j < len(src) and src[j].isalpha() else i
+
+
 def latex_to_plain(tex: str) -> str:
     """Подмножество LaTeX наших банков → запись, понятная sympy."""
     src = tex.strip().strip('$')
@@ -59,6 +74,25 @@ def latex_to_plain(tex: str) -> str:
             body, i = take_group(src, close + 1)
             glue = '*' if out and (out[-1].isalnum() or out[-1] == ')') else ''
             out += f'{glue}real_root({latex_to_plain(body)},{index})'
+            continue
+        if src.startswith(r'\log_', i):        # \log_{2}(…) → log((…), 2)
+            base, i = take_group(src, i + len(r'\log_'))
+            out += f'logb{len(LOG_BASES)}' + bare_argument(src, i)
+            LOG_BASES.append(latex_to_plain(base))
+            i = skip_bare(src, i)
+            continue
+        for macro, name in ((r'\lg', 'logb_ten'), (r'\sin', 'sin'), (r'\cos', 'cos'),
+                            (r'\operatorname{tg}', 'tan'), (r'\pi', 'pi')):
+            if src.startswith(macro, i):
+                glue = '*' if name == 'pi' and out and (out[-1].isalnum() or out[-1] == ')') else ''
+                out, i = out + glue + name, i + len(macro)
+                if name != 'pi':
+                    out += bare_argument(src, i)
+                    i = skip_bare(src, i)
+                break
+        else:
+            macro = None
+        if macro:
             continue
         if src.startswith(r'\left', i) or src.startswith(r'\right', i):
             i += len(r'\left') if src.startswith(r'\left', i) else len(r'\right')
@@ -88,7 +122,8 @@ def latex_to_plain(tex: str) -> str:
 
 
 # Имена, которые нельзя рвать на отдельные переменные.
-KNOWN_NAMES = ('real_root', 'Rational', 'sqrt')
+KNOWN_NAMES = ('real_root', 'Rational', 'sqrt', 'sin', 'cos', 'tan', 'pi', 'logb_ten')
+LOG_BASES: list = []   # основания \log_{b} по порядку: «logbN» → log(…, b)
 
 
 def parse(src: str):
@@ -97,11 +132,16 @@ def parse(src: str):
     # правила защищены — «sqrt» распался бы на произведение четырёх букв.
     def split_word(m):
         word = m.group(0)
-        return word if word in KNOWN_NAMES else '*'.join(word)
+        if word in KNOWN_NAMES or re.fullmatch(r'logb\d+', word):
+            return word
+        return '*'.join(word)
 
-    guarded = re.sub(r'[A-Za-z_]+', split_word, src)
+    guarded = re.sub(r'[A-Za-z_]+\d*', lambda m: split_word(m) if not re.fullmatch(r'logb\d+', m.group(0)) else m.group(0), src)
+    local = {f'logb{k}': (lambda b: (lambda arg: sympy.log(arg, b)))(parse_expr(base, transformations=TRANSFORMS))
+             for k, base in enumerate(LOG_BASES)}
+    local['logb_ten'] = lambda arg: sympy.log(arg, 10)
 
-    return parse_expr(guarded, transformations=TRANSFORMS)
+    return parse_expr(guarded, local_dict=local, transformations=TRANSFORMS)
 
 
 def split_substitution(expression: str) -> tuple[str, dict]:
@@ -134,12 +174,54 @@ def parse_answer(answer: str):
     return parse(s)
 
 
+def check_equation(task) -> bool:
+    """«Решите уравнение: $…=…$» — каждый корень обращает уравнение в верное
+    равенство. «Наименьший положительный корень … в градусах» — подставляем
+    градусы в радианах."""
+    formula = re.search(r'\$(.*?)\$', task['expression']).group(1)
+    lhs, rhs = formula.split('=', 1)
+    diff = parse(latex_to_plain(lhs)) - parse(latex_to_plain(rhs))
+    x = sympy.Symbol('x')
+    degrees = 'в градусах' in task['expression']
+    for root in str(task['answer']).split(';'):
+        value = parse_answer(root)
+        point = value * sympy.pi / 180 if degrees else value
+        if sympy.simplify(diff.subs(x, point)) != 0:
+            return False
+    return True
+
+
+def check_table(task) -> bool:
+    """«Заполните таблицу значений функции $y=…$» — y считаем по функции."""
+    func = re.search(r'функции \$y=(.*?)\$', task['expression']).group(1)
+    xs = re.search(r'\\hline x&(.*?)\\\\', task['expression']).group(1).split('&')
+    f = parse(latex_to_plain(func))
+    x = sympy.Symbol('x')
+    ys = [parse_answer(c.strip()) for c in str(task['answer']).split('|')]
+    return len(xs) == len(ys) and all(sympy.simplify(f.subs(x, int(v)) - y) == 0 for v, y in zip(xs, ys))
+
+
 def check_file(path: Path) -> tuple[int, list[str]]:
     data = json.loads(path.read_text(encoding='utf-8'))
     errors, total = [], 0
     for zadanie in data.get('zadaniya', []):
         for task in zadanie.get('tasks', []):
             total += 1
+            LOG_BASES.clear()
+            special = None
+            if 'Заполните таблицу' in task['expression']:
+                special = check_table
+            elif re.search(r'\$[^$]*=[^$]*\$', task['expression']) and ' при ' not in task['expression']:
+                special = check_equation
+            if special:
+                try:
+                    ok = special(task)
+                except Exception as e:  # noqa: BLE001
+                    errors.append(f'{path.name} №{task["id"]}: не разобрано ({e}) — {task["expression"]}')
+                    continue
+                if not ok:
+                    errors.append(f'{path.name} №{task["id"]}: {task["expression"]} ≠ {task["answer"]}')
+                continue
             head, values = split_substitution(task['expression'])
             # «Раскройте скобки: $(x+3)^{2}$» — действие словами перед формулой.
             if not values and ':' in head.split('$', 1)[0]:
