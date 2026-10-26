@@ -8,6 +8,8 @@
     Уровень 1 — свойства степеней: a⁵·a³, a⁹:a⁴, (a³)⁴, (a²)³·a⁵:a⁷.
     Уровень 2 — вычислить удобным способом: 2¹⁰:2⁷, 5³·2³, (3⁴)²:3⁷, 4⁵:2⁸.
     Уровень 3 — одночлены: 3a²b·(−2ab³), (−2x³y)²·5xy, (2a²b)³.
+    Уровень 4 — разложить основания на простые: 36³/(2⁵·3⁶), 8⁵/16³, 75²·2³/(15·10²)
+               (добавлен 26.10, свой seed — прежние примеры не сдвигаются).
   8 класс — целый показатель
     Уровень 1 — вычислить: 2⁻³, (2/3)⁻², 5⁻²·5⁴, 3⁻⁴:3⁻⁶, 0,5⁻².
     Уровень 2 — упростить: a⁻³·a⁵, (x⁻²)³·x⁸, (a⁻²b³)⁻²·a⁵b⁷.
@@ -405,11 +407,55 @@ def sci(rng):
     return f'({left}){op}({right})', None, None
 
 
+# Составные основания и их разложение на простые: 36 = 2²·3², 75 = 3·5².
+FACTORS = {
+    4: {2: 2}, 8: {2: 3}, 16: {2: 4}, 32: {2: 5}, 64: {2: 6}, 9: {3: 2}, 27: {3: 3}, 81: {3: 4},
+    25: {5: 2}, 125: {5: 3}, 6: {2: 1, 3: 1}, 10: {2: 1, 5: 1}, 12: {2: 2, 3: 1}, 15: {3: 1, 5: 1},
+    18: {2: 1, 3: 2}, 20: {2: 2, 5: 1}, 24: {2: 3, 3: 1}, 36: {2: 2, 3: 2}, 45: {3: 2, 5: 1},
+    48: {2: 4, 3: 1}, 50: {2: 1, 5: 2}, 54: {2: 1, 3: 3}, 72: {2: 3, 3: 2}, 75: {3: 1, 5: 2},
+    100: {2: 2, 5: 2},
+}
+PRIMES = {2: {2: 1}, 3: {3: 1}, 5: {5: 1}}
+
+
+def b7_prime_bases(rng):
+    """\\dfrac{36^{3}}{2^{5}\\cdot 3^{6}}: основания раскладываются на степени
+    2, 3, 5, после чего почти всё сокращается. Ответ — небольшое число или дробь."""
+    composite = list(FACTORS)
+    top = rng.sample(composite, rng.choice([1, 1, 2]))
+    bottom_pool = composite + list(PRIMES) * 3
+    bottom = rng.sample([b for b in bottom_pool if b not in top], rng.choice([1, 2, 2]))
+    bottom = list(dict.fromkeys(bottom))
+    vec, parts = {}, {}
+    for side, bases in ((1, top), (-1, bottom)):
+        for b in bases:
+            e = rng.randint(2, 9)
+            parts[(side, b)] = e
+            for p, k in {**FACTORS, **PRIMES}[b].items():
+                vec[p] = vec.get(p, 0) + side * k * e
+    # Сокращается почти всё: остаток — степени 2, 3, 5 не выше куба.
+    if not vec or all(v == 0 for v in vec.values()):
+        return None
+    if any(abs(v) > 3 for v in vec.values()) or sum(abs(v) for v in vec.values()) > 5:
+        return None
+    if sum(e for (side, _), e in parts.items() if side > 0) < 3:
+        return None
+    # Целый ответ — основной случай, дробный — примерно каждый третий.
+    if any(v < 0 for v in vec.values()) and rng.random() < 0.7:
+        return None
+    num = '\\cdot '.join(f'{b}^{{{parts[(1, b)]}}}' for b in top)
+    den = '\\cdot '.join(f'{b}^{{{parts[(-1, b)]}}}' for b in bottom)
+    return f'\\dfrac{{{num}}}{{{den}}}', None, None
+
+
 LEVELS = [
     (7, '7 класс', [
         ('Уровень 1 — свойства степеней', SIMPLIFY, [(p7_mul, 20), (p7_div, 20), (p7_pow, 20), (p7_three, 10), (p7_mixed, 20), (p7_frac, 10)]),
         ('Уровень 2 — вычислить удобным способом', COMPUTE, [(c7_same_base, 20), (c7_same_exp, 15), (c7_pow_div, 20), (c7_change_base, 20), (c7_frac_powers, 15), (c7_decimal_pair, 10)]),
         ('Уровень 3 — одночлены', SIMPLIFY, [(m7_product, 35), (m7_power, 25), (m7_power_times, 25), (m7_decimal_coef, 15)]),
+        # Добавлен 26.10 (Стас): свой seed — прежние уровни и 8 класс не сдвигаются,
+        # номера задач, на которые уже ссылаются уроки и домашки, те же.
+        ('Уровень 4 — разложить основания на простые', COMPUTE, [(b7_prime_bases, 100)], SEED + 7004),
     ]),
     (8, '8 класс', [
         ('Уровень 1 — отрицательный показатель: вычислить', COMPUTE, [(n8_single, 12), (n8_neg_base, 8), (n8_fraction_base, 15), (n8_decimal_base, 10), (n8_mul, 15), (n8_div, 15), (n8_pow, 15), (n8_sum, 10)]),
@@ -420,7 +466,10 @@ LEVELS = [
 
 
 def build(rng, template, kind):
-    tex, powers, coef = template(rng)
+    got = template(rng)
+    if got is None:
+        return None
+    tex, powers, coef = got
     value = sympy.simplify(to_sympy(tex))
     if powers is None:
         assert not value.free_symbols, tex
@@ -446,14 +495,15 @@ def main() -> None:
     zadaniya = []
     for grade, title, levels in LEVELS:
         tasks, subtypes = [], []
-        for li, (ltitle, kind, templates) in enumerate(levels):
+        for li, (ltitle, kind, templates, *own_seed) in enumerate(levels):
             subtypes.append(ltitle)
+            lrng = random.Random(own_seed[0]) if own_seed else rng
             for template, count in templates:
                 made, guard = 0, 0
                 while made < count:
                     guard += 1
                     assert guard < 20000, f'{template.__name__}: не набралось уникальных'
-                    got = build(rng, template, kind)
+                    got = build(lrng, template, kind)
                     if got is None:
                         continue
                     tex, answer = got
@@ -473,8 +523,8 @@ def main() -> None:
         'topic': '06',
         'meta': {
             'title': 'Степени',
-            'description': 'Свойства степеней с натуральным и целым показателем, вычисления удобным способом, '
-                           'одночлены, числа в стандартном виде. 7 и 8 класс, по три уровня из 100 примеров.',
+            'description': 'Свойства степеней с натуральным и целым показателем, вычисления удобным способом, разложение оснований на простые, '
+                           'одночлены, числа в стандартном виде. 7 класс — четыре уровня, 8 класс — три, по 100 примеров.',
         },
         'generator': {'script': 'scripts/generate-skills-powers.py', 'seed': SEED},
         'zadaniya': zadaniya,
