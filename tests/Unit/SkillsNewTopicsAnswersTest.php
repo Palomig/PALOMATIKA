@@ -40,7 +40,7 @@ class SkillsNewTopicsAnswersTest extends TestCase
     {
         $resolver = new TaskAnswerResolver();
         $tasks = $this->tasks('powers');
-        $this->assertCount(600, $tasks);
+        $this->assertCount(700, $tasks);
         foreach ($tasks as $task) {
             $answer = (string) $task['answer'];
             $this->assertTrue($resolver->isCorrect($answer, $answer), "эталон #{$task['id']}: {$answer}");

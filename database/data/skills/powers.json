@@ -3,7 +3,7 @@
   "topic": "06",
   "meta": {
     "title": "Степени",
-    "description": "Свойства степеней с натуральным и целым показателем, вычисления удобным способом, одночлены, числа в стандартном виде. 7 и 8 класс, по три уровня из 100 примеров."
+    "description": "Свойства степеней с натуральным и целым показателем, вычисления удобным способом, разложение оснований на простые, одночлены, числа в стандартном виде. 7 класс — четыре уровня, 8 класс — три, по 100 примеров."
   },
   "generator": {
     "script": "scripts/generate-skills-powers.py",
@@ -20,7 +20,8 @@
       "subtypes": [
         "Уровень 1 — свойства степеней",
         "Уровень 2 — вычислить удобным способом",
-        "Уровень 3 — одночлены"
+        "Уровень 3 — одночлены",
+        "Уровень 4 — разложить основания на простые"
       ],
       "tasks": [
         {
@@ -2422,6 +2423,806 @@
           "status": "production",
           "subtype": 2,
           "level": 3
+        },
+        {
+          "id": 301,
+          "expression": "Вычислите: $\\dfrac{25^{9}\\cdot 4^{9}}{100^{8}}$",
+          "answer": "100",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 302,
+          "expression": "Вычислите: $\\dfrac{9^{6}}{3^{9}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 303,
+          "expression": "Вычислите: $\\dfrac{16^{7}}{2^{6}\\cdot 32^{4}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 304,
+          "expression": "Вычислите: $\\dfrac{9^{4}}{3^{6}}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 305,
+          "expression": "Вычислите: $\\dfrac{48^{3}}{32^{2}}$",
+          "answer": "108",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 306,
+          "expression": "Вычислите: $\\dfrac{32^{9}}{64^{7}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 307,
+          "expression": "Вычислите: $\\dfrac{9^{4}}{3^{7}}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 308,
+          "expression": "Вычислите: $\\dfrac{15^{3}}{3^{5}}$",
+          "answer": "125/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 309,
+          "expression": "Вычислите: $\\dfrac{12^{5}}{2^{3}\\cdot 6^{4}}$",
+          "answer": "24",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 310,
+          "expression": "Вычислите: $\\dfrac{27^{3}}{3^{7}}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 311,
+          "expression": "Вычислите: $\\dfrac{54^{6}}{12^{3}\\cdot 9^{6}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 312,
+          "expression": "Вычислите: $\\dfrac{16^{4}}{2^{9}\\cdot 12^{3}}$",
+          "answer": "2/27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 313,
+          "expression": "Вычислите: $\\dfrac{45^{2}\\cdot 18^{2}}{3^{9}}$",
+          "answer": "100/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 314,
+          "expression": "Вычислите: $\\dfrac{20^{4}}{32^{2}\\cdot 5^{3}}$",
+          "answer": "5/4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 315,
+          "expression": "Вычислите: $\\dfrac{24^{9}}{6^{6}\\cdot 8^{7}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 316,
+          "expression": "Вычислите: $\\dfrac{10^{5}}{2^{3}\\cdot 5^{2}}$",
+          "answer": "500",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 317,
+          "expression": "Вычислите: $\\dfrac{18^{3}}{2^{5}\\cdot 27^{3}}$",
+          "answer": "1/108",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 318,
+          "expression": "Вычислите: $\\dfrac{12^{5}}{2^{4}\\cdot 24^{2}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 319,
+          "expression": "Вычислите: $\\dfrac{20^{3}}{2^{5}}$",
+          "answer": "250",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 320,
+          "expression": "Вычислите: $\\dfrac{50^{4}}{5^{6}\\cdot 4^{2}}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 321,
+          "expression": "Вычислите: $\\dfrac{75^{3}}{5^{4}}$",
+          "answer": "675",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 322,
+          "expression": "Вычислите: $\\dfrac{100^{5}}{2^{8}\\cdot 25^{5}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 323,
+          "expression": "Вычислите: $\\dfrac{25^{6}}{125^{3}}$",
+          "answer": "125",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 324,
+          "expression": "Вычислите: $\\dfrac{12^{5}}{24^{3}}$",
+          "answer": "18",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 325,
+          "expression": "Вычислите: $\\dfrac{24^{3}}{2^{7}}$",
+          "answer": "108",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 326,
+          "expression": "Вычислите: $\\dfrac{18^{3}}{2^{2}\\cdot 54^{2}}$",
+          "answer": "1/2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 327,
+          "expression": "Вычислите: $\\dfrac{25^{5}}{5^{8}}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 328,
+          "expression": "Вычислите: $\\dfrac{20^{3}}{2^{4}}$",
+          "answer": "500",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 329,
+          "expression": "Вычислите: $\\dfrac{32^{4}}{4^{9}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 330,
+          "expression": "Вычислите: $\\dfrac{36^{4}}{48^{2}\\cdot 3^{3}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 331,
+          "expression": "Вычислите: $\\dfrac{27^{8}\\cdot 18^{7}}{81^{8}\\cdot 12^{3}}$",
+          "answer": "54",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 332,
+          "expression": "Вычислите: $\\dfrac{12^{7}}{2^{2}\\cdot 24^{4}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 333,
+          "expression": "Вычислите: $\\dfrac{75^{3}}{5^{6}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 334,
+          "expression": "Вычислите: $\\dfrac{54^{5}}{3^{4}\\cdot 18^{5}}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 335,
+          "expression": "Вычислите: $\\dfrac{10^{3}}{2^{3}}$",
+          "answer": "125",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 336,
+          "expression": "Вычислите: $\\dfrac{18^{4}}{3^{8}\\cdot 2^{2}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 337,
+          "expression": "Вычислите: $\\dfrac{25^{6}}{5^{9}\\cdot 3^{2}}$",
+          "answer": "125/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 338,
+          "expression": "Вычислите: $\\dfrac{45^{4}}{5^{4}\\cdot 3^{6}}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 339,
+          "expression": "Вычислите: $\\dfrac{64^{3}\\cdot 18^{2}}{12^{3}\\cdot 4^{7}}$",
+          "answer": "3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 340,
+          "expression": "Вычислите: $\\dfrac{10^{3}}{2^{2}}$",
+          "answer": "250",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 341,
+          "expression": "Вычислите: $\\dfrac{27^{2}\\cdot 10^{3}}{45^{3}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 342,
+          "expression": "Вычислите: $\\dfrac{48^{6}}{32^{3}\\cdot 12^{6}}$",
+          "answer": "1/8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 343,
+          "expression": "Вычислите: $\\dfrac{12^{3}}{2^{5}}$",
+          "answer": "54",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 344,
+          "expression": "Вычислите: $\\dfrac{24^{7}}{2^{6}\\cdot 12^{9}}$",
+          "answer": "1/72",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 345,
+          "expression": "Вычислите: $\\dfrac{72^{4}}{2^{6}\\cdot 54^{3}}$",
+          "answer": "8/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 346,
+          "expression": "Вычислите: $\\dfrac{32^{5}}{16^{6}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 347,
+          "expression": "Вычислите: $\\dfrac{48^{3}}{12^{2}\\cdot 4^{3}}$",
+          "answer": "12",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 348,
+          "expression": "Вычислите: $\\dfrac{6^{3}\\cdot 50^{3}}{10^{6}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 349,
+          "expression": "Вычислите: $\\dfrac{50^{3}}{5^{5}}$",
+          "answer": "40",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 350,
+          "expression": "Вычислите: $\\dfrac{54^{3}}{3^{9}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 351,
+          "expression": "Вычислите: $\\dfrac{4^{3}}{12^{2}}$",
+          "answer": "4/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 352,
+          "expression": "Вычислите: $\\dfrac{100^{4}}{10^{6}\\cdot 25^{2}}$",
+          "answer": "4/25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 353,
+          "expression": "Вычислите: $\\dfrac{4^{5}}{2^{8}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 354,
+          "expression": "Вычислите: $\\dfrac{100^{3}}{10^{8}}$",
+          "answer": "1/100",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 355,
+          "expression": "Вычислите: $\\dfrac{36^{7}}{72^{4}\\cdot 3^{6}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 356,
+          "expression": "Вычислите: $\\dfrac{24^{3}}{16^{3}\\cdot 3^{3}}$",
+          "answer": "1/8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 357,
+          "expression": "Вычислите: $\\dfrac{15^{8}}{3^{6}\\cdot 5^{6}}$",
+          "answer": "225",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 358,
+          "expression": "Вычислите: $\\dfrac{25^{4}}{5^{9}}$",
+          "answer": "1/5",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 359,
+          "expression": "Вычислите: $\\dfrac{6^{7}}{18^{4}}$",
+          "answer": "8/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 360,
+          "expression": "Вычислите: $\\dfrac{8^{3}\\cdot 75^{9}}{50^{9}\\cdot 27^{2}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 361,
+          "expression": "Вычислите: $\\dfrac{10^{6}}{2^{4}\\cdot 125^{2}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 362,
+          "expression": "Вычислите: $\\dfrac{72^{4}}{12^{5}}$",
+          "answer": "108",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 363,
+          "expression": "Вычислите: $\\dfrac{48^{3}\\cdot 32^{4}}{16^{8}}$",
+          "answer": "27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 364,
+          "expression": "Вычислите: $\\dfrac{16^{3}}{4^{7}\\cdot 5^{2}}$",
+          "answer": "1/100",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 365,
+          "expression": "Вычислите: $\\dfrac{45^{4}}{3^{3}\\cdot 15^{3}}$",
+          "answer": "45",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 366,
+          "expression": "Вычислите: $\\dfrac{20^{4}\\cdot 16^{6}}{32^{5}\\cdot 100^{3}}$",
+          "answer": "2/25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 367,
+          "expression": "Вычислите: $\\dfrac{12^{6}}{4^{6}\\cdot 3^{8}}$",
+          "answer": "1/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 368,
+          "expression": "Вычислите: $\\dfrac{125^{4}}{25^{7}}$",
+          "answer": "1/25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 369,
+          "expression": "Вычислите: $\\dfrac{125^{3}}{75^{2}\\cdot 5^{4}}$",
+          "answer": "5/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 370,
+          "expression": "Вычислите: $\\dfrac{9^{5}}{81^{3}}$",
+          "answer": "1/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 371,
+          "expression": "Вычислите: $\\dfrac{75^{2}\\cdot 50^{7}}{10^{5}\\cdot 25^{7}}$",
+          "answer": "36/5",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 372,
+          "expression": "Вычислите: $\\dfrac{10^{3}}{5^{2}}$",
+          "answer": "40",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 373,
+          "expression": "Вычислите: $\\dfrac{15^{3}}{3^{4}}$",
+          "answer": "125/3",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 374,
+          "expression": "Вычислите: $\\dfrac{16^{6}\\cdot 81^{9}}{18^{9}\\cdot 36^{9}}$",
+          "answer": "1/8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 375,
+          "expression": "Вычислите: $\\dfrac{6^{9}}{48^{2}\\cdot 3^{6}}$",
+          "answer": "6",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 376,
+          "expression": "Вычислите: $\\dfrac{8^{5}}{4^{9}}$",
+          "answer": "1/8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 377,
+          "expression": "Вычислите: $\\dfrac{125^{5}}{25^{7}}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 378,
+          "expression": "Вычислите: $\\dfrac{6^{4}}{12^{2}}$",
+          "answer": "9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 379,
+          "expression": "Вычислите: $\\dfrac{20^{3}}{10^{3}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 380,
+          "expression": "Вычислите: $\\dfrac{50^{4}}{2^{6}\\cdot 5^{9}}$",
+          "answer": "1/20",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 381,
+          "expression": "Вычислите: $\\dfrac{25^{2}\\cdot 100^{3}}{50^{4}}$",
+          "answer": "100",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 382,
+          "expression": "Вычислите: $\\dfrac{10^{5}}{5^{6}\\cdot 2^{8}}$",
+          "answer": "1/40",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 383,
+          "expression": "Вычислите: $\\dfrac{25^{4}}{5^{7}}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 384,
+          "expression": "Вычислите: $\\dfrac{45^{7}}{15^{9}\\cdot 3^{3}}$",
+          "answer": "9/25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 385,
+          "expression": "Вычислите: $\\dfrac{16^{7}}{8^{9}\\cdot 20^{2}}$",
+          "answer": "1/200",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 386,
+          "expression": "Вычислите: $\\dfrac{15^{3}}{3^{2}}$",
+          "answer": "375",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 387,
+          "expression": "Вычислите: $\\dfrac{16^{8}}{64^{5}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 388,
+          "expression": "Вычислите: $\\dfrac{16^{8}}{2^{7}\\cdot 8^{8}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 389,
+          "expression": "Вычислите: $\\dfrac{125^{3}}{5^{7}}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 390,
+          "expression": "Вычислите: $\\dfrac{72^{7}\\cdot 4^{6}}{24^{8}\\cdot 6^{8}}$",
+          "answer": "2/9",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 391,
+          "expression": "Вычислите: $\\dfrac{8^{3}}{4^{4}}$",
+          "answer": "2",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 392,
+          "expression": "Вычислите: $\\dfrac{25^{4}}{5^{5}}$",
+          "answer": "125",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 393,
+          "expression": "Вычислите: $\\dfrac{72^{3}}{3^{4}\\cdot 24^{2}}$",
+          "answer": "8",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 394,
+          "expression": "Вычислите: $\\dfrac{50^{8}}{8^{2}\\cdot 25^{7}}$",
+          "answer": "100",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 395,
+          "expression": "Вычислите: $\\dfrac{25^{3}}{5^{5}}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 396,
+          "expression": "Вычислите: $\\dfrac{6^{6}}{72^{2}\\cdot 3^{5}}$",
+          "answer": "1/27",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 397,
+          "expression": "Вычислите: $\\dfrac{12^{7}}{16^{3}\\cdot 3^{7}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 398,
+          "expression": "Вычислите: $\\dfrac{15^{2}\\cdot 9^{8}}{27^{6}}$",
+          "answer": "25",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 399,
+          "expression": "Вычислите: $\\dfrac{125^{2}\\cdot 45^{4}}{81^{2}\\cdot 5^{9}}$",
+          "answer": "5",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
+        },
+        {
+          "id": 400,
+          "expression": "Вычислите: $\\dfrac{4^{4}}{2^{6}}$",
+          "answer": "4",
+          "status": "production",
+          "subtype": 3,
+          "level": 4
         }
       ]
     },
