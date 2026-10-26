@@ -211,6 +211,10 @@ class StudentLessonController extends Controller
         $payload = $t->task_payload;
         // Скрываем answer из payload (он же в correct_answer, но в payload его тоже сохранили)
         unset($payload['answer'], $payload['raw']);
+        // Таблица значений функции: строка y — полями ввода прямо в таблице.
+        if ($table = \App\Support\ValueTable::parse($payload['expression'] ?? null)) {
+            $payload['value_table'] = $table;
+        }
 
         return [
             'id'          => $t->id,

@@ -38,6 +38,14 @@
   .task-visual img { max-width: 100%; height: auto; display: block; border-radius: 8px; }
   .task-visual > .task-visual-frame { width: 100%; max-width: 320px; }
   .task-form { margin-top: 12px; display: grid; gap: 8px; }
+  /* Таблица значений функции: строка y — поля ввода */
+  .vt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 10px; }
+  .vt-table { border-collapse: collapse; font-size: 16px; }
+  .vt-table th, .vt-table td { border: 1px solid var(--border); text-align: center; padding: 0; min-width: 52px; height: 42px; }
+  .vt-table th { background: var(--surface2); font-style: italic; font-weight: 600; min-width: 34px; padding: 0 8px; }
+  .vt-table tr:first-child td { padding: 0 6px; }
+  .vt-input { width: 52px; height: 40px; border: 0; background: transparent; text-align: center; font: inherit; color: var(--text); outline: none; }
+  .vt-input:focus { background: var(--accent-bg); }
   .task-input {
     width: 100%; padding: 11px 12px; border-radius: 10px;
     border: 1px solid var(--border); background: var(--surface2);
@@ -169,6 +177,11 @@
       $hasLegacyInlineSvg = !$hasInlineSvg && is_string($image) && str_starts_with(ltrim($image), '<svg');
       $hasImageFile = !$hasInlineSvg && !$hasLegacyInlineSvg && is_string($image) && $image !== '';
       $payloadTopicId = (string) ($payload['topic_id'] ?? '');
+      // Таблица значений функции: y вписываются прямо в клетки таблицы.
+      $valueTable = \App\Support\ValueTable::parse($payload['expression'] ?? null);
+      if ($valueTable) {
+          $text = e($valueTable['lead']);
+      }
     @endphp
 
     <div class="task-card">
@@ -207,6 +220,19 @@
               x-init="restoreDraft()"
               @submit.prevent="send()">
           @csrf
+          @if($valueTable)
+            {{-- Клетки собираются в скрытое «answer» как «v1; v2; …» —
+                 сверка по порядку столбцов (TaskAnswerResolver::tableMatches). --}}
+            @php $oldCells = (int) session('answer_task_id') === (int) $task->id ? preg_split('/\s*[;|]\s*/', (string) old('answer')) : []; @endphp
+            <input type="hidden" name="answer" x-ref="answer" value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
+            <div class="vt-scroll" x-data="{ cells: @js(array_map(fn ($i) => $oldCells[$i] ?? '', array_keys($valueTable['xs']))) }"
+                 x-effect="$el.closest('form').querySelector('input[name=answer]').value = cells.every(v => String(v).trim() !== '') ? cells.map(v => String(v).trim()).join('; ') : ''">
+              <table class="vt-table">
+                <tr><th>x</th>@foreach($valueTable['xs'] as $xv)<td>{{ $xv }}</td>@endforeach</tr>
+                <tr><th>y</th>@foreach($valueTable['xs'] as $i => $xv)<td><input type="text" class="vt-input" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="y при x = {{ $xv }}" x-model="cells[{{ $i }}]"></td>@endforeach</tr>
+              </table>
+            </div>
+          @else
           {{-- Ответ возвращаем только той задаче, из которой пришла ошибка. --}}
           <input class="task-input" type="text" name="answer" placeholder="Ответ" required x-ref="answer"
                  value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
@@ -218,6 +244,7 @@
               'target' => 'input[name=answer]',
               'letters' => app(\App\Services\AlgebraicAnswerComparator::class)->looksAlgebraic($task->correct_answer) ? 'true' : 'false',
           ])
+          @endif
 
           <template x-if="pages.length">
             <div class="page-list">
@@ -448,7 +475,7 @@ function taskPhotos(config) {
 
       const answer = (this.$refs.answer?.value || '').trim();
       if (!answer) {
-        this.error = 'Впиши ответ.';
+        this.error = this.$refs.answer?.type === 'hidden' ? 'Заполни все клетки таблицы.' : 'Впиши ответ.';
         this.$refs.answer?.focus();
         return;
       }
