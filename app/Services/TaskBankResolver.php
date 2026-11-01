@@ -45,7 +45,29 @@ class TaskBankResolver
         $topic = (new TaskDataService())->getTopicData($refs['topic_id']);
         [$z, $task] = $this->findTaskInBlocks($topic['blocks'] ?? [], $refs['zadanie_number'], $refs['task_id']);
         $label = "ОГЭ · Тема {$refs['topic_id']} · Задание {$refs['zadanie_number']}.{$refs['task_id']}";
-        return $this->normalize($task, $z, $label);
+        $resolved = $this->normalize($task, $z, $label);
+
+        $html = self::ogeConditionHtml($task);
+        if ($html !== '') {
+            $resolved['condition_html'] = $html;
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * Разметка ФИПИ для урока, если в условии ОГЭ несколько рисунков.
+     *
+     * ОГЭ на уроке идёт плоским `expression`, а чертёж — отдельным
+     * `image_svg`, но склеивать несколько SVG в один нельзя. В задании 11
+     * графики А–В — три SVG внутри таблицы соответствия: без разметки урок
+     * показывал «А) Б) В)» без единого графика.
+     */
+    public static function ogeConditionHtml(array $task): string
+    {
+        $html = (string) ($task['html'] ?? '');
+
+        return substr_count($html, '<svg') > 1 ? $html : '';
     }
 
     /**

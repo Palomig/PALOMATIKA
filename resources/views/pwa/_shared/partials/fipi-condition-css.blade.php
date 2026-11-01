@@ -26,6 +26,10 @@
     display: block; width: auto; max-width: 100%; max-height: 220px;
     background: #fff; border-radius: 8px; padding: 6px; margin: 6px 0;
   }
+  /* Графики ОГЭ — свои SVG в ячейках таблицы соответствия (задание 11).
+     Ширина явная: у SVG классы витрины (w-full), а ячейка flex-раскладки
+     сжимается по содержимому — без ширины график схлопывался. */
+  .fipi-condition td svg[role="img"] { display: block; width: 150px; max-width: 100%; height: auto; border-radius: 6px; }
   /* Таблицы-раскладки ФИПИ (соответствие, текст рядом с чертежом). */
   .fipi-condition table:not(.fipi-data) { display: block; width: 100%; max-width: 100%; border-collapse: collapse; }
   .fipi-condition table:not(.fipi-data) > tbody { display: block; width: 100%; }

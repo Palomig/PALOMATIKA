@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * варианты «$a-5<0$» так и остаются обрезанными до «$a-5». Снимок хранит
  * исходную разметку банка в `raw` — из неё текст и собирается заново.
  * Идентификаторы вариантов не меняются, ответы учеников остаются верными.
+ * Заодно снимкам ОГЭ с несколькими рисунками добавляется `condition_html`
+ * ({@see TaskBankResolver::ogeConditionHtml()}).
  *
  *   php artisan tasks:refresh-fipi-text --dry-run
  *   php artisan tasks:refresh-fipi-text
@@ -61,12 +63,21 @@ class RefreshFipiSnapshotText extends Command
                             $next[$key] = $value;
                         }
                     }
+                    // Задание ОГЭ с несколькими рисунками (графики А–В в
+                    // задании 11) снимок без разметки показывал без графиков.
+                    $html = TaskBankResolver::ogeConditionHtml($payload['raw']);
+                    if ($html !== '' && !isset($payload['condition_html'])) {
+                        $next['condition_html'] = $html;
+                    }
                     if ($next === $payload) {
                         continue;
                     }
 
                     $changed++;
                     $this->line(sprintf('%s · задача %d:', $label, $task->id));
+                    if (isset($next['condition_html']) && !isset($payload['condition_html'])) {
+                        $this->line('  condition_html: добавлена разметка с рисунками');
+                    }
                     foreach (['expression', 'options'] as $key) {
                         if (($next[$key] ?? null) !== ($payload[$key] ?? null)) {
                             $this->line('  ' . $key . ': ' . $this->show($payload[$key] ?? null) . ' → ' . $this->show($next[$key]));
