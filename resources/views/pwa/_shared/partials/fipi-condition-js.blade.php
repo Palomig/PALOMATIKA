@@ -1,5 +1,5 @@
 {{--
-  Подготовка условия ЕГЭ (разметка ФИПИ) к выводу через x-html на экранах
+  Подготовка условия ФИПИ (ЕГЭ; ОГЭ с несколькими рисунками) к выводу через x-html на экранах
   урока. Единственная задача — отличить настоящую таблицу данных (гостиницы,
   тарифы: три и больше столбцов, без рисунков и вложенных таблиц) от
   таблицы-раскладки, которой ФИПИ верстает соответствие «А–Г ↔ 1–4» и
@@ -11,7 +11,7 @@
     const tpl = document.createElement('template');
     tpl.innerHTML = String(html || '');
     tpl.content.querySelectorAll('table').forEach((table) => {
-      if (table.querySelector('table, img')) return;
+      if (table.querySelector('table, img, svg')) return;
       let cols = 0;
       table.querySelectorAll('tr').forEach((tr) => { cols = Math.max(cols, tr.children.length); });
       if (cols < 3) return;
