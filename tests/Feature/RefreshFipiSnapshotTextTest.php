@@ -57,4 +57,22 @@ class RefreshFipiSnapshotTextTest extends TestCase
             ->expectsOutputToContain('Снимков с изменениями: 0')
             ->assertSuccessful();
     }
+
+    public function test_adds_condition_html_to_oge_snapshot_with_several_graphs(): void
+    {
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" role="img"><rect/></svg>';
+        $html = '<table><tr><td><b>А)</b></td><td><p>' . $svg . '</p></td>'
+            . '<td><b>Б)</b></td><td><p>' . $svg . '</p></td></tr></table>';
+        $raw = ['id' => 11, 'answer' => '21', 'fipi_guid' => str_repeat('c', 32), 'html' => $html];
+        $task = $this->lessonTask([
+            'type' => 'expression', 'answer' => '21', 'raw' => $raw,
+            'expression' => "А)\nБ)",
+        ]);
+
+        $this->artisan('tasks:refresh-fipi-text', ['--dry-run' => true])->assertSuccessful();
+        $this->assertArrayNotHasKey('condition_html', $task->fresh()->task_payload);
+
+        $this->artisan('tasks:refresh-fipi-text')->assertSuccessful();
+        $this->assertSame($html, $task->fresh()->task_payload['condition_html']);
+    }
 }

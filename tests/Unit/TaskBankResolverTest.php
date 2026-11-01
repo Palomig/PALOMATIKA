@@ -81,6 +81,18 @@ class TaskBankResolverTest extends TestCase
         $this->assertStringContainsString('$a<7$', $r['expression']);
     }
 
+    public function test_oge_condition_html_only_for_several_figures(): void
+    {
+        $svg = '<svg role="img"><rect/></svg>';
+        $three = '<p>А)</p>' . $svg . '<p>Б)</p>' . $svg . '<p>В)</p>' . $svg;
+
+        // Задание 11: графики А–В нельзя склеить в один image_svg — урок
+        // получает разметку целиком.
+        $this->assertSame($three, TaskBankResolver::ogeConditionHtml(['html' => $three]));
+        $this->assertSame('', TaskBankResolver::ogeConditionHtml(['html' => '<p>Чертёж</p>' . $svg]));
+        $this->assertSame('', TaskBankResolver::ogeConditionHtml(['expression' => '2+2']));
+    }
+
     public function test_alg_skill_resolves_simple_level_task(): void
     {
         $r = $this->resolver()->resolve('alg-skill', [
