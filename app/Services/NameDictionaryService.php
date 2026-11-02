@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cache;
 
 class NameDictionaryService
 {
-    private const CACHE_KEY = 'first_names_dict_v1';
+    private const CACHE_KEY = 'first_names_dict_v2';
     private const CACHE_TTL = 3600;
     private const PATH = 'data/first_names.json';
 

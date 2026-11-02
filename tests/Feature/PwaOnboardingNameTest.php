@@ -38,6 +38,26 @@ class PwaOnboardingNameTest extends TestCase
         $this->assertFalse($names->isKnownName('Qwerty'));
     }
 
+    public function test_expanded_dictionary_knows_common_names_in_both_spellings(): void
+    {
+        $names = app(NameDictionaryService::class);
+
+        foreach (['Алёна', 'Алена', 'Алиса', 'Мирон', 'Елисей', 'Есения', 'Аделина', 'Айгуль',
+                  'Тёма', 'Тема', 'Матрёна', 'Гусейн', 'Мариам', 'Анна-Мария'] as $name) {
+            $this->assertTrue($names->isKnownName($name), $name);
+        }
+    }
+
+    public function test_dictionary_stores_yo_spelling_without_ye_duplicates(): void
+    {
+        $dict = json_decode(file_get_contents(resource_path('data/first_names.json')), true)['names'];
+        $folded = array_map(fn ($n) => str_replace('ё', 'е', $n), $dict);
+
+        $this->assertSame(count($folded), count(array_unique($folded)));
+        $this->assertContains('алёна', $dict);
+        $this->assertNotContains('алена', $dict);
+    }
+
     public function test_artem_without_yo_completes_onboarding(): void
     {
         $user = User::factory()->create(['role' => 'student', 'onboarding_completed_at' => null]);
