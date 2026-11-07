@@ -362,6 +362,11 @@ class LessonTaskPickerService
                         // без этого карточка задачи оставалась без рисунка.
                         'image'          => (string) ($t['image'] ?? self::figureFromHtml((string) ($t['html'] ?? ''))),
                         'answer'         => (string) ($t['answer'] ?? ''),
+                        // Варианты ответа (choice-задачи ФИПИ): «Какому из
+                        // данных промежутков…» без списка промежутков в
+                        // карточке — условие без смысла, «Ответ: 3» не к чему
+                        // привязать. Эталон у таких задач — номер варианта.
+                        'options'        => self::cardOptions($t),
                         'image_svg'      => (string) ($t['svg'] ?? self::drawingFromHtml((string) ($t['html'] ?? ''))),
                         'group_key'      => $number,
                         'group_label'    => $groupLabel,
@@ -531,6 +536,41 @@ class LessonTaskPickerService
         }
 
         return $m[0];
+    }
+
+    /**
+     * Варианты ответа задачи для карточки выбора: {id, label}.
+     *
+     * Идёт тем же путём, что и TaskBankResolver для урока (id из `id`/`n`,
+     * текст из разметки), чтобы номер в «Ответ: 3» совпадал с номером
+     * варианта, который отправит ученик. multi_select (утверждения) сюда
+     * не попадает: их перечень уже вшит в условие.
+     *
+     * @return list<array{id: string, label: string}>
+     */
+    private static function cardOptions(array $task): array
+    {
+        if (empty($task['options']) || !empty($task['multi_select'])) {
+            return [];
+        }
+
+        $options = [];
+        foreach ($task['options'] as $opt) {
+            if (!is_array($opt)) {
+                continue;
+            }
+            $label = trim(self::scalar($opt['label'] ?? $opt['text'] ?? ''));
+            if ($label === '') {
+                $label = self::conditionFromHtml(self::scalar($opt['html'] ?? ''));
+            }
+            $id = self::scalar($opt['id'] ?? $opt['n'] ?? '');
+            if ($label === '' || $id === '') {
+                continue;
+            }
+            $options[] = ['id' => (string) $id, 'label' => $label];
+        }
+
+        return $options;
     }
 
     private function supportedTasks(array $zadanie, bool $allowMissingAnswer = false): array
