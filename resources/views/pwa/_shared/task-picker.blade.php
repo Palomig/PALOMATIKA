@@ -263,6 +263,15 @@
   .task-picker .fipi-condition img.fipi-figure { max-height:160px; }
   .task-picker .answer-row { margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .task-picker .answer-label { font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+  /* Варианты ответа choice-задач (промежутки, утверждения): сетка мелких
+     строк с номером — номер совпадает с эталоном и с тем, что отправит ученик.
+     Верный вариант подсвечен зелёным: «Ответ: 3» читается сразу. */
+  .task-picker .tp-opts { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:4px; margin-top:6px; }
+  .task-picker .tp-opt { display:flex; align-items:baseline; gap:4px; font-size:13px; line-height:1.3;
+    background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 8px; min-width:0; overflow-wrap:anywhere; }
+  .task-picker .tp-opt .tp-opt-n { font-family:ui-monospace, monospace; font-size:11px; color:var(--muted); flex-shrink:0; }
+  .task-picker .tp-opt.is-correct { border-color:var(--green-bd, rgba(22,163,74,.45)); background:var(--green-bg, rgba(22,163,74,.12)); }
+  .task-picker .tp-opt.is-correct .tp-opt-n { color:var(--green, #16a34a); font-weight:700; }
   /* Ответ — мелко и muted (это picker учителя, не витрина базы) */
   .task-picker .tp-answer { font-family:ui-monospace, monospace; font-size:12px; color:var(--muted); }
   .task-picker .tp-badge {
