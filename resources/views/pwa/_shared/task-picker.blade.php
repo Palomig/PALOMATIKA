@@ -270,6 +270,9 @@
   .task-picker .tp-opt { display:flex; align-items:baseline; gap:4px; font-size:13px; line-height:1.3;
     background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 8px; min-width:0; overflow-wrap:anywhere; }
   .task-picker .tp-opt .tp-opt-n { font-family:ui-monospace, monospace; font-size:11px; color:var(--muted); flex-shrink:0; }
+  /* Вариант-картинка (тема 13: числовая прямая): svg не шире ячейки сетки. */
+  .task-picker .tp-opt .tp-opt-svg { min-width:0; flex:1; }
+  .task-picker .tp-opt .tp-opt-svg svg { display:block; max-width:100%; height:auto; }
   .task-picker .tp-opt.is-correct { border-color:var(--green-bd, rgba(22,163,74,.45)); background:var(--green-bg, rgba(22,163,74,.12)); }
   .task-picker .tp-opt.is-correct .tp-opt-n { color:var(--green, #16a34a); font-weight:700; }
   /* Ответ — мелко и muted (это picker учителя, не витрина базы) */

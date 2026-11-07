@@ -22,7 +22,8 @@
       <template x-for="o in t.options" :key="'opt' + o.id">
         <span class="tp-opt" :class="{ 'is-correct': String(t.answer) === String(o.id) }">
           <span class="tp-opt-n" x-text="o.id + ')'"></span>
-          <span x-html="renderLatex(o.label)"></span>
+          <span class="tp-opt-svg" x-show="o.svg" x-html="o.svg"></span>
+          <span x-show="!o.svg" x-html="renderLatex(o.label)"></span>
         </span>
       </template>
     </div>

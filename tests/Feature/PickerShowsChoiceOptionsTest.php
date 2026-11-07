@@ -117,4 +117,31 @@ class PickerShowsChoiceOptionsTest extends TestCase
 
         $this->assertSame([], $tasks[0]['options']);
     }
+
+    public function test_picture_options_carry_their_svg(): void
+    {
+        // Тема 13, задание 2: вариант — числовая прямая svg без текста.
+        // Текст пуст, но чертёж обязан доехать до карточки, иначе задача в
+        // пикере снова превращается в «Ответ: 3» без промежутков.
+        $topic = json_decode(File::get(storage_path('app/tasks/topic_' . self::TOPIC . '.json')), true);
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 57"><line x1="15" y1="28" x2="200" y2="28"/></svg>';
+        $topic['blocks'][0]['zadaniya'][0]['tasks'][0]['options'] = [
+            ['n' => 1, 'html' => '<p>' . $svg . '</p>'],
+            ['n' => 2, 'html' => '<p>' . $svg . '</p>'],
+            ['n' => 3, 'html' => '<p>' . $svg . '</p>'],
+        ];
+        $topic['blocks'][0]['zadaniya'][0]['tasks'][0]['answer'] = '2';
+        File::put(storage_path('app/tasks/topic_' . self::TOPIC . '.json'), json_encode($topic, JSON_UNESCAPED_UNICODE));
+        Cache::flush();
+
+        $tasks = app(LessonTaskPickerService::class)->tasks('oge', ['topic_id' => self::TOPIC]);
+        $options = $tasks[0]['options'];
+
+        $this->assertCount(3, $options, 'варианты-картинки пропали из карточки');
+        foreach ($options as $i => $opt) {
+            $this->assertSame('', $opt['label'], 'у варианта-картинки подпись должна быть пустой');
+            $this->assertSame($svg, $opt['svg'], 'чертёж варианта не доехал до карточки');
+            $this->assertSame((string) ($i + 1), $opt['id']);
+        }
+    }
 }
