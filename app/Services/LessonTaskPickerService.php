@@ -539,14 +539,19 @@ class LessonTaskPickerService
     }
 
     /**
-     * Варианты ответа задачи для карточки выбора: {id, label}.
+     * Варианты ответа задачи для карточки выбора: {id, label, svg?}.
      *
      * Идёт тем же путём, что и TaskBankResolver для урока (id из `id`/`n`,
      * текст из разметки), чтобы номер в «Ответ: 3» совпадал с номером
      * варианта, который отправит ученик. multi_select (утверждения) сюда
      * не попадает: их перечень уже вшит в условие.
      *
-     * @return list<array{id: string, label: string}>
+     * Варианты-картинки (тема 13, задание 2 — «какому из промежутков
+     * принадлежит решение системы»: каждый вариант это числовая прямая svg
+     * без текста) текстом пусты — их чертёж отдаётся полем `svg`, карточка
+     * выводит его как есть.
+     *
+     * @return list<array{id: string, label: string, svg: string}>
      */
     private static function cardOptions(array $task): array
     {
@@ -559,15 +564,19 @@ class LessonTaskPickerService
             if (!is_array($opt)) {
                 continue;
             }
-            $label = trim(self::scalar($opt['label'] ?? $opt['text'] ?? ''));
+            $label = trim(self::scalar($opt['label'] ?? $opt['text'] ?? $opt['value'] ?? ''));
             if ($label === '') {
                 $label = self::conditionFromHtml(self::scalar($opt['html'] ?? ''));
             }
             $id = self::scalar($opt['id'] ?? $opt['n'] ?? '');
-            if ($label === '' || $id === '') {
+            $svg = '';
+            if ($label === '') {
+                $svg = self::drawingFromHtml(self::scalar($opt['html'] ?? ''));
+            }
+            if ($id === '' || ($label === '' && $svg === '')) {
                 continue;
             }
-            $options[] = ['id' => (string) $id, 'label' => $label];
+            $options[] = ['id' => (string) $id, 'label' => $label, 'svg' => $svg];
         }
 
         return $options;
