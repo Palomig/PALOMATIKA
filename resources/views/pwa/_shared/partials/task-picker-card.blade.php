@@ -15,6 +15,18 @@
   </template>
   <div class="task-item-text" x-show="!t.html && t.text" x-text="t.text"></div>
   <div class="task-item-text tp-expr" x-show="!t.html && !t.text && t.expression" x-html="renderLatex(t.expression)"></div>
+  {{-- Варианты ответа (choice): «Какому из данных промежутков…» без списка
+       промежутков не читается, а «Ответ: 3» не привязать к варианту. --}}
+  <template x-if="!t.html && t.options && t.options.length">
+    <div class="tp-opts">
+      <template x-for="o in t.options" :key="'opt' + o.id">
+        <span class="tp-opt" :class="{ 'is-correct': String(t.answer) === String(o.id) }">
+          <span class="tp-opt-n" x-text="o.id + ')'"></span>
+          <span x-html="renderLatex(o.label)"></span>
+        </span>
+      </template>
+    </div>
+  </template>
   <div class="answer-row">
     <template x-if="t.answer">
       <span><span class="answer-label">Ответ:</span> <span class="tp-answer" x-text="t.answer"></span></span>
