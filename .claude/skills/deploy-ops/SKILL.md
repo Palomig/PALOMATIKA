@@ -5,6 +5,10 @@ description: "Use when deploying, managing CI/CD, clearing caches, running artis
 
 # Deploy & Operations
 
+## Правило
+
+**Прод деплоится ТОЛЬКО вручную: FTP-заливка напрямую на Timeweb (`scripts/deploy-prod.sh` с dev-VPS). Через GitHub ничего не выкатывается.** GitHub — хранение кода и авто-мёрж `claude/**` в `develop`, не деплой. Пуш в любую ветку (включая `main`) сам по себе ничего не выкладывает. Автодеплой из Actions убран 2026-08-07 (зелёный статус без реального трансфера) — не возвращать и не предлагать.
+
 ## Хостинг
 
 **Хостинг:** Timeweb (cw95865.tmweb.ru)
