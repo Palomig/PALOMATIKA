@@ -128,6 +128,10 @@
   .lesson-choice-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
   .lesson-choice-option.is-selected { background: var(--accent-bg); border-color: var(--accent); }
   .lesson-choice-option input[type="radio"] { accent-color: var(--accent); }
+  /* Выбор уходит учителю кнопкой: тап по варианту — только пометка */
+  .lesson-choice-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .lesson-choice-send { width: 100%; border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 700; font-size: 15px; background: var(--accent, #4f6bff); color: #fff; cursor: pointer; }
+  .lesson-choice-send:disabled { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); cursor: default; font-weight: 500; }
   .lesson-end-banner { background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 14px; padding: 16px; color: var(--red); font-weight: 700; text-align: center; }
   .lesson-released-banner { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 14px; padding: 16px; color: var(--green); font-weight: 700; text-align: center; }
   .lock-timer { margin-left: auto; flex-shrink: 0; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--muted); }
@@ -276,19 +280,28 @@
         <div class="lesson-task-image is-raster"><img :src="task.payload.image_url" alt=""></div>
       </template>
 
-      {{-- Choice type --}}
+      {{-- Choice type: тап по варианту только выбирает его, уходит учителю
+           кнопкой «Отправить». Мгновенная отправка по тапу записывала
+           случайные касания (заметка Джарвиса #101: «выбрал 2 — засчитало 3»). --}}
       <template x-if="task.payload.type === 'choice'">
         <div class="lesson-choice-options">
           <template x-for="opt in task.payload.options" :key="opt.id">
-            <label class="lesson-choice-option" :class="task.my_answer === opt.id ? 'is-selected' : ''">
+            <label class="lesson-choice-option" :class="selectedChoice(task) === opt.id ? 'is-selected' : ''">
               <input type="radio" :name="'task_' + task.id" :value="opt.id"
-                     :checked="task.my_answer === opt.id"
+                     :checked="selectedChoice(task) === opt.id"
                      :disabled="status === 'ended'"
-                     @change="submitAnswer(task.id, opt.id)">
+                     @change="choiceDraft[task.id] = opt.id">
               <span x-html="renderMath(opt.label)"></span>
             </label>
           </template>
-          <div class="lesson-choice-note" x-show="task.my_answer && status !== 'ended'">Отправлено учителю — до конца урока можно выбрать другой вариант</div>
+          <div class="lesson-choice-actions" x-show="status !== 'ended'">
+            <button type="button" class="lesson-choice-send"
+                    :disabled="choiceDraft[task.id] === undefined || sending[task.id]"
+                    @click="sendChoice(task)">
+              <span x-text="sending[task.id] ? 'Отправляем…' : (task.my_answer ? 'Отправить новый ответ' : 'Отправить')"></span>
+            </button>
+            <div class="lesson-choice-note" x-show="task.my_answer && choiceDraft[task.id] === undefined">Отправлено учителю — до конца урока можно выбрать другой вариант</div>
+          </div>
         </div>
       </template>
 
@@ -485,6 +498,7 @@
       editing: {},         // task_id → ученик меняет отправленный ответ
       fracDraft: {},       // task_id → {w, n, d} дробного поля
       tableDraft: {},      // task_id → [y1, y2, …] таблицы значений
+      choiceDraft: {},     // task_id → выбранный, но ещё не отправленный вариант
       newIds: [],          // задачи, добавленные учителем после открытия страницы
       newToast: false,
 
@@ -804,6 +818,17 @@
         if (answer) this.submitAnswer(task.id, answer);
       },
 
+      // --- выбор варианта: черновик отправляется кнопкой, не сам по себе ---
+      selectedChoice(task) {
+        if (this.choiceDraft[task.id] !== undefined) return this.choiceDraft[task.id];
+        return task.my_answer;
+      },
+      sendChoice(task) {
+        const value = this.choiceDraft[task.id];
+        if (value === undefined || value === null || value === '') return;
+        this.submitAnswer(task.id, value);
+      },
+
       // --- таблица значений: клетки → ответ «v1; v2; …» (сверка по порядку) ---
       tableCells(raw) {
         return String(raw || '').split(/\s*[;|]\s*/).map(v => v.trim());
@@ -895,6 +920,9 @@
           const task = this.tasks.find(t => t.id === taskId);
           if (task) task.my_answer = String(answer);
           this.editing[taskId] = false;
+          // Выбранный вариант доехал до учителя — черновик больше не нужен,
+          // подсветка возвращается к отправленному ответу.
+          delete this.choiceDraft[taskId];
           this.newIds = this.newIds.filter(i => i !== taskId);
           this.typesetSoon();
         } finally {
