@@ -117,6 +117,20 @@
   .check-meta { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 3px; }
   .check-go { color: var(--muted); font-size: 20px; flex-shrink: 0; }
 
+  .undone-student { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); margin-bottom: 8px; }
+  .undone-summary { display: flex; align-items: center; gap: 10px; padding: 14px; cursor: pointer; list-style: none; }
+  .undone-summary::-webkit-details-marker { display: none; }
+  .undone-summary:hover { background: var(--surface2); border-radius: 12px; }
+  .undone-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
+  .undone-summary .check-name { overflow-wrap: anywhere; }
+  .undone-chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--muted); }
+  .undone-student[open] .undone-chevron { transform: rotate(180deg); }
+  .undone-homeworks { padding: 0 14px; }
+  .undone-homeworks .check-card { margin: 0; padding: 12px 0; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: none; opacity: 1; animation: none; }
+  .undone-homeworks a.check-card:hover { background: var(--surface2); }
+  .undone-homeworks a.check-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .undone-homeworks .check-title { margin-top: 0; color: var(--text); }
+
   .empty-state { text-align: center; padding: 36px 16px; color: var(--muted); font-size: 13px; font-weight: 600; }
   .empty-icon { font-size: 32px; margin-bottom: 8px; }
 
@@ -329,32 +343,49 @@
     @endforelse
   </div>
 
-  {{-- Не сделаны: выдано, но до конца не доведено. Открыть можно только то, где что-то сдано. --}}
+  {{-- Ученики по последней невыполненной домашке; все их долги внутри спойлера. --}}
   <div x-show="tab === 'undone'" x-cloak>
-    @forelse($undone as $i => $row)
+    @forelse($undoneStudents as $student)
+      <details class="undone-student" data-student-id="{{ $student['student_id'] }}">
+        <summary class="undone-summary">
+          <div class="check-body">
+            <div class="check-head">
+              <span class="check-name">{{ $student['name'] }}</span>
+              @if($student['grade'])<span class="check-grade">{{ $student['grade'] }} класс</span>@endif
+            </div>
+            <div class="check-meta">Не сделано: {{ $student['homeworks']->count() }}</div>
+            @if($student['latest_assigned_at'])
+              <div class="check-meta">Последняя ДЗ: {{ $student['latest_assigned_at'] }}</div>
+            @endif
+          </div>
+          <svg class="undone-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="undone-homeworks">
+    @foreach($student['homeworks'] as $row)
       @php
         $subText = match ($row['state']) {
             'partial' => 'сдано ' . $row['submitted'] . ' из ' . ($row['total'] ?: $row['submitted']),
             'opened' => 'открыл, но ничего не сдал',
             default => $row['tracks_open'] ? 'не открывал' : 'не сдал',
         };
-        $when = $row['state'] === 'partial' ? $row['at'] : ($row['assigned_at'] ? 'выдано ' . $row['assigned_at'] : null);
+        $when = $row['assigned_at'] ? 'выдано ' . $row['assigned_at'] : null;
         $tag = $row['can_open'] ? 'a' : 'div';
       @endphp
-      <{{ $tag }} class="check-card is-undone" style="--i:{{ $i }}"
+      <{{ $tag }} class="check-card is-undone"
          @if($row['can_open']) href="{{ route('pwa.teacher.homework.submissions', $row['assignment']) }}" @endif>
         <span class="check-dot dot-{{ $row['state'] }}"></span>
         <div class="check-body">
           <div class="check-head">
-            <span class="check-name">{{ $row['name'] }}</span>
-            @if($row['grade'])<span class="check-grade">{{ $row['grade'] }} класс</span>@endif
+            <div class="check-title">{{ $row['title'] }}</div>
             @if($row['is_debt'])<span class="hw-status-badge badge-debt">долг</span>@endif
           </div>
-          <div class="check-title">{{ $row['title'] }}</div>
           <div class="check-meta">{{ $subText }}@if($when) · {{ $when }}@endif</div>
         </div>
         @if($row['can_open'])<span class="check-go">›</span>@endif
       </{{ $tag }}>
+    @endforeach
+        </div>
+      </details>
     @empty
       <div class="empty-state">
         <div class="empty-icon">🎉</div>

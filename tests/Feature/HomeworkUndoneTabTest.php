@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /**
- * Вкладка «Не сделаны» на странице домашки: плоский список выданных, но
- * не доведённых до конца работ — кто открыл и не сдал, кто не открывал, кто сдал часть.
+ * Вкладка «Не сделаны»: ученики со свёрнутыми списками всех невыполненных работ.
  */
 class HomeworkUndoneTabTest extends TestCase
 {
@@ -194,5 +193,87 @@ class HomeworkUndoneTabTest extends TestCase
         $this->assertStringNotContainsString('Закрытое учителем ДЗ', $tab);
         $this->assertLessThan(strpos($tab, 'Старое ДЗ'), strpos($tab, 'Свежее ДЗ'), 'Свежая домашка должна стоять выше старой');
         $this->assertStringContainsString('долг', $tab);
+    }
+
+    public function test_students_are_grouped_by_id_and_sorted_by_latest_assignment_date(): void
+    {
+        $first = $this->student('Одинаковое имя');
+        $second = $this->student('Одинаковое имя');
+        TeacherStudent::where('teacher_id', $this->teacher->id)
+            ->where('student_id', $first->id)->update(['student_alias' => 'Алиас ученика']);
+
+        // Создаём не по дате выдачи, чтобы сортировка по ID не могла пройти тест.
+        foreach ([
+            [$second, 'Средняя домашка', '2026-11-10 12:00:00'],
+            [$first, 'Самая новая домашка', '2026-11-15 12:00:00'],
+            [$first, 'Самая старая домашка', '2026-10-01 12:00:00'],
+        ] as [$student, $title, $date]) {
+            $hw = Homework::create([
+                'teacher_id' => $this->teacher->id,
+                'homework_type' => 'full_variant',
+                'tasks_count' => 1,
+                'title' => $title,
+                'assigned_at' => $date,
+            ]);
+            HomeworkAssignment::create([
+                'homework_id' => $hw->id, 'student_id' => $student->id,
+                'status' => 'assigned', 'tasks_total' => 1,
+            ]);
+        }
+
+        $tab = $this->undoneTabHtml();
+        $this->assertSame(2, substr_count($tab, '<details class="undone-student"'));
+        $this->assertStringNotContainsString('<details open', $tab);
+        $this->assertSame(1, substr_count($tab, 'Алиас ученика'));
+        $this->assertStringContainsString('Не сделано: 2', $tab);
+        $this->assertStringContainsString('Последняя ДЗ: 15.11.2026', $tab);
+        $this->assertLessThan(strpos($tab, 'Средняя домашка'), strpos($tab, 'Самая старая домашка'));
+        $this->assertLessThan(strpos($tab, 'Самая старая домашка'), strpos($tab, 'Самая новая домашка'));
+
+        // Одинаковые имена тоже не должны склеивать разных учеников.
+        TeacherStudent::where('teacher_id', $this->teacher->id)
+            ->where('student_id', $first->id)->update(['student_alias' => null]);
+        $this->assertSame(2, substr_count($this->undoneTabHtml(), '<details class="undone-student"'));
+    }
+
+    public function test_old_undone_work_is_not_lost_after_300_newer_assignments(): void
+    {
+        $student = $this->student('Ученик со старым долгом');
+        for ($i = 0; $i <= 300; $i++) {
+            $hw = Homework::create([
+                'teacher_id' => $this->teacher->id,
+                'homework_type' => 'full_variant',
+                'tasks_count' => 1,
+                'title' => $i === 0 ? 'Очень старый долг' : 'Завершённая работа',
+                'assigned_at' => now()->subDays(301 - $i),
+            ]);
+            HomeworkAssignment::create([
+                'homework_id' => $hw->id, 'student_id' => $student->id,
+                'status' => $i === 0 ? 'assigned' : 'completed', 'tasks_total' => 1,
+            ]);
+        }
+
+        $otherTeacher = User::factory()->create(['role' => 'teacher']);
+        $foreign = Homework::create([
+            'teacher_id' => $otherTeacher->id, 'homework_type' => 'full_variant',
+            'tasks_count' => 1, 'title' => 'Работа другого учителя', 'assigned_at' => now(),
+        ]);
+        HomeworkAssignment::create([
+            'homework_id' => $foreign->id, 'student_id' => $student->id,
+            'status' => 'assigned', 'tasks_total' => 1,
+        ]);
+
+        $tab = $this->undoneTabHtml();
+        $this->assertStringContainsString('Очень старый долг', $tab);
+        $this->assertStringContainsString('Не сделано: 1', $tab);
+        $this->assertStringNotContainsString('Завершённая работа', $tab);
+        $this->assertStringNotContainsString('Работа другого учителя', $tab);
+    }
+
+    public function test_empty_undone_tab_has_no_student_spoilers(): void
+    {
+        $tab = $this->undoneTabHtml();
+        $this->assertStringContainsString('Все выданные домашки сделаны.', $tab);
+        $this->assertStringNotContainsString('<details', $tab);
     }
 }

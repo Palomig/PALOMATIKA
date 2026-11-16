@@ -459,7 +459,7 @@ class TeacherController extends Controller
      * Экран домашки учителя — это экран ПРОВЕРКИ, а не расписания.
      *
      * Три вкладки: «Новые» (ученик что-то сдал, но работу ещё не отметили
-     * проверенной), «Проверенные» и «Статистика». Выдача ДЗ живёт на уроке,
+     * проверенной), «Проверенные» и «Не сделаны». Выдача ДЗ живёт на уроке,
      * здесь остаётся резервной кнопкой.
      */
     public function homework(Request $request)
@@ -491,14 +491,13 @@ class TeacherController extends Controller
             ->sortBy('number')
             ->values();
 
-        $assignments = HomeworkAssignment::query()
+        $assignmentQuery = HomeworkAssignment::query()
             ->whereHas('homework', fn ($q) => $q->where('teacher_id', $user->id))
             ->with(['homework:id,title,homework_type,topic_number,assigned_at', 'student:id,name,grade_num'])
             ->withCount('topicTaskSubmissions')
             ->withMax('topicTaskSubmissions', 'updated_at')
-            ->orderByDesc('id')
-            ->limit(300)
-            ->get();
+            ->orderByDesc('id');
+        $assignments = (clone $assignmentQuery)->limit(300)->get();
 
         $aliases = $relMap->map(fn ($rel) => $rel->student_alias)->filter()->all();
         $card = fn (HomeworkAssignment $a) => [
@@ -529,9 +528,11 @@ class TeacherController extends Controller
             ->map($card)->values();
 
         // Не сделаны: выдано, но до конца не доведено и учитель работу не закрыл.
-        // Свежие домашки сверху, внутри одной домашки — по имени.
-        $undone = $assignments
-            ->filter(fn ($a) => $a->status !== 'completed' && $a->reviewed_at === null)
+        // Все долги, а не только попавшие в 300 последних назначений доски проверки.
+        $undone = (clone $assignmentQuery)
+            ->where('status', '!=', 'completed')
+            ->whereNull('reviewed_at')
+            ->get()
             ->sortBy(fn ($a) => sprintf(
                 '%s %05d %s',
                 $a->homework?->assigned_at?->format('Y-m-d H:i:s') ?? '',
@@ -541,9 +542,22 @@ class TeacherController extends Controller
             ->map(fn (HomeworkAssignment $a) => $card($a) + $this->homeworkUndoneState($a))
             ->values();
 
+        // Коллекция уже отсортирована по дате выдачи: первая работа задаёт
+        // место ученика в списке, остальные внутри группы тоже идут от новых к старым.
+        // Ключ — ID, чтобы однофамильцы и одинаковые алиасы не склеивались.
+        $undoneStudents = $undone
+            ->groupBy(fn (array $row) => $row['assignment']->student_id)
+            ->map(fn ($rows) => [
+                'student_id' => $rows->first()['assignment']->student_id,
+                'name' => $rows->first()['name'],
+                'grade' => $rows->first()['grade'],
+                'latest_assigned_at' => $rows->first()['assignment']->homework?->assigned_at?->format('d.m.Y'),
+                'homeworks' => $rows->values(),
+            ])->values();
+
         return view('pwa.teacher.homework', compact(
             'user', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'studentGrades',
-            'pending', 'reviewed', 'undone'
+            'pending', 'reviewed', 'undone', 'undoneStudents'
         ));
     }
 
