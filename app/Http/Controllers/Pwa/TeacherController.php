@@ -21,6 +21,7 @@ use App\Services\EgeTaskDataService;
 use App\Services\EgeVariantBuilderService;
 use App\Services\EgeVariantPoolService;
 use App\Services\HomeworkPhotoStore;
+use App\Services\HomeworkTaskPreviewService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
@@ -462,7 +463,7 @@ class TeacherController extends Controller
      * проверенной), «Проверенные» и «Не сделаны». Выдача ДЗ живёт на уроке,
      * здесь остаётся резервной кнопкой.
      */
-    public function homework(Request $request)
+    public function homework(Request $request, HomeworkTaskPreviewService $previews)
     {
         $user = $request->user();
 
@@ -493,7 +494,7 @@ class TeacherController extends Controller
 
         $assignmentQuery = HomeworkAssignment::query()
             ->whereHas('homework', fn ($q) => $q->where('teacher_id', $user->id))
-            ->with(['homework:id,title,homework_type,topic_number,assigned_at', 'student:id,name,grade_num'])
+            ->with(['homework:id,title,homework_type,topic_number,assigned_at,variant_hash', 'student:id,name,grade_num'])
             ->withCount('topicTaskSubmissions')
             ->withMax('topicTaskSubmissions', 'updated_at')
             ->orderByDesc('id');
@@ -555,9 +556,12 @@ class TeacherController extends Controller
                 'homeworks' => $rows->values(),
             ])->values();
 
+        $homeworkPreviews = $previews->forHomeworks($undone
+            ->map(fn (array $row) => $row['assignment']->homework)->filter()->unique('id'));
+
         return view('pwa.teacher.homework', compact(
             'user', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'studentGrades',
-            'pending', 'reviewed', 'undone', 'undoneStudents'
+            'pending', 'reviewed', 'undone', 'undoneStudents', 'homeworkPreviews'
         ));
     }
 

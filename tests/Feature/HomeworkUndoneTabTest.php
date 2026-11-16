@@ -6,6 +6,7 @@ use App\Models\Homework;
 use App\Models\HomeworkAssignment;
 use App\Models\HomeworkTopicTask;
 use App\Models\HomeworkTopicTaskSubmission;
+use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -275,5 +276,56 @@ class HomeworkUndoneTabTest extends TestCase
         $tab = $this->undoneTabHtml();
         $this->assertStringContainsString('Все выданные домашки сделаны.', $tab);
         $this->assertStringNotContainsString('<details', $tab);
+    }
+
+    public function test_each_homework_has_its_own_read_only_task_spoiler(): void
+    {
+        $student = $this->student('Ученик с заданиями');
+        $photo = Homework::create([
+            'teacher_id' => $this->teacher->id, 'homework_type' => 'topic_photo_practice',
+            'tasks_count' => 1, 'title' => 'Фото-практика', 'assigned_at' => now(),
+        ]);
+        HomeworkTopicTask::create([
+            'homework_id' => $photo->id, 'topic_number' => 6, 'task_order' => 1,
+            'task_payload' => ['instruction' => 'Вычислите', 'expression' => '2+3', 'answer' => 'PHOTO-SECRET'],
+            'correct_answer' => 'PHOTO-SECRET',
+        ]);
+        HomeworkTopicTask::create([
+            'homework_id' => $photo->id, 'topic_number' => 7, 'task_order' => 2,
+            'task_payload' => ['type' => 'between_fractions', 'instruction' => 'Между числами', 'left' => '\\frac{8}{3}', 'right' => '\\frac{11}{4}'],
+            'correct_answer' => 'STRUCTURED-SECRET',
+        ]);
+        HomeworkTopicTask::create([
+            'homework_id' => $photo->id, 'topic_number' => 7, 'task_order' => 3,
+            'task_payload' => ['type' => 'segment', 'instruction' => 'На отрезке', 'segment' => '[3; 4]'],
+            'correct_answer' => 'SEGMENT-SECRET',
+        ]);
+        $variant = OgeVariant::create([
+            'hash' => 'preview-variant', 'exam_type' => 'vpr_5', 'mode' => 'mini_mixed',
+            'config_json' => ['tasks' => [['task' => ['html' => '<p>Условие варианта</p>', 'answer' => 'VARIANT-SECRET']]]],
+        ]);
+        $full = Homework::create([
+            'teacher_id' => $this->teacher->id, 'homework_type' => 'full_variant',
+            'variant_hash' => $variant->hash, 'tasks_count' => 1, 'title' => 'Мини-вариант', 'assigned_at' => now(),
+        ]);
+        $assignments = collect([$photo, $full])->map(fn ($hw) => HomeworkAssignment::create([
+            'homework_id' => $hw->id, 'student_id' => $student->id, 'status' => 'assigned', 'tasks_total' => 1,
+        ]));
+        $before = $assignments->map(fn ($a) => $a->fresh()->getAttributes())->all();
+        $variantBefore = $variant->fresh()->getAttributes();
+        $attemptCount = \App\Models\OgeAttempt::count();
+
+        $tab = $this->undoneTabHtml();
+        $this->assertSame(2, substr_count($tab, '<details class="undone-homework"'));
+        $this->assertStringContainsString('Вычислите', $tab);
+        $this->assertStringContainsString('2+3', $tab);
+        $this->assertStringContainsString('\\(\\frac{8}{3} \\text{ и } \\frac{11}{4}\\)', $tab);
+        $this->assertStringContainsString('\\([3; 4]\\)', $tab);
+        $this->assertStringContainsString('<p>Условие варианта</p>', $tab);
+        $this->assertStringNotContainsString('SECRET', $tab);
+        $this->assertSame($before, $assignments->map(fn ($a) => $a->fresh()->getAttributes())->all());
+        $this->assertSame($variantBefore, $variant->fresh()->getAttributes());
+        $this->assertSame($attemptCount, \App\Models\OgeAttempt::count());
+        $this->assertSame(0, HomeworkTopicTaskSubmission::count());
     }
 }

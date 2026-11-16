@@ -124,12 +124,32 @@
   .undone-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
   .undone-summary .check-name { overflow-wrap: anywhere; }
   .undone-chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--muted); }
-  .undone-student[open] .undone-chevron { transform: rotate(180deg); }
+  .undone-student[open] > .undone-summary .undone-chevron { transform: rotate(180deg); }
   .undone-homeworks { padding: 0 14px; }
   .undone-homeworks .check-card { margin: 0; padding: 12px 0; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: none; opacity: 1; animation: none; }
   .undone-homeworks a.check-card:hover { background: var(--surface2); }
   .undone-homeworks a.check-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .undone-homeworks .check-title { margin-top: 0; color: var(--text); }
+  .undone-homework { border-top: 1px solid var(--border); }
+  .undone-homework > summary { list-style: none; cursor: pointer; }
+  .undone-homework > summary::-webkit-details-marker { display: none; }
+  .undone-homeworks .undone-homework > .check-card { border-top: 0; }
+  .undone-homework > summary:hover { background: var(--surface2); }
+  .undone-homework > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .undone-homework[open] > summary .homework-chevron { transform: rotate(180deg); }
+  .homework-preview { padding: 0 0 14px; font-size: 13px; line-height: 1.6; color: var(--text); overflow-wrap: anywhere; }
+  .homework-preview-task { padding: 14px 0; border-top: 1px solid var(--border); }
+  .homework-preview-number { font-weight: 800; margin-bottom: 8px; }
+  .homework-preview-condition { overflow-x: auto; }
+  .homework-preview-condition > div + div { margin-top: 8px; }
+  .homework-preview-condition svg:not(.katex svg), .homework-preview-condition img { max-width: 100%; height: auto; }
+  .homework-preview-condition table { border-collapse: collapse; max-width: 100%; }
+  .homework-preview-condition td, .homework-preview-condition th { padding: 6px; border: 1px solid var(--border); }
+  .homework-preview .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+  .homework-preview-option { display: flex; gap: 8px; margin-top: 8px; }
+  .homework-preview-option > b { flex-shrink: 0; }
+  .homework-preview-option > div { min-width: 0; }
+  .homework-preview-link { display: inline-block; color: var(--accent); margin: 0 0 10px; font-weight: 800; }
 
   .empty-state { text-align: center; padding: 36px 16px; color: var(--muted); font-size: 13px; font-weight: 600; }
   .empty-icon { font-size: 32px; margin-bottom: 8px; }
@@ -369,10 +389,9 @@
             default => $row['tracks_open'] ? 'не открывал' : 'не сдал',
         };
         $when = $row['assigned_at'] ? 'выдано ' . $row['assigned_at'] : null;
-        $tag = $row['can_open'] ? 'a' : 'div';
       @endphp
-      <{{ $tag }} class="check-card is-undone"
-         @if($row['can_open']) href="{{ route('pwa.teacher.homework.submissions', $row['assignment']) }}" @endif>
+      <details class="undone-homework" data-assignment-id="{{ $row['assignment']->id }}">
+      <summary class="check-card is-undone">
         <span class="check-dot dot-{{ $row['state'] }}"></span>
         <div class="check-body">
           <div class="check-head">
@@ -381,8 +400,15 @@
           </div>
           <div class="check-meta">{{ $subText }}@if($when) · {{ $when }}@endif</div>
         </div>
-        @if($row['can_open'])<span class="check-go">›</span>@endif
-      </{{ $tag }}>
+        <svg class="undone-chevron homework-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="homework-preview">
+        @if($row['can_open'])
+          <a class="homework-preview-link" href="{{ route('pwa.teacher.homework.submissions', $row['assignment']) }}">Проверить присланное</a>
+        @endif
+        @include('pwa.teacher.partials.homework-task-preview', ['previewTasks' => $homeworkPreviews[$row['assignment']->homework_id] ?? []])
+      </div>
+      </details>
     @endforeach
         </div>
       </details>
@@ -596,6 +622,23 @@
 
 @push('scripts')
 <script>
+// Native details work without JS; math is typeset once, when its homework opens.
+document.addEventListener('toggle', (event) => {
+  const details = event.target;
+  if (!details.matches?.('.undone-homework') || !details.open || details.dataset.mathRendered) return;
+  if (typeof renderMathInElement !== 'function') return;
+  renderMathInElement(details.querySelector('.homework-preview'), {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '\\(', right: '\\)', display: false},
+      {left: '$', right: '$', display: false},
+    ],
+    throwOnError: false,
+  });
+  details.dataset.mathRendered = '1';
+}, true);
+
 function teacherHw() {
   return {
     tab: 'new',
