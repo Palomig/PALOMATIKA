@@ -34,6 +34,9 @@
 </style>
 </head>
 <body>
+@if(config('services.ucaller.key') && config('services.ucaller.id'))
+<a class="btn btn-surface" href="/phone-login">Войти по телефону</a>
+@endif
 
 <div class="logo">palomatika</div>
 <div class="tagline">Следите за успехами ребёнка<br>в подготовке к ОГЭ</div>

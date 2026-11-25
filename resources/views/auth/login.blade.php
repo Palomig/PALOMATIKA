@@ -60,7 +60,10 @@
             </div>
             @endif
 
-            {{-- Login form --}}
+            @if(config('services.ucaller.key') && config('services.ucaller.id'))
+            <a class="btn btn-surface" href="/phone-login">Войти по телефону</a>
+            @endif
+
             <form @submit.prevent="submit">
                 <div class="space-y-4">
                     <div>

@@ -19,7 +19,10 @@
     <div class="sec-label" style="margin-bottom:16px;">Войти через</div>
     <div style="display:flex;flex-direction:column;gap:10px;">
 
-      {{-- Telegram (основной способ, OIDC redirect) --}}
+      @if(config('services.ucaller.key') && config('services.ucaller.id'))
+      <a class="btn btn-surface" href="/phone-login">Войти по телефону</a>
+      @endif
+
       <a href="https://{{ config('app.base_domain') }}/auth/telegram/redirect?origin={{ $context }}"
         class="btn btn-left"
         style="background:#229ED9;border-color:#229ED9;color:#fff;font-weight:600;">

@@ -70,6 +70,9 @@ Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
 Route::post('/api/auth/telegram/webapp-login', [TelegramBotAuthController::class, 'webAppLogin'])
     ->name('telegram.webapp-login');
 
+Route::get('/phone-login', [\App\Http\Controllers\Auth\PhoneLoginController::class, 'form']);
+Route::post('/phone-login', [\App\Http\Controllers\Auth\PhoneLoginController::class, 'submit'])->middleware('throttle:30,1');
+
 // Auth pages (guest only)
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {

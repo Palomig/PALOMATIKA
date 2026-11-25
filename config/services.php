@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'ucaller' => [
+        'id' => env('UCALLER_SERVICE_ID'),
+        'key' => env('UCALLER_SECRET_KEY'),
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
