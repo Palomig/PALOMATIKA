@@ -46,6 +46,10 @@
      Ни зелёного, ни галочки: верен ли ответ, ученик на уроке не видит. */
   .lesson-task-card.is-answered { border-color: var(--accent-bd); }
   .lesson-task-card.is-new { border-color: var(--yellow-bd); }
+  .lesson-task-card.is-wrong, .lesson-task-card.is-wrong .lesson-sent-row { border-color: var(--red, #d94747); }
+  .lesson-feedback-wrong { color: var(--red, #d94747); font-weight: 700; }
+  .lesson-rooms { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .lesson-rooms select { max-width: 100%; padding: 8px; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
   /* Номер — в начале текста условия, а не отдельной строкой. */
   .lesson-task-num { font-family: var(--display); font-size: 17px; color: var(--accent); float: left; margin-right: 6px; line-height: 1.35; }
   .lesson-task-tags { display: flex; gap: 6px; }
@@ -239,8 +243,20 @@
   @include('pwa._shared.partials.fipi-condition-js')
   @include('partials.math-answer-pad')
 
+  <label class="lesson-rooms" x-show="rooms.length" x-cloak>
+    Комната
+    <select x-ref="roomPicker" :value="String(currentRoomId ?? '')"
+            :disabled="!!(status !== 'live' || switchingRoom || Object.values(sending).some(Boolean))"
+            @change="switchRoom($event.target.value)">
+      <option value="">Общие задания</option>
+      <template x-for="room in rooms" :key="room.id">
+        <option :value="room.id" x-text="room.name"></option>
+      </template>
+    </select>
+  </label>
+
   <template x-for="task in tasks" :key="task.id">
-    <div class="lesson-task-card" :class="{ 'is-answered': !!task.my_answer && !editing[task.id], 'is-new': isNew(task) }" :data-task-id="task.id">
+    <div class="lesson-task-card" :class="{ 'is-answered': !!task.my_answer && !editing[task.id], 'is-new': isNew(task), 'is-wrong': wrongAnswer(task) }" :data-task-id="task.id">
       <template x-if="task.personal || isNew(task)">
         <div class="lesson-task-tags">
           <span class="personal-badge" x-show="task.personal">только тебе</span>
@@ -291,12 +307,14 @@
                      :checked="selectedChoice(task) === opt.id"
                      :disabled="status === 'ended'"
                      @change="choiceDraft[task.id] = opt.id">
-              <span x-html="renderMath(opt.label)"></span>
+              <span x-text="opt.id + ')'" aria-hidden="true"></span>
+              <span x-show="opt.svg" style="min-width:0;max-width:100%" x-html="opt.svg"></span>
+              <span x-show="!opt.svg" x-html="renderMath(opt.label)"></span>
             </label>
           </template>
           <div class="lesson-choice-actions" x-show="status !== 'ended'">
             <button type="button" class="lesson-choice-send"
-                    :disabled="choiceDraft[task.id] === undefined || sending[task.id]"
+                    :disabled="!!(choiceDraft[task.id] === undefined || sending[task.id] || switchingRoom)"
                     @click="sendChoice(task)">
               <span x-text="sending[task.id] ? 'Отправляем…' : (task.my_answer ? 'Отправить новый ответ' : 'Отправить')"></span>
             </button>
@@ -305,7 +323,8 @@
         </div>
       </template>
 
-      {{-- Ответ отправлен: синяя строка, поменять можно до конца урока --}}
+      <div class="lesson-feedback-wrong" role="status" x-show="wrongAnswer(task)" x-cloak>Неверный ответ</div>
+      {{-- Ответ отправлен: поменять можно до конца урока --}}
       {{-- Таблица значений: y вписываются прямо в клетки --}}
       <template x-if="task.payload.value_table">
         <div class="lesson-vt">
@@ -483,6 +502,11 @@
       vi: 0,
       loaded: false,       // пришёл первый ответ /state
       sending: {},
+      rooms: [],
+      currentRoomId: null,
+      switchingRoom: false,
+      stateSequence: 0,
+      pollingState: false,
       pollTimer: null,
       lock: null,          // {locked_until, released_at, active} из state
       nowTick: Date.now(), // обновляется раз в секунду для реактивности таймера
@@ -700,9 +724,56 @@
       },
 
       async refreshState() {
-        const r = await fetch(`/lessons/${this.sessionId}/state`, { headers: { 'Accept': 'application/json' }, credentials: 'include' });
-        if (!r.ok) return;
-        const d = await r.json();
+        if (this.switchingRoom || this.pollingState) return;
+        this.pollingState = true;
+        const sequence = this.stateSequence;
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/state`, {
+            headers: { 'Accept': 'application/json' }, credentials: 'include',
+            signal: window.AbortSignal?.timeout?.(15000),
+          });
+          if (!r.ok) return;
+          const d = await r.json();
+          if (sequence !== this.stateSequence || this.switchingRoom) return;
+          this.applyState(d);
+        } catch (e) { /* следующая проверка повторит запрос */ }
+        finally { this.pollingState = false; }
+      },
+
+      async switchRoom(value) {
+        if (this.switchingRoom || Object.values(this.sending).some(Boolean)) {
+          this.$refs.roomPicker.value = String(this.currentRoomId ?? '');
+          return;
+        }
+        this.switchingRoom = true;
+        ++this.stateSequence;
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/room`, {
+            method: 'PUT', credentials: 'include',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+            body: JSON.stringify({ room_id: value === '' ? null : Number(value) }),
+          });
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.error || 'Не удалось переключить комнату');
+          this.applyState(d, true);
+        } catch (e) {
+          alert(e.message || 'Не удалось переключить комнату');
+        } finally {
+          this.switchingRoom = false;
+          this.$nextTick(() => { this.$refs.roomPicker.value = String(this.currentRoomId ?? ''); });
+        }
+      },
+
+      applyState(d, force = false) {
+        const nextRoom = d.current_room_id ?? null;
+        const roomChanged = force || nextRoom !== this.currentRoomId;
+        this.currentRoomId = nextRoom;
+        const rooms = d.rooms || [];
+        if (JSON.stringify(rooms) !== JSON.stringify(this.rooms) || roomChanged) {
+          this.rooms = rooms;
+          this.$nextTick(() => { this.$refs.roomPicker.value = String(this.currentRoomId ?? ''); });
+        }
         this.loaded = true;
         this.status = d.session.status;
         if (this.status === 'ended') this.releaseWakeLock(); // урок кончился — экран гасим как обычно
@@ -720,10 +791,16 @@
           this.typesetSoon();
         }
         const tj = JSON.stringify(d.tasks);
-        if (tj !== tasksJson && !typing) {
+        if (roomChanged || (tj !== tasksJson && !typing && !Object.values(this.sending).some(Boolean))) {
           tasksJson = tj;
           this.tasks = d.tasks;
-          this.noticeNewTasks(d.tasks);
+          if (roomChanged) {
+            knownIds = new Set(d.tasks.map(t => t.id));
+            this.newIds = [];
+            this.newToast = false;
+          } else {
+            this.noticeNewTasks(d.tasks);
+          }
           // Re-render KaTeX только когда задачи реально изменились: обход всего
           // body каждые 5 секунд заметно тормозил слабые телефоны.
           this.$nextTick(() => {
@@ -898,7 +975,7 @@
       step(d) { this.vi = (this.vi + d + this.photos.length) % this.photos.length; },
 
       async submitAnswer(taskId, answer) {
-        if (!answer || this.sending[taskId]) return;
+        if (!answer || this.switchingRoom || this.sending[taskId]) return;
         this.sending[taskId] = true;
         try {
           const r = await fetch(`/lessons/${this.sessionId}/answer`, {
@@ -918,7 +995,9 @@
           }
           // Update local copy так чтобы UI сразу обновился, без ожидания polling
           const task = this.tasks.find(t => t.id === taskId);
-          if (task) task.my_answer = String(answer);
+          if (task) { task.my_answer = String(answer); delete task.feedback; }
+          ++this.stateSequence;
+          tasksJson = null;
           this.editing[taskId] = false;
           // Выбранный вариант доехал до учителя — черновик больше не нужен,
           // подсветка возвращается к отправленному ответу.
@@ -928,6 +1007,10 @@
         } finally {
           this.sending[taskId] = false;
         }
+      },
+
+      wrongAnswer(task) {
+        return task.feedback === 'wrong' && !this.editing[task.id] && this.choiceDraft[task.id] === undefined;
       },
 
       renderMath(text) {
