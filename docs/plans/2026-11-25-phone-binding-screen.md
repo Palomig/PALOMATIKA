@@ -52,7 +52,7 @@ cd /home/dev/palomatika-phone-screen && php artisan tinker --execute='DB::table(
 - Create: `tests/Feature/PhoneScreenTest.php`
 - Modify: `app/Http/Controllers/Auth/PhoneLoginController.php`
 
-Тесты этого шага смотрят только в сессию: старый шаблон номера ещё не показывает.
+Тесты этого шага смотрят только в сессию: старый шаблон номера ещё не показывает. Проверки сессии цепляются к ответу — у тест-класса в этой версии Laravel их нет. Во втором и третьем тесте сначала проверяется, что ключ появился: иначе проверка исчезновения проходит ещё до написания фичи.
 
 **Step 1: Написать падающие тесты**
 
@@ -76,10 +76,11 @@ class PhoneScreenTest extends TestCase
     public function test_call_details_are_kept_for_the_second_step(): void
     {
         $this->fakeCall();
-        $this->post('/phone-login', ['action' => 'start', 'phone' => '8 (900) 123-45-67'])->assertRedirect('/phone-login');
-        $this->assertSessionHas('phone_call', function ($call) {
-            return is_array($call) && $call['phone'] === '+7 900 123-45-67' && abs($call['at'] - time()) < 5;
-        });
+        $this->post('/phone-login', ['action' => 'start', 'phone' => '8 (900) 123-45-67'])
+            ->assertRedirect('/phone-login')
+            ->assertSessionHas('phone_call', function ($call) {
+                return is_array($call) && $call['phone'] === '+7 900 123-45-67' && abs($call['at'] - time()) < 5;
+            });
     }
 
     public function test_call_details_are_forgotten_once_the_code_is_accepted(): void
@@ -88,18 +89,24 @@ class PhoneScreenTest extends TestCase
         $user = User::factory()->create();
         DB::table('phone_login_numbers')->insert(['phone' => '79001234567', 'user_id' => $user->id]);
 
-        $this->post('/phone-login', ['action' => 'start', 'phone' => '+7 900 123-45-67'])->assertRedirect('/phone-login');
-        $this->post('/phone-login', ['code' => '4567'])->assertRedirect('https://student.'.config('app.base_domain').'/');
-        $this->assertSessionMissing('phone_call');
+        $this->post('/phone-login', ['action' => 'start', 'phone' => '+7 900 123-45-67'])
+            ->assertRedirect('/phone-login')
+            ->assertSessionHas('phone_call');
+        $this->post('/phone-login', ['code' => '4567'])
+            ->assertRedirect('https://student.'.config('app.base_domain').'/')
+            ->assertSessionMissing('phone_call');
     }
 
     public function test_call_details_are_dropped_when_a_new_call_is_requested(): void
     {
         $this->fakeCall();
-        $this->post('/phone-login', ['action' => 'start', 'phone' => '+7 900 123-45-67'])->assertRedirect('/phone-login');
+        $this->post('/phone-login', ['action' => 'start', 'phone' => '+7 900 123-45-67'])
+            ->assertRedirect('/phone-login')
+            ->assertSessionHas('phone_call');
 
-        $this->post('/phone-login', ['action' => 'start', 'phone' => '123'])->assertSessionHasErrors();
-        $this->assertSessionMissing('phone_call');
+        $this->post('/phone-login', ['action' => 'start', 'phone' => '123'])
+            ->assertSessionHasErrors()
+            ->assertSessionMissing('phone_call');
     }
 
     public function test_wrong_code_error_tells_how_to_fix_it(): void
