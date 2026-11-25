@@ -255,6 +255,9 @@
   .review-add { width: 100%; margin-top: 4px; padding: 10px; border: none; border-radius: 10px; background: var(--purple); color: #fff; font-family: var(--display); font-size: 13px; cursor: pointer; }
   .review-add:disabled { opacity: .45; cursor: default; }
   /* ── Компоновка урока под телефон (вариант A): код строкой, вкладки, панель внизу ── */
+  /* hidden создаёт у body отдельный scroll container и ломает sticky:
+     прокручивается документ, а закрепление привязывается к body. */
+  body:has(.lp-page) { overflow-x: clip; }
   .lp-page { padding-bottom: calc(112px + var(--safe-bottom, 0px)); }
   .lp-top { display: flex; align-items: center; gap: 10px; }
   .lp-top .topbar-title { flex: 1; min-width: 0; }
@@ -262,7 +265,7 @@
   .lp-menu { position: absolute; right: 0; top: 44px; z-index: 60; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 6px; min-width: 230px; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
   .lp-menu button { display: block; width: 100%; text-align: left; padding: 11px 12px; border: none; background: none; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; }
   .lp-menu button:hover { background: var(--surface); }
-  .lp-switch { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 10px; padding-bottom: 2px; scrollbar-width: none; }
+  .lp-switch { position: sticky; top: var(--lesson-switch-top, var(--safe-top, 0px)); z-index: 50; display: flex; flex-shrink: 0; gap: 6px; overflow-x: auto; margin: 0 0 10px; padding: 8px 0; background: var(--bg); border-bottom: 1px solid var(--border); scrollbar-width: none; }
   .lp-switch::-webkit-scrollbar { display: none; }
   .lp-sw { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; max-width: 70vw; padding: 7px 11px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 13px; font-weight: 600; text-decoration: none; }
   .lp-sw.cur { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
@@ -914,6 +917,7 @@
 
 <script>
   function lessonPrep(sessionId, initialStatus) {
+    let switchResizeObserver = null;
     // Вне reactive-состояния (запись во время рендера не должна триггерить эффекты)
     let typesetTimer = null;
     let tasksJson = '';
@@ -997,10 +1001,29 @@
       peek: null,               // [studentId, taskId] — открытая клетка матрицы
 
       async init() {
+        this.initStickySwitch();
         await this.refreshState();
         await this.refreshReview();
         this.startPolling();
         this.waitForKatex();
+      },
+
+      // Шапка режима «Ученик / Учитель» тоже закреплена. Учитываем её
+      // фактическую высоту, в том числе при повороте телефона и safe-area.
+      initStickySwitch() {
+        switchResizeObserver?.disconnect();
+        const roleBar = document.querySelector('.pwa-role-switcher-shell');
+        if (!roleBar) return;
+        const update = () => this.$root.style.setProperty(
+          '--lesson-switch-top', roleBar.getBoundingClientRect().height + 'px'
+        );
+        update();
+        switchResizeObserver = new ResizeObserver(update);
+        switchResizeObserver.observe(roleBar);
+      },
+
+      destroy() {
+        switchResizeObserver?.disconnect();
       },
 
       /**
