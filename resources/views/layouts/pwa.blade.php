@@ -320,7 +320,9 @@
 </head>
 <body>
 
+@sectionMissing('focused-auth')
 @include('pwa.shared.role-switcher')
+@endif
 
 @yield('body')
 
@@ -375,7 +377,9 @@
 
 @stack('scripts')
 
+@sectionMissing('focused-auth')
 @include('pwa.shared.bug-report')
+@endif
 
 </body>
 </html>
