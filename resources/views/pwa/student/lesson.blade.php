@@ -309,7 +309,7 @@
                      @change="choiceDraft[task.id] = opt.id">
               <span x-text="opt.id + ')'" aria-hidden="true"></span>
               <span x-show="opt.svg" style="min-width:0;max-width:100%" x-html="opt.svg"></span>
-              <span x-show="!opt.svg" x-html="renderMath(opt.label)"></span>
+              <span x-show="!opt.svg" x-html="choiceLabelHtml(opt.label)"></span>
             </label>
           </template>
           <div class="lesson-choice-actions" x-show="status !== 'ended'">
@@ -1011,6 +1011,20 @@
 
       wrongAnswer(task) {
         return task.feedback === 'wrong' && !this.editing[task.id] && this.choiceDraft[task.id] === undefined;
+      },
+
+      // Вложенные x-for/x-if могут создать варианты после общего auto-render.
+      // Готовим формулы до вставки x-html, не полагаясь на порядок Alpine ticks.
+      choiceLabelHtml(text) {
+        const el = document.createElement('span');
+        el.innerHTML = this.renderMath(text);
+        if (window.renderMathInElement) {
+          window.renderMathInElement(el, {
+            delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+            throwOnError: false,
+          });
+        }
+        return el.innerHTML;
       },
 
       renderMath(text) {
