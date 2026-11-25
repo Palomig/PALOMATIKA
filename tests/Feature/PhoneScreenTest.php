@@ -58,6 +58,41 @@ class PhoneScreenTest extends TestCase
             ->assertSee('Код не принят. Проверьте цифры или закажите звонок ещё раз.');
     }
 
+    public function test_second_step_shows_the_typed_number_even_without_a_call(): void
+    {
+        $this->fakeCall();
+        $this->post('/phone-login', ['action' => 'start', 'phone' => '8 (900) 123-45-67'])->assertRedirect('/phone-login');
+        $this->get('/phone-login')->assertOk()
+            ->assertSee('class="pv-cells"', false)
+            ->assertSee('name="phone" value="+7 900 123-45-67"', false)
+            ->assertSee('data-wait="', false)
+            ->assertSee('+7 900 123-45-67', false)
+            ->assertSee('Изменить номер')
+            ->assertSee('Нет звонка?');
+    }
+
+    public function test_guest_sees_both_steps_and_a_way_back(): void
+    {
+        $this->fakeCall();
+        $this->get('/phone-login')->assertOk()
+            ->assertSee('Войти по телефону')
+            ->assertSee('Номер ещё не привязан?')
+            ->assertSee('href="/login"', false)
+            ->assertSee('data-phone', false);
+    }
+
+    public function test_signed_in_user_sees_which_account_gets_the_number(): void
+    {
+        $this->fakeCall();
+        $this->actingAs(User::factory()->create(['name' => 'Артём', 'role' => 'student']))
+            ->get('/phone-login')->assertOk()
+            ->assertSee('Подтвердите телефон')
+            ->assertSee('Артём')
+            ->assertSee('ученик')
+            ->assertSee('action="/logout"', false)
+            ->assertDontSee('Другой способ входа');
+    }
+
     private function fakeCall(): void
     {
         config(['services.zvonok.id' => 'test-id', 'services.zvonok.key' => 'test-key']);
