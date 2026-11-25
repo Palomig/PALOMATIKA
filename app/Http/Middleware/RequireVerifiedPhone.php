@@ -10,7 +10,7 @@ final class RequireVerifiedPhone
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!config('services.plusofon.id') || !config('services.plusofon.key')
+        if (!config('services.zvonok.id') || !config('services.zvonok.key')
             || $request->is('phone-login', 'logout', 'api/auth/logout', 'sw.js', 'manifest.json')) {
             return $next($request);
         }

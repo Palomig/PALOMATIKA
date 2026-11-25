@@ -34,7 +34,7 @@
 </style>
 </head>
 <body>
-@if(config('services.plusofon.key') && config('services.plusofon.id'))
+@if(config('services.zvonok.key') && config('services.zvonok.id'))
 <a class="btn btn-surface" href="/phone-login">Войти по телефону</a>
 @endif
 

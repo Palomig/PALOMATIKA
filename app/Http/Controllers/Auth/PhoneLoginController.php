@@ -13,16 +13,16 @@ final class PhoneLoginController extends Controller
 {
     public function form(Request $request)
     {
-        abort_unless(config('services.plusofon.key') && config('services.plusofon.id'), 404);
+        abort_unless(config('services.zvonok.key') && config('services.zvonok.id'), 404);
         return response()->view('auth.phone', ['pending' => $request->session()->has('phone_challenge')])
             ->header('Cache-Control', 'no-store');
     }
 
     public function submit(Request $request)
     {
-        abort_unless(config('services.plusofon.key') && config('services.plusofon.id'), 404);
+        abort_unless(config('services.zvonok.key') && config('services.zvonok.id'), 404);
         $actor = (int)Auth::id();
-        $service = new PhoneLogin(DB::connection(), config('services.plusofon.id'), config('services.plusofon.key'));
+        $service = new PhoneLogin(DB::connection(), config('services.zvonok.id'), config('services.zvonok.key'));
         if ($request->input('action') === 'start') {
             $data = $request->validate(['phone' => 'required|string|max:40']);
             $request->session()->forget('phone_challenge');

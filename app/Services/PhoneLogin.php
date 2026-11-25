@@ -53,14 +53,16 @@ final class PhoneLogin
             return $challenge;
         }
         try {
-            $response = \Illuminate\Support\Facades\Http::withToken($this->key)
-                ->withHeaders(['Client' => $this->service])->acceptJson()->withoutRedirecting()->timeout(10)
-                ->post('https://restapi.plusofon.ru/api/v1/flash-call/send', ['phone' => $phone]);
+            $response = \Illuminate\Support\Facades\Http::asForm()
+                ->acceptJson()->withoutRedirecting()->timeout(10)
+                ->post('https://zvonok.com/manager/cabapi_external/api/v1/phones/flashcall/', [
+                    'public_key' => $this->key, 'campaign_id' => $this->service, 'phone' => '+'.$phone,
+                ]);
         } catch (\Illuminate\Http\Client\ConnectionException $exception) {
             throw new DomainException('Не удалось заказать звонок. Попробуйте позже.');
         }
-        $code = $response->json('data.pin');
-        if (!$response->successful() || $response->json('success') !== true
+        $code = $response->json('data.pincode');
+        if (!$response->successful() || $response->json('status') !== 'ok'
             || !is_string($code)
             || !preg_match('/^[0-9]{4}$/D', $code)) {
             throw new DomainException('Не удалось заказать звонок. Попробуйте позже.');

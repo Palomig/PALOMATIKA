@@ -19,7 +19,7 @@
     <div class="sec-label" style="margin-bottom:16px;">Войти через</div>
     <div style="display:flex;flex-direction:column;gap:10px;">
 
-      @if(config('services.plusofon.key') && config('services.plusofon.id'))
+      @if(config('services.zvonok.key') && config('services.zvonok.id'))
       <a class="btn btn-surface" href="/phone-login">Войти по телефону</a>
       @endif
 

@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'plusofon' => [
-        'id' => env('PLUSOFON_CLIENT_ID'),
-        'key' => env('PLUSOFON_FLASH_TOKEN'),
+    'zvonok' => [
+        'id' => env('ZVONOK_CAMPAIGN_ID'),
+        'key' => env('ZVONOK_PUBLIC_KEY'),
     ],
 
 

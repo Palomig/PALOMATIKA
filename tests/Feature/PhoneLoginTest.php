@@ -13,10 +13,10 @@ class PhoneLoginTest extends TestCase
 
     public function test_existing_session_requires_a_call_before_cabinet_access(): void
     {
-        config(['services.plusofon.id' => 'test-id', 'services.plusofon.key' => 'test-key']);
+        config(['services.zvonok.id' => 'test-id', 'services.zvonok.key' => 'test-key']);
         \Illuminate\Support\Facades\Http::fake([
-            'restapi.plusofon.ru/api/v1/flash-call/send' => \Illuminate\Support\Facades\Http::response([
-                'success' => true, 'data' => ['pin' => '0012', 'key' => 'sample'],
+            'zvonok.com/manager/cabapi_external/api/v1/phones/flashcall/' => \Illuminate\Support\Facades\Http::response([
+                'status' => 'ok', 'data' => ['pincode' => '0012', 'call_id' => 123],
             ]),
         ]);
         $user = User::factory()->create(['role' => 'parent']);
@@ -31,7 +31,7 @@ class PhoneLoginTest extends TestCase
 
     public function test_flash_call_opens_existing_account_and_consumes_challenge(): void
     {
-        config(['services.plusofon.id' => 'example', 'services.plusofon.key' => 'example-key']);
+        config(['services.zvonok.id' => 'example', 'services.zvonok.key' => 'example-key']);
         $user = User::factory()->create(['role' => 'student']);
         $challenge = bin2hex(random_bytes(24));
         $phone = '79000000001';
