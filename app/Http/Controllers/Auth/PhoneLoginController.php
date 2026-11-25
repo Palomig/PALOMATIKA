@@ -13,16 +13,16 @@ final class PhoneLoginController extends Controller
 {
     public function form(Request $request)
     {
-        abort_unless(config('services.ucaller.key') && config('services.ucaller.id'), 404);
+        abort_unless(config('services.plusofon.key') && config('services.plusofon.id'), 404);
         return response()->view('auth.phone', ['pending' => $request->session()->has('phone_challenge')])
             ->header('Cache-Control', 'no-store');
     }
 
     public function submit(Request $request)
     {
-        abort_unless(config('services.ucaller.key') && config('services.ucaller.id'), 404);
+        abort_unless(config('services.plusofon.key') && config('services.plusofon.id'), 404);
         $actor = (int)Auth::id();
-        $service = new PhoneLogin(DB::connection()->getPdo(), config('services.ucaller.id'), config('services.ucaller.key'));
+        $service = new PhoneLogin(DB::connection(), config('services.plusofon.id'), config('services.plusofon.key'));
         if ($request->input('action') === 'start') {
             $data = $request->validate(['phone' => 'required|string|max:40']);
             $request->session()->forget('phone_challenge');
@@ -41,11 +41,10 @@ final class PhoneLoginController extends Controller
             return back()->withErrors('Код не принят. Проверьте цифры и привязку номера.');
         }
         $request->session()->forget('phone_challenge');
-        if ($actor) {
-            return redirect('/phone-login')->with('phone_linked', true);
+        if (!$actor) {
+            Auth::login($user, true);
+            $request->session()->regenerate();
         }
-        Auth::login($user, true);
-        $request->session()->regenerate();
         $domain = config('app.base_domain');
         $url = match ($user->role) {
             'parent' => "https://".$domain."/parent/dashboard",

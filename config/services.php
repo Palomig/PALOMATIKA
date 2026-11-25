@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'ucaller' => [
-        'id' => env('UCALLER_SERVICE_ID'),
-        'key' => env('UCALLER_SECRET_KEY'),
+    'plusofon' => [
+        'id' => env('PLUSOFON_CLIENT_ID'),
+        'key' => env('PLUSOFON_FLASH_TOKEN'),
     ],
 
 

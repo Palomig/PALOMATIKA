@@ -83,9 +83,6 @@
 
 @section('body')
 <div class="page" x-data="profilePage()">
-@if(config('services.ucaller.key') && config('services.ucaller.id'))
-<a class="btn btn-surface" href="/phone-login">Привязать телефон</a>
-@endif
   <div class="topbar">
     <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">&#8249;</a>
     <div class="topbar-title">Профиль</div>

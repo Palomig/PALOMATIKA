@@ -19,9 +19,6 @@
 
 @section('body')
 <div class="page">
-@if(config('services.ucaller.key') && config('services.ucaller.id'))
-<a class="btn btn-surface" href="/phone-login">Привязать телефон</a>
-@endif
   <div class="topbar">
     <a href="/" class="back-btn">‹</a>
     <div class="topbar-title">Кабинет учителя</div>

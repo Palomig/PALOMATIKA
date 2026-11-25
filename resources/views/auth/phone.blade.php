@@ -3,10 +3,10 @@
 @section('body')
 <main class="page">
     <h1>{{ auth()->check() ? 'Привязать телефон' : 'Войти по телефону' }}</h1>
-    @if (session('phone_linked'))
-        <p role="status">Телефон привязан. В следующий раз можно войти по звонку.</p>
-        <a href="{{ auth()->user()->isParent() ? '/parent/dashboard' : '/' }}">Вернуться в кабинет</a>
-    @endif
+    @auth
+        <p>Чтобы открыть кабинет, подтвердите свой номер. Профиль и данные сохранятся.</p>
+        <form method="post" action="/logout">@csrf<button type="submit">Выйти из аккаунта</button></form>
+    @endauth
     @if ($errors->any())
         <p role="alert">{{ $errors->first() }}</p>
     @endif
@@ -26,7 +26,7 @@
         <button class="btn" type="submit">Получить звонок</button>
     </form>
     @guest
-        <p>При первом входе войдите привычным способом и привяжите номер в кабинете.</p>
+        <p>Если вы ещё не привязывали телефон, войдите привычным способом. Затем откроется форма привязки.</p>
     @endguest
 </main>
 @endsection

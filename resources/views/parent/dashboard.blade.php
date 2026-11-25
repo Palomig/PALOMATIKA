@@ -51,9 +51,6 @@
 @endpush
 
 @section('content')
-@if(config('services.ucaller.key') && config('services.ucaller.id'))
-<a class="btn btn-surface" href="/phone-login">Привязать телефон</a>
-@endif
 
 <div class="p-header">
   <div class="p-header-title">Мои дети</div>

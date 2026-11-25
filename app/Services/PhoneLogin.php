@@ -3,15 +3,16 @@
 namespace App\Services;
 
 use PDO;
+use Illuminate\Database\Connection;
 use DomainException;
 
 final class PhoneLogin
 {
-    public function __construct(private PDO $db, private string $service, private string $key) {}
+    public function __construct(private Connection $db, private string $service, private string $key) {}
 
     private function query(string $sql, array $params): \PDOStatement
     {
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db->getPdo()->prepare($sql);
         $statement->execute($params);
         return $statement;
     }
@@ -51,22 +52,23 @@ final class PhoneLogin
         if ((!$actor && !$owner) || ($actor && $owner && $actor !== $owner)) {
             return $challenge;
         }
-        $curl = curl_init('https://api.ucaller.ru/v1.0/initCall');
-        curl_setopt_array($curl, [
-            CURLOPT_POST => true, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'Authorization: Bearer '.$this->key.'.'.$this->service],
-            CURLOPT_POSTFIELDS => json_encode(['phone' => (int)$phone, 'unique' => $challenge]),
-        ]);
-        $response = json_decode((string)curl_exec($curl), true);
-        $status = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-        curl_close($curl);
-        if ($status !== 200 || ($response['status'] ?? false) !== true || !preg_match('/^[0-9]{4}$/D', $response['code'] ?? '')) {
+        try {
+            $response = \Illuminate\Support\Facades\Http::withToken($this->key)
+                ->withHeaders(['Client' => $this->service])->acceptJson()->withoutRedirecting()->timeout(10)
+                ->post('https://restapi.plusofon.ru/api/v1/flash-call/send', ['phone' => $phone]);
+        } catch (\Illuminate\Http\Client\ConnectionException $exception) {
+            throw new DomainException('Не удалось заказать звонок. Попробуйте позже.');
+        }
+        $code = $response->json('data.pin');
+        if (!$response->successful() || $response->json('success') !== true
+            || !is_string($code)
+            || !preg_match('/^[0-9]{4}$/D', $code)) {
             throw new DomainException('Не удалось заказать звонок. Попробуйте позже.');
         }
         $this->query('DELETE FROM phone_login_codes WHERE expires_at < UNIX_TIMESTAMP()', []);
         $this->query('INSERT INTO phone_login_codes (id, phone, actor, owner, digest, attempts, expires_at)
             VALUES (?, ?, ?, ?, ?, 5, UNIX_TIMESTAMP()+300)', [
-            $challenge, $phone, $actor, $owner, hash_hmac('sha256', $challenge.$response['code'], $this->key),
+            $challenge, $phone, $actor, $owner, hash_hmac('sha256', $challenge.$code, $this->key),
         ]);
         return $challenge;
     }
