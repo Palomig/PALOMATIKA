@@ -515,6 +515,14 @@
   @include('pwa._shared.photo-viewer')
 
   {{-- Вкладка «Задачи»: условия целиком — по ним учитель помогает --}}
+  <div class="assign-row" x-show="loadedRoomTools" x-cloak style="flex-wrap:wrap">
+    <form x-show="status !== 'ended'" @submit.prevent="createRoom()" style="display:flex;gap:6px;flex-wrap:wrap">
+      <input class="assign-select" x-model="roomName" maxlength="60" placeholder="Название комнаты" aria-label="Название комнаты" required>
+      <button class="btn" type="submit" :disabled="!!roomBusy">Создать комнату</button>
+    </form>
+    <label><input type="checkbox" :checked="showWrongAnswers" :disabled="!!feedbackBusy" @change="setFeedback($event)"> Показывать ученикам их неверные ответы</label>
+    <div x-show="rooms.length" x-text="'Комнаты: ' + rooms.map(r => r.name).join(', ')"></div>
+  </div>
   <div class="lp-list" x-show="tab === 'tasks'">
     <template x-for="task in tasks" :key="task.id">
       <div class="lesson-task" :id="'lt-' + task.id">
@@ -536,7 +544,11 @@
           <template x-if="task.task_payload.type === 'choice'">
             <div class="lesson-task-options">
               <template x-for="(opt, oi) in task.task_payload.options" :key="opt.id">
-                <span class="lesson-task-option" x-html="renderLatex(opt.label)"></span>
+                <span class="lesson-task-option">
+                  <span x-text="opt.id + ')'"></span>
+                  <span x-show="opt.svg" x-html="opt.svg"></span>
+                  <span x-show="!opt.svg" x-html="renderLatex(opt.label)"></span>
+                </span>
               </template>
             </div>
           </template>
@@ -546,6 +558,7 @@
               · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
               <span class="personal-badge" x-show="task.assigned_student_id"
                     x-text="'для ' + (task.assigned_name || '#' + task.assigned_student_id)"></span>
+              <span class="personal-badge" x-show="task.room_id" x-text="'Комната: ' + roomLabel(task.room_id)"></span>
             </span>
             <button class="btn btn-icon btn-danger" x-show="status === 'draft'"
                     @click="removeTask(task.id)" title="Убрать задачу из урока">×</button>
@@ -571,7 +584,7 @@
               <template x-for="r in taskResults(task)" :key="'r-' + task.id + '-' + r.id">
                 <span class="lp-chip" :class="r.cls">
                   <b x-text="r.name"></b>
-                  <span class="ans" x-show="r.answer !== null" x-text="(r.cls === 'ok' ? '✓ ' : '✗ ') + r.answer + r.flags"></span>
+                  <span class="ans" x-show="r.answer !== null" x-text="(r.cls === 'ok' ? '✓ ' : (r.cls === 'bad' ? '✗ ' : '')) + r.answer + r.flags"></span>
                   <span x-show="r.answer === null">—</span>
                 </span>
               </template>
@@ -701,12 +714,15 @@
         <button class="btn" @click="pickerOpen = false">✕ Закрыть</button>
       </div>
       {{-- Кому добавляем: всем или персонально участнику --}}
-      <div class="assign-row" x-show="participants.length">
+      <div class="assign-row" x-show="participants.length || rooms.length">
         <span class="assign-label">Кому:</span>
         <select class="assign-select" x-model="assignTo">
           <option value="">Всем классу</option>
+          <template x-for="room in rooms" :key="'room-' + room.id">
+            <option :value="'room:' + room.id" x-text="'Комната: ' + room.name"></option>
+          </template>
           <template x-for="p in participants" :key="'assign-' + p.id">
-            <option :value="p.id" x-text="p.name || ('#' + p.id)"></option>
+            <option :value="'student:' + p.id" x-text="p.name || ('#' + p.id)"></option>
           </template>
         </select>
       </div>
@@ -715,7 +731,7 @@
             // Добавленные всем — заняты для любого получателя; персональные —
             // только для того же ученика (другому ту же задачу дать можно).
             existingUids: () => tasks
-              .filter(t => !t.assigned_student_id || !assignTo || String(t.assigned_student_id) === String(assignTo))
+              .filter(t => !assignTo || !taskRecipient(t) || taskRecipient(t) === assignTo)
               .map(t => window.paloTaskKey(t.bank, t.task_ref)),
           })">
         @include('pwa._shared.task-picker')
@@ -912,7 +928,14 @@
       grid: {},
       pickerOpen: false,
       parallel: [],
-      assignTo: '',        // '' = всем; id участника = персональная задача
+      assignTo: '',
+      rooms: [],
+      roomName: '',
+      roomBusy: false,
+      loadedRoomTools: false,
+      showWrongAnswers: false,
+      feedbackBusy: false,
+      feedbackGeneration: 0,
       pollTimer: null,
       katexReady: false,
       note: '',
@@ -1064,21 +1087,65 @@
       },
 
       async onPickerAdd(items) {
-        // assignTo пусто = всем; иначе персонально выбранному участнику.
-        const assigned = this.assignTo ? Number(this.assignTo) : null;
+        const [audience, id] = this.assignTo.split(':');
         for (const it of items) {
           const r = await fetch(`/lessons/${this.sessionId}/tasks`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json',
               'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, Accept: 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({ ...it, assigned_student_id: assigned }),
+            body: JSON.stringify({ ...it, assigned_student_id: audience === 'student' ? Number(id) : null,
+              room_id: audience === 'room' ? Number(id) : null }),
           });
           if (!r.ok) { alert('Не удалось добавить задачу'); break; }
         }
         await this.refreshState();
         // Picker остаётся открытым; он сам сбрасывается на выбор класса (reset в confirmAdd),
         // чтобы можно было сразу добрать задачи из другого класса. Закрытие — кнопкой «Отмена».
+      },
+
+      taskRecipient(task) {
+        return task.room_id ? 'room:' + task.room_id : (task.assigned_student_id ? 'student:' + task.assigned_student_id : '');
+      },
+
+      roomLabel(id) { return this.rooms.find(r => r.id === id)?.name || ('#' + id); },
+
+      async roomCommand(path, method, body) {
+        const r = await fetch(`/lessons/${this.sessionId}/${path}`, {
+          method, credentials: 'include', body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || d.message || 'Не удалось сохранить');
+        return d;
+      },
+
+      async createRoom() {
+        const name = this.roomName.trim();
+        if (!name || this.roomBusy) return;
+        this.roomBusy = true;
+        try {
+          await this.roomCommand('rooms', 'POST', { name });
+          this.roomName = '';
+          await this.refreshState();
+        } catch (e) { alert(e.message); }
+        finally { this.roomBusy = false; }
+      },
+
+      async setFeedback(event) {
+        if (this.feedbackBusy) return;
+        this.feedbackBusy = true;
+        ++this.feedbackGeneration;
+        try {
+          const d = await this.roomCommand('feedback', 'PUT', { show_wrong_answers: event.target.checked });
+          this.showWrongAnswers = d.show_wrong_answers;
+        } catch (e) { alert(e.message); }
+        finally {
+          ++this.feedbackGeneration;
+          this.feedbackBusy = false;
+          event.target.checked = this.showWrongAnswers;
+        }
       },
 
       /**
@@ -1445,6 +1512,7 @@
       },
 
       async refreshState() {
+        const feedbackGeneration = this.feedbackGeneration;
         const r = await fetch(`/lessons/${this.sessionId}/state`, { headers: { 'Accept': 'application/json' }, credentials: 'include' });
         if (!r.ok) return;
         const d = await r.json();
@@ -1456,6 +1524,11 @@
         const tj = JSON.stringify(d.tasks);
         if (tj !== tasksJson) { tasksJson = tj; this.tasks = d.tasks; }
         this.participants = d.participants;
+        this.rooms = d.rooms || [];
+        this.loadedRoomTools = true;
+        if (!this.feedbackBusy && feedbackGeneration === this.feedbackGeneration) {
+          this.showWrongAnswers = !!d.session.show_wrong_answers;
+        }
         this.grid = d.grid || {};
         this.parallel = d.parallel || [];
         this.rememberSeen();
@@ -1715,7 +1788,10 @@
       // Персональная задача не для этого ученика — ячейка неприменима.
       cellNotForStudent(studentId, taskId) {
         const t = this.tasks.find(x => x.id === taskId);
-        return t && t.assigned_student_id && t.assigned_student_id !== studentId;
+        if (!t || this.grid[studentId]?.[taskId]) return false;
+        const p = this.participants.find(x => x.id === studentId);
+        return !!((t.assigned_student_id && t.assigned_student_id !== studentId) ||
+          (t.room_id && p?.current_room_id !== t.room_id));
       },
 
       cellLabel(studentId, taskId) {
@@ -1732,7 +1808,7 @@
         if (this.cellNotForStudent(studentId, taskId)) return 'live-cell-na';
         const a = this.grid[studentId]?.[taskId];
         if (!a) return 'live-cell-empty';
-        return a.is_correct ? 'live-cell-ok' : 'live-cell-bad';
+        return a.is_correct === null ? '' : (a.is_correct ? 'live-cell-ok' : 'live-cell-bad');
       },
 
       // Summary helpers
@@ -1806,7 +1882,7 @@
               id: p.id,
               name: this.firstName(p),
               answer: a ? String(a.answer ?? '') : null,
-              cls: a ? (a.is_correct ? 'ok' : 'bad') : '',
+               cls: a?.is_correct === true ? 'ok' : (a?.is_correct === false ? 'bad' : ''),
               flags: a ? (a.pasted ? ' 📥' : '') + (a.quick_after_away ? ' ⚡' : '') : '',
             };
           });
@@ -1830,7 +1906,7 @@
       mxCellMark(studentId, taskId) {
         if (this.cellNotForStudent(studentId, taskId)) return '';
         const a = this.grid[studentId]?.[taskId];
-        return a ? (a.is_correct ? '✓' : '✗') : '';
+        return a?.is_correct === true ? '✓' : (a?.is_correct === false ? '✗' : (a ? '•' : ''));
       },
 
       cellFlagged(studentId, taskId) {
