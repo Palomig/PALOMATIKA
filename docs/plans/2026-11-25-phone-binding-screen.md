@@ -527,7 +527,7 @@ const browser = await chromium.launch();
   const page = await (await browser.newContext(mobile)).newPage();
   page.setDefaultTimeout(5000);
   await page.goto(`${STAND}/phone-login`);
-  const phone = page.locator('[data-phone] input');
+  const phone = page.locator('[data-phone] input[name=phone]');
   const expect = async (name, wanted) => check(name, (await phone.inputValue()) === wanted, await phone.inputValue());
 
   await section('маска', async () => {
@@ -559,7 +559,7 @@ const browser = await chromium.launch();
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
   await page.goto(`${STAND}/phone-login`);
-  await page.fill('[data-phone] input', '+7 900 123-45-67');
+  await page.fill('[data-phone] input[name=phone]', '+7 900 123-45-67');
   await submit(page, '[data-phone] .pv-btn');
 
   const cell = (index) => page.locator('.pv-cells input').nth(index);
@@ -589,7 +589,7 @@ const browser = await chromium.launch();
     await page.waitForFunction(() => !document.querySelector('[data-wait]').disabled, null, { timeout: 45000 });
     check('через 30 секунд повтор доступен', (await recall.textContent()).trim() === 'Позвонить ещё раз');
     await page.click('.pv-more summary:has-text("Изменить номер")');
-    check('«Изменить номер» раскрывает форму с текущим номером', (await page.locator('[data-phone] input').inputValue()) === '+7 (900) 123-45-67');
+    check('«Изменить номер» раскрывает форму с текущим номером', (await page.locator('[data-phone] input[name=phone]').inputValue()) === '+7 (900) 123-45-67');
     await submit(page, '[data-wait]');
     check('повтор возвращает на второй шаг', await page.isVisible('.pv-cells'));
     await cell(0).pressSequentially('0000');
@@ -625,7 +625,7 @@ const browser = await chromium.launch();
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
   await page.goto(`${STAND}/phone-login`);
-  await page.fill('[data-phone] input', '+7 900 123-45-68');
+  await page.fill('[data-phone] input[name=phone]', '+7 900 123-45-68');
   await submit(page, '[data-phone] .pv-btn');
   check('без JavaScript экран остаётся рабочим', await page.isVisible('.pv-otp-source')
     && !(await page.isVisible('.pv-cells')) && !(await page.locator('[data-wait]').isDisabled()));
@@ -647,7 +647,7 @@ cd /home/dev/palomatika-phone-screen && php artisan tinker --execute='DB::table(
 
 **Step 3: Добавить скрипт в шаблон**
 
-В `resources/views/auth/phone.blade.php` между `@endpush` и `@section('body')` вставь:
+В `resources/views/auth/phone.blade.php` между `@endpush` и `@section('body')` вставь приведённое ниже. Селектор поля — строго `input[name=phone]`: внутри той же формы лежат скрытые `_token` и `action`, и маска не должна их касаться (в токене есть цифры — форма умерла бы с «страница устарела»).
 
 ```blade
 @push('scripts')
@@ -656,7 +656,7 @@ cd /home/dev/palomatika-phone-screen && php artisan tinker --execute='DB::table(
       const digits = (value) => value.replace(/\D/g, '');
 
       // The field always holds "+7 (900) 123-45-67", so the server gets a complete number.
-      document.querySelectorAll('[data-phone] input').forEach((input) => {
+      document.querySelectorAll('[data-phone] input[name=phone]').forEach((input) => {
         const apply = (raw) => {
           if (raw.startsWith('7')) raw = raw.slice(1);
           if (raw.length === 11 && raw.startsWith('8')) raw = raw.slice(1);

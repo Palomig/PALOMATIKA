@@ -60,6 +60,7 @@
   .pv-otp { margin-top:20px; }
   .pv-otp-source { text-align:center; letter-spacing:.4em; }
   .pv-cells { display:flex; justify-content:center; gap:10px; }
+  .pv-cells[hidden] { display:none; }
   .pv-cells input { flex:0 1 72px; min-width:0; height:66px; border:1.5px solid var(--border); border-radius:16px; background:var(--bg); color:var(--text); text-align:center; font:800 28px var(--body); caret-color:var(--accent); }
   .pv-cells input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-bg); }
   .is-split .pv-otp-source { display:none; }
@@ -74,6 +75,75 @@
   @keyframes pv-ripple { from { transform:scale(1); opacity:.5; } to { transform:scale(1.8); opacity:0; } }
   @keyframes pv-blink { 0%,60%,100% { opacity:.2; } 30% { opacity:1; } }
   @media (prefers-reduced-motion: reduce) { .pv-wrap,.pv-orb::before,.pv-orb::after,.pv-dots b { animation:none; } }
+@endpush
+
+@push('scripts')
+  <script id="pv-js">
+    (() => {
+      const digits = (value) => value.replace(/\D/g, '');
+
+      // The field always holds "+7 (900) 123-45-67", so the server gets a complete number.
+      document.querySelectorAll('[data-phone] input[name=phone]').forEach((input) => {
+        const apply = (raw) => {
+          if (input.value.startsWith('+7') || (raw.length === 11 && raw.startsWith('7'))) raw = raw.slice(1);
+          if (raw.length === 11 && raw.startsWith('8')) raw = raw.slice(1);
+          const value = raw.slice(0, 11);
+          input.value = value ? '+7 (' + value.slice(0, 3) + (value.length > 3 ? ') ' + value.slice(3, 6) + (value.length > 6 ? '-' + value.slice(6, 8) + (value.length > 8 ? '-' + value.slice(8) : '') : '') : '') : '';
+          input.setSelectionRange(input.value.length, input.value.length);
+          input.setCustomValidity(value.length > 0 && value.length !== 10 ? 'Введите номер полностью' : '');
+        };
+        input.addEventListener('input', () => apply(digits(input.value)));
+        apply(digits(input.value));
+      });
+
+      document.querySelectorAll('[data-code]').forEach((form) => {
+        const source = form.querySelector('.pv-otp-source');
+        const cells = [...form.querySelectorAll('.pv-cells input')];
+        const submit = form.querySelector('.pv-btn');
+        const sync = () => {
+          source.value = cells.map((cell) => cell.value).join('');
+          submit.disabled = source.value.length !== 4;
+        };
+        form.querySelector('.pv-cells').hidden = false;
+        form.classList.add('is-split');
+        cells.forEach((cell, index) => {
+          cell.addEventListener('input', () => {
+            cell.value = digits(cell.value).slice(-1);
+            if (cell.value) cells[index + 1]?.focus();
+            sync();
+          });
+          cell.addEventListener('keydown', (event) => {
+            if (event.key !== 'Backspace' || cell.value || !index) return;
+            event.preventDefault();
+            cells[index - 1].value = '';
+            cells[index - 1].focus();
+            sync();
+          });
+          cell.addEventListener('paste', (event) => {
+            const text = digits(event.clipboardData.getData('text')).slice(0, 4);
+            if (!text) return;
+            event.preventDefault();
+            cells.forEach((target, i) => { target.value = text[i] || ''; });
+            cells[Math.min(text.length, 3)].focus();
+            sync();
+          });
+          cell.addEventListener('focus', () => cell.select());
+        });
+        sync();
+        if (document.activeElement === source) cells[0].focus();
+      });
+
+      document.querySelectorAll('[data-wait]').forEach((button) => {
+        let left = Number(button.dataset.wait);
+        const tick = () => {
+          button.disabled = left > 0;
+          button.querySelector('.pv-wait').textContent = left > 0 ? ' · 0:' + String(left).padStart(2, '0') : '';
+          if (left-- > 0) setTimeout(tick, 1000);
+        };
+        tick();
+      });
+    })();
+  </script>
 @endpush
 
 @section('body')
