@@ -210,8 +210,7 @@
         @unless ($pending)
           @if ($errors->any())<p class="pv-alert" role="alert">{{ $errors->first() }}</p>@endif
         @endunless
-        <label class="pv-label" for="pv-phone">Номер телефона</label>
-        <input class="pv-input" id="pv-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 900 123-45-67" value="{{ old('phone', $phone ?? '') }}" required>
+        <input class="pv-input" id="pv-phone" aria-label="Номер телефона" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 900 123-45-67" value="{{ old('phone', $phone ?? '') }}" required>
         <button class="pv-btn" type="submit">Позвонить мне</button>
       </form>
       @if ($pending)</div></details>@endif
