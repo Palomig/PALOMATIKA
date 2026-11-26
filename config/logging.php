@@ -73,6 +73,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'phone_login' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/phone-login.log'),
+            'level' => 'info',
+            'days' => 14,
+            'permission' => 0600,
+        ],
+
         'answer_resolver' => [
             'driver' => 'daily',
             'path' => storage_path('logs/answer-resolver.log'),

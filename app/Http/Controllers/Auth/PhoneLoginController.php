@@ -8,6 +8,7 @@ use App\Services\PhoneLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 final class PhoneLoginController extends Controller
 {
@@ -26,7 +27,12 @@ final class PhoneLoginController extends Controller
         $actor = (int)Auth::id();
         $service = new PhoneLogin(DB::connection(), config('services.zvonok.id'), config('services.zvonok.key'));
         if ($request->input('action') === 'start') {
-            $data = $request->validate(['phone' => 'required|string|max:40']);
+            try {
+                $data = $request->validate(['phone' => 'required|string|max:40']);
+            } catch (ValidationException $exception) {
+                PhoneLogin::audit('call.invalid_form', '', $actor);
+                throw $exception;
+            }
             $request->session()->forget(['phone_challenge', 'phone_call']);
             try {
                 $challenge = $service->start($data['phone'], $request->ip(), $actor);
@@ -37,10 +43,19 @@ final class PhoneLoginController extends Controller
             $request->session()->put('phone_call', ['phone' => self::format($data['phone']), 'at' => time()]);
             return redirect('/phone-login');
         }
-        $data = $request->validate(['code' => 'required|string|regex:/^[0-9]{4}$/D']);
-        $id = $service->verify((string)$request->session()->get('phone_challenge'), $data['code'], $actor);
+        $challenge = (string)$request->session()->get('phone_challenge');
+        try {
+            $data = $request->validate(['code' => 'required|string|regex:/^[0-9]{4}$/D']);
+        } catch (ValidationException $exception) {
+            PhoneLogin::audit('verify.invalid_form', $challenge, $actor);
+            throw $exception;
+        }
+        $id = $service->verify($challenge, $data['code'], $actor);
         $user = $id ? User::find($id) : null;
         if (!$user) {
+            if ($id) {
+                PhoneLogin::audit('verify.account_missing', $challenge, $actor);
+            }
             return back()->withErrors('Код не принят. Проверьте цифры или закажите звонок ещё раз.');
         }
         $request->session()->forget(['phone_challenge', 'phone_call']);
@@ -54,6 +69,7 @@ final class PhoneLoginController extends Controller
             'teacher', 'admin' => "https://teacher.".$domain."/dashboard",
             default => "https://student.".$domain."/",
         };
+        PhoneLogin::audit('verify.cabinet_redirect', $challenge, $actor, ['role' => $user->role]);
         return redirect()->away($url);
     }
 
