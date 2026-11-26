@@ -28,10 +28,6 @@
   .pv-back { display:flex; align-items:center; gap:4px; margin-left:-8px; }
   .pv-back svg { width:18px; height:18px; }
   .pv-title { margin-top:18px; font:800 26px/1.18 var(--body); letter-spacing:-.6px; }
-  .pv-lead { margin-top:8px; font-size:15px; line-height:1.5; color:var(--ink2); }
-  .pv-how { list-style:none; margin-top:16px; display:grid; gap:10px; }
-  .pv-how li { display:flex; gap:10px; font-size:14px; line-height:1.45; color:var(--ink2); }
-  .pv-how b { flex:none; width:22px; height:22px; margin-top:-1px; display:grid; place-items:center; border-radius:50%; background:var(--surface2); color:var(--accent); font-size:12px; }
   .pv-form { margin-top:20px; }
   .pv-form .pv-alert { margin:0 0 14px; }
   .pv-label { display:block; margin-bottom:8px; font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); }
@@ -44,7 +40,6 @@
   .pv-btn2 { display:block; width:100%; min-height:50px; margin-top:10px; border:0; border-radius:16px; background:var(--surface2); color:var(--text); font:800 15px var(--body); cursor:pointer; transition:transform .12s, opacity .15s; }
   .pv-btn2:active { transform:scale(.98); }
   .pv-btn2:disabled { opacity:.55; cursor:default; font-variant-numeric:tabular-nums; }
-  .pv-note { margin-top:12px; font-size:13px; line-height:1.5; color:var(--ink3); }
   .pv-alert { display:flex; align-items:flex-start; gap:9px; margin-top:14px; padding:11px 12px; border:1px solid var(--red-bd); border-radius:14px; background:var(--red-bg); font-size:14px; font-weight:700; line-height:1.4; }
   .pv-alert::before { content:''; flex:none; width:18px; height:18px; margin-top:1px; border-radius:50%; background:var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M12 7v6'/%3E%3Cpath d='M12 16.5h.01'/%3E%3C/svg%3E") center/12px no-repeat; }
   .pv-call { margin-top:14px; text-align:center; }
@@ -69,7 +64,6 @@
   .pv-more summary::-webkit-details-marker { display:none; }
   .pv-more-body { margin-top:12px; padding-top:14px; border-top:1px solid var(--border); text-align:left; }
   .pv-more-body .pv-form { margin-top:0; }
-  .pv-help { list-style:none; display:grid; gap:8px; font-size:13px; line-height:1.5; color:var(--ink2); }
   .pv-inline { display:none; }
   @keyframes pv-rise { from { opacity:0; transform:translateY(14px); } }
   @keyframes pv-ripple { from { transform:scale(1); opacity:.5; } to { transform:scale(1.8); opacity:0; } }
@@ -183,8 +177,7 @@
           @if ($phone)<div class="pv-number">{{ $phone }}</div>@endif
           <div class="pv-status">Звоним<span class="pv-dots" aria-hidden="true"><b>.</b><b>.</b><b>.</b></span></div>
         </div>
-        <h1 class="pv-title pv-center">Последние 4 цифры номера</h1>
-        <p class="pv-lead pv-center">Возьмите их из входящего звонка. Трубку не берите — звонок сбросится сам.</p>
+        <h1 class="pv-title pv-center">Введите последние 4 цифры номера, с которого вам позвонят</h1>
 
         <form method="post" data-code>
           @csrf
@@ -200,20 +193,13 @@
           </div>
           <button class="pv-btn" type="submit">Подтвердить</button>
         </form>
-        <p class="pv-note pv-center">Код действует 5 минут.</p>
 
         @if ($phone)
           <form method="post" id="pv-recall" class="pv-inline">@csrf<input type="hidden" name="action" value="start"><input type="hidden" name="phone" value="{{ $phone }}"></form>
           <button class="pv-btn2" type="submit" form="pv-recall" data-wait="{{ $wait }}">Позвонить ещё раз<span class="pv-wait" aria-hidden="true"></span></button>
         @endif
       @else
-        <h1 class="pv-title">{{ auth()->check() ? 'Подтвердите телефон' : 'Войти по телефону' }}</h1>
-        <p class="pv-lead">{{ auth()->check() ? 'Теперь в Паломатике входят по номеру телефона. Профиль и прогресс на месте — привязка займёт около минуты.' : 'Вход по номеру, который привязан к кабинету.' }}</p>
-        <ol class="pv-how">
-          <li><b>1</b><span>Введите номер телефона</span></li>
-          <li><b>2</b><span>Вам позвонят. Трубку не берите — звонок сбросится сам</span></li>
-          <li><b>3</b><span>Введите последние 4 цифры номера звонящего</span></li>
-        </ol>
+        <h1 class="pv-title">{{ auth()->check() ? 'Привяжите номер телефона' : 'Войти по телефону' }}</h1>
       @endif
 
       {{-- Форма номера одна на оба состояния: на втором шаге она спрятана за «Изменить номер». --}}
@@ -230,24 +216,7 @@
       </form>
       @if ($pending)</div></details>@endif
 
-      @if ($pending)
-        <details class="pv-more">
-          <summary>Нет звонка?</summary>
-          <div class="pv-more-body">
-            <ul class="pv-help">
-              <li>Обычно звонок приходит в течение 30 секунд.</li>
-              <li>Если линия занята или нет сети, звонок не пройдёт.</li>
-              <li>Определитель или блокировщик может скрыть незнакомый номер — проверьте их.</li>
-              <li>Пропустили звонок? Номер останется в журнале вызовов, цифры оттуда тоже подойдут.</li>
-              @guest <li>Номер ещё не привязан к кабинету — тогда звонок не поступит. Войдите другим способом.</li>@endguest
-            </ul>
-          </div>
-        </details>
-      @endif
 
-      @unless ($pending)
-        <p class="pv-note">{{ auth()->check() ? 'Звонок бесплатный. Телефон с этим номером должен быть рядом — подойдёт и номер родителя. Один номер — один кабинет.' : 'Звонок бесплатный, трубку брать не нужно. Номер ещё не привязан? Войдите другим способом — привязать его предложим сразу после входа.' }}</p>
-      @endunless
     </section>
   </div>
 </main>
