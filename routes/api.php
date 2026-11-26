@@ -49,7 +49,7 @@ Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy']);
 Route::get('/students/search', [ScheduleController::class, 'searchStudents']);
 
 // Geometry Editor API
-Route::middleware(['auth', \App\Http\Middleware\RequireVerifiedPhone::class, 'role:admin'])->prefix('geometry')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('geometry')->group(function () {
     Route::get('/stats', [GeometryEditorController::class, 'stats']);
     Route::get('/{taskId}/load', [GeometryEditorController::class, 'load']);
     Route::post('/{taskId}/save', [GeometryEditorController::class, 'save']);
@@ -57,14 +57,14 @@ Route::middleware(['auth', \App\Http\Middleware\RequireVerifiedPhone::class, 'ro
 });
 
 
-Route::middleware(['auth:sanctum', \App\Http\Middleware\RequireVerifiedPhone::class, 'role:teacher,admin', 'throttle:oge-variants-v1'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:teacher,admin', 'throttle:oge-variants-v1'])->group(function () {
     Route::post('/oge/variants/generator', [TestPdfController::class, 'apiCreateOgeGeneratorVariantV1']);
     Route::post('/oge/variants/custom-random', [TestPdfController::class, 'apiCreateOgeCustomRandomVariantV1']);
     Route::get('/oge/variants/{hash}', [TestPdfController::class, 'apiGetOgeVariantV1'])
         ->where('hash', '[a-z0-9]{5,16}');
 });
 
-Route::middleware(['auth:sanctum', \App\Http\Middleware\RequireVerifiedPhone::class, 'role:teacher,admin'])->prefix('materials')->group(function () {
+Route::middleware(['auth:sanctum', 'role:teacher,admin'])->prefix('materials')->group(function () {
     Route::get('/', [JarvisMaterialController::class, 'index']);
     Route::post('/', [JarvisMaterialController::class, 'store']);
     Route::get('/{material}', [JarvisMaterialController::class, 'show']);
@@ -75,7 +75,7 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\RequireVerifiedPhone::cl
 
 
 // Protected routes
-Route::middleware(['auth:sanctum', \App\Http\Middleware\RequireVerifiedPhone::class])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     // Auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);

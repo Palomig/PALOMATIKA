@@ -68,7 +68,7 @@ class PhoneScreenTest extends TestCase
             ->assertSee('data-wait="', false)
             ->assertSee('+7 900 123-45-67', false)
             ->assertSee('Изменить номер')
-            ->assertSee('Нет звонка?');
+            ->assertSee('Позвонить ещё раз');
     }
 
     public function test_guest_sees_both_steps_and_a_way_back(): void
@@ -76,7 +76,7 @@ class PhoneScreenTest extends TestCase
         $this->fakeCall();
         $this->get('/phone-login')->assertOk()
             ->assertSee('Войти по телефону')
-            ->assertSee('Номер ещё не привязан?')
+            ->assertSee('Другой способ входа')
             ->assertSee('href="/login"', false)
             ->assertSee('data-phone', false);
     }
@@ -86,7 +86,7 @@ class PhoneScreenTest extends TestCase
         $this->fakeCall();
         $this->actingAs(User::factory()->create(['name' => 'Артём', 'role' => 'student']))
             ->get('/phone-login')->assertOk()
-            ->assertSee('Подтвердите телефон')
+            ->assertSee('Привяжите номер телефона')
             ->assertSee('Артём')
             ->assertSee('ученик')
             ->assertSee('action="/logout"', false)

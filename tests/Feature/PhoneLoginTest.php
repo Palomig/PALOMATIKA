@@ -11,7 +11,7 @@ class PhoneLoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_existing_session_requires_a_call_before_cabinet_access(): void
+    public function test_existing_session_can_access_cabinet_and_bind_phone_optionally(): void
     {
         config(['services.zvonok.id' => 'test-id', 'services.zvonok.key' => 'test-key']);
         \Illuminate\Support\Facades\Http::fake([
@@ -20,8 +20,8 @@ class PhoneLoginTest extends TestCase
             ]),
         ]);
         $user = User::factory()->create(['role' => 'parent']);
-        $this->actingAs($user)->get('/parent/dashboard')->assertRedirect('/phone-login');
-        $this->getJson('/parent/dashboard')->assertForbidden()->assertJsonPath('error', 'phone_verification_required');
+        $this->actingAs($user)->get('/parent/dashboard')->assertOk();
+        $this->getJson('/api/auth/me')->assertOk();
         $this->get('/phone-login')->assertOk();
         $this->post('/phone-login', ['action' => 'start', 'phone' => '89000000001'])->assertRedirect('/phone-login');
         $this->post('/phone-login', ['code' => '0012'])->assertRedirect('https://'.config('app.base_domain').'/parent/dashboard');
@@ -42,7 +42,7 @@ class PhoneLoginTest extends TestCase
             'attempts' => 5, 'expires_at' => time() + 300,
         ]);
         $this->withSession(['phone_challenge' => $challenge])->get('/phone-login')
-            ->assertOk()->assertSeeText('Последние 4 цифры');
+            ->assertOk()->assertSeeText('Введите последние 4 цифры номера');
         $this->post('/phone-login', ['code' => '1111'])->assertSessionHasErrors();
         $this->assertGuest();
         $this->post('/phone-login', ['code' => '0012'])->assertRedirect('https://student.'.config('app.base_domain').'/');

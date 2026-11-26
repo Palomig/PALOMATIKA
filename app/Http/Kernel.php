@@ -40,7 +40,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\CaptureTelegramStartParam::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-            \App\Http\Middleware\RequireVerifiedPhone::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
